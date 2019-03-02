@@ -90,9 +90,12 @@ PROGRAM modification
     DO i = 1, ma - mi + 1
         L(i) = 0
         L1(i) = 0
-        VAL(i) = 0
-        COL_IDX(i) = 0
     ENDDO
+
+    DO i=1, Length + Length 
+        VAL(i) = 0
+        COL_IDX(i) = 0 
+    enddo
 
     DO i = 1, N
         L(G1(i) - mi + 1) = L(G1(i) - mi + 1) + 1
@@ -101,9 +104,6 @@ PROGRAM modification
 
     DO i = 1, ma - mi + 1
         L1(i) = L(i)
-        if(L1(i).lt.0) then
-            print *, 'am roi', L1(i), 'tai k:', i
-        endif
     ENDDO
 
     c = 1
