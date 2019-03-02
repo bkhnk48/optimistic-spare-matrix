@@ -161,6 +161,7 @@ PROGRAM modification
         call timing(wct_start,cput_start)
         DO c = 1, trial
             !$omp parallel do schedule(static)
+            !!$omp parallel do schedule(dynamic)
             do i = 1, ma - mi + 1
                 do j = row(i), row(i + 1) - 1
                     X(i) = X(i) + VAL(j)* Y(COL_IDX(j))
