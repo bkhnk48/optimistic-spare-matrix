@@ -26,7 +26,7 @@ PROGRAM modification
 
     INTEGER, DIMENSION (:), ALLOCATABLE :: row, COL_IDX
 
-    INTEGER :: mi, ma
+    INTEGER :: mi, ma, iter
 
     integer ierr
     integer num_procs
@@ -131,6 +131,15 @@ PROGRAM modification
         L1(k) = L1(k) - 1
     enddo
 
+    iter = 0
+    do i = 1, ma - mi + 1
+        do j = row(i), row(i + 1) - 1
+            iter = iter + 1
+        enddo
+    enddo
+
+    print *, 'iter =', iter
+
     deallocate(L1)
 
     !
@@ -169,7 +178,7 @@ PROGRAM modification
         call timing(wct_end,cput_end)
         runtime = wct_end-wct_start
         print *, "Time = ", runtime, "seconds"
-        !print *,"Performance: ", dble(trial)*N/runtime/1000000.d0," MIt/s"
+        print *,"Performance: ", dble(trial)*iter/runtime/1000000.d0," MIt/s"
         
 
     endif
