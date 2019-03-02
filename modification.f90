@@ -17,14 +17,14 @@ PROGRAM modification
 
     DOUBLE PRECISION, DIMENSION (:), ALLOCATABLE :: X, XA1, XA2, Y 
     
-    INTEGER, DIMENSION (:), ALLOCATABLE :: L, L1 !, Index
+    INTEGER, DIMENSION (:), ALLOCATABLE :: L1, L1_1, L2, L2_1 !, Index
 
-    DOUBLE PRECISION, DIMENSION (:), ALLOCATABLE :: VAL
+    INTEGER, DIMENSION (:), ALLOCATABLE :: VAL_1, VAL_2
 
     INTEGER, DIMENSION (:), ALLOCATABLE :: G1, G2
 
 
-    INTEGER, DIMENSION (:), ALLOCATABLE :: row, COL_IDX
+    INTEGER, DIMENSION (:), ALLOCATABLE :: row1, row2, COL_1, COL_2
 
     INTEGER :: mi, ma, iter
 
@@ -50,24 +50,30 @@ PROGRAM modification
 
     ALLOCATE (X(Length))
 
-    ALLOCATE (L(Length))
     ALLOCATE (L1(Length))
+    ALLOCATE (L1_1(Length))
 
-    !ALLOCATE (I(Length))
-
-    ALLOCATE (VAL(Length + Length))
-    ALLOCATE (COL_IDX(Length + Length))
-
-    ALLOCATE (row(length + Length))
+    ALLOCATE (L2(Length))
+    ALLOCATE (L2_1(Length))
 
 
-    CALL readINT(ios, fh, G1, 'd1541_3077528') !, 'int')
+    ALLOCATE (VAL_1(Length))
+    ALLOCATE (COL_1(Length))
+
+    ALLOCATE (VAL_2(Length))
+    ALLOCATE (COL_2(Length))
+
+    ALLOCATE(row1(length))
+    ALLOCATE(row2(length))
+
+
+    CALL readINT(ios, fh, G1, 'd1541_3077528') 
 
     fh = 13
-    CALL readREAL(ios, fh, XA1, 'd1541XA1') !, 'r')
+    CALL readREAL(ios, fh, XA1, 'd1541XA1') 
 
     fh = 14
-    CALL readREAL(ios, fh, XA2, 'd1541XA2') !, 'r')
+    CALL readREAL(ios, fh, XA2, 'd1541XA2') 
 
     fh = 15
     CALL readINT(ios, fh, G2, 'd1541G2')
@@ -89,51 +95,71 @@ PROGRAM modification
     ENDDO
 
     DO i = 1, ma - mi + 1
-        L(i) = 0
         L1(i) = 0
+        L1_1(i) = 0
+
+        L2(i) = 0
+        L2_1(i) = 0
     ENDDO
 
-    DO i=1, Length + Length 
-        VAL(i) = 0
-        COL_IDX(i) = 0 
+    DO i=1, Length
+        VAL_1(i) = 0
+        COL_1(i) = 0 
+        VAL_2(i) = 0
+        COL_2(i) = 0 
     enddo
 
     DO i = 1, N
-        L(G1(i) - mi + 1) = L(G1(i) - mi + 1) + 1
-        L(G2(i) - mi + 1) = L(G2(i) - mi + 1) + 1
+        L1(G1(i) - mi + 1) = L1(G1(i) - mi + 1) + 1
+        L2(G2(i) - mi + 1) = L2(G2(i) - mi + 1) + 1
     ENDDO
 
     DO i = 1, ma - mi + 1
-        L1(i) = L(i)
+        L1_1(i) = L1(i)
+        L2_1(i) = L2(i)
     ENDDO
 
     c = 1
-    row(1) = 1
+    row1(1) = 1
     do i = 1, ma - mi + 1
-        c = c + L(i)
-        row(i+1) = c
+        c = c + L1(i)
+        row1(i+1) = c
+    enddo
+
+    c = 1
+    row2(1) = 1
+    do i = 1, ma - mi + 1
+        c = c + L2(i)
+        row2(i+1) = c
     enddo
 
 
     do i = 1, N 
         k = G1(i) - mi + 1
-        j = row(k)
-        offset = L(k) - L1(k)
-        VAL(j + offset) = XA1(i)
-        COL_IDX(j + offset) = G2(i)
-        L1(k) = L1(k) - 1
+        j = row1(k)
+        offset = L1(k) - L1_1(k)
+        !VAL(j + offset) = XA1(i)
+        VAL_1(j + offset) = i
+        !COL_IDX(j + offset) = G2(i)
+        COL_1(j + offset) = G2(i)
+        !L1(k) = L1(k) - 1
+        L1_1(k) = L1_1(k) - 1
         
         k = G2(i) - mi + 1
-        j = row(k)
-        offset = L(k) - L1(k)
-        VAL(j + offset) = XA2(i)
-        COL_IDX(j + offset) = G1(i)
-        L1(k) = L1(k) - 1
+        j = row2(k)
+        offset = L2(k) - L2_1(k)
+        VAL_2(j + offset) = i
+        COL_2(j + offset) = G1(i)
+        L2_1(k) = L2_1(k) - 1
     enddo
 
     iter = 0
     do i = 1, ma - mi + 1
-        do j = row(i), row(i + 1) - 1
+        do j = row1(i), row1(i + 1) - 1
+            iter = iter + 1
+        enddo
+
+        do j = row2(i), row2(i + 1) - 1
             iter = iter + 1
         enddo
     enddo
@@ -141,6 +167,9 @@ PROGRAM modification
     print *, 'iter =', iter
 
     deallocate(L1)
+    deallocate(L1_1)
+    deallocate(L2)
+    deallocate(L2_1)
 
     !
     !  Initialize MPI.
@@ -163,8 +192,15 @@ PROGRAM modification
             !$omp parallel do schedule(static)
             !!$omp parallel do schedule(dynamic)
             do i = 1, ma - mi + 1
-                do j = row(i), row(i + 1) - 1
-                    X(i) = X(i) + VAL(j)* Y(COL_IDX(j))
+                !do j = row(i), row(i + 1) - 1
+                !    X(i) = X(i) + VAL(j)* Y(COL_IDX(j))
+                !enddo
+                do j = row1(i), row1(i + 1) - 1
+                    X(i) = X(i) + XA1(VAL_1(j))* Y(COL_1(j))
+                enddo
+
+                do j = row2(i), row2(i + 1) - 1
+                    X(i) = X(i) + XA2(VAL_2(j))* Y(COL_2(j))
                 enddo
             enddo
             !$omp end parallel do
@@ -195,8 +231,14 @@ PROGRAM modification
 
     DEALLOCATE (X)
 
-    DEALLOCATE (VAL)
-    DEALLOCATE (COL_IDX)
+    DEALLOCATE (VAL_1)
+    DEALLOCATE (COL_1)
+
+    DEALLOCATE (VAL_2)
+    DEALLOCATE (COL_2)
+
+    DEALLOCATE(row1)
+    DEALLOCATE(row2)
     
 END PROGRAM modification
 
