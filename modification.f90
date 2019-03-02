@@ -2,6 +2,7 @@ PROGRAM modification
     USE ReadAll
     USE PrintAll
     use mpi
+    use omp_lib
     
     use, intrinsic :: iso_c_binding
     
@@ -18,12 +19,12 @@ PROGRAM modification
     
     INTEGER, DIMENSION (:), ALLOCATABLE :: L, L1 !, Index
 
-    DOUBLE PRECISION, DIMENSION (:), ALLOCATABLE :: VAL, COL_IDX
+    DOUBLE PRECISION, DIMENSION (:), ALLOCATABLE :: VAL
 
     INTEGER, DIMENSION (:), ALLOCATABLE :: G1, G2
 
 
-    INTEGER, DIMENSION (:), ALLOCATABLE :: row
+    INTEGER, DIMENSION (:), ALLOCATABLE :: row, COL_IDX
 
     INTEGER :: mi, ma
 
@@ -150,10 +151,14 @@ PROGRAM modification
 
         call timing(wct_start,cput_start)
         DO c = 1, trial
-            !DO i = 1, 2*N
-            !    V(i) = 0
-            !    B(i) = 0
-            !ENDDO
+            !$omp parallel do schedule(static)
+            do i = 1, ma - mi + 1
+                do j = row(i), row(i + 1) - 1
+                    X(i) = X(i) + VAL(j)* Y(COL_IDX(j))
+                enddo
+            enddo
+            !$omp end parallel do
+
             IF(i - M > M) THEN
                 CALL dummy(X, XA1, XA2, Y)
             ENDIF
