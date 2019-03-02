@@ -140,15 +140,7 @@ PROGRAM modification
         !endif
     enddo
 
-
-    !DO i = 1, N
-    !    L(G1(i) - mi + 1) = L(G1(i) - mi + 1) + 1
-    !    V(G1(i) - mi + L(G1(i) - mi + 1)) = XA1(i)
-    
-    !    L(G2(i) - mi + 1) = L(G2(i) - mi + 1) + 1
-    !    V(G2(i) - mi + L(G2(i) - mi + 1)) = XA2(i)
-    
-    !ENDDO
+    deallocate(L1)
 
     !
     !  Initialize MPI.
