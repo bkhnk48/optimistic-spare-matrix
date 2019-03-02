@@ -25,7 +25,7 @@ e:
 #/opt/intel/compilers_and_libraries/linux/mpi/intel64/bin/mpif90  -c PrintAll.f90
 	mpif90 -O3 -o a readdata.f90 ReadAll.o PrintAll.o timing.o
 #/opt/intel/compilers_and_libraries/linux/mpi/intel64/bin/mpif90 -O3 -o a readdata.f90 ReadAll.o PrintAll.o 
-	mpif90 -O3 -o m modification.f90 ReadAll.o PrintAll.o timing.o
+	mpif90 -fopenmp -O3 -o m modification.f90 ReadAll.o PrintAll.o timing.o
 
 d: 
 	gfortran -g -c ReadAll.f90
