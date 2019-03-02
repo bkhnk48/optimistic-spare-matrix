@@ -114,7 +114,6 @@ PROGRAM modification
     enddo
 
 
-    !print *, 'ffff'
     do i = 1, N 
         k = G1(i) - mi + 1
         j = row(k)
@@ -122,22 +121,13 @@ PROGRAM modification
         VAL(j + offset) = XA1(i)
         COL_IDX(j + offset) = G2(i)
         L1(k) = L1(k) - 1
-        !print *, 'i =', i, ' k =', k, ' and: ', L1(49536)
-        !if(L1(k).lt.0) then
-        !    print *, 'am roi', L1(k), 'tai k:', k
-        !endif
-        !if((i.eq.162).or.(i.eq.156)) then
-        !    print *, 'i = ', i
-        !endif
+        
         k = G2(i) - mi + 1
         j = row(k)
         offset = L(k) - L1(k)
         VAL(j + offset) = XA2(i)
         COL_IDX(j + offset) = G1(i)
         L1(k) = L1(k) - 1
-        !if(L1(k).lt.0) then
-        !    print *, 'am roi', L1(k), 'tai k:', k
-        !endif
     enddo
 
     deallocate(L1)
