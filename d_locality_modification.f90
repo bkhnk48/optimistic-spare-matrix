@@ -237,7 +237,8 @@ PROGRAM d_locality_modification
         call timing(wct_end,cput_end)
         runtime = wct_end-wct_start
         print *, "Time = ", runtime, "seconds"
-        print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MIt/s"
+        !print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MIt/s"
+        print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MFlop/s"
         
 
     endif
