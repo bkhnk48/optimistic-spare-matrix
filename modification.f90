@@ -2,6 +2,7 @@ PROGRAM modification
     USE ReadAll
     USE PrintAll
     use mpi
+    !use mpiifort
     use omp_lib
     
     use, intrinsic :: iso_c_binding
@@ -27,11 +28,13 @@ PROGRAM modification
     INTEGER, DIMENSION (:), ALLOCATABLE :: row1, row2, COL_1, COL_2
 
     INTEGER :: mi, ma
+    INTEGER :: num_of_threads
     INTEGER(8) :: iter
 
     integer :: ierr
     integer :: num_procs
     integer :: rank
+    
     
 
     fh = 12
@@ -165,7 +168,12 @@ PROGRAM modification
         enddo
     enddo
 
+    num_of_threads = 8
     print *, 'iter =', iter
+    print *,"Enter number of threads: "
+    read (*, *) num_of_threads
+    call OMP_SET_NUM_THREADS(num_of_threads)
+    
 
     deallocate(L1)
     deallocate(L1_1)
