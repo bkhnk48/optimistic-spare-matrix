@@ -12,6 +12,7 @@ PROGRAM readdata
 
     INTEGER :: ios, fh, Length
     INTEGER :: N, i, c, trial, M
+    INTEGER(8) :: iter
 
     DOUBLE PRECISION, DIMENSION (:), ALLOCATABLE :: X, XA1, XA2, Y 
     
@@ -32,6 +33,7 @@ PROGRAM readdata
     avgT = 0
     trial = 10000
 
+    iter = 0
     c = 0
     Length = 300*1000
     ALLOCATE (G1(Length))
@@ -63,6 +65,11 @@ PROGRAM readdata
             !Z(i) = 0
     ENDDO
 
+    DO c = 1, trial
+        DO i = 1 , N
+            iter = iter + 1
+        ENDDO
+    ENDDO
     !
     !  Initialize MPI.
     !
@@ -109,6 +116,7 @@ PROGRAM readdata
         
         runtime = wct_end-wct_start
         print *, "Time = ", runtime, "seconds"
+        !print *, "Number of iterations: ", iter, ' as ', dble(trial)*N
         print *,"Performance: ", dble(trial)*N/runtime/1000000.d0," MIt/s"
         !print *, 'ETA:  ', avgT, '(s).Mflops: ', Mflops!, avgT2, '(s) %: ', percent
         !print *, '                                            %2: ', percent2

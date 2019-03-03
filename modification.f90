@@ -26,11 +26,12 @@ PROGRAM modification
 
     INTEGER, DIMENSION (:), ALLOCATABLE :: row1, row2, COL_1, COL_2
 
-    INTEGER :: mi, ma, iter
+    INTEGER :: mi, ma
+    INTEGER(8) :: iter
 
-    integer ierr
-    integer num_procs
-    integer rank
+    integer :: ierr
+    integer :: num_procs
+    integer :: rank
     
 
     fh = 12
