@@ -117,7 +117,8 @@ PROGRAM readdata
         runtime = wct_end-wct_start
         print *, "Time = ", runtime, "seconds"
         !print *, "Number of iterations: ", iter, ' as ', dble(trial)*N
-        print *,"Performance: ", dble(trial)*N/runtime/1000000.d0," MIt/s"
+        !print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MIt/s"
+        print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MFlop/s"
         !print *, 'ETA:  ', avgT, '(s).Mflops: ', Mflops!, avgT2, '(s) %: ', percent
         !print *, '                                            %2: ', percent2
     ENDIF
