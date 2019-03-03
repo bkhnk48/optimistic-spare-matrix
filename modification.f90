@@ -37,7 +37,7 @@ PROGRAM modification
     
     
 
-    fh = 12
+    
     N = 285896
     M = N + 3
     i = 0
@@ -70,7 +70,9 @@ PROGRAM modification
     ALLOCATE(row1(length))
     ALLOCATE(row2(length))
 
+    rank = 0
 
+    fh = 12
     CALL readINT(ios, fh, G1, 'd1541_3077528') 
 
     fh = 13
@@ -106,12 +108,12 @@ PROGRAM modification
         L2_1(i) = 0
     ENDDO
 
-    DO i=1, Length
-        VAL_1(i) = 0
-        COL_1(i) = 0 
-        VAL_2(i) = 0
-        COL_2(i) = 0 
-    enddo
+    !DO i=1, Length
+    !    VAL_1(i) = 0
+    !    COL_1(i) = 0 
+    !    VAL_2(i) = 0
+    !    COL_2(i) = 0 
+    !enddo
 
     DO i = 1, N
         L1(G1(i) - mi + 1) = L1(G1(i) - mi + 1) + 1
@@ -137,26 +139,6 @@ PROGRAM modification
         row2(i+1) = c
     enddo
 
-
-    do i = 1, N 
-        k = G1(i) - mi + 1
-        j = row1(k)
-        offset = L1(k) - L1_1(k)
-        !VAL(j + offset) = XA1(i)
-        VAL_1(j + offset) = i
-        !COL_IDX(j + offset) = G2(i)
-        COL_1(j + offset) = G2(i)
-        !L1(k) = L1(k) - 1
-        L1_1(k) = L1_1(k) - 1
-        
-        k = G2(i) - mi + 1
-        j = row2(k)
-        offset = L2(k) - L2_1(k)
-        VAL_2(j + offset) = i
-        COL_2(j + offset) = G1(i)
-        L2_1(k) = L2_1(k) - 1
-    enddo
-
     iter = 0
     do i = 1, ma - mi + 1
         do j = row1(i), row1(i + 1) - 1
@@ -173,12 +155,6 @@ PROGRAM modification
     print *,"Enter number of threads: "
     read (*, *) num_of_threads
     call OMP_SET_NUM_THREADS(num_of_threads)
-    
-
-    deallocate(L1)
-    deallocate(L1_1)
-    deallocate(L2)
-    deallocate(L2_1)
 
     !
     !  Initialize MPI.
@@ -196,9 +172,49 @@ PROGRAM modification
 
     if ( rank == 0 ) then
 
+        !!shared(VAL_1, VAL_2, COL_1, COL_2)
+        !$omp parallel do schedule(static) 
+        do i = 1, ma - mi + 1
+            do j = row1(i), row1(i + 1) - 1
+                VAL_1(j) = 0
+                COL_1(j) = 0 
+            enddo
+
+            do j = row2(i), row2(i + 1) - 1
+                VAL_2(j) = 0
+                COL_2(j) = 0 
+            enddo
+        enddo
+        !$omp end parallel do
+
+        do i = 1, N 
+            k = G1(i) - mi + 1
+            j = row1(k)
+            offset = L1(k) - L1_1(k)
+            !VAL(j + offset) = XA1(i)
+            VAL_1(j + offset) = i
+            !COL_IDX(j + offset) = G2(i)
+            COL_1(j + offset) = G2(i)
+            !L1(k) = L1(k) - 1
+            L1_1(k) = L1_1(k) - 1
+            
+            k = G2(i) - mi + 1
+            j = row2(k)
+            offset = L2(k) - L2_1(k)
+            VAL_2(j + offset) = i
+            COL_2(j + offset) = G1(i)
+            L2_1(k) = L2_1(k) - 1
+        enddo
+
+        deallocate(L1)
+        deallocate(L1_1)
+        deallocate(L2)
+        deallocate(L2_1)
+
+
         call timing(wct_start,cput_start)
         DO c = 1, trial
-            !$omp parallel do schedule(static)
+            !$omp parallel do schedule(static) 
             !!$omp parallel do schedule(dynamic)
             do i = 1, ma - mi + 1
                 !do j = row(i), row(i + 1) - 1
@@ -229,7 +245,7 @@ PROGRAM modification
 
     endif
 
-    call MPI_Finalize ( ierr )
+    !call MPI_Finalize ( ierr )
 
     DEALLOCATE (G1)
     DEALLOCATE (XA1)
