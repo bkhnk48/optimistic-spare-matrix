@@ -26,6 +26,7 @@ e:
 	mpif90 -O3 -o a readdata.f90 ReadAll.o PrintAll.o timing.o
 #/opt/intel/compilers_and_libraries/linux/mpi/intel64/bin/mpif90 -O3 -o a readdata.f90 ReadAll.o PrintAll.o 
 	mpif90 -fopenmp -O3 -o m modification.f90 ReadAll.o PrintAll.o timing.o
+	mpif90 -fopenmp -O3 -o d_locality d_locality_modification.f90 ReadAll.o PrintAll.o timing.o
 
 00:
 	gfortran -c ReadAll.f90
@@ -33,6 +34,7 @@ e:
 	gcc -O0 -fargument-noalias -c timing.c
 	mpif90 -O0 -o a readdata.f90 ReadAll.o PrintAll.o timing.o
 	mpif90 -fopenmp -O0 -o m modification.f90 ReadAll.o PrintAll.o timing.o
+	mpif90 -g -O0 -o d_locality d_locality_modification.f90 ReadAll.o PrintAll.o timing.o
 
 d: 
 	gfortran -g -c ReadAll.f90
@@ -40,7 +42,7 @@ d:
 	gcc -g -fargument-noalias -c timing.c
 	mpif90 -g -o a readdata.f90 ReadAll.o PrintAll.o timing.o
 	mpif90 -g -o m modification.f90 ReadAll.o PrintAll.o timing.o
-
+	mpif90 -g -o d_locality d_locality_modification.f90 ReadAll.o PrintAll.o timing.o
 
 t:
 	gfortran -g -c Reproducibility.f90
@@ -55,6 +57,8 @@ r:
 s:
 #mpiexec -np 1 a
 	mpiexec -np 1 ./m
+n:
+	mpiexec -np 1 ./d_locality	
 
 clean: 
 	-rm *.o
