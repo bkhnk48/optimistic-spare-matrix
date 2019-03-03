@@ -38,13 +38,16 @@ PROGRAM d_locality_modification
     
 
     
-    N = 285896
+    !N = 285896
+    N = 1140404
     M = N + 3
     i = 0
     trial = 10000
-    !trial = 10
+
+    iter = 0
     c = 0
-    Length = 300*1000
+    !Length = 300*1000
+    Length = 12 * 100000
     ALLOCATE (G1(Length))
     ALLOCATE (G2(Length))
 
@@ -73,19 +76,24 @@ PROGRAM d_locality_modification
     rank = 0
 
     fh = 12
-    CALL readINT(ios, fh, G1, 'd1541_3077528') 
+    !CALL readINT(ios, fh, G1, 'd1541_3077528') 
+    CALL readINT(ios, fh, G1, 'g1s') 
 
     fh = 13
-    CALL readREAL(ios, fh, XA1, 'd1541XA1') 
+    !CALL readREAL(ios, fh, XA1, 'd1541XA1') 
+    CALL readREAL(ios, fh, XA1, 'xa1') 
 
     fh = 14
-    CALL readREAL(ios, fh, XA2, 'd1541XA2') 
+    !CALL readREAL(ios, fh, XA2, 'd1541XA2') 
+    CALL readREAL(ios, fh, XA2, 'xa2') 
 
     fh = 15
-    CALL readINT(ios, fh, G2, 'd1541G2')
+    !CALL readINT(ios, fh, G2, 'd1541G2')
+    CALL readINT(ios, fh, G2, 'g2s')
 
     fh = 16
-    CALL readREAL(ios, fh, Y, 'd1541Y')
+    !CALL readREAL(ios, fh, Y, 'd1541Y')
+    CALL readREAL(ios, fh, Y, 'y')
 
     DO i = 1 , Length
         X(i) = 0
