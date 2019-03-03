@@ -92,6 +92,7 @@
       !DATA G2 /0/
       INTEGER :: ios, t, i1
       INTEGER :: s 
+      DOUBLE PRECISION :: r
       SAVE s
       DATA s /0/
       INTEGER :: unit
@@ -120,6 +121,51 @@
 
       !ThanhNT
       !print *, "Which calls this sub", getpid()
+                !ThanhNT
+      unit = 0
+      i1 = 0
+      
+      IF(s.EQ.0) THEN
+        open (unit = 190222, file = "g1s")
+        open (unit = 190223, file = "g2s") 
+      
+        
+        DO ISEG = 1 , MINSEG
+      
+          write (190222,*) GLOSEG1(ISEG) 
+          write (190223,*) GLOSEG2(ISEG) 
+          !write (190222,*) XA1(ISEG) 
+          !write (190223,*) XA2(ISEG) 
+        enddo
+
+        close(190222)
+        close(190223)
+      ELSE IF(s.gt.0) THEN
+          open (unit = 190222, iostat=ios, file = "g1s")
+      
+          DO
+              i1 = i1 + 1
+              READ(190222, *, iostat=ios) t
+              IF (ios.NE.0) exit
+              
+              IF(t.NE.GLOSEG1(i1)) then
+                  print *, 'NE: ', GLOSEG1(i1), ' ', i1
+                  unit = unit + 1
+              endif  
+
+          ENDDO
+
+          if(unit.eq.0) then
+            print *, ' EQ nhe voi s = ', s
+          endif
+
+
+          close(190222)
+
+      endif
+      s = s + 1
+      
+      !Endof ThanhNT
       !Endof ThanhNT
 !
       IF(OP(1:8).EQ.'X=AY    ') THEN
@@ -142,57 +188,7 @@
 !
         IF(TYPEXT(1:1).EQ.'Q'.OR.TYPEXT(1:1).EQ.'S') THEN
 ! 
-          !ThanhNT
-          unit = 0
-          i1 = 0
-          !print *, 'ffffffffffff'
-          IF(s.EQ.0) THEN
-            open (unit = 190222, file = "g1s")
-            open (unit = 190223, file = "g2s") 
-            !ALLOCATE(G1(MINSEG))
-            !ALLOCATE(G2(MINSEG))
-            
-            DO ISEG = 1 , MINSEG
-              !G1(i) = GLOSEG1(i)
-              !G2(i) = GLOSEG2(i)
-              write (190222,*) GLOSEG1(ISEG) 
-              write (190223,*) GLOSEG2(ISEG) 
-            enddo
 
-            close(190222)
-            close(190223)
-          ELSE IF(s.lt.100) THEN
-              open (unit = 190222, iostat=ios, file = "g1s")
-              !open (unit = 190223, iostat=ios, file = "g2s") 
-              !IF (ios.NE.0) STOP 1
-              DO
-                  i1 = i1 + 1
-                  READ(190222, *, iostat=ios) t
-                  IF (ios.NE.0) exit
-                  !t = t + 1
-                  IF(t.NE.GLOSEG1(i1)) then
-                    !if((mode(i1, 10)).eq.(2)) then
-                      print *, 'NE: ', GLOSEG1(i1), ' ', i1
-                    !endif  
-                    unit = unit + 1
-                  endif  
-                  
-                  !unit = 0
-
-              ENDDO
-
-              if(unit.eq.0) then
-                print *, ' EQ nhe voi s = ', s
-              endif
-
-
-              close(190222)
-              !close(190223)
-            !endif  
-          endif
-          s = s + 1
-          
-          !Endof ThanhNT
 !         SQUARE PART
 !
           DO ISEG = 1 , MINSEG
