@@ -166,7 +166,7 @@ PROGRAM modification
     !enddo
 
     num_of_threads = 8
-    !print *, 'iter =', iter
+    
     print *,"Enter number of threads: "
     read (*, *) num_of_threads
     call OMP_SET_NUM_THREADS(num_of_threads)
@@ -218,8 +218,8 @@ PROGRAM modification
         call timing(wct_end,cput_end)
         runtime = wct_end-wct_start
         print *, "Time = ", runtime, "seconds"
-        print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MIt/s"
-        
+        !print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MIt/s"
+        print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MFlop/s"
 
     endif
 
