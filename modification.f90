@@ -1,6 +1,7 @@
 PROGRAM modification
     USE ReadFile
     USE PrintAll
+    USE DataModel
     use mpi
     !use mpiifort
     use omp_lib
@@ -10,9 +11,10 @@ PROGRAM modification
     IMPLICIT NONE
     
 
-    INTEGER :: ios, fh, Length
-    INTEGER :: N, i, c, trial, M
-    INTEGER :: j, k, offset
+    !INTEGER :: ios, fh, Length
+    !INTEGER :: N, c, trial, M
+    INTEGER :: c
+    INTEGER :: i, j, k, offset
 
     double precision :: wct_start,wct_end,cput_start,cput_end,runtime
 
@@ -29,7 +31,6 @@ PROGRAM modification
 
     INTEGER :: mi, ma
     INTEGER :: num_of_threads
-    INTEGER(8) :: iter
 
     integer :: ierr
     integer :: num_procs
@@ -38,16 +39,9 @@ PROGRAM modification
     
 
     
-    !N = 285896
-    N = 1140404
-    M = N + 3
     i = 0
-    trial = 10000
 
-    iter = 0
     c = 0
-    !Length = 300*1000
-    Length = 12 * 100000
 
     ALLOCATE (G1(Length))
     ALLOCATE (G2(Length))
