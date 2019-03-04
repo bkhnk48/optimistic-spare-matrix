@@ -1,6 +1,7 @@
 PROGRAM readdata
     USE ReadFile
     USE PrintAll
+    USE DataModel
     !USE Replacement
     !USE OptimizedLib
     !USE Reproducibility
@@ -10,12 +11,9 @@ PROGRAM readdata
     IMPLICIT NONE
     
 
-    INTEGER :: ios, fh, Length
-    INTEGER :: N, i, c, trial, M
-    INTEGER(8) :: iter
+    INTEGER :: i, c
 
     DOUBLE PRECISION, DIMENSION (:), ALLOCATABLE :: X, XA1, XA2, Y 
-    
 
     double precision :: wct_start,wct_end,cput_start,cput_end,runtime
 
@@ -27,17 +25,10 @@ PROGRAM readdata
     integer rank
 
     fh = 12
-    !N = 285896
-    N = 1140404
-    M = N + 3
     i = 0
     avgT = 0
-    trial = 10000
 
-    iter = 0
     c = 0
-    !Length = 300*1000
-    Length = 12 * 100000
     ALLOCATE (G1(Length))
     ALLOCATE (G2(Length))
 
@@ -73,11 +64,11 @@ PROGRAM readdata
             !Z(i) = 0
     ENDDO
 
-    DO c = 1, trial
-        DO i = 1 , N
-            iter = iter + 1
-        ENDDO
-    ENDDO
+    !DO c = 1, trial
+    !    DO i = 1 , N
+    !        iter = iter + 1
+    !    ENDDO
+    !ENDDO
     !
     !  Initialize MPI.
     !
