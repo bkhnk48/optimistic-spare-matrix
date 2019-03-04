@@ -1,5 +1,5 @@
 PROGRAM readdata
-    USE ReadAll
+    USE ReadFile
     USE PrintAll
     !USE Replacement
     !USE OptimizedLib
