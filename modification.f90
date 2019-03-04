@@ -1,5 +1,5 @@
 PROGRAM modification
-    USE ReadAll
+    USE ReadFile
     USE PrintAll
     use mpi
     !use mpiifort
