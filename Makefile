@@ -20,13 +20,14 @@ e:
 #ifort -c ReadFile.f90
 #/opt/intel/compilers_and_libraries/linux/mpi/intel64/bin/mpif90  -c ReadFile.f90
 	gfortran -c PrintAll.f90
+	gfortran -c DataModel.f90
 	gcc -O3 -fargument-noalias -c timing.c
 #ifort -c PrintAll.f90
 #/opt/intel/compilers_and_libraries/linux/mpi/intel64/bin/mpif90  -c PrintAll.f90
-	mpif90 -O3 -o a readdata.f90 ReadFile.o PrintAll.o timing.o
+	mpif90 -O3 -o a readdata.f90 ReadFile.o PrintAll.o timing.o DataModel.o
 #/opt/intel/compilers_and_libraries/linux/mpi/intel64/bin/mpif90 -O3 -o a readdata.f90 ReadFile.o PrintAll.o 
-	mpif90 -fopenmp -O3 -o m modification.f90 ReadFile.o PrintAll.o timing.o
-	mpif90 -fopenmp -O3 -o d_locality d_locality_modification.f90 ReadFile.o PrintAll.o timing.o
+	mpif90 -fopenmp -O3 -o m modification.f90 ReadFile.o PrintAll.o timing.o DataModel.o
+	mpif90 -fopenmp -O3 -o d_locality d_locality_modification.f90 ReadFile.o PrintAll.o timing.o DataModel.o
 
 00:
 	gfortran -c ReadFile.f90
