@@ -83,12 +83,13 @@ PROGRAM readdata
     !
     call MPI_Comm_size ( MPI_COMM_WORLD, num_procs, ierr )
 
+    !N_Length = N
     if ( rank == 0 ) then
     !start = timestamp()
         call timing(wct_start,cput_start)
         DO c = 1, trial
         
-            DO i = 1 , N
+            DO i = 1 , N_Length
                 X(G1(i))= X(G1(i))+ XA1(i)*Y(G2(i))
                 X(G2(i))= X(G2(i))+XA2(i)*Y(G1(i))
             ENDDO
@@ -117,7 +118,7 @@ PROGRAM readdata
         print *, "Time = ", runtime, "seconds"
         !print *, "Number of iterations: ", iter, ' as ', dble(trial)*N
         !print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MIt/s"
-        print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MFlop/s"
+        print *,"Performance: ", dble(trial)*N_Loop*2/runtime/1000000.d0," MFlop/s"
         !print *, 'ETA:  ', avgT, '(s).Mflops: ', Mflops!, avgT2, '(s) %: ', percent
         !print *, '                                            %2: ', percent2
     ENDIF
