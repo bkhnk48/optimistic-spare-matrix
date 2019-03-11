@@ -20,5 +20,7 @@ module DataModel
     !INTEGER :: c = 0
     !Length = 300*1000
     INTEGER :: Length = 12 * 100000
+
+    integer :: chunk_size
     contains
 end module DataModel
