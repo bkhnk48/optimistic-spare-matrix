@@ -157,16 +157,7 @@ PROGRAM modification
         L2_1(k) = L2_1(k) - 1
     enddo
 
-    !iter = 0
-    !do i = 1, ma - mi + 1
-    !    do j = row1(i), row1(i + 1) - 1
-    !        iter = iter + 1
-    !    enddo
-
-    !    do j = row2(i), row2(i + 1) - 1
-    !        iter = iter + 1
-    !    enddo
-    !enddo
+    
 
     num_of_threads = 8
     
@@ -194,13 +185,15 @@ PROGRAM modification
     !
     call MPI_Comm_size ( MPI_COMM_WORLD, num_procs, ierr )
 
+    !N_Length = ma - mi + 1
+
     if ( rank == 0 ) then
 
         call timing(wct_start,cput_start)
         DO c = 1, trial
             !$omp parallel do schedule(static)
             !!$omp parallel do schedule(dynamic)
-            do i = 1, ma - mi + 1
+            do i = 1, N_Length !ma - mi + 1
                 do j = row1(i), row1(i + 1) - 1
                     X(i) = X(i) + XA1(VAL_1(j))* Y(COL_1(j))
                 enddo
@@ -222,7 +215,7 @@ PROGRAM modification
         runtime = wct_end-wct_start
         print *, "Time = ", runtime, "seconds"
         !print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MIt/s"
-        print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MFlop/s"
+        print *,"Performance: ", dble(trial)*N_Loop*2/runtime/1000000.d0," MFlop/s"
 
     endif
 
