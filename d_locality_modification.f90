@@ -35,6 +35,7 @@ PROGRAM d_locality_modification
     integer :: rank
     
     
+    
     i = 0
 
     c = 0
@@ -149,10 +150,13 @@ PROGRAM d_locality_modification
     !enddo
 
     num_of_threads = 8
-    !print *, 'iter =', iter
+    
+    !chunk_size = 1024
     print *,"Enter number of threads: "
     read (*, *) num_of_threads
     call OMP_SET_NUM_THREADS(num_of_threads)
+    print *,"Enter chunk size: "
+    read (*, *) chunk_size
 
     !
     !  Initialize MPI.
@@ -171,7 +175,7 @@ PROGRAM d_locality_modification
     if ( rank == 0 ) then
 
         !!shared(VAL_1, VAL_2, COL_1, COL_2)
-        !$omp parallel do schedule(static) 
+        !$omp parallel do schedule(static, chunk_size) 
         do i = 1, ma - mi + 1
             do j = row1(i), row1(i + 1) - 1
                 VAL_1(j) = 0
@@ -212,7 +216,9 @@ PROGRAM d_locality_modification
 
         call timing(wct_start,cput_start)
         DO c = 1, trial
-            !$omp parallel do schedule(static) 
+            !!$omp parallel do schedule(static) 
+            !$omp parallel do schedule(static, chunk_size) 
+            !shared(X, XA1, XA2, Y, VAL_1, VAL_2, COL_1, COL_2)
             !!$omp parallel do schedule(dynamic)
             do i = 1, ma - mi + 1
                 do j = row1(i), row1(i + 1) - 1
@@ -231,6 +237,18 @@ PROGRAM d_locality_modification
 
         
         ENDDO !DO c = 1, trial
+
+        !!$omp parallel do schedule(static)
+        !do i = mi, ma 
+        !    do j = row1(i - mi + 1), row1(i - mi + 2) - 1
+        !        X(i) = X(i) + XA1(VAL_1(j))* Y(COL_1(j))
+        !    enddo
+
+        !    do j = row2(i - mi + 1), row2(i - mi + 2) - 1
+        !        X(i) = X(i) + XA2(VAL_2(j))* Y(COL_2(j))
+        !    enddo
+        !enddo
+        !!$omp end parallel do
 
         call timing(wct_end,cput_end)
         runtime = wct_end-wct_start
