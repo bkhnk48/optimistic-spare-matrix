@@ -1,16 +1,100 @@
 # First data block (index 0)
 # X   Y
 #6.5158581733703613  438.76952566037636
-  1  6671.0040569305420
+#1  6671.0040569305420
+
+
+#TIME AND PERFOMANCE MFlop
+#mpiexec -np 1 ./a
+
+Time =    3.2215721607208252      seconds
+Performance:    707.97979564414607       MFlop/s
+
+
+#mpiexec -np 1 ./m
+#Enter number of threads: 
+#2
+Time =    3.4759888648986816      seconds
+Performance:    656.16090518359044       MFlop/s
+
+
+#mpiexec -np 1 ./m
+#Enter number of threads: 
+#4
+Time =    2.3678891658782959      seconds
+Performance:    963.22413771170079       MFlop/s
+
+
+#mpiexec -np 1 ./m
+#Enter number of threads: 
+#6
+Time =    2.5477910041809082      seconds
+Performance:    895.21000594523230       MFlop/s
+
+
+mpiexec -np 1 ./m
+ Enter number of threads: 
+7
+ Time =    2.4753291606903076      seconds
+ Performance:    921.41604285223195       MFlop/s
+
+
+#mpiexec -np 1 ./m
+#Enter number of threads: 
+#8
+Time =    2.8511378765106201      seconds
+Performance:    799.96411916472414       MFlop/s
   
+
+
+#DATA LOCALITY
+#mpiexec -np 1 ./d_locality	
+#Enter number of threads: 
+#2
+Time =    3.4682590961456299      seconds
+Performance:    657.62330228866801       MFlop/s
+
+
+#mpiexec -np 1 ./d_locality	
+#Enter number of threads: 
+#4
+Time =    2.3794100284576416      seconds
+Performance:    958.56030390795809       MFlop/s
+
+
+#mpiexec -np 1 ./d_locality	
+#Enter number of threads: 
+#6
+Time =    2.6935191154479980      seconds
+Performance:    846.77624410348608       MFlop/s
+
+
+#mpiexec -np 1 ./d_locality	
+#Enter number of threads: 
+#7
+Time =    2.6667580604553223      seconds
+Performance:    855.27368748651122       MFlop/s
+
+
+
+#mpiexec -np 1 ./d_locality	
+#Enter number of threads: 
+#8
+Time =    2.4631109237670898      seconds
+Performance:    925.98671785017495       MFlop/s
+
+
+
+
+
 
 # Second data block (index 1)
 # X   Y
 #7.8642091751098633  727.08137241531608
-  2  8546.8029975891113
+#2  8546.8029975891113
 #4.3620231151580811  1310.8412883302158
-  4  4405.4858684539795
-  6  4678.5180568695068
+#4  4405.4858684539795
+#6  4678.5180568695068
 #3.6851089000701904  1551.6285013696856
-  8  4134.4311237335205
+#8  4134.4311237335205
 
