@@ -155,8 +155,8 @@ PROGRAM d_locality_modification
     print *,"Enter number of threads: "
     read (*, *) num_of_threads
     call OMP_SET_NUM_THREADS(num_of_threads)
-    print *,"Enter chunk size: "
-    read (*, *) chunk_size
+    !print *,"Enter chunk size: "
+    !read (*, *) chunk_size
 
     !
     !  Initialize MPI.
@@ -175,7 +175,8 @@ PROGRAM d_locality_modification
     if ( rank == 0 ) then
 
         !!shared(VAL_1, VAL_2, COL_1, COL_2)
-        !$omp parallel do schedule(static, chunk_size) 
+        !$omp parallel do schedule(static)
+        !!$omp parallel do schedule(static, chunk_size) 
         do i = 1, ma - mi + 1
             do j = row1(i), row1(i + 1) - 1
                 VAL_1(j) = 0
@@ -213,14 +214,16 @@ PROGRAM d_locality_modification
         deallocate(L2)
         deallocate(L2_1)
 
+        !N_Length = ma - mi + 1
+
 
         call timing(wct_start,cput_start)
         DO c = 1, trial
-            !!$omp parallel do schedule(static) 
-            !$omp parallel do schedule(static, chunk_size) 
+            !$omp parallel do schedule(static) 
+            !!$omp parallel do schedule(static, chunk_size) 
             !shared(X, XA1, XA2, Y, VAL_1, VAL_2, COL_1, COL_2)
             !!$omp parallel do schedule(dynamic)
-            do i = 1, ma - mi + 1
+            do i = 1, N_Length
                 do j = row1(i), row1(i + 1) - 1
                     X(i) = X(i) + XA1(VAL_1(j))* Y(COL_1(j))
                 enddo
@@ -254,7 +257,7 @@ PROGRAM d_locality_modification
         runtime = wct_end-wct_start
         print *, "Time = ", runtime, "seconds"
         !print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MIt/s"
-        print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MFlop/s"
+        print *,"Performance: ", dble(trial)*N_Loop*2/runtime/1000000.d0," MFlop/s"
         
 
     endif
