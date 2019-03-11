@@ -1,0 +1,33 @@
+voi so luong vong lap la 800, va so luong phan tu cua mang la 1,1tr
+thi van chua den peak cua no
+
+
+
+mpiexec -np 1 ./a
+ Time =    8.6109709739685059      seconds
+ Performance:    185.80947547458914       MFlop/s
+tienthanh@ubuntu:~/Public/test/19.03.02/temp/optimistic-spare-matrix$ make s
+mpiexec -np 1 ./m
+ Enter number of threads: 
+2
+ Time =    5.3616890907287598      seconds
+ Performance:    298.41342400227245       MFlop/s
+tienthanh@ubuntu:~/Public/test/19.03.02/temp/optimistic-spare-matrix$ make s
+mpiexec -np 1 ./m
+ Enter number of threads: 
+4
+ Time =    3.3633801937103271      seconds
+ Performance:    475.71190524106441       MFlop/s
+tienthanh@ubuntu:~/Public/test/19.03.02/temp/optimistic-spare-matrix$ make s
+mpiexec -np 1 ./m
+ Enter number of threads: 
+6
+ Time =    3.8499510288238525      seconds
+ Performance:    415.58970179649140       MFlop/s
+tienthanh@ubuntu:~/Public/test/19.03.02/temp/optimistic-spare-matrix$ make s
+mpiexec -np 1 ./m
+ Enter number of threads: 
+8
+ Time =    3.8232569694519043      seconds
+ Performance:    418.49135770473026       MFlop/s
+
