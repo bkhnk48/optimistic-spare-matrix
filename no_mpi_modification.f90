@@ -1,7 +1,6 @@
 PROGRAM no_mpi_modification
     USE ReadFile
     USE PrintAll
-    USE DataModel
 
     use omp_lib
     
@@ -27,14 +26,17 @@ PROGRAM no_mpi_modification
     INTEGER, DIMENSION (:), ALLOCATABLE :: row1, row2, COL_1, COL_2
 
     INTEGER :: mi, ma
-    INTEGER :: num_of_threads
+    
 
-    integer :: ierr
-    integer :: num_procs
-    integer :: rank
     
     
 
+    num_of_threads = 8
+    CALL get_command_argument(1, num1char)
+    read (num1char, *) num_of_threads
+    !print *, ":", command_argument_count()
+    !print *,"Enter number of threads: "
+    !read (*, *) num_of_threads
     
     i = 0
 
@@ -156,10 +158,7 @@ PROGRAM no_mpi_modification
 
     
 
-    num_of_threads = 8
-    
-    print *,"Enter number of threads: "
-    read (*, *) num_of_threads
+    !print *, "# of threads: ", num_of_threads
     call OMP_SET_NUM_THREADS(num_of_threads)
     
 
@@ -167,7 +166,9 @@ PROGRAM no_mpi_modification
     deallocate(L1_1)
     deallocate(L2)
     deallocate(L2_1)
-
+    N_Length = ma - mi + 1
+    N_Loops = N
+    !print *, ma, " ", mi, " ", trial
 
     !if ( rank == 0 ) then
 
@@ -175,7 +176,7 @@ PROGRAM no_mpi_modification
         DO c = 1, trial
             !$omp parallel do schedule(static)
             !!$omp parallel do schedule(dynamic)
-            do i = 1, N_Length !ma - mi + 1
+            do i = 1, ma - mi + 1 !N_Length !
                 do j = row1(i), row1(i + 1) - 1
                     X(i) = X(i) + XA1(VAL_1(j))* Y(COL_1(j))
                 enddo
@@ -197,7 +198,7 @@ PROGRAM no_mpi_modification
         runtime = wct_end-wct_start
         print *, "Time = ", runtime, "seconds"
         !print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MIt/s"
-        print *,"Performance: ", dble(trial)*N_Loop*2/runtime/1000000.d0," MFlop/s"
+        print *,"Performance: ", dble(trial)*N_Loops*2/runtime/1000000.d0," MFlop/s"
 
     !endif
 
