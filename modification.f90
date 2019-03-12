@@ -1,7 +1,6 @@
 PROGRAM modification
     USE ReadFile
     USE PrintAll
-    USE DataModel
     use mpi
     !use mpiifort
     use omp_lib
@@ -30,7 +29,7 @@ PROGRAM modification
     INTEGER, DIMENSION (:), ALLOCATABLE :: row1, row2, COL_1, COL_2
 
     INTEGER :: mi, ma
-    INTEGER :: num_of_threads
+    
 
     integer :: ierr
     integer :: num_procs
@@ -163,6 +162,7 @@ PROGRAM modification
     
     print *,"Enter number of threads: "
     read (*, *) num_of_threads
+
     call OMP_SET_NUM_THREADS(num_of_threads)
     
 
@@ -185,7 +185,8 @@ PROGRAM modification
     !
     call MPI_Comm_size ( MPI_COMM_WORLD, num_procs, ierr )
 
-    !N_Length = ma - mi + 1
+    N_Length = ma - mi + 1
+    N_Loops = N
 
     if ( rank == 0 ) then
 
@@ -193,7 +194,7 @@ PROGRAM modification
         DO c = 1, trial
             !$omp parallel do schedule(static)
             !!$omp parallel do schedule(dynamic)
-            do i = 1, N_Length !ma - mi + 1
+            do i = 1, ma - mi + 1 !N_Length !
                 do j = row1(i), row1(i + 1) - 1
                     X(i) = X(i) + XA1(VAL_1(j))* Y(COL_1(j))
                 enddo
@@ -214,8 +215,7 @@ PROGRAM modification
         call timing(wct_end,cput_end)
         runtime = wct_end-wct_start
         print *, "Time = ", runtime, "seconds"
-        !print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MIt/s"
-        print *,"Performance: ", dble(trial)*N_Loop*2/runtime/1000000.d0," MFlop/s"
+        print *,"Performance: ", dble(trial)*N_Loops*2/runtime/1000000.d0," MFlop/s"
 
     endif
 
