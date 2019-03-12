@@ -1,11 +1,8 @@
 PROGRAM readdata
     USE ReadFile
     USE PrintAll
-    USE DataModel
-    !USE Replacement
-    !USE OptimizedLib
-    !USE Reproducibility
     
+   
     use mpi
     use, intrinsic :: iso_c_binding
     IMPLICIT NONE
@@ -60,15 +57,9 @@ PROGRAM readdata
     CALL readREAL(ios, fh, Y, 'y')
 
     DO i = 1 , Length
-            X(i) = 0
-            !Z(i) = 0
+       X(i) = 0
     ENDDO
 
-    !DO c = 1, trial
-    !    DO i = 1 , N
-    !        iter = iter + 1
-    !    ENDDO
-    !ENDDO
     !
     !  Initialize MPI.
     !
@@ -83,9 +74,8 @@ PROGRAM readdata
     !
     call MPI_Comm_size ( MPI_COMM_WORLD, num_procs, ierr )
 
-    !N_Length = N
+    N_Length = N
     if ( rank == 0 ) then
-    !start = timestamp()
         call timing(wct_start,cput_start)
         DO c = 1, trial
         
@@ -94,33 +84,21 @@ PROGRAM readdata
                 X(G2(i))= X(G2(i))+XA2(i)*Y(G1(i))
             ENDDO
 
-            IF(i > M) THEN
+            IF(G1(i-1) - M > M) THEN
                 CALL dummy(X, XA1, XA2, Y)
             ENDIF
-
         
         ENDDO !DO c = 1, trial
 
-        !finish = timestamp()
 
         call timing(wct_end,cput_end)
 
-        !avgT = real(finish - start) / real(clock_rate)
-
-        !Mflops = (4.d0*trial)*N/avgT
-        !Mflops = Mflops / (1000*1000)
-
-        !avgT1 = 11.7129688
 
 
         
         runtime = wct_end-wct_start
         print *, "Time = ", runtime, "seconds"
-        !print *, "Number of iterations: ", iter, ' as ', dble(trial)*N
-        !print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MIt/s"
-        print *,"Performance: ", dble(trial)*N_Loop*2/runtime/1000000.d0," MFlop/s"
-        !print *, 'ETA:  ', avgT, '(s).Mflops: ', Mflops!, avgT2, '(s) %: ', percent
-        !print *, '                                            %2: ', percent2
+        print *,"Performance: ", dble(trial)*N_Loops*2/runtime/1000000.d0," MFlop/s"
     ENDIF
 
     call MPI_Finalize ( ierr )
