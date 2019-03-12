@@ -1,7 +1,7 @@
 PROGRAM d_locality_modification
     USE ReadFile
     USE PrintAll
-    USE DataModel
+
     use mpi
     !use mpiifort
     use omp_lib
@@ -28,13 +28,14 @@ PROGRAM d_locality_modification
     INTEGER, DIMENSION (:), ALLOCATABLE :: row1, row2, COL_1, COL_2
 
     INTEGER :: mi, ma
-    INTEGER :: num_of_threads
 
     integer :: ierr
     integer :: num_procs
     integer :: rank
     
-    
+    !num_of_threads = 8
+    !CALL get_command_argument(1, num1char)
+    !read (num1char, *) num_of_threads
     
     i = 0
 
@@ -106,13 +107,6 @@ PROGRAM d_locality_modification
         L2(i) = 0
         L2_1(i) = 0
     ENDDO
-
-    !DO i=1, Length
-    !    VAL_1(i) = 0
-    !    COL_1(i) = 0 
-    !    VAL_2(i) = 0
-    !    COL_2(i) = 0 
-    !enddo
 
     DO i = 1, N
         L1(G1(i) - mi + 1) = L1(G1(i) - mi + 1) + 1
@@ -214,7 +208,7 @@ PROGRAM d_locality_modification
         deallocate(L2)
         deallocate(L2_1)
 
-        !N_Length = ma - mi + 1
+        N_Length = ma - mi + 1
 
 
         call timing(wct_start,cput_start)
@@ -223,7 +217,7 @@ PROGRAM d_locality_modification
             !!$omp parallel do schedule(static, chunk_size) 
             !shared(X, XA1, XA2, Y, VAL_1, VAL_2, COL_1, COL_2)
             !!$omp parallel do schedule(dynamic)
-            do i = 1, N_Length
+            do i = 1, ma - mi + 1!N_Length
                 do j = row1(i), row1(i + 1) - 1
                     X(i) = X(i) + XA1(VAL_1(j))* Y(COL_1(j))
                 enddo
@@ -257,7 +251,7 @@ PROGRAM d_locality_modification
         runtime = wct_end-wct_start
         print *, "Time = ", runtime, "seconds"
         !print *,"Performance: ", dble(trial)*N*2/runtime/1000000.d0," MIt/s"
-        print *,"Performance: ", dble(trial)*N_Loop*2/runtime/1000000.d0," MFlop/s"
+        print *,"Performance: ", dble(trial)*N_Loops*2/runtime/1000000.d0," MFlop/s"
         
 
     endif
