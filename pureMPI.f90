@@ -15,50 +15,17 @@ PROGRAM pureMPI
     double precision :: wct_start,wct_end,cput_start,cput_end,runtime
 
     INTEGER, DIMENSION (:), ALLOCATABLE :: G1, G2
-    REAL :: avgT, Mflops
+    REAL :: Mflops
 
     integer ierr
     integer num_procs
     integer rank
 
-    fh = 12
     i = 0
-    avgT = 0
-
     c = 0
-    ALLOCATE (G1(Length))
-    ALLOCATE (G2(Length))
-
-    ALLOCATE (XA1(Length))
-    ALLOCATE (XA2(Length))
-    ALLOCATE (Y(Length))
-
-    ALLOCATE (X(Length))
 
 
-    fh = 12
-    !CALL readINT(ios, fh, G1, 'd1541_3077528') 
-    CALL readINT(ios, fh, G1, 'g1s') 
-
-    fh = 13
-    !CALL readREAL(ios, fh, XA1, 'd1541XA1') 
-    CALL readREAL(ios, fh, XA1, 'xa1') 
-
-    fh = 14
-    !CALL readREAL(ios, fh, XA2, 'd1541XA2') 
-    CALL readREAL(ios, fh, XA2, 'xa2') 
-
-    fh = 15
-    !CALL readINT(ios, fh, G2, 'd1541G2')
-    CALL readINT(ios, fh, G2, 'g2s')
-
-    fh = 16
-    !CALL readREAL(ios, fh, Y, 'd1541Y')
-    CALL readREAL(ios, fh, Y, 'y')
-
-    DO i = 1 , Length
-       X(i) = 0
-    ENDDO
+    CALL LoadArray(X, XA1, XA2, Y, G1, G2)
 
     !
     !  Initialize MPI.
