@@ -58,7 +58,7 @@ t:
 
 r:
 #mpiexec -np 1 a
-	mpiexec -np 1 ./a
+	mpiexec -np 4 ./a
 s:
 #mpiexec -np 1 a
 	mpiexec -np 1 ./m
