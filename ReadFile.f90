@@ -34,15 +34,14 @@ SUBROUTINE dummy(X, XA1, XA2, Y)
 ENDSUBROUTINE
 
 
-SUBROUTINE LoadArray(X, XA1, XA2, Y, G1, G2)
+SUBROUTINE LoadArray(X, XA1, XA2, Y)!, G1, G2)
     IMPLICIT NONE
     DOUBLE PRECISION, DIMENSION(:), ALLOCATABLE, INTENT(INOUT) :: X, XA1, XA2, Y
-    INTEGER, DIMENSION (:), ALLOCATABLE, INTENT(INOUT) :: G1, G2
+    !INTEGER, DIMENSION (:), ALLOCATABLE, INTENT(INOUT) :: G1, G2
     INTEGER :: i
 
-    fh = 12
-    ALLOCATE (G1(Length))
-    ALLOCATE (G2(Length))
+    !ALLOCATE (G1(Length))
+    !ALLOCATE (G2(Length))
 
     ALLOCATE (XA1(Length))
     ALLOCATE (XA2(Length))
@@ -50,30 +49,57 @@ SUBROUTINE LoadArray(X, XA1, XA2, Y, G1, G2)
 
     ALLOCATE (X(Length))
 
-
-    fh = 12
-    !CALL readINT(ios, fh, G1, 'd1541_3077528') 
-    CALL readINT(ios, fh, G1, 'g1s') 
-
     fh = 13
-    !CALL readREAL(ios, fh, XA1, 'd1541XA1') 
-    CALL readREAL(ios, fh, XA1, 'xa1') 
+    !print *, SMALL_SIZE, ' ', Length
+    if(Length.eq.SMALL_SIZE) then
+        CALL readREAL(ios, fh, XA1, 'd1541XA1') 
+    elseif(Length.eq.BIG_SIZE) then    
+        CALL readREAL(ios, fh, XA1, 'xa1') 
+    endif
 
     fh = 14
-    !CALL readREAL(ios, fh, XA2, 'd1541XA2') 
-    CALL readREAL(ios, fh, XA2, 'xa2') 
+    if(Length.eq.SMALL_SIZE) then
+        CALL readREAL(ios, fh, XA2, 'd1541XA2') 
+    elseif(Length.eq.BIG_SIZE) then
+        CALL readREAL(ios, fh, XA2, 'xa2') 
+    endif
 
-    fh = 15
-    !CALL readINT(ios, fh, G2, 'd1541G2')
-    CALL readINT(ios, fh, G2, 'g2s')
+
 
     fh = 16
-    !CALL readREAL(ios, fh, Y, 'd1541Y')
-    CALL readREAL(ios, fh, Y, 'y')
+    if(Length.eq.SMALL_SIZE) then
+        CALL readREAL(ios, fh, Y, 'd1541Y')
+    elseif(Length.eq.BIG_SIZE) then    
+        CALL readREAL(ios, fh, Y, 'y')
+    endif    
 
     DO i = 1 , Length
        X(i) = 0
     ENDDO
+ENDSUBROUTINE
+
+SUBROUTINE LoadGLOSEG(G1, G2, L)
+IMPLICIT NONE
+    INTEGER, DIMENSION (:), ALLOCATABLE, INTENT(INOUT) :: G1, G2
+    INTEGER :: L
+
+    ALLOCATE (G1(Length))
+    ALLOCATE (G2(Length))
+
+    fh = 12
+    if(L.eq.SMALL_SIZE) then
+        CALL readINT(ios, fh, G1, 'd1541_3077528') 
+    elseif(L.eq.BIG_SIZE) then
+        CALL readINT(ios, fh, G1, 'g1s') 
+    endif
+
+    fh = 15
+    if(L.eq.SMALL_SIZE) then
+        CALL readINT(ios, fh, G2, 'd1541G2')
+    elseif(L.eq.BIG_SIZE) then
+        CALL readINT(ios, fh, G2, 'g2s')
+    endif
+
 ENDSUBROUTINE
 
 SUBROUTINE readINT(ios, fh, X, fn)
@@ -96,6 +122,21 @@ SUBROUTINE readINT(ios, fh, X, fn)
         X(i) = t
     ENDDO
     CLOSE(fh)
+ENDSUBROUTINE
+
+SUBROUTINE FindMIN_MAX(G1, G2, ma, mi)
+    IMPLICIT NONE
+        INTEGER, INTENT(INOUT) :: ma, mi
+        INTEGER, DIMENSION (:), INTENT(IN) :: G1, G2
+        INTEGER :: i
+    mi = MIN(G1(1), G2(1))
+    ma = MAX(G1(1), G2(1))
+    DO i = 2 , N
+        mi = MIN(mi, G1(i))
+        ma = MAX(ma, G1(i))
+        mi = MIN(mi, G2(i))
+        ma = MAX(ma, G2(i))
+    ENDDO
 ENDSUBROUTINE
 
 SUBROUTINE LoadIndexes(L1, L1_1, L2, L2_1, VAL_1, VAL_2, COL_1, COL_2, row1, row2, G1, G2, ma, mi)
@@ -123,15 +164,8 @@ SUBROUTINE LoadIndexes(L1, L1_1, L2, L2_1, VAL_1, VAL_2, COL_1, COL_2, row1, row
     ALLOCATE(row1(length))
     ALLOCATE(row2(length))
 
-
-    mi = MIN(G1(1), G2(1))
-    ma = MAX(G1(1), G2(1))
-    DO i = 2 , N
-        mi = MIN(mi, G1(i))
-        ma = MAX(ma, G1(i))
-        mi = MIN(mi, G2(i))
-        ma = MAX(ma, G2(i))
-    ENDDO
+    CALL FindMIN_MAX(G1, G2, ma, mi)
+    
 
     DO i = 1, ma - mi + 1
         L1(i) = 0
@@ -182,7 +216,7 @@ SUBROUTINE LoadSpareMatrix(L1, L1_1, L2, L2_1, VAL_1, VAL_2, COL_1, COL_2, row1,
     INTEGER, DIMENSION (:), INTENT(INOUT) :: L1_1, L2_1
     INTEGER, DIMENSION (:), INTENT(IN) :: G1, G2
     INTEGER, INTENT(IN) :: mi
-    INTEGER :: i, c, k, offset, j
+    INTEGER :: i, k, offset, j
 
     do i = 1, N 
         k = G1(i) - mi + 1
