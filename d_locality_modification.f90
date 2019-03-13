@@ -27,7 +27,7 @@ PROGRAM d_locality_modification
 
     INTEGER, DIMENSION (:), ALLOCATABLE :: row1, row2, COL_1, COL_2
 
-    INTEGER :: mi, ma
+    !INTEGER :: mi, ma
 
     integer :: ierr
     integer :: num_procs
