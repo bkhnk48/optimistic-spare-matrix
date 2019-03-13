@@ -25,12 +25,8 @@ PROGRAM no_mpi_modification
 
     INTEGER, DIMENSION (:), ALLOCATABLE :: row1, row2, COL_1, COL_2
 
-    INTEGER :: mi, ma
+    !INTEGER :: mi, ma
     
-
-    
-    
-
     num_of_threads = 8
     CALL get_command_argument(1, num1char)
     read (num1char, *) num_of_threads
