@@ -56,20 +56,23 @@ PROGRAM pureMPI
         call timing(wct_start,cput_start)
         
         call MPI_Irecv(recv1, buffsize, MPI_DOUBLE_PRECISION, 1, &
-                        1, &
-            &             MPI_COMM_WORLD,recv_request,ierr)
+                        1, MPI_COMM_WORLD,recv_request(1),ierr)
         call MPI_Irecv(recv2, buffsize, MPI_DOUBLE_PRECISION, 2, &
                         2, &
-                MPI_COMM_WORLD,recv_request,ierr)
+                MPI_COMM_WORLD,recv_request(2),ierr)
         
         call MPI_Irecv(recv3, buffsize, MPI_DOUBLE_PRECISION, 3, &
                 3, &
-        MPI_COMM_WORLD,recv_request,ierr)
-        call MPI_WaitAll(3, recv_request,sendAll,ierr);
+        MPI_COMM_WORLD,recv_request(3),ierr)
+        call MPI_WaitAll(3, recv_request,MPI_STATUSES_IGNORE,ierr);
 
+        
         DO c = 1, trial
         
+            !print *, "come here???: ", c, ' ', offset
             DO i = 1 , N_Length
+                !print *, '      i = ', i, 'G1(i)=', sizeof(G1)
+
                 X(offset + G1(i))= X(offset + G1(i))+ XA1(i)*Y(G2(i))
                 X(offset + G2(i))= X(offset + G2(i))+XA2(i)*Y(G1(i))
             ENDDO
@@ -102,7 +105,7 @@ PROGRAM pureMPI
 
         
         CALL MPI_Isend(X(offset + mi : offset + ma), buffsize, &
-                MPI_REAL8,0,rank,MPI_COMM_WORLD, &
+            MPI_DOUBLE_PRECISION,0,rank,MPI_COMM_WORLD, &
                 send_request,ierr)
         call MPI_Wait(send_request,status,ierr);        
     ENDIF
