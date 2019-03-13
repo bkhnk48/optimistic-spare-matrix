@@ -28,7 +28,7 @@ PROGRAM modification
 
     INTEGER, DIMENSION (:), ALLOCATABLE :: row1, row2, COL_1, COL_2
 
-    INTEGER :: mi, ma
+    
     
 
     integer :: ierr
@@ -39,8 +39,12 @@ PROGRAM modification
     i = 0
 
     c = 0
+    Length = 12 * 100 * 1000
+    N = 1140404
+    M = 1140407
 
-    CALL LoadArray(X, XA1, XA2, Y, G1, G2)
+    CALL LoadArray(X, XA1, XA2, Y)!, G1, G2)
+    CALL LoadGLOSEG(G1, G2, Length)
 
     CALL LoadIndexes(L1, L1_1, L2, L2_1, VAL_1, & 
             VAL_2, COL_1, COL_2, row1, row2,&
