@@ -86,6 +86,7 @@ IMPLICIT NONE
     INTEGER, DIMENSION (:), ALLOCATABLE, INTENT(INOUT) :: G1, G2
     INTEGER :: L
 
+    !print *, 'length = ', L
     ALLOCATE (G1(Length))
     ALLOCATE (G2(Length))
 
