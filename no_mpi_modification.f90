@@ -37,124 +37,25 @@ PROGRAM no_mpi_modification
     i = 0
 
     c = 0
-
-    ALLOCATE (G1(Length))
-    ALLOCATE (G2(Length))
-
-    ALLOCATE (XA1(Length))
-    ALLOCATE (XA2(Length))
-    ALLOCATE (Y(Length))
-
-    ALLOCATE (X(Length))
-
-    ALLOCATE (L1(Length))
-    ALLOCATE (L1_1(Length))
-
-    ALLOCATE (L2(Length))
-    ALLOCATE (L2_1(Length))
-
-
-    ALLOCATE (VAL_1(Length))
-    ALLOCATE (COL_1(Length))
-
-    ALLOCATE (VAL_2(Length))
-    ALLOCATE (COL_2(Length))
-
-    ALLOCATE(row1(length))
-    ALLOCATE(row2(length))
-
-    fh = 12
-    !CALL readINT(ios, fh, G1, 'd1541_3077528') 
-    CALL readINT(ios, fh, G1, 'g1s') 
-
-    fh = 13
-    !CALL readREAL(ios, fh, XA1, 'd1541XA1') 
-    CALL readREAL(ios, fh, XA1, 'xa1') 
-
-    fh = 14
-    !CALL readREAL(ios, fh, XA2, 'd1541XA2') 
-    CALL readREAL(ios, fh, XA2, 'xa2') 
-
-    fh = 15
-    !CALL readINT(ios, fh, G2, 'd1541G2')
-    CALL readINT(ios, fh, G2, 'g2s')
-
-    fh = 16
-    !CALL readREAL(ios, fh, Y, 'd1541Y')
-    CALL readREAL(ios, fh, Y, 'y')
-
-    DO i = 1 , Length
-        X(i) = 0
-    ENDDO
-
-    mi = MIN(G1(1), G2(1))
-    ma = MAX(G1(1), G2(1))
-    DO i = 2 , N
-        mi = MIN(mi, G1(i))
-        ma = MAX(ma, G1(i))
-        mi = MIN(mi, G2(i))
-        ma = MAX(ma, G2(i))
-    ENDDO
-
-    DO i = 1, ma - mi + 1
-        L1(i) = 0
-        L1_1(i) = 0
-
-        L2(i) = 0
-        L2_1(i) = 0
-    ENDDO
-
-    DO i=1, Length
-        VAL_1(i) = 0
-        COL_1(i) = 0 
-        VAL_2(i) = 0
-        COL_2(i) = 0 
-    enddo
-
-    DO i = 1, N
-        L1(G1(i) - mi + 1) = L1(G1(i) - mi + 1) + 1
-        L2(G2(i) - mi + 1) = L2(G2(i) - mi + 1) + 1
-    ENDDO
-
-    DO i = 1, ma - mi + 1
-        L1_1(i) = L1(i)
-        L2_1(i) = L2(i)
-    ENDDO
-
-    c = 1
-    row1(1) = 1
-    do i = 1, ma - mi + 1
-        c = c + L1(i)
-        row1(i+1) = c
-    enddo
-
-    c = 1
-    row2(1) = 1
-    do i = 1, ma - mi + 1
-        c = c + L2(i)
-        row2(i+1) = c
-    enddo
-
-
-    do i = 1, N 
-        k = G1(i) - mi + 1
-        j = row1(k)
-        offset = L1(k) - L1_1(k)
-        VAL_1(j + offset) = i
-        COL_1(j + offset) = G2(i)
-        L1_1(k) = L1_1(k) - 1
-        
-        k = G2(i) - mi + 1
-        j = row2(k)
-        offset = L2(k) - L2_1(k)
-        VAL_2(j + offset) = i
-        COL_2(j + offset) = G1(i)
-        L2_1(k) = L2_1(k) - 1
-    enddo
-
     
 
-    !print *, "# of threads: ", num_of_threads
+    Length = 12 * 100 * 1000
+    N = 1140404
+    M = 1140407
+
+    CALL LoadArray(X, XA1, XA2, Y)!, G1, G2)
+    CALL LoadGLOSEG(G1, G2, Length)
+
+    CALL LoadIndexes(L1, L1_1, L2, L2_1, VAL_1, & 
+            VAL_2, COL_1, COL_2, row1, row2,&
+                 G1, G2, ma, mi)
+
+
+
+    CALL LoadSpareMatrix(L1, L1_1, L2, L2_1, &
+            VAL_1, VAL_2, COL_1, COL_2, row1,&
+                row2, G1, G2, mi)
+
     call OMP_SET_NUM_THREADS(num_of_threads)
     
 
@@ -164,9 +65,9 @@ PROGRAM no_mpi_modification
     deallocate(L2_1)
     N_Length = ma - mi + 1
     N_Loops = N
-    !print *, ma, " ", mi, " ", trial
 
     !if ( rank == 0 ) then
+        print *, 'trial:', trial
 
         call timing(wct_start,cput_start)
         DO c = 1, trial
@@ -207,6 +108,7 @@ PROGRAM no_mpi_modification
     DEALLOCATE (Y)
     DEALLOCATE (G2)
 
+    !print *, 'X=', sizeof(X)
     DEALLOCATE (X)
 
     DEALLOCATE (VAL_1)
