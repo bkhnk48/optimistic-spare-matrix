@@ -24,11 +24,12 @@ PROGRAM pureMPI
     integer :: rank, status(MPI_STATUS_SIZE)
     integer :: sendAll(MPI_STATUS_SIZE, 1), recvAll(MPI_STATUS_SIZE, 1)
     integer :: offset, buffsize
+    integer :: first, last, step
 
     i = 0
     c = 0
     
-    print *, getpid()
+    !print *, getpid()
     CALL LoadArray(X, XA1, XA2, Y)!, G1, G2)
 
         !print *, '!Come here???', sizeof(XA1)
@@ -41,7 +42,6 @@ PROGRAM pureMPI
     Allocate(recv_request(3))
 
     buffsize = ma - mi + 1
-    !print *, ma - mi
     recv1 = -1
     recv2 = -1
     recv3 = -1
@@ -58,90 +58,96 @@ PROGRAM pureMPI
     !  Find out the number of processes available.
     !
     call MPI_Comm_size ( MPI_COMM_WORLD, num_procs, ierr )
-    !print *, '# proc:', num_procs
 
     N_Length = N
     offset = N_Loops*rank
     if ( rank == 0 ) then
-        !!!!!!!!
         call timing(wct_start,cput_start)
+
+        DO c = 1, trial
         
-        call MPI_Irecv(recv1, buffsize, MPI_DOUBLE_PRECISION, 1, &
+            call MPI_Irecv(recv1, buffsize, MPI_DOUBLE_PRECISION, 1, &
                         1, MPI_COMM_WORLD,recv_request(1),ierr)
-        call MPI_Irecv(recv2, buffsize, MPI_DOUBLE_PRECISION, 2, &
+            call MPI_Irecv(recv2, buffsize, MPI_DOUBLE_PRECISION, 2, &
                         2, &
                 MPI_COMM_WORLD,recv_request(2),ierr)
         
-        call MPI_Irecv(recv3, buffsize, MPI_DOUBLE_PRECISION, 3, &
+            call MPI_Irecv(recv3, buffsize, MPI_DOUBLE_PRECISION, 3, &
                 3, &
                 MPI_COMM_WORLD,recv_request(3),ierr)
         
-        call MPI_WaitAll(3, recv_request,MPI_STATUSES_IGNORE,ierr);
+            call MPI_WaitAll(3, recv_request,MPI_STATUSES_IGNORE,ierr);
 
 
-        
-        c = 1
-        !print *, 'bs: ', buffsize
-        DO i = 1 , buffsize
-            X(c*N_Loops + i)= recv1(i)
-        !    print *, recv1(i)
-        ENDDO
-        !print *, c*N_Loops + i, 'bs: ', buffsize
-        
+            DO i = mi , ma
+                X(i)= X(i) + recv1(i) + &
+                    recv2(i) + recv3(i)
+            ENDDO
 
-        !c = 2
-        !DO i = 1 , buffsize
-        !        X(c*N_Loops + i)= recv2(i)
-        !ENDDO
+            !c = 2
+            !DO i = 1 , buffsize
+            !        X(c*N_Loops + i)= recv2(i)
+            !ENDDO
 
-        !c = 3
-        !DO i = 1 , buffsize
-        !        X(c*N_Loops + i)= recv3(i)
-        !ENDDO
+            !c = 3
+            !DO i = 1 , buffsize
+            !        X(c*N_Loops + i)= recv3(i)
+            !ENDDO
         
         
-        !DO c = 1, trial
+            !DO c = 1, trial
         
-        !    DO i = 1 , N_Length
-        !        X(G1(i))= X(G1(i))+ XA1(i)*Y(G2(i))
-        !        X(G2(i))= X(G2(i))+XA2(i)*Y(G1(i))
-        !    ENDDO
+            !    DO i = 1 , N_Length
+            !        X(G1(i))= X(G1(i))+ XA1(i)*Y(G2(i))
+            !        X(G2(i))= X(G2(i))+XA2(i)*Y(G1(i))
+            !    ENDDO
 
-        !    IF(G1(i-1) - M > M) THEN
-        !        CALL dummy(X, XA1, XA2, Y)
-        !    ENDIF
+            !    IF(G1(i-1) - M > M) THEN
+            !        CALL dummy(X, XA1, XA2, Y)
+            !    ENDIF
         
-        !ENDDO !DO c = 1, trial
+        ENDDO !DO c = 1, trial
 
         
         
-        !call timing(wct_end,cput_end)
+        call timing(wct_end,cput_end)
 
-        !runtime = wct_end-wct_start
-        !print *, "Time = ", runtime, "seconds"
+        runtime = wct_end-wct_start
+        print *, "Time = ", runtime, "seconds"
         !print *,"Performance: ", dble(trial)*N_Loops*2/runtime/1000000.d0," MFlop/s"
     ELSE 
         IF(rank.lt.4) then
-            !print *, 'rank = ', rank
             !offset = 2
             DO c = 1, trial
+                step = N_Length / num_procs
+                first = (rank - 1)*step + 1
+                last = rank * step
+                if(rank == 3) then
+                    last = MAX(last, N_Length)
+                endif
+                X = 0
             
-                DO i = 1 , N_Length
-                    X(offset + G1(i))= X(offset + G1(i))+ XA1(i)*Y(G2(i))
-                    X(offset + G2(i))= X(offset + G2(i))+XA2(i)*Y(G1(i))
+                !DO i = 1 , N_Length
+                DO i = first , last
+                    X(G1(i))= X(G1(i))+ XA1(i)*Y(G2(i))
+                    X(G2(i))= X(G2(i))+XA2(i)*Y(G1(i))
                 ENDDO
 
                 IF(G1(i-1) - M > M) THEN
                     CALL dummy(X, XA1, XA2, Y)
                 ENDIF    
+
+                CALL MPI_Isend(X((mi) : (ma)), buffsize, &
+                    MPI_DOUBLE_PRECISION,0,rank,MPI_COMM_WORLD, &
+                        send_request,ierr)
+                call MPI_Wait(send_request,status,ierr); 
             
             ENDDO !DO c = 1, trial
         
-            CALL MPI_Isend(X((offset + mi) : (offset + ma)), buffsize, &
-                MPI_DOUBLE_PRECISION,0,rank,MPI_COMM_WORLD, &
-                    send_request,ierr)
-        !print *, "ISend here"
-            call MPI_Wait(send_request,status,ierr);        
+            !CALL MPI_Isend(X((mi) : (ma)), buffsize, &
+            !    MPI_DOUBLE_PRECISION,0,rank,MPI_COMM_WORLD, &
+            !        send_request,ierr)
+            !call MPI_Wait(send_request,status,ierr);        
         endif
         
     ENDIF
@@ -155,14 +161,11 @@ PROGRAM pureMPI
         
         DEALLOCATE (XA1)
         
-        !print *, '!Come here???', sizeof(XA2), ' ', getpid()
         DEALLOCATE (XA2)
-        print *, "After receiving here"
 
-        print *, '!Come here???', sizeof(Y)
-        if(associated(Y )) then
-            DEALLOCATE (Y)
-        endif
+        !if(associated(Y )) then
+        !    DEALLOCATE (Y)
+        !endif
         DEALLOCATE (G2)
         DEALLOCATE (X)
     endif
