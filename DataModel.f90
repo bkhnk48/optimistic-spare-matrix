@@ -18,7 +18,7 @@ module DataModel
     !INTEGER :: M = 1007
     !INTEGER :: Length = 12 * 100
 
-    INTEGER :: trial = 1!1000!*10  !00
+    INTEGER :: trial = 1000!*10  !00
 
     INTEGER :: N_Loops = 285935
 
