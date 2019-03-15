@@ -7,28 +7,24 @@ SUBROUTINE readREAL(ios, fh, X, fn)
     CHARACTER (len=*), INTENT(IN) :: fn !file name
     INTEGER, INTENT(INOUT) :: ios  
     INTEGER, INTENT(IN) :: fh
-    INTEGER :: i, count  
+    INTEGER :: i!, count  
     DOUBLE PRECISION :: t
     
     DOUBLE PRECISION, DIMENSION(:), INTENT(INOUT) :: X
 
     i = 0
-    count = 0
     OPEN(fh, file=fn, iostat=ios, action='READ')
-    print *, 'File name: ', fn
 
     IF (ios /= 0) STOP 1
     DO i = 1, N
         READ(fh, *, iostat=ios) t
         IF (ios /= 0) exit
-        if(i.eq.(N-1)) then
-            print *, i
+        if(i.eq.(N)) then
+            !print *, i
             exit
         endif
         X(i) = t
-        count = count + 1
     ENDDO
-    print *, 'count = ', count
     CLOSE(fh)
 ENDSUBROUTINE
 
