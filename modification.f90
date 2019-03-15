@@ -43,6 +43,8 @@ PROGRAM modification
     N = 1140404
     M = 1140407
 
+    print *, 'N = ', N, ' trial: ', trial
+
     CALL LoadArray(X, XA1, XA2, Y)!, G1, G2)
     CALL LoadGLOSEG(G1, G2, Length)
 
