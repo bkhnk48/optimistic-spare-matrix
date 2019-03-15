@@ -25,6 +25,7 @@ e:
 #ifort -c PrintAll.f90
 #/opt/intel/compilers_and_libraries/linux/mpi/intel64/bin/mpif90  -c PrintAll.f90
 	mpif90 -O3 -o a pureMPI.f90 ReadFile.o PrintAll.o timing.o DataModel.o
+	gfortran -O3 -o serial serial.f90 ReadFile.o PrintAll.o timing.o DataModel.o
 #/opt/intel/compilers_and_libraries/linux/mpi/intel64/bin/mpif90 -O3 -o a pureMPI.f90 ReadFile.o PrintAll.o 
 	mpif90 -fopenmp -O3 -o m modification.f90 ReadFile.o PrintAll.o timing.o DataModel.o
 	mpif90 -fopenmp -O3 -o d_locality d_locality_modification.f90 ReadFile.o PrintAll.o timing.o DataModel.o
@@ -46,6 +47,7 @@ d:
 	gfortran -g -c PrintAll.f90
 	gcc -g -fargument-noalias -c timing.c
 	mpif90 -g -o a pureMPI.f90 ReadFile.o PrintAll.o timing.o DataModel.o
+	gfortran -g -o serial serial.f90 ReadFile.o PrintAll.o timing.o DataModel.o
 	mpif90 -fopenmp -g -o m modification.f90 ReadFile.o PrintAll.o timing.o DataModel.o
 	mpif90 -fopenmp -g -o d_locality d_locality_modification.f90 ReadFile.o PrintAll.o timing.o DataModel.o
 	gfortran -fopenmp -g -o no_mpi no_mpi_modification.f90 ReadFile.o PrintAll.o timing.o DataModel.o
@@ -70,3 +72,4 @@ clean:
 	-rm *.mod
 	-rm a
 	-rm m
+	-rm serial
