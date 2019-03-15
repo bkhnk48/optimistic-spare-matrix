@@ -43,6 +43,8 @@ PROGRAM no_mpi_modification
     N = 1140404
     M = 1140407
 
+    !print *, 'N = ', N, ' trial: ', trial
+
     CALL LoadArray(X, XA1, XA2, Y)!, G1, G2)
     CALL LoadGLOSEG(G1, G2, Length)
 
@@ -67,7 +69,7 @@ PROGRAM no_mpi_modification
     N_Loops = N
 
     !if ( rank == 0 ) then
-        print *, 'trial:', trial
+        !print *, 'trial:', trial
 
         call timing(wct_start,cput_start)
         DO c = 1, trial
