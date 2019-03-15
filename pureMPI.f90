@@ -60,6 +60,8 @@ PROGRAM pureMPI
     call MPI_Comm_size ( MPI_COMM_WORLD, num_procs, ierr )
 
     N_Length = N
+    N_Loops = N
+    !print *, 'N = ', N, ' trial: ', trial
     offset = N_Loops*rank
     if ( rank == 0 ) then
         call timing(wct_start,cput_start)
@@ -84,27 +86,7 @@ PROGRAM pureMPI
                     recv2(i) + recv3(i)
             ENDDO
 
-            !c = 2
-            !DO i = 1 , buffsize
-            !        X(c*N_Loops + i)= recv2(i)
-            !ENDDO
-
-            !c = 3
-            !DO i = 1 , buffsize
-            !        X(c*N_Loops + i)= recv3(i)
-            !ENDDO
-        
-        
-            !DO c = 1, trial
-        
-            !    DO i = 1 , N_Length
-            !        X(G1(i))= X(G1(i))+ XA1(i)*Y(G2(i))
-            !        X(G2(i))= X(G2(i))+XA2(i)*Y(G1(i))
-            !    ENDDO
-
-            !    IF(G1(i-1) - M > M) THEN
-            !        CALL dummy(X, XA1, XA2, Y)
-            !    ENDIF
+            
         
         ENDDO !DO c = 1, trial
 
@@ -114,7 +96,7 @@ PROGRAM pureMPI
 
         runtime = wct_end-wct_start
         print *, "Time = ", runtime, "seconds"
-        !print *,"Performance: ", dble(trial)*N_Loops*2/runtime/1000000.d0," MFlop/s"
+        print *,"Performance: ", dble(trial)*N_Loops*2/runtime/1000000.d0," MFlop/s"
     ELSE 
         IF(rank.lt.4) then
             !offset = 2
