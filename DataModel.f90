@@ -5,11 +5,12 @@ module DataModel
     
     
     
-    !INTEGER :: N = 1140404
-    !INTEGER :: M = 1140407
-    INTEGER :: N = 285935
-    INTEGER :: M = 285950
-    INTEGER :: Length  = 29 * 10  * 1000
+    INTEGER :: N = 1140404
+    INTEGER :: M = 1140407
+    !INTEGER :: N = 285935
+    !INTEGER :: M = 285950
+    !INTEGER :: Length  = 29 * 10  * 1000
+    INTEGER :: Length = 12 * 100 * 1000
     !INTEGER :: Length = 12 * 100 * 1000
 
     integer :: N_Length = 800
