@@ -24,7 +24,7 @@ e:
 	gcc -O3 -fargument-noalias -c timing.c
 #ifort -c PrintAll.f90
 #/opt/intel/compilers_and_libraries/linux/mpi/intel64/bin/mpif90  -c PrintAll.f90
-	mpif90 -O3 -o a pureMPI.f90 ReadFile.o PrintAll.o timing.o DataModel.o
+	mpif90 -O3 -o pureMPI pureMPI.f90 ReadFile.o PrintAll.o timing.o DataModel.o
 	gfortran -O3 -o serial serial.f90 ReadFile.o PrintAll.o timing.o DataModel.o
 #/opt/intel/compilers_and_libraries/linux/mpi/intel64/bin/mpif90 -O3 -o a pureMPI.f90 ReadFile.o PrintAll.o 
 	mpif90 -fopenmp -O3 -o m modification.f90 ReadFile.o PrintAll.o timing.o DataModel.o
@@ -35,7 +35,7 @@ e:
 	gfortran -c ReadFile.f90
 	gfortran -c PrintAll.f90
 	gcc -O0 -fargument-noalias -c timing.c
-	mpif90 -O0 -o a pureMPI.f90 ReadFile.o PrintAll.o timing.o
+	mpif90 -O0 -o pureMPI pureMPI.f90 ReadFile.o PrintAll.o timing.o
 	mpif90 -fopenmp -O0 -o m modification.f90 ReadFile.o PrintAll.o timing.o
 	mpgfortran -fopenmp -O0 -o no_mpi no_mpi_modification.f90 ReadFile.o PrintAll.o timing.o DataModel.o
 #if90 -g -O0 -o d_locality d_locality_modification.f90 ReadFile.o PrintAll.o timing.o
@@ -46,7 +46,7 @@ d:
 	gfortran -g -c ReadFile.f90 DataModel.o
 	gfortran -g -c PrintAll.f90
 	gcc -g -fargument-noalias -c timing.c
-	mpif90 -g -o a pureMPI.f90 ReadFile.o PrintAll.o timing.o DataModel.o
+	mpif90 -g -o pureMPI pureMPI.f90 ReadFile.o PrintAll.o timing.o DataModel.o
 	gfortran -g -o serial serial.f90 ReadFile.o PrintAll.o timing.o DataModel.o
 	mpif90 -fopenmp -g -o m modification.f90 ReadFile.o PrintAll.o timing.o DataModel.o
 	mpif90 -fopenmp -g -o d_locality d_locality_modification.f90 ReadFile.o PrintAll.o timing.o DataModel.o
@@ -60,7 +60,7 @@ t:
 
 r:
 #mpiexec -np 1 a
-	mpiexec -np 4 ./a
+	mpiexec -np 4 ./pureMPI
 s:
 #mpiexec -np 1 a
 	mpiexec -np 1 ./m
@@ -70,6 +70,6 @@ n:
 clean: 
 	-rm *.o
 	-rm *.mod
-	-rm a
+	-rm pureMPI
 	-rm m
 	-rm serial
