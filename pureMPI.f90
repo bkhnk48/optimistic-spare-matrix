@@ -63,6 +63,17 @@ PROGRAM pureMPI
     N_Loops = N
     !print *, 'N = ', N, ' trial: ', trial
     offset = N_Loops*rank
+
+    step = N_Length / (num_procs)
+    first = (rank)*step + 1
+    last = rank * step + step 
+    if(rank == 3) then
+        !print *, '3 ', last, ' ', N_Length
+        last = MIN(last, N_Length)
+    endif
+            !X = 0
+    !print *, ' ', last - first, ' ', rank, ' ', N_Length
+
     if ( rank == 0 ) then
         call timing(wct_start,cput_start)
 
@@ -77,8 +88,14 @@ PROGRAM pureMPI
             call MPI_Irecv(recv3, buffsize, MPI_DOUBLE_PRECISION, 3, &
                 3, &
                 MPI_COMM_WORLD,recv_request(3),ierr)
+
+            DO i = 1 , step
+                X(G1(i))= X(G1(i))+ XA1(i)*Y(G2(i))
+                X(G2(i))= X(G2(i))+XA2(i)*Y(G1(i))
+            ENDDO    
         
             call MPI_WaitAll(3, recv_request,MPI_STATUSES_IGNORE,ierr);
+
 
 
             DO i = mi , ma
@@ -87,6 +104,10 @@ PROGRAM pureMPI
             ENDDO
 
             
+
+            IF(G1(i-1) - M > M) THEN
+                CALL dummy(X, XA1, XA2, Y)
+            ENDIF 
         
         ENDDO !DO c = 1, trial
 
@@ -100,15 +121,11 @@ PROGRAM pureMPI
     ELSE 
         IF(rank.lt.4) then
             !offset = 2
-            DO c = 1, trial
-                step = N_Length / num_procs
-                first = (rank - 1)*step + 1
-                last = rank * step
-                if(rank == 3) then
-                    last = MAX(last, N_Length)
-                endif
-                X = 0
             
+
+            DO c = 1, trial
+                
+                
                 !DO i = 1 , N_Length
                 DO i = first , last
                     X(G1(i))= X(G1(i))+ XA1(i)*Y(G2(i))
