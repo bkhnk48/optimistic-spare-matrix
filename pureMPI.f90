@@ -69,7 +69,7 @@ PROGRAM pureMPI
     last = rank * step + step 
     if(rank == 3) then
         !print *, '3 ', last, ' ', N_Length
-        last = MIN(last, N_Length)
+        last = N_Length - first !MIN(last, N_Length)
     endif
             !X = 0
     !print *, ' ', last - first, ' ', rank, ' ', N_Length
@@ -101,6 +101,7 @@ PROGRAM pureMPI
             DO i = mi , ma
                 X(i)= X(i) + recv1(i) + &
                     recv2(i) + recv3(i)
+                
             ENDDO
 
             
@@ -139,7 +140,7 @@ PROGRAM pureMPI
                 CALL MPI_Isend(X((mi) : (ma)), buffsize, &
                     MPI_DOUBLE_PRECISION,0,rank,MPI_COMM_WORLD, &
                         send_request,ierr)
-                call MPI_Wait(send_request,status,ierr); 
+                !call MPI_Wait(send_request,status,ierr); 
             
             ENDDO !DO c = 1, trial
         
