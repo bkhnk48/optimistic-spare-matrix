@@ -25,9 +25,9 @@ print('Xbar = ', Xbar) #ghep hai ma tran one, X lam mot
 #cot 1 la cac so 1, cot 2 la cac phan tu cua X
 
 # Calculating weights of the fitting line 
-A = np.dot(Xbar.T, Xbar)
-b = np.dot(Xbar.T, y)
-w = np.dot(np.linalg.pinv(A), b)
+A = np.dot(Xbar.T, Xbar) #tinh A = X(T)*X
+b = np.dot(Xbar.T, y)    #tinh b = X(T)*y
+w = np.dot(np.linalg.pinv(A), b)#tinh w = A(-1)*b
 print('w = ', w)
 # Preparing the fitting line 
 w_0 = w[0][0]
