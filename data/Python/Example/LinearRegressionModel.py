@@ -18,8 +18,11 @@ y = np.array([[ 49, 50, 51,  54, 58, 59, 60, 62, 63, 64, 66, 67, 68]]).T
 # Building Xbar 
 #print('X.shape[0]', X.shape[0])
 one = np.ones((X.shape[0], 1)) #X.shape[0] = 13
-print('one = ', one)
+print('one = ', one) # tao ma tran 13x1, voi cac phan tu la 1
 Xbar = np.concatenate((one, X), axis = 1)
+print('Xbar = ', Xbar) #ghep hai ma tran one, X lam mot
+#tao thanh ma tran Xbar voi kich thuoc 13x2
+#cot 1 la cac so 1, cot 2 la cac phan tu cua X
 
 # Calculating weights of the fitting line 
 A = np.dot(Xbar.T, Xbar)
