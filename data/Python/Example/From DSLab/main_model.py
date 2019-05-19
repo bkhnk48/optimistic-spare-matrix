@@ -11,24 +11,22 @@ def get_data(relative_path):
     
     mypath = Path().absolute()
     path = str(mypath) + relative_path
-    #print(path)
-    #X = np.array([[]]) #np.array([])
     
-    Y = []
     file = open(path, "r")
     list = file.readlines()
-    #print(len(profile_list))
-    #print(profile_list[72])
-    #row_ids = np.array(range(len(list)))
+
     list = list[72:]
     #X = [[] for i in range(len(list))]
     X = [] #np.arange(len(list)*15)
     #Y = [[] for i in range(len(list))]
     Y = []
-    #print(list[0])
-    for i in range(len(list)):
+  
+    num_of_rows = len(list)
+    for i in range(num_of_rows):
         temp = list[i].split()
-        temp1 = temp[1: len(temp) - 2]
+        
+        temp1 = temp[1: len(temp) - 1]
+        
         temp2 = temp[len(temp) - 1]
         #X[i] = X.append(np.array(temp1))
         #X[i].append(temp1)
@@ -40,10 +38,14 @@ def get_data(relative_path):
         #tempF2 = np.array(temp2)
         Y.append(float(temp2))
     file.close()
+
+    X = np.reshape(X, (num_of_rows, 15))
+    Y = np.reshape(Y, (num_of_rows, 1))
     return X, Y
+    
 if __name__ == '__main__':
     print("Main model")
     
     X, Y = get_data(relative_path = '/datasets/death_rates_data.txt')
-    #X = normalize_and_add_one(X)
-    print(X)
+    X = normalize_and_add_one(X)
+    #print(Y)
