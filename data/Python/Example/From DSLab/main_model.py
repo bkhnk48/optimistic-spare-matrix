@@ -22,17 +22,23 @@ def get_data(relative_path):
     #row_ids = np.array(range(len(list)))
     list = list[72:]
     #X = [[] for i in range(len(list))]
-    X = np.arange(len(list))
-    Y = [[] for i in range(len(list))]
+    X = [] #np.arange(len(list)*15)
+    #Y = [[] for i in range(len(list))]
+    Y = []
     #print(list[0])
     for i in range(len(list)):
         temp = list[i].split()
         temp1 = temp[1: len(temp) - 2]
         temp2 = temp[len(temp) - 1]
         #X[i] = X.append(np.array(temp1))
-        X[i].append(temp1)
+        #X[i].append(temp1)
+        #X.extend(temp1)
+        tempF1 = np.array(temp1)
+        X.extend(tempF1.astype(np.float))
         #Y = Y.append(temp2)
-        Y[i].append(temp2)
+        #Y[i].append(temp2)
+        #tempF2 = np.array(temp2)
+        Y.append(float(temp2))
     file.close()
     return X, Y
 if __name__ == '__main__':
