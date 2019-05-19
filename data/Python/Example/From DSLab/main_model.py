@@ -42,10 +42,17 @@ def get_data(relative_path):
     X = np.reshape(X, (num_of_rows, 15))
     Y = np.reshape(Y, (num_of_rows, 1))
     return X, Y
-    
+
 if __name__ == '__main__':
     print("Main model")
     
     X, Y = get_data(relative_path = '/datasets/death_rates_data.txt')
     X = normalize_and_add_one(X)
-    #print(Y)
+    
+    X_train, Y_train = X[:50], Y[:50]
+    X_test, Y_test = X[50:], Y[50:]
+
+    ridgeRegression = RidgeRegression()
+    best_LAMBDA = 0
+    #best_LAMBDA = ridgeRegression.get_the_best_LAMBDA(X_train, Y_train)
+    #print('BEST LAMBDA: ', best_LAMBDA)
