@@ -51,25 +51,25 @@
 #    Academic Press, 1991,
 #    ISBN 0-12-656460-4.
 #
-17 columns
-60 rows
-Index
-A1 average annual precipitation in inches
-A2 average January temperature in degrees Fahrenheit
-A3 average July temperature in degrees Fahrenheit
-A4 percent of 1960 SMSA population 65 years old or older
-A5 household size, 1960
-A6 schooling for persons over 22
-A7 household with full kitchens
-A8 population per square mile in urbanized areas
-A9 percent nonwhite population
-A10 percent office workers
-A11 poor families (annual income under $3000)
-A12 relative pollution potential of hydrocarbons
-A13 relative pollution potential of oxides of Nitrogen
-A14 relative pollution of Sulfur Dioxide
-A15 percent relative humidity, annual average at 1pm.
-B death rate
+#17 columns
+#60 rows
+#Index
+#A1 average annual precipitation in inches
+#A2 average January temperature in degrees Fahrenheit
+#A3 average July temperature in degrees Fahrenheit
+#A4 percent of 1960 SMSA population 65 years old or older
+#A5 household size, 1960
+#A6 schooling for persons over 22
+#A7 household with full kitchens
+#A8 population per square mile in urbanized areas
+#A9 percent nonwhite population
+#A10 percent office workers
+#A11 poor families (annual income under $3000)
+#A12 relative pollution potential of hydrocarbons
+#A13 relative pollution potential of oxides of Nitrogen
+#A14 relative pollution of Sulfur Dioxide
+#A15 percent relative humidity, annual average at 1pm.
+#B death rate
  1  36  27  71   8.1  3.34  11.4  81.5  3243   8.8  42.6  11.7   21   15   59  59   921.870
  2  35  23  72  11.1  3.14  11.0  78.8  4281   3.6  50.7  14.4    8   10   39  57   997.875
  3  44  29  74  10.4  3.21   9.8  81.6  4260   0.8  39.4  12.4    6    6   33  54   962.354
