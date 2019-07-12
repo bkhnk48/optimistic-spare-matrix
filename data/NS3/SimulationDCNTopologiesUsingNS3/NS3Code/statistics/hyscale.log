@@ -1,0 +1,39 @@
+Waf: Entering directory `/home/sksamal/990/ns-3-dev/build'
+Waf: Leaving directory `/home/sksamal/990/ns-3-dev/build'
+'build' finished successfully (2.199s)
+Number of HyScale level = 1 
+Number of switch in basic HyScale level =  8
+Number of host under each switch =  2
+Total number of host = 16
+Finished creating On/Off traffic
+Fininshed connecting switches to hosts
+Start Simulation.. 
+HyScale,k,txPackets,rxPackets,delaySum,jitterSum,lastDelay,lostPackets,timesForwarded,averageDelay,throughput
+HyScale,0,800,800,+21700044.0ns,+8004044.0ns,+17120.0ns,0,0,27125,745.78
+Simulation finished 
+Waf: Entering directory `/home/sksamal/990/ns-3-dev/build'
+Waf: Leaving directory `/home/sksamal/990/ns-3-dev/build'
+'build' finished successfully (2.199s)
+Number of HyScale level =  2
+Number of switch in basic HyScale level =  8
+Number of host under each switch =  2
+Total number of host =  128
+Finished creating On/Off traffic
+Fininshed connecting switches to hosts
+Start Simulation.. 
+HyScale,k,txPackets,rxPackets,delaySum,jitterSum,lastDelay,lostPackets,timesForwarded,averageDelay,throughput
+HyScale,1,755,755,+12929644.0ns,+4044.0ns,+17120.0ns,0,0,17125,720.531
+Simulation finished 
+Waf: Entering directory `/home/sksamal/990/ns-3-dev/build'
+Waf: Leaving directory `/home/sksamal/990/ns-3-dev/build'
+'build' finished successfully (2.180s)
+Number of HyScale level =  3
+Number of switch in basic HyScale level =  8
+Number of host under each switch =  2
+Total number of host =  1024
+Finished creating On/Off traffic
+Fininshed connecting switches to hosts
+Start Simulation.. 
+HyScale,k,txPackets,rxPackets,delaySum,jitterSum,lastDelay,lostPackets,timesForwarded,averageDelay,throughput
+HyScale,2,1508,1508,+33821004.0ns,+8004044.0ns,+51360.0ns,0,0,20953.3,464.834
+Simulation finished 
