@@ -13,7 +13,7 @@ folder if not already present.
 (c) At the ns-3 root directory, execute the following commands
 to run the implementation
 
-    ns3-dev> ./waf --run "scratch/Fat-Tree --k=2"
+    ns3-dev> ./waf --run "scratch/Fat-tree --k=10"
     ns3-dev> ./waf --run "scratch/BCube --n=3"
     ns3-dev> ./waf --run "scratch/HyScale --k=2"
 
