@@ -379,7 +379,8 @@ int
 	std::cout << "Start Simulation.. "<<"\n";
 	for (i=0;i<total_host;i++){
 		app[i].Start (Seconds (0.0));
-  	app[i].Stop (Seconds (101.0));
+  	//app[i].Stop (Seconds (101.0));
+		app[i].Stop (Seconds (2.0));
 	}
   	Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
 // Calculate Throughput using Flowmonitor
@@ -389,7 +390,8 @@ int
 // Run simulation.
 //
   	NS_LOG_INFO ("Run Simulation.");
-  	Simulator::Stop (Seconds(100.0));
+  	//Simulator::Stop (Seconds(100.0));
+		Simulator::Stop (Seconds(1.0));
 #ifdef NEED_TRACE
   	AsciiTraceHelper ascii;
   	csma.EnableAsciiAll (ascii.CreateFileStream (traceFile));
