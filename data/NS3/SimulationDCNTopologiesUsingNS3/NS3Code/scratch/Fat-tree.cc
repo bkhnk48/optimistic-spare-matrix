@@ -193,7 +193,7 @@ int
 // Initialize Internet Stack and Routing Protocols
 //	
 	InternetStackHelper internet;
-	Ipv4NixVectorHelper nixRouting; 
+	Ipv4NixVectorHelper nixRouting; //=> ThanhNT: giao thuc nixRouting
 	Ipv4StaticRoutingHelper staticRouting;
 	Ipv4ListRoutingHelper list;
 	list.Add (staticRouting, 0);	
@@ -379,7 +379,7 @@ int
 	std::cout << "Start Simulation.. "<<"\n";
 	for (i=0;i<total_host;i++){
 		app[i].Start (Seconds (0.0));
-  		app[i].Stop (Seconds (101.0));
+  	app[i].Stop (Seconds (101.0));
 	}
   	Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
 // Calculate Throughput using Flowmonitor
