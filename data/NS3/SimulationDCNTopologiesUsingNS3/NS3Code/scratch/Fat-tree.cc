@@ -26,6 +26,8 @@
 #include <string>
 #include <cassert>
 #include <stdlib.h>
+#include <time.h>
+#include <stdio.h>
 
 #include "ns3/flow-monitor-module.h"
 #include "ns3/bridge-helper.h"
@@ -117,6 +119,13 @@ char * toString(int a,int b, int c, int d){
 	return address;
 }
 
+void printTime()
+{
+	time_t t;
+  time(&t);
+  
+  printf("\nCurrent date and time : %s\n",ctime(&t));
+}
 // Main function
 //
 int 
@@ -172,13 +181,16 @@ int
 // Initialize parameters for On/Off application
 //
 	int port = 9;
-	int packetSize = 1024;		// 1024 bytes
-	char dataRate_OnOff [] = "1Mbps";
+	//int packetSize = 1024;		// 1024 bytes
+	int packetSize = 102400;		// 100 Kbytes
+	//char dataRate_OnOff [] = "1Mbps";
+	char dataRate_OnOff [] = "1024Mbps";
 	char maxBytes [] = "0";		// unlimited
 
 // Initialize parameters for Csma and PointToPoint protocol
 //
-	char dataRate [] = "1000Mbps";	// 1Gbps
+	//char dataRate [] = "1000Mbps";	// 1Gbps
+	char dataRate [] = "1024Mbps";	// real 1Gbps 
 	int delay = 0.001;		// 0.001 ms
 
 	
@@ -377,6 +389,7 @@ int
 //=========== Start the simulation ===========//
 //
 	std::cout << "Start Simulation.. "<<"\n";
+	printTime();
 	for (i=0;i<total_host;i++){
 		app[i].Start (Seconds (0.0));
   	//app[i].Stop (Seconds (101.0));
@@ -507,7 +520,9 @@ int
  	std::cout<<","<<"lostPackets"<<","<<"timesForwarded"<<","<<"averageDelay"<<","<<"throughput"<<endl;
 	std::cout<<"Fat-Tree"<<","<<k<<","<<txPackets<<","<<rxPackets<<","<<delaySum<<","<<jitterSum<<","<<lastDelay;
  	std::cout<<","<<lostPackets<<","<<timesForwarded<<","<<averageDelay/nFlows<<","<<throughput/nFlows<<endl;
-  	monitor->SerializeToXmlFile(filename, true, true);
+  	
+		//monitor->SerializeToXmlFile(filename, true, true); //ThanhNT: set comment to reduce time
+  printTime();
 	std::cout << "Simulation finished "<<"\n";
   	Simulator::Destroy ();
   	NS_LOG_INFO ("Done.");
