@@ -37,28 +37,22 @@ int main(int argc, char** argv)
     
     assignAdj(AdjOfSwitches, 10, 11);
 
-    /*for(int i = 0; i < numOfHosts; i++)
-    {   
-        if(i == 32 - numOfSwitches)
-            hosts[i] = createPacket(i + numOfSwitches, i + numOfSwitches, 21, 0);
-        else
-            hosts[i] = //i + numOfSwitches;  
-                    createPacket(i + numOfSwitches, -1, -1, 0);
-    }*/
-
-    printf("Here\n");
+    InitIntegratedPorts(IntegratedPortOfSwitches, numOfPorts, numOfSwitches);
 
 
     printf("\nLAST ID %d", lastIDs[32 - numOfSwitches]);
-    generatePacket(hosts, lasts, 32, 21, numOfSwitches, lastIDs);
+    insertToSourceQueue(hosts, lasts, 32, 21, numOfSwitches, lastIDs);
 
     display(hosts, numOfHosts);
 
     printf("\n%d", lastIDs[32 - numOfSwitches]);
     printf("\n====================\n");
-    generatePacket(hosts, lasts, 32, 21, numOfSwitches, lastIDs);
+    insertToSourceQueue(hosts, lasts, 32, 21, numOfSwitches, lastIDs);
     display(hosts, numOfHosts);
     printf("\n%d", lastIDs[32 - numOfSwitches]);
+
+    int *port = getNumOfPort(32, AdjOfSwitches, numOfPorts, numOfSwitches);
+    printf("Switch: %d Port: %d", port[0], port[1]);
     //display(hosts, numOfHosts);
 
     //echo(AdjOfSwitches, numOfPorts, numOfSwitches);
