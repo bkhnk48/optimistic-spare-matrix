@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "DataStructures.c"
+#include "GenerationOfPackets.c"
 
 void display(Packet *n, int length);
 void assignAdj(int **n, int width, int height);
@@ -16,26 +16,23 @@ void echo(int **n, int w, int h)
     }
 }
 
-void echoIntegratedPorts(IntegratedPort **n, int w, int h)
+void InitIntegratedPorts(IntegratedPort **n, int w, int h)
 {
     int i, j, k;
     for(i = 0; i < h; i++) 
     {
         for(j = 0; j < w; j++){
-            //printf("\tFrom %d to %d\n", i, n[i][j]);
+            
             printf("\tIntegratedPorts %d of Switch %d has inputPort/outputPort: \n", j, i);
             printf("\t\t Input Port: ");
-            /*if(n[i][j]->inputPort == NULL){
-                printf("NULLLLLLLLLLLLLLLLLLLL");
-                (n[i][j]->inputPort) = malloc( 5 * sizeof(Packet));
-            }*/
+
             IntegratedPort p = (IntegratedPort)malloc(10*sizeof(Packet));
-            //IntegratedPort p = (IntegratedPort)
+
             n[i][j] = p;
             if(n[i][j] == NULL){
                 printf("n[i][j] == NULL");
             }
-            //n[i][j]->inputPort = {NULL, NULL, NULL, NULL, NULL};
+
             for(k = 0; k < 5; k++)
             {
                 if(n[i][j]->inputPort[k] == NULL)
@@ -59,8 +56,21 @@ void display(Packet *n, int length)
     int i;
     for(i=0; i<length; i++) 
     {
-        if(n[i] -> dst != -1)
-            printf("\tFrom %d to %d\n", n[i]->id, n[i] -> dst);
+        if(n[i] != NULL)
+        {
+
+            Packet curr = n[i];
+            while(curr != NULL)
+            {
+                printf("\tFrom %d to %d id = %d||||", curr->src, curr -> dst, curr->id);
+                curr = curr->next;
+            }
+        }
+        else
+        {
+            printf("NULL ");
+        }
+        
     }
 }
 
