@@ -16,6 +16,44 @@ void echo(int **n, int w, int h)
     }
 }
 
+void echoIntegratedPorts(IntegratedPort **n, int w, int h)
+{
+    int i, j, k;
+    for(i = 0; i < h; i++) 
+    {
+        for(j = 0; j < w; j++){
+            //printf("\tFrom %d to %d\n", i, n[i][j]);
+            printf("\tIntegratedPorts %d of Switch %d has inputPort/outputPort: \n", j, i);
+            printf("\t\t Input Port: ");
+            /*if(n[i][j]->inputPort == NULL){
+                printf("NULLLLLLLLLLLLLLLLLLLL");
+                (n[i][j]->inputPort) = malloc( 5 * sizeof(Packet));
+            }*/
+            IntegratedPort p = (IntegratedPort)malloc(10*sizeof(Packet));
+            //IntegratedPort p = (IntegratedPort)
+            n[i][j] = p;
+            if(n[i][j] == NULL){
+                printf("n[i][j] == NULL");
+            }
+            //n[i][j]->inputPort = {NULL, NULL, NULL, NULL, NULL};
+            for(k = 0; k < 5; k++)
+            {
+                if(n[i][j]->inputPort[k] == NULL)
+                    printf("NULL ");
+            }
+            printf("\n");
+            printf("\t\t Output Port: ");
+            for(k = 0; k < 5; k++)
+            {
+                if(n[i][j]->outputPort[k] == NULL)
+                    printf("NULL ");
+            }
+            printf("\n");
+        }
+        printf("------------\n");
+    }
+}
+
 void display(Packet *n, int length)
 {
     int i;
