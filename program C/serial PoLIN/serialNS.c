@@ -10,16 +10,27 @@ int main(int argc, char** argv)
     int numOfHosts = 16;
     int numOfInforAboutSwitch = 12;
     //int switches[numOfSwitches][numOfPorts];
-    int **switches = NULL;
-    switches = malloc( sizeof * switches * numOfSwitches );
+    int **AdjOfSwitches = NULL;//Mang luu tru cac Adjancent cua SWiTCHES
+    IntegratedPort **IntegratedPortOfSwitches = NULL;//Mang luu tru cac Integrated Port cua SWITCHES
+    AdjOfSwitches = malloc( sizeof * AdjOfSwitches * numOfSwitches );
+
+    IntegratedPortOfSwitches = malloc( sizeof * IntegratedPortOfSwitches * numOfSwitches );
+
     for (int i = 0; i < numOfSwitches; i++ )
     {
-      switches[i] = malloc( sizeof *switches[i] * numOfPorts );
+      IntegratedPortOfSwitches[i] = malloc( sizeof *IntegratedPortOfSwitches[i] * numOfPorts );
     }
-    int buffers[numOfSwitches * numOfPorts][numOfInforAboutSwitch];
+
+    for (int i = 0; i < numOfSwitches; i++ )
+    {
+      AdjOfSwitches[i] = malloc( sizeof *AdjOfSwitches[i] * numOfPorts );
+    }
+
+    echoIntegratedPorts(IntegratedPortOfSwitches, numOfPorts, numOfSwitches);
+    //int buffers[numOfSwitches * numOfPorts][numOfInforAboutSwitch];
     Packet hosts[numOfHosts];
 
-    assignAdj(switches, 10, 11);
+    assignAdj(AdjOfSwitches, 10, 11);
 
     for(int i = 0; i < numOfHosts; i++)
     {   
@@ -32,10 +43,10 @@ int main(int argc, char** argv)
 
     //display(hosts, numOfHosts);
 
-    echo(switches, numOfPorts, numOfSwitches);
+    //echo(AdjOfSwitches, numOfPorts, numOfSwitches);
     //printf("%d", switches[0][1]);
 
-    printf("\nHello World\n");
+    //printf("\nHello World\n");
     return 0;
 }
 
