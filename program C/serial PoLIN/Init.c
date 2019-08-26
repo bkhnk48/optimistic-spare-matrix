@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "GenerationOfPackets.c"
+#include "Switches.c"
 
 void display(Packet *n, int length);
 void assignAdj(int **n, int width, int height);
