@@ -1,6 +1,8 @@
 #include <stdio.h> 
 #include <stdlib.h> 
 #include <limits.h> 
+
+#include "ErrorReport.c"
   
 // A structure to represent a queue 
 struct Queue 
