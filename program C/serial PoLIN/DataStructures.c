@@ -12,7 +12,17 @@ struct Queue
     struct Queue *next; 
 }; 
 
+
 typedef struct Queue *Packet; //Define packet as pointer of data type struct Queue
+
+
+struct PortOfSwitch
+{
+    Packet inputPort[5];
+    Packet outputPort[5];
+};
+
+typedef struct PortOfSwitch *IntegratedPort; 
 
 Packet createPacket(int id, int src, int dst, int nHop){
     Packet temp; // declare a node
