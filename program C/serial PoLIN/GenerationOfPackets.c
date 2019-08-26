@@ -2,21 +2,23 @@
 #include "DataStructures.c"
 
 
-void generatePacket(Packet *hosts, Packet *lasts, int src, int dst, int numOfSwitches, int *lastIDs);
+void insertToSourceQueue(Packet *hosts, Packet *lasts, int src, int dst, int numOfSwitches, int *lastIDs);
+
+void sendToOutPort(int host, int aSwitch, IntegratedPort **IntegratedPortOfSwitches, int time, Packet *p);
 
 /*
-    Vi du minh hoa cua ham generatePacket:
+    Vi du minh hoa cua ham insertToSourceQueue:
     Dau vao: hosts[src - numOfSwitches] = NULL; lasts[src - numOfSwitches] = NULL; lastID[src - numOfSwitches] = 14;
-    Lan 1 khi goi generatePacket(hosts, lasts, 32, 21, 20, lastIDs)
+    Lan 1 khi goi insertToSourceQueue(hosts, lasts, 32, 21, 20, lastIDs)
     thi sau khi thuc thi xong, ta co t = hosts[src - numOfSwitches] la mot packet
     co: (i) id = 15; (ii) t-> next = NULL; lasts[src - numOfSwitches] chua chinh t
 
-    Lan 2 khi goi generatePacket(hosts, lasts, 32, 21, 20, lastIDs)
+    Lan 2 khi goi insertToSourceQueue(hosts, lasts, 32, 21, 20, lastIDs)
     thi sau khi thuc thi xong, ta co t = hosts[src - numOfSwitches] la mot packet
     co: (i) id = 15; (ii) t-> next = mot packet P nao do ma P->id = 16; 
     lasts[src - numOfSwitches] chua chinh P
  */
-void generatePacket(Packet *hosts, Packet *lasts, int src, int dst, int numOfSwitches, int *lastIDs)
+void insertToSourceQueue(Packet *hosts, Packet *lasts, int src, int dst, int numOfSwitches, int *lastIDs)
 //Ham nay thuc hien viec tao ra Packet, roi luu tru vao phan tu hosts[src - numOfSwitches]
 //cung nhu Packet moi se duoc luu vao trong lasts[src - numOfSwitches]
 //Yeu cau dau vao:  (i) cac hosts, lasts, lastIDs khong bi NULL
@@ -72,4 +74,9 @@ void generatePacket(Packet *hosts, Packet *lasts, int src, int dst, int numOfSwi
 
     lastIDs[src - numOfSwitches] = id; //Cap nhat gia tri cua ID cuc dai
     return;
+}
+
+void sendToOutPort(int host, int aSwitch, IntegratedPort **IntegratedPortOfSwitches, int time, Packet *p)
+{
+    
 }
