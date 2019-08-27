@@ -10,9 +10,10 @@ int main(int argc, char** argv)
     int numOfHosts = 16;
     int numOfInforAboutSwitch = 12;
 
-    int **AdjOfSwitches = NULL;//Mang luu tru cac Adjancent cua SWiTCHES
+    //int **AdjOfSwitches = NULL;//Mang luu tru cac Adjancent cua SWiTCHES
+    
     IntegratedPort **IntegratedPortOfSwitches = NULL;//Mang luu tru cac Integrated Port cua SWITCHES
-    AdjOfSwitches = malloc( sizeof * AdjOfSwitches * numOfSwitches );
+    //AdjOfSwitches = malloc( sizeof * AdjOfSwitches * numOfSwitches );
 
     IntegratedPortOfSwitches = malloc( sizeof * IntegratedPortOfSwitches * numOfSwitches );
 
@@ -23,7 +24,7 @@ int main(int argc, char** argv)
 
     for (int i = 0; i < numOfSwitches; i++ )
     {
-      AdjOfSwitches[i] = malloc( sizeof *AdjOfSwitches[i] * numOfPorts );
+      //AdjOfSwitches[i] = malloc( sizeof *AdjOfSwitches[i] * numOfPorts );
     }
 
     Packet *hosts = NULL; //Source Queue cua cac Hosts
@@ -35,7 +36,7 @@ int main(int argc, char** argv)
     int *lastIDs = NULL;
     lastIDs = calloc(numOfHosts, sizeof(int));
     
-    assignAdj(AdjOfSwitches, 10, 11);
+    //assignAdj(AdjOfSwitches, 10, 11);
 
     InitIntegratedPorts(IntegratedPortOfSwitches, numOfPorts, numOfSwitches);
 
@@ -51,8 +52,8 @@ int main(int argc, char** argv)
     display(hosts, numOfHosts);
     printf("\n%d", lastIDs[32 - numOfSwitches]);
 
-    int *port = getNumOfPort(32, AdjOfSwitches, numOfPorts, numOfSwitches);
-    printf("Switch: %d Port: %d", port[0], port[1]);
+    //int *port = getNumOfPort(32, AdjOfSwitches, numOfPorts, numOfSwitches);
+    //printf("Switch: %d Port: %d", port[0], port[1]);
     //display(hosts, numOfHosts);
 
     //echo(AdjOfSwitches, numOfPorts, numOfSwitches);
