@@ -4,7 +4,7 @@
 void display(Packet *n, int length);
 void assignAdj(int **n, int width, int height);
 
-void assignAdjant(Switch *switches, Host *hosts, int **n);
+void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w);
 
 void echo(int **n, int w, int h);
 
@@ -77,9 +77,32 @@ void display(Packet *n, int length)
     }
 }
 
-void assignAdjant(Switch *switches, Host *hosts, int **n)
+void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w)
 {
-    
+    int i,j, temp, idOfHost, size;
+    size = sizeof(int);
+    size = size * 8 - 1;
+    for(i = 0; i < h; i++)
+    {
+        for(j = 0; j < w; j++)
+        {
+            idOfHost = n[i][j];
+            temp = idOfHost - h;
+            temp = temp >> size;
+            //printf("\t%d %d %d \n", n[i][j], h, temp);
+            switch(temp)
+            {
+                case 0: //la HOST
+                    switches[i]-> host++;
+                    hosts[idOfHost] -> aSwitch = i;
+                    //break;
+                default: //la Switch
+                    
+                    break;
+
+            }
+        }
+    }
     /* n[0][0] = 20;  n[0][1] = 17; n[0][2] = 1; n[0][3] = 2;
     n[1][0] = 21;  n[1][1] = 0; n[1][2] = 18; n[1][3] = 14;
 
