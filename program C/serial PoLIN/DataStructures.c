@@ -35,6 +35,7 @@ struct PairInOutPortsOfSwitch
 {
     Packet inputPort[5];
     Packet outputPort[5];
+    int destID; //ID of SWITCH or HOST
     int linkID;
 };
 
