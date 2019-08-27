@@ -3,6 +3,9 @@
 
 void display(Packet *n, int length);
 void assignAdj(int **n, int width, int height);
+
+void assignAdjant(Switch *switches, Host *hosts);
+
 void echo(int **n, int w, int h);
 
 void echo(int **n, int w, int h)
@@ -74,6 +77,10 @@ void display(Packet *n, int length)
     }
 }
 
+void assignAdjant(Switch *switches, Host *hosts)
+{
+
+}
 
 void assignAdj(int **n, int width, int height)
 {
