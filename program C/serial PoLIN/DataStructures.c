@@ -25,23 +25,30 @@ struct HOST{
 };
 
 
-
 typedef struct HOST *host;
 
+/* struct LINK{
+    double length;
+};*/
 
-struct PairPortsOfSwitch
+struct PairInOutPortsOfSwitch
 {
     Packet inputPort[5];
     Packet outputPort[5];
+    int linkID;
 };
 
-typedef struct PairPortsOfSwitch *IntegratedPort; 
+typedef struct PairInOutPortsOfSwitch *IntegratedPort; 
 
 
 struct SWITCH{
     int host;//-1 nghia la khong ket noi voi host nao ca
-    IntegratedPort *integratedPorts;
+    IntegratedPort *integratedPorts;//Cac IntegratedPort
+    //int *link;//danh sach cac Link ket noi den Switch
+    int DELAY;
 };
+
+typedef struct SWITCH *Switch;
 
 
 Packet createPacket(int id, int src, int dst, int nHop){
