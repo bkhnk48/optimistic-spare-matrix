@@ -25,7 +25,7 @@ struct HOST{
 };
 
 
-typedef struct HOST *host;
+typedef struct HOST *Host;
 
 /* struct LINK{
     double length;
@@ -43,7 +43,7 @@ typedef struct PairInOutPortsOfSwitch *IntegratedPort;
 
 
 struct SWITCH{
-    int host;//-1 nghia la khong ket noi voi host nao ca
+    int host;//0 nghia la khong ket noi voi host nao ca
     IntegratedPort *integratedPorts;//Cac IntegratedPort
     //int *link;//danh sach cac Link ket noi den Switch
     int DELAY;
