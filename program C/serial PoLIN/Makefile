@@ -3,6 +3,7 @@ all: serial
 serial: 
 	gcc -g -c ErrorReport.c
 	gcc -g -c DataStructures.c 
+	gcc -g -c Host.c
 	gcc -g -c GenerationOfPackets.c 
 	gcc -g -c Switches.c
 	gcc -g -c Init.c
