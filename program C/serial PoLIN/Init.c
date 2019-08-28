@@ -102,6 +102,7 @@ void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w)
                     hosts[idOfHost - h] -> aSwitch = i;
                     hosts[idOfHost - h] -> outPort = j;
                     hosts[idOfHost - h] -> lastID = -1;//nghia la chua gui packet nao ca
+                    hosts[idOfHost - h] -> front = -1;
                     (switches[i]-> integratedPorts[j])->destID = idOfHost;
                     break;
                 default: //la Switch
