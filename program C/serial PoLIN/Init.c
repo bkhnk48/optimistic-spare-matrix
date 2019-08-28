@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "Switches.c"
 
-void display(Packet *n, int length);
+void display(Host *hosts, int length);
 void assignAdj(int **n, int width, int height);
 
 void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w);
@@ -54,20 +54,24 @@ void InitIntegratedPorts(IntegratedPort **n, int w, int h)
     }
 }
 
-void display(Packet *n, int length)
+void display(Host *hosts, int length)
 {
-    int i;
+    int i, j;
     for(i=0; i<length; i++) 
     {
-        if(n[i] != NULL)
+        j = 0;
+        if(hosts[i] != NULL)
         {
 
-            Packet curr = n[i];
+            Packet curr = hosts[i]->queue;
             while(curr != NULL)
             {
+                j++;
                 printf("\tFrom %d to %d id = %d||||", curr->src, curr -> dst, curr->id);
                 curr = curr->next;
             }
+            if(j > 0)
+                printf("\n");
         }
         else
         {
@@ -89,7 +93,7 @@ void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w)
             idOfHost = n[i][j];
             temp = idOfHost - h;
             temp = temp >> size;
-            //printf("\t%d %d %d \n", n[i][j], h, temp);
+            
             (switches[i]-> integratedPorts[j]) = malloc(sizeof(IntegratedPort));
             switch(temp)
             {
@@ -97,7 +101,7 @@ void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w)
                     switches[i]-> host++;
                     hosts[idOfHost - h] -> aSwitch = i;
                     hosts[idOfHost - h] -> outPort = j;
-                    hosts[idOfHost - h] -> lastID = 0;
+                    hosts[idOfHost - h] -> lastID = -1;//nghia la chua gui packet nao ca
                     (switches[i]-> integratedPorts[j])->destID = idOfHost;
                     break;
                 default: //la Switch
