@@ -90,16 +90,18 @@ void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w)
             temp = idOfHost - h;
             temp = temp >> size;
             //printf("\t%d %d %d \n", n[i][j], h, temp);
+            (switches[i]-> integratedPorts[j]) = malloc(sizeof(IntegratedPort));
             switch(temp)
             {
                 case 0: //la HOST
                     switches[i]-> host++;
-                    hosts[idOfHost] -> aSwitch = i;
-                    //break;
-                default: //la Switch
-                    
+                    hosts[idOfHost - h] -> aSwitch = i;
+                    hosts[idOfHost - h] -> outPort = j;
+                    (switches[i]-> integratedPorts[j])->destID = idOfHost;
                     break;
-
+                default: //la Switch
+                    (switches[i]-> integratedPorts[j])->destID = j;
+                    break;
             }
         }
     }
