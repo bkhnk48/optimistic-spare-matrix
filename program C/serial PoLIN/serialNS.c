@@ -59,6 +59,8 @@ int main(int argc, char** argv)
     insertSourceQueue(hosts, 32, 21, numOfSwitches);
     display(hosts, numOfHosts);
 
+    sendToOutPort(hosts[12], switches);
+
     return 0;
 }
 
