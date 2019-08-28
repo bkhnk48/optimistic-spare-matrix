@@ -15,17 +15,19 @@ int main(int argc, char** argv)
     Switch *switches = NULL;//Mang luu tru cac switches cua network
     Host *hosts = NULL;
 
-    IntegratedPort **IntegratedPortOfSwitches = NULL;//Mang luu tru cac Integrated Port cua SWITCHES
+    //IntegratedPort **IntegratedPortOfSwitches = NULL;//Mang luu tru cac Integrated Port cua SWITCHES
     AdjOfSwitches = malloc( sizeof * AdjOfSwitches * numOfSwitches );
 
-    IntegratedPortOfSwitches = malloc( sizeof * IntegratedPortOfSwitches * numOfSwitches );
+    //IntegratedPortOfSwitches = malloc( sizeof * IntegratedPortOfSwitches * numOfSwitches );
     switches = malloc(sizeof * switches * numOfSwitches);
     hosts = malloc(sizeof * hosts * numOfHosts);
 
+
     for (int i = 0; i < numOfSwitches; i++ )
     {
-      IntegratedPortOfSwitches[i] = malloc( sizeof *IntegratedPortOfSwitches[i] * numOfPorts );
+      //IntegratedPortOfSwitches[i] = malloc( sizeof *IntegratedPortOfSwitches[i] * numOfPorts );
     }
+
 
     for (int i = 0; i < numOfHosts; i++ )
     {
@@ -46,12 +48,12 @@ int main(int argc, char** argv)
     //Packet *hosts = NULL; //Source Queue cua cac Hosts
     //hosts = malloc(numOfHosts * sizeof(Packet));
     
-    Packet *lasts = NULL;//Luu tru phan tu cuoi cung trong Source Queue cua cac Hosts
-    lasts = malloc(numOfHosts * sizeof(Packet));
+    //Packet *lasts = NULL;//Luu tru phan tu cuoi cung trong Source Queue cua cac Hosts
+    //lasts = malloc(numOfHosts * sizeof(Packet));
 
-    int *lastIDs = NULL;
-    lastIDs = calloc(numOfHosts, sizeof(int));
-    
+    //int *lastIDs = NULL;
+    //lastIDs = calloc(numOfHosts, sizeof(int));
+
     assignAdj(AdjOfSwitches, 10, 11);
     assignAdjant(switches, hosts, AdjOfSwitches, numOfSwitches, numOfPorts);
 
@@ -60,7 +62,7 @@ int main(int argc, char** argv)
 
     //printf("\nLAST ID %d", lastIDs[32 - numOfSwitches]);
     //insertToSourceQueue(hosts, lasts, 32, 21, numOfSwitches, lastIDs);
-    
+
     insertSourceQueue(hosts, 32, 21, numOfSwitches);
 
     //display(hosts, numOfHosts);
