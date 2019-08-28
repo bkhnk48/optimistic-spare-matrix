@@ -1,12 +1,22 @@
 #include <stdio.h>
-#include "DataStructures.c"
-
+//#include "DataStructures.c"
+#include "Host.c"
 
 
 void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches);
 
-void sendToOutPort(int host, int aSwitch, IntegratedPort **IntegratedPortOfSwitches, int time, Packet *p);
+//void sendToOutPort(int host, int aSwitch, IntegratedPort **IntegratedPortOfSwitches, int time, Packet *p);
 
+void sendToOutPort(Host host, Switch *switches)
+{
+    if(CanReceive(host, switches))
+        printf("Can send packet from host");
+    else
+    {
+        printf("Full of next buffer");
+    }
+    
+}
 
 void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches)
 //Ham nay thuc hien viec tao ra Packet, roi luu tru vao phan tu hosts[src - numOfSwitches] -> queue
@@ -75,7 +85,7 @@ void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches)
     return;
 }
 
-void sendToOutPort(int host, int aSwitch, IntegratedPort **IntegratedPortOfSwitches, int time, Packet *p)
-{
+//void sendToOutPort(int host, int aSwitch, IntegratedPort **IntegratedPortOfSwitches, int time, Packet *p)
+//{
     
-}
+//}
