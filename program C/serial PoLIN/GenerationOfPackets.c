@@ -102,11 +102,13 @@ void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches)
 //                    hosts[src - numOfSwitches] -> last phai duoc tang them 1 gia tri so voi luc 
 //                    truoc khi thuc hien ham
 {
+    
     if(hosts == NULL)//Neu hosts la mang NULL
     {   
         nullPointerException(__LINE__, __FILE__, __func__);
         return;
     }
+    
 
     if(src - numOfSwitches < 0 || src - numOfSwitches >= numOfSwitches
         || dst - numOfSwitches < 0 || dst - numOfSwitches > numOfSwitches
@@ -116,30 +118,34 @@ void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches)
         return;
     }
 
-    Packet first, last, current;
+    
+
+    Packet *first, *last, current;
+    outOfBoundException(__LINE__, __FILE__, __func__);
     int id = (hosts[src - numOfSwitches] -> lastID);
     id++; //Tang gia tri ID len
     current = createPacket(id, src, dst, 0);//Khoi tao Packet voi id = lastID + 1
 
+    printf("Go here %d", __LINE__);
     if(hosts[src - numOfSwitches] -> queue == NULL)//Neu phan tu hosts[src - numOfSwitches] khong chua Packet nao ca
     //noi cach khac, hosts thu (src) van chua tao ra packet nao ca hoac cac packet deu da len duong di roi
     {
-        first = current; last = current;
-        first->next = NULL;//Vi Packet nay la dau tien nen truong next cua no tro den NULL
-        last->next = NULL;//Vi Packet nay la dau tien nen truong next cua no tro den NULL
+        first = &current; last = &current;
+        ((Packet)(first))->next = NULL;//Vi Packet nay la dau tien nen truong next cua no tro den NULL
+        ((Packet)last)->next = NULL;//Vi Packet nay la dau tien nen truong next cua no tro den NULL
 
-        hosts[src - numOfSwitches] -> queue = &first;//Nap vao trong mang hosts, hosts thu (src) dang chua Packet voi id = lastID
-        hosts[src - numOfSwitches] -> last = &first;
+        hosts[src - numOfSwitches] -> queue = first;//Nap vao trong mang hosts, hosts thu (src) dang chua Packet voi id = lastID
+        hosts[src - numOfSwitches] -> last = first;
     }
     else{
         
         first = hosts[src - numOfSwitches] -> queue;//Lay ra packet dung dau tien trong danh sach sourceQueue
         last = hosts[src - numOfSwitches] -> last;//Lay ra packet dung CUOI CUNG trong danh sach sourceQueue
         
-        if(first->next == NULL)//Neu hien tai sourceQueue chi co mot packet
-            first->next = current;//packet nay tro den packet tiep theo (vua moi tao)
+        if(((Packet)first)->next == NULL)//Neu hien tai sourceQueue chi co mot packet
+            ((Packet)first)->next = current;//packet nay tro den packet tiep theo (vua moi tao)
         else{
-            last-> next = current;//Nguoc lai neu sourceQueue da co nhieu packet ben trong
+            ((Packet)last)-> next = current;//Nguoc lai neu sourceQueue da co nhieu packet ben trong
             //thi phan tu cuoi cung se tro den packet current (vua moi duoc tao ra)
         }
         
