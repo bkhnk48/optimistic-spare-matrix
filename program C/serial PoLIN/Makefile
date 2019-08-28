@@ -1,13 +1,13 @@
 all: serial
 
 serial: 
-	gcc -c ErrorReport.c
-	gcc -c DataStructures.c 
-	gcc -c GenerationOfPackets.c 
-	gcc -c Switches.c
-	gcc -c Init.c
+	gcc -g -c ErrorReport.c
+	gcc -g -c DataStructures.c 
+	gcc -g -c GenerationOfPackets.c 
+	gcc -g -c Switches.c
+	gcc -g -c Init.c
 #gcc serialNS.c -o serialNS.exe  DataStructures.o
-	gcc serialNS.c -o serialNS.exe 
+	gcc serialNS.c -g -o serialNS.exe 
 r:
 	./serialNS.exe
 clean: 
