@@ -60,6 +60,7 @@ int main(int argc, char** argv)
 
     //printf("\nLAST ID %d", lastIDs[32 - numOfSwitches]);
     //insertToSourceQueue(hosts, lasts, 32, 21, numOfSwitches, lastIDs);
+    
     insertSourceQueue(hosts, 32, 21, numOfSwitches);
 
     //display(hosts, numOfHosts);
