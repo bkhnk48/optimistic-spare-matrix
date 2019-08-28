@@ -20,8 +20,8 @@ struct HOST{
     int aSwitch;
     int outPort;
     int lastID; //ID cua packet cuoi cung da tao ra
-    Packet *queue;//Source queue
-    Packet *last;//phan tu cuoi cung trong queue
+    Packet queue;//Source queue
+    Packet last;//phan tu cuoi cung trong queue
 };
 
 
