@@ -19,7 +19,8 @@ typedef struct PACKET *Packet; //Define packet as pointer of data type struct Qu
 struct HOST{
     int aSwitch;
     int outPort;
-    int lastID; //ID cua packet cuoi cung da tao ra
+    int lastID; //ID cua packet cuoi cung da tao ra, gia tri
+                //nay bang -1 nghia la chua gui packet nao ca
     Packet queue;//Source queue
     Packet last;//phan tu cuoi cung trong queue
 };
