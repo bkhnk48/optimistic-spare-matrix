@@ -13,3 +13,6 @@ r:
 clean: 
 	-rm *.exe
 	-rm *.o
+clear: 
+	-rm *.exe
+	-rm *.o
