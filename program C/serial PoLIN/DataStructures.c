@@ -23,6 +23,7 @@ struct HOST{
                 //nay bang -1 nghia la chua gui packet nao ca
     Packet queue;//Source queue
     Packet last;//phan tu cuoi cung trong queue
+    int front;
 };
 
 
@@ -52,6 +53,11 @@ struct SWITCH{
 
 typedef struct SWITCH *Switch;
 
+struct SIMULATOR{
+    int currentTime;
+};
+
+typedef struct SIMULATOR *DiscreteEventSimulator;
 
 Packet createPacket(int id, int src, int dst, int nHop){
     Packet temp; // declare a node
