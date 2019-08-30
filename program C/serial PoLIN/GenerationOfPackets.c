@@ -9,21 +9,27 @@ void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches);
 void sendToOutPort(Host host, Switch *switches)
 {
     IntegratedPort ports = getOutPort(host, switches);
+
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
     int t = //ports->bufferIn;
             (int)((Packet)(ports->inputPort[4]));//TRONG C, NULL luon mang gia tri 0
             //Nguon: https://stackoverflow.com/questions/1296843/what-is-the-difference-between-null-0-and-0
             /* Note: This concept applies to the C language, not C++.*/
+    #pragma GCC diagnostic pop
+    
     int temp;
     Packet first = NULL;
     switch (t)//chinh la cau lenh kiem tra if (outPort.canReceive()) 
     {
         case 0:
             //ports->swFlag = 0;
-            temp = dequeue(host, &first);
+            temp = dequeue(host, &first);//lay Packet ra tu source queue cua host
             switch(temp)
             {
                 case 1:
-                    printf("\n Packet:  %d from %d to %d\n",first->id, first->src, first->dst);
+                    //printf("\n Packet:  %d from %d to %d\n",first->id, first->src, first->dst);
+
                     break;
             }
             break;
