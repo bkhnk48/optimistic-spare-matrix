@@ -1,6 +1,5 @@
 #include <stdio.h>
-//#include "DataStructures.c"
-#include "Host.c"
+#include "IntegratedPort.c"
 
 
 void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches);
@@ -9,13 +8,37 @@ void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches);
 
 void sendToOutPort(Host host, Switch *switches)
 {
-    if(CanReceive(host, switches))
-        printf("Can send packet from host");
-    else
+    IntegratedPort ports = getOutPort(host, switches);
+    int t = //ports->bufferIn;
+            (int)((Packet)(ports->inputPort[4]));//TRONG C, NULL luon mang gia tri 0
+            //Nguon: https://stackoverflow.com/questions/1296843/what-is-the-difference-between-null-0-and-0
+            /* Note: This concept applies to the C language, not C++.*/
+    int temp;
+    Packet first = NULL;
+    switch (t)//chinh la cau lenh kiem tra if (outPort.canReceive()) 
     {
-        printf("Full of next buffer");
+        case 0:
+            //ports->swFlag = 0;
+            temp = dequeue(host, &first);
+            switch(temp)
+            {
+                case 1:
+                    printf("\n Packet:  %d from %d to %d\n",first->id, first->src, first->dst);
+                    break;
+            }
+            break;
+        /*case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:*/
+        default:    
+            ports->swFlag = 0;
+            break;
+        //default:
+        //    ports->swFlag = 0;
+        //    break;
     }
-    
 }
 
 void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches)
@@ -59,8 +82,8 @@ void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches)
     //noi cach khac, hosts thu (src) van chua tao ra packet nao ca hoac cac packet deu da len duong di roi
     {
         first = current; last = current;
-        ((Packet)(first))->next = NULL;//Vi Packet nay la dau tien nen truong next cua no tro den NULL
-        ((Packet)last)->next = NULL;//Vi Packet nay la dau tien nen truong next cua no tro den NULL
+        ((Packet)(first))-> next = NULL;//Vi Packet nay la dau tien nen truong next cua no tro den NULL
+        ((Packet)last)-> next = NULL;//Vi Packet nay la dau tien nen truong next cua no tro den NULL
 
         hosts[src - numOfSwitches] -> queue = first;//Nap vao trong mang hosts, hosts thu (src) dang chua Packet voi id = lastID
         hosts[src - numOfSwitches] -> last = first;
