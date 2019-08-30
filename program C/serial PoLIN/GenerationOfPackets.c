@@ -17,7 +17,7 @@ void sendToOutPort(Host host, Switch *switches)
             //Nguon: https://stackoverflow.com/questions/1296843/what-is-the-difference-between-null-0-and-0
             /* Note: This concept applies to the C language, not C++.*/
     #pragma GCC diagnostic pop
-    
+
     int temp;
     Packet first = NULL;
     switch (t)//chinh la cau lenh kiem tra if (outPort.canReceive()) 
@@ -28,8 +28,7 @@ void sendToOutPort(Host host, Switch *switches)
             switch(temp)
             {
                 case 1:
-                    //printf("\n Packet:  %d from %d to %d\n",first->id, first->src, first->dst);
-
+                    addPacketToBuffer(first, ports);
                     break;
             }
             break;
