@@ -21,9 +21,10 @@ struct HOST{
     int outPort;
     int lastID; //ID cua packet cuoi cung da tao ra, gia tri
                 //nay bang -1 nghia la chua gui packet nao ca
+    int front;
     Packet queue;//Source queue
     Packet last;//phan tu cuoi cung trong queue
-    int front;
+    
 };
 
 
