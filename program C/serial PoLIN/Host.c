@@ -7,7 +7,8 @@ int CanReceive(Host host, Switch *switches)
     Switch theSwitch = switches[switchID];
     int i = 0;
     int count = 0;
-    IntegratedPort ports = (IntegratedPort)(theSwitch->integratedPorts[host->outPort]);
+    int t = host->outPort;
+    IntegratedPort ports = (theSwitch->integratedPorts[t]);
     //Packet outputPort[5] ;
     //outputPort = ports->outputPort;
     if(ports->outputPort == NULL)
