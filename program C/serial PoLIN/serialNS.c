@@ -59,9 +59,13 @@ int main(int argc, char** argv)
     insertSourceQueue(hosts, 32, 21, numOfSwitches);
     display(hosts, numOfHosts);
 
-    printf("%d", hosts[12]->aSwitch);
+    //printf("%d", hosts[12]->aSwitch);
 
     sendToOutPort(hosts[12], switches);
+
+    Packet p = (switches[12]->integratedPorts[0])->inputPort[0];
+
+    printf("\n Packet:  %d from %d to %d\n",p->id, p->src, p->dst);
 
     return 0;
 }
