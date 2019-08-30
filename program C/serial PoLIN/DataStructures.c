@@ -36,10 +36,13 @@ typedef struct HOST *Host;
 
 struct PairInOutPortsOfSwitch
 {
-    Packet inputPort[5];
-    Packet outputPort[5];
+    unsigned char bufferIn;
+    unsigned char bufferOut;
     int destID; //ID of SWITCH or HOST
     int linkID;
+    unsigned char swFlag;
+    Packet inputPort[5];
+    Packet outputPort[5];
 };
 
 typedef struct PairInOutPortsOfSwitch *IntegratedPort; 
