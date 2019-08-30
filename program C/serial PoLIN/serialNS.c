@@ -46,15 +46,8 @@ int main(int argc, char** argv)
       AdjOfSwitches[i] = malloc( sizeof *AdjOfSwitches[i] * numOfPorts );
     }
 
-    printf("\n%d\n", hosts[12]->aSwitch);
-
     assignAdj(AdjOfSwitches, 10, 11);
     assignAdjant(switches, hosts, AdjOfSwitches, numOfSwitches, numOfPorts);
-
-    printf("%d\n", __LINE__);
-    if(hosts[12] == NULL)
-      printf("NULL ROI");
-    printf("========> %d\n %d", hosts[12]->aSwitch, __LINE__);
 
     //InitIntegratedPorts(IntegratedPortOfSwitches, numOfPorts, numOfSwitches);
 
