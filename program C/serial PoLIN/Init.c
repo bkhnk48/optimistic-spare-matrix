@@ -111,6 +111,10 @@ void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w)
                     (switches[i]-> integratedPorts[j])->destID = j;
                     break;
             }
+
+            (switches[i]-> integratedPorts[j])->bufferIn = 5;
+            (switches[i]-> integratedPorts[j])->bufferOut = 5;
+            (switches[i]-> integratedPorts[j])->swFlag = 0;
         }
     }
 }
