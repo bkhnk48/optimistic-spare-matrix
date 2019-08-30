@@ -1,2 +1,3 @@
 #include "Host.c"
-void addPacketToBuffer();
+void addPacketToBuffer(Packet p, IntegratedPort port);
+int getEmptySlot(IntegratedPort port);
