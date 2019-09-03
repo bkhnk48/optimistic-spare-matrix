@@ -16,39 +16,53 @@ struct PACKET
 
 typedef struct PACKET *Packet; //Define packet as pointer of data type struct Queue
 
+struct LINK{
+    long bandwidth;
+    double length;
+    int allIntegratedPort[2];
+    int isBusy[2];
+};
+
+typedef struct LINK *Link;
+
+struct PairInOutPortsOfSwitch
+{
+    //unsigned char bufferIn;
+    //unsigned char bufferOut;
+    int creditCount;
+    int destID; //ID of SWITCH or HOST
+    //int linkID;
+    unsigned char swFlag;
+    unsigned char stFlag;
+    Packet inputPort[5];
+    Packet outputPort[5];
+    Link link;
+};
+
+typedef struct PairInOutPortsOfSwitch *IntegratedPort; 
+
 struct HOST{
+    int ID;
     int aSwitch;
-    int outPort;
+    //int outPort;
     int lastID; //ID cua packet cuoi cung da tao ra, gia tri
                 //nay bang -1 nghia la chua gui packet nao ca
     int front;
+    //unsigned char swFlag;
+    //unsigned char stFlag;
+    IntegratedPort outPort;
     Packet queue;//Source queue
     Packet last;//phan tu cuoi cung trong queue
+
+    //Packet outputPort[5];
     
 };
 
 
 typedef struct HOST *Host;
 
-/* struct LINK{
-    double length;
-};*/
-
-struct PairInOutPortsOfSwitch
-{
-    unsigned char bufferIn;
-    unsigned char bufferOut;
-    int destID; //ID of SWITCH or HOST
-    int linkID;
-    unsigned char swFlag;
-    Packet inputPort[5];
-    Packet outputPort[5];
-};
-
-typedef struct PairInOutPortsOfSwitch *IntegratedPort; 
-
-
 struct SWITCH{
+    int ID;
     int host;//0 nghia la khong ket noi voi host nao ca
     IntegratedPort *integratedPorts;//Cac IntegratedPort
     //int *link;//danh sach cac Link ket noi den Switch
