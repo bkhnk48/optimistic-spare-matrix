@@ -14,6 +14,7 @@ int main(int argc, char** argv)
     //vi chua tao ra duoc ham doc file
     Switch *switches = NULL;//Mang luu tru cac switches cua network
     Host *hosts = NULL;
+    Link *link = NULL;
 
     //IntegratedPort **IntegratedPortOfSwitches = NULL;//Mang luu tru cac Integrated Port cua SWITCHES
     AdjOfSwitches = malloc( sizeof * AdjOfSwitches * numOfSwitches );
