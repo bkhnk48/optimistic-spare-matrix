@@ -32,8 +32,22 @@ int main(int argc, char** argv)
     for (int i = 0; i < numOfHosts; i++ )
     {
       Host tempHost = malloc(sizeof tempHost);
+      
       hosts[i] = tempHost;
-      hosts[i]->lastID = -1;
+      hosts[i] -> ID = i + numOfSwitches;
+      hosts[i] -> lastID = -1;//nghia la chua gui packet nao ca
+      hosts[i] -> front = -1;
+      IntegratedPort integratedPorts = malloc(sizeof * integratedPorts);
+      (hosts[i] -> outPort) = integratedPorts;
+      (hosts[i] -> outPort) -> swFlag = 0;
+      (hosts[i] -> outPort) -> stFlag = 0;
+      /*hosts[i] -> outputPort[0] = NULL;
+      hosts[i] -> outputPort[1] = NULL;
+      hosts[i] -> outputPort[2] = NULL;
+      hosts[i] -> outputPort[3] = NULL;
+      hosts[i] -> outputPort[4] = NULL;*/
+      hosts[i] -> queue = NULL;
+      hosts[i] -> last = NULL;
     }
 
     for (int i = 0; i < numOfSwitches; i++ )
@@ -42,15 +56,18 @@ int main(int argc, char** argv)
       Switch aSwitch = malloc(sizeof aSwitch);
       aSwitch-> host = 0;
       switches[i] = aSwitch;
+      switches[i] -> ID = i;
       switches[i] -> integratedPorts = integratedPorts;
       AdjOfSwitches[i] = malloc( sizeof *AdjOfSwitches[i] * numOfPorts );
     }
 
     assignAdj(AdjOfSwitches, 10, 11);
+
     assignAdjant(switches, hosts, AdjOfSwitches, numOfSwitches, numOfPorts);
 
     //InitIntegratedPorts(IntegratedPortOfSwitches, numOfPorts, numOfSwitches);
 
+    
     insertSourceQueue(hosts, 32, 21, numOfSwitches);
 
     display(hosts, numOfHosts);
@@ -63,7 +80,8 @@ int main(int argc, char** argv)
 
     sendToOutPort(hosts[12], switches);
 
-    Packet p = (switches[12]->integratedPorts[0])->inputPort[0];
+    Packet p = //(switches[12]->integratedPorts[0])->inputPort[0];
+                (hosts[12]-> outPort)->outputPort[0];
 
     printf("\n Packet:  %d from %d to %d\n",p->id, p->src, p->dst);
 
