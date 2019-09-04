@@ -59,7 +59,7 @@ void sendToOutPort(Host host, Switch *switches)
     }
 }
 
-void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches)
+
 //Ham nay thuc hien viec tao ra Packet, roi luu tru vao phan tu hosts[src - numOfSwitches] -> queue
 //cung nhu Packet moi se duoc luu vao trong hosts[src - numOfSwitches] -> last
 //Yeu cau dau vao:  (i) cac hosts khong bi NULL
@@ -69,21 +69,18 @@ void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches)
 //                (ii) neu hosts[src - numOfSwitches] -> queue duoc cap nhat thi 
 //                    hosts[src - numOfSwitches] -> last phai duoc tang them 1 gia tri so voi luc 
 //                    truoc khi thuc hien ham
+void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches)
 {
     
     if(hosts == NULL)//Neu hosts la mang NULL
     {   
-        nullPointerException(__LINE__, __FILE__, __func__);
-        return;
+        nullPointerException(__LINE__, __FILE__, __func__);   return;
     }
-    
 
     if(src - numOfSwitches < 0 || src - numOfSwitches >= numOfSwitches
-        || dst - numOfSwitches < 0 || dst - numOfSwitches > numOfSwitches
-    )
+        || dst - numOfSwitches < 0 || dst - numOfSwitches > numOfSwitches)
     {
-        outOfBoundException(__LINE__, __FILE__, __func__);
-        return;
+        outOfBoundException(__LINE__, __FILE__, __func__);    return;
     }
 
     Packet first, last, current;
@@ -98,7 +95,6 @@ void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches)
         first = current; last = current;
         ((Packet)(first))-> next = NULL;//Vi Packet nay la dau tien nen truong next cua no tro den NULL
         ((Packet)last)-> next = NULL;//Vi Packet nay la dau tien nen truong next cua no tro den NULL
-
         hosts[src - numOfSwitches] -> queue = first;//Nap vao trong mang hosts, hosts thu (src) dang chua Packet voi id = lastID
         hosts[src - numOfSwitches] -> last = first;
     }
@@ -113,9 +109,7 @@ void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches)
             ((Packet)last)-> next = current;//Nguoc lai neu sourceQueue da co nhieu packet ben trong
             //thi phan tu cuoi cung se tro den packet current (vua moi duoc tao ra)
         }
-        
         hosts[src - numOfSwitches] -> last = current;//mang lasts se luu tru packet current vua moi duoc tao ra
-        
     }
 
     (hosts[src - numOfSwitches] -> lastID) = id; //Cap nhat gia tri cua ID cuc dai
