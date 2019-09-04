@@ -62,7 +62,7 @@ int main(int argc, char** argv)
       AdjOfSwitches[i] = malloc( sizeof *AdjOfSwitches[i] * numOfPorts );
     }
 
-    assignAdj(AdjOfSwitches, 10, 11);
+    int count = assignAdj(AdjOfSwitches, 4, 20);
 
     assignAdjant(switches, hosts, AdjOfSwitches, numOfSwitches, numOfPorts);
 
