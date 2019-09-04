@@ -3,8 +3,10 @@
 
 void display(Host *hosts, int length);
 int assignAdj(int **n, int width, int height);
+void createLinkBetweenSwitchHost(Switch aSwitch, Host host, int i, int j, int n);
+void createLinkBetweenSwitches(Switch *switches, int i, int j, int n);
 
-void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w);
+void assignAdjant(Switch *switches, Host *hosts, int **n, Link *link, int h, int w);
 
 void echo(int **n, int w, int h);
 
@@ -81,44 +83,105 @@ void display(Host *hosts, int length)
     }
 }
 
-void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w)
+void assignAdjant(Switch *switches, Host *hosts, int **n, Link *link, int h, int w)
 {
-    int i,j, temp, idOfHost, size;
+    int i,j, temp, idOfNode, size;
     size = sizeof(int);
     size = size * 8 - 1;
-    //Host ptr = &hosts;
+    
     for(i = 0; i < h; i++)
     {
         for(j = 0; j < w; j++)
         {
-            idOfHost = n[i][j];
-            temp = idOfHost - h;
+            idOfNode = n[i][j];
+            temp = idOfNode - h;
             temp = temp >> size;
             
             (switches[i]-> integratedPorts[j]) = malloc(sizeof(IntegratedPort));
+            (switches[i]-> integratedPorts[j])->destID = idOfNode;
             switch(temp)
             {
-                case 0: //la HOST
+                case 0: //la HOST. GT: temp = 0 nghia la (idOfHost - h) > 0, ma h = No.Switches, tuc la idOfHost > h
                     switches[i]-> host++;
                     
-                    hosts[idOfHost - h]->aSwitch = i;
-                    (hosts[idOfHost - h] -> outPort) -> destID = i;
+                    hosts[idOfNode - h]->aSwitch = i;
+                    (hosts[idOfNode - h] -> outPort) -> destID = i;
                     //hosts[idOfHost - h] -> outPort = j;
                     
-                    (switches[i]-> integratedPorts[j])->destID = idOfHost;
+                    //(switches[i]-> integratedPorts[j])->destID = idOfHost;
                     break;
                 default: //la Switch
-                    (switches[i]-> integratedPorts[j])->destID = j;
+                    //(switches[i]-> integratedPorts[j])->destID = j;
                     break;
             }
 
-            //(switches[i]-> integratedPorts[j])->bufferIn = 5;
-            //(switches[i]-> integratedPorts[j])->bufferOut = 5;
+
             (switches[i]-> integratedPorts[j])-> creditCount = 5;
             (switches[i]-> integratedPorts[j])->swFlag = 0;
             (switches[i]-> integratedPorts[j])->stFlag = 0;
         }
     }
+}
+
+void createLinkBetweenSwitches(Switch *switches, int i, int j, int n)
+{
+    int temp = i - n; //i - n[i][j]
+    int size = sizeof(int)*8 - 1;
+    temp = temp >> size;//neu temp = 0 tuc la i lon hon n[i][j]
+    Link t = NULL;
+    t = malloc(sizeof(t));
+    int idOfSwitch = (switches[i]-> integratedPorts[j])->destID;
+    t->idsOfNodes[0] = idOfSwitch;//id cua switch
+    t->idsOfNodes[1] = i;//id cua Switch
+    t->isBusy[0] = 0;
+    t->isBusy[1] = 0;
+
+    switch (temp)
+    {
+        case 0://Tuc la da co link ton tai giua hai phan tu nay roi
+            free(t);
+            t = NULL;
+
+            break;
+    
+        default://nguoc lai i < n[i][j], luu y dau bang ko xay ra
+            t->idsOfIntegratedPorts[0] = -1;
+            t->idsOfIntegratedPorts[1] = j;
+            //switches[n]->link = t;
+            switches[i]->link[j] = t;
+            break;
+    }
+}
+
+void createLinkBetweenSwitchHost(Switch aSwitch, Host host, int i, int j, int n)
+{
+    //int temp = i - n; //i - n[i][j]
+    //int size = sizeof(int)*8 - 1;
+    //temp = temp >> size;//neu temp = 0 tuc la i > n[i][j]
+    Link t = NULL;
+    t = malloc(sizeof(t));
+    //int idOfNode = (switches[i]-> integratedPorts[j])->destID;
+    int idOfNode = (aSwitch->integratedPorts[j])->destID;
+    t->idsOfNodes[0] = idOfNode;//id cua Node (co the Switch hoac Host)
+    t->idsOfNodes[1] = i;//id cua Switch
+    t->isBusy[0] = 0;
+    t->isBusy[1] = 0;
+
+    //switch (temp)
+    //{
+    //    case 0://Tuc la da co link ton tai giua hai phan tu nay roi
+    //        free(t);
+    //        t = NULL;
+
+    //        break;
+    
+    //    default://nguoc lai i < n[i][j], luu y dau bang ko xay ra
+            t->idsOfIntegratedPorts[0] = -1;
+            t->idsOfIntegratedPorts[1] = j;
+            host->link = t;
+            aSwitch->link[j] = t;
+    //        break;
+    //}
 }
 
 int assignAdj(int **n, int width, int height)
