@@ -54,17 +54,21 @@ int main(int argc, char** argv)
     for (int i = 0; i < numOfSwitches; i++ )
     {
       IntegratedPort *integratedPorts = malloc(sizeof * integratedPorts * numOfPorts);
+      Link *link = malloc(sizeof * link * numOfPorts);
       Switch aSwitch = malloc(sizeof aSwitch);
       aSwitch-> host = 0;
       switches[i] = aSwitch;
       switches[i] -> ID = i;
       switches[i] -> integratedPorts = integratedPorts;
+      switches[i] -> link = link;
       AdjOfSwitches[i] = malloc( sizeof *AdjOfSwitches[i] * numOfPorts );
     }
 
     int count = assignAdj(AdjOfSwitches, 4, 20);
 
-    assignAdjant(switches, hosts, AdjOfSwitches, numOfSwitches, numOfPorts);
+    link = malloc(sizeof * link * count);
+
+    assignAdjant(switches, hosts, AdjOfSwitches, link, numOfSwitches, numOfPorts);
 
     //InitIntegratedPorts(IntegratedPortOfSwitches, numOfPorts, numOfSwitches);
 
