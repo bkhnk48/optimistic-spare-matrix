@@ -19,8 +19,12 @@ typedef struct PACKET *Packet; //Define packet as pointer of data type struct Qu
 struct LINK{
     long bandwidth;
     double length;
-    int allIntegratedPort[2];
-    int isBusy[2];
+    //int allIntegratedPort[2];
+    //IntegratedPort allIntegratedPort[2];
+    int idsOfNodes[2];//Quy uoc, phan tu thu 2 luon la ID cua SWITCH
+    int idsOfIntegratedPorts[2];//Neu phan tu dau tien la HOST thi phan tu dau tien
+                                //cua mang nay la mot so am???
+    int isBusy[2];//luon la 0 hoac 1
 };
 
 typedef struct LINK *Link;
@@ -53,7 +57,7 @@ struct HOST{
     IntegratedPort outPort;
     Packet queue;//Source queue
     Packet last;//phan tu cuoi cung trong queue
-
+    Link link;
     //Packet outputPort[5];
     
 };
@@ -64,9 +68,10 @@ typedef struct HOST *Host;
 struct SWITCH{
     int ID;
     int host;//0 nghia la khong ket noi voi host nao ca
+    int DELAY;
     IntegratedPort *integratedPorts;//Cac IntegratedPort
     //int *link;//danh sach cac Link ket noi den Switch
-    int DELAY;
+    Link *link;
 };
 
 typedef struct SWITCH *Switch;
