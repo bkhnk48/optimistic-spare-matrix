@@ -15,9 +15,11 @@ int main(int argc, char** argv)
     Switch *switches = NULL;//Mang luu tru cac switches cua network
     Host *hosts = NULL;
     Link *link = NULL;
+    int *linkID = NULL;
 
     //IntegratedPort **IntegratedPortOfSwitches = NULL;//Mang luu tru cac Integrated Port cua SWITCHES
     AdjOfSwitches = malloc( sizeof * AdjOfSwitches * numOfSwitches );
+    linkID = malloc(sizeof * linkID * numOfSwitches);
 
     //IntegratedPortOfSwitches = malloc( sizeof * IntegratedPortOfSwitches * numOfSwitches );
     switches = malloc(sizeof * switches * numOfSwitches);
@@ -42,11 +44,6 @@ int main(int argc, char** argv)
       (hosts[i] -> outPort) = integratedPorts;
       (hosts[i] -> outPort) -> swFlag = 0;
       (hosts[i] -> outPort) -> stFlag = 0;
-      /*hosts[i] -> outputPort[0] = NULL;
-      hosts[i] -> outputPort[1] = NULL;
-      hosts[i] -> outputPort[2] = NULL;
-      hosts[i] -> outputPort[3] = NULL;
-      hosts[i] -> outputPort[4] = NULL;*/
       hosts[i] -> queue = NULL;
       hosts[i] -> last = NULL;
     }
@@ -60,11 +57,21 @@ int main(int argc, char** argv)
       switches[i] = aSwitch;
       switches[i] -> ID = i;
       switches[i] -> integratedPorts = integratedPorts;
-      switches[i] -> link = link;
+      //switches[i] -> link = link;//This statement will cause "malloc(): corrupted top size"
       AdjOfSwitches[i] = malloc( sizeof *AdjOfSwitches[i] * numOfPorts );
     }
 
-    int count = assignAdj(AdjOfSwitches, 4, 20);
+    //nullPointerException(__LINE__, __FILE__, __func__);
+
+    int count = assignAdj(AdjOfSwitches, linkID, 4, 20);
+
+    //nullPointerException(__LINE__, __FILE__, __func__);
+    
+
+    //for(int i = 0; i < numOfSwitches; i++)
+    //{
+    //  printf("\n\t Switch[%d] has %d links", i, linkID[i]);//test value of linkID
+    //}
 
     link = malloc(sizeof * link * count);
 
