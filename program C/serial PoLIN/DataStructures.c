@@ -49,15 +49,17 @@ struct HOST{
     int ID;
     int aSwitch;
     //int outPort;
+    int linkID;
     int lastID; //ID cua packet cuoi cung da tao ra, gia tri
                 //nay bang -1 nghia la chua gui packet nao ca
     int front;
+    int bufferSize;
     //unsigned char swFlag;
     //unsigned char stFlag;
     IntegratedPort outPort;
     Packet queue;//Source queue
     Packet last;//phan tu cuoi cung trong queue
-    Link link;
+    
     //Packet outputPort[5];
     
 };
@@ -69,9 +71,10 @@ struct SWITCH{
     int ID;
     int host;//0 nghia la khong ket noi voi host nao ca
     int DELAY;
+    //int *link;//danh sach cac Link ket noi den Switch
     IntegratedPort *integratedPorts;//Cac IntegratedPort
     //int *link;//danh sach cac Link ket noi den Switch
-    Link *link;
+    //Link *link;
 };
 
 typedef struct SWITCH *Switch;
