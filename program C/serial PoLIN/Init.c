@@ -2,7 +2,7 @@
 #include "Switches.c"
 
 void display(Host *hosts, int length);
-int assignAdj(int **n, int width, int height);
+int assignAdj(int **n, int *linkID, int width, int height);
 void createLinkBetweenSwitchHost(Switch aSwitch, Host host, int i, int j, int n);
 void createLinkBetweenSwitches(Switch *switches, int i, int j, int n);
 
@@ -184,7 +184,7 @@ void createLinkBetweenSwitchHost(Switch aSwitch, Host host, int i, int j, int n)
     //}
 }
 
-int assignAdj(int **n, int width, int height)
+int assignAdj(int **n, int *linkID, int width, int height)
 {
     n[0][0] = 20;  n[0][1] = 17; n[0][2] = 1; n[0][3] = 2; //4 0->20, 17, 1, 2
     n[1][0] = 21;  n[1][1] = 0; n[1][2] = 18; n[1][3] = 14; //3:  1->21, 18, 14  => 7
@@ -218,14 +218,22 @@ int assignAdj(int **n, int width, int height)
 
     int i, j;
     int count = 0;
+    
+
     for(i = 0; i < height; i++)
     {
+        linkID[i] = 0;
         for(j = 0; j < width; j++)
         {
-            if(i < n[i][j]) count++;
+            if(i < n[i][j])
+            { 
+                count++;
+                linkID[i] += 1;
+            }
         }
-        //printf("At %d, has %d links\n", i, count);
     }
+    
+    
     return count; //Could it return 48?
 
 }
