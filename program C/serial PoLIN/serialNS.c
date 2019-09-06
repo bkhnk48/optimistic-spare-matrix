@@ -25,13 +25,6 @@ int main(int argc, char** argv)
     switches = malloc(sizeof * switches * numOfSwitches);
     hosts = malloc(sizeof * hosts * numOfHosts);
 
-
-    for (int i = 0; i < numOfSwitches; i++ )
-    {
-      //IntegratedPortOfSwitches[i] = malloc( sizeof *IntegratedPortOfSwitches[i] * numOfPorts );
-    }
-
-
     for (int i = 0; i < numOfHosts; i++ )
     {
       Host tempHost = malloc(sizeof tempHost);
@@ -41,12 +34,12 @@ int main(int argc, char** argv)
       hosts[i] -> lastID = -1;//nghia la chua gui packet nao ca
       hosts[i] -> front = -1;
       hosts[i] -> linkID = 0;
-      hosts[i]->bufferSize = 0;
+      hosts[i]-> bufferSize = 0;
       IntegratedPort integratedPorts = malloc(sizeof * integratedPorts);
       (hosts[i] -> outPort) = integratedPorts;
       (hosts[i] -> outPort) -> swFlag = 0;
       (hosts[i] -> outPort) -> stFlag = 0;
-      
+      (hosts[i] -> outPort) -> linkID = -1;
       hosts[i] -> queue = NULL;
       hosts[i] -> last = NULL;
     }
@@ -81,6 +74,8 @@ int main(int argc, char** argv)
     //printf("\n MAX: %d", bigger);
 
     assignAdjant(switches, hosts, AdjOfSwitches, /*links,*/ numOfSwitches, numOfPorts);
+
+    addLinks(switches, hosts, links, numOfSwitches, numOfPorts, numOfHosts);
 
     //InitIntegratedPorts(IntegratedPortOfSwitches, numOfPorts, numOfSwitches);
 
