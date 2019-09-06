@@ -35,12 +35,12 @@ struct PairInOutPortsOfSwitch
     //unsigned char bufferOut;
     int creditCount;
     int destID; //ID of SWITCH or HOST
-    //int linkID;
+    int linkID;
     unsigned char swFlag;
     unsigned char stFlag;
     Packet inputPort[5];
     Packet outputPort[5];
-    Link link;
+    //Link link;
 };
 
 typedef struct PairInOutPortsOfSwitch *IntegratedPort; 
