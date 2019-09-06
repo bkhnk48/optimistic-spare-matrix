@@ -67,9 +67,7 @@ void display(Host *hosts, int length)
         {
 
             Packet curr = hosts[i]->queue;
-            //printf("\nAt hosts[%d], bufferSize = %d", i, hosts[i]->bufferSize);
             int count = hosts[i]->bufferSize;
-            //while(curr != NULL)
             for(k = 0; k < count; k++)
             {
                 j++;
@@ -99,13 +97,13 @@ void assignAdjant(Switch *switches, Host *hosts, int **n, /* Link *links,*/ int 
     {
         for(j = 0; j < w; j++)
         {
-            //printf("\n At here: i=%d j=%d ",i, j);
             idOfNode = n[i][j];
             temp = idOfNode - h;
             temp = temp >> size;
             
             (switches[i]-> integratedPorts[j]) = malloc(sizeof(IntegratedPort));
             (switches[i]-> integratedPorts[j])->destID = idOfNode;
+            (switches[i]-> integratedPorts[j])->linkID = -1;
             switch(temp)
             {
                 case 0: //la HOST. GT: temp = 0 nghia la (idOfHost - h) > 0, ma h = No.Switches, tuc la idOfHost > h
@@ -113,7 +111,8 @@ void assignAdjant(Switch *switches, Host *hosts, int **n, /* Link *links,*/ int 
                     hosts[idOfNode - h]->aSwitch = i;
                     (hosts[idOfNode - h] -> outPort) -> destID = i;
                     //Link li = malloc(sizeof(Link));
-                    //hosts[idOfNode - h]->linkID = indexOfLink;
+                    hosts[idOfNode - h]->linkID = indexOfLink;
+                    (hosts[idOfNode - h]->outPort)->linkID = indexOfLink;
                     //switches[i]->link[j] = indexOfLink;
                     //li->idsOfNodes[0] = idOfNode; li->isBusy[0] = 0; li->isBusy[1] = 0;
                     //li->idsOfNodes[1] = i; li->idsOfIntegratedPorts[0] = -1; li->idsOfIntegratedPorts[1] = j;
@@ -203,11 +202,12 @@ void addLinks(Switch *switches, Host *hosts, Link *links, int height, int width,
     
     for(i = 0; i < numOfHosts; i++)
     {
-       Link li = malloc(sizeof(Link));
+       Link li = malloc(sizeof * li);//Link li = malloc(sizeof(Link));Neu khong viet sizeof * li 
+                                     //ma viet sizeof(Link) thi se bi loi malloc(): corrupted top size
        li->idsOfNodes[0] = i + height; 
        li->isBusy[0] = 0; 
        li->isBusy[1] = 0;
-       //idOfNode = hosts[i] -> aSwitch;
+       idOfNode = hosts[i] -> aSwitch;
        li->idsOfNodes[1] = idOfNode; 
        li->idsOfIntegratedPorts[0] = -1; 
        li->idsOfIntegratedPorts[1] = 0;
@@ -219,7 +219,7 @@ void addLinks(Switch *switches, Host *hosts, Link *links, int height, int width,
     {
         for(j = 0; j < width; j++)
         {
-            idOfNode = (switches[i]->integratedPorts[j])->destID;
+            //idOfNode = (switches[i]->integratedPorts[j])->destID;
         }
     }
 }
