@@ -61,26 +61,18 @@ int main(int argc, char** argv)
       AdjOfSwitches[i] = malloc( sizeof *AdjOfSwitches[i] * numOfPorts );
     }
 
-    //nullPointerException(__LINE__, __FILE__, __func__);
 
     int count = assignAdj(AdjOfSwitches, linkID, 4, 20);
 
-    //nullPointerException(__LINE__, __FILE__, __func__);
-    
-
-    //for(int i = 0; i < numOfSwitches; i++)
-    //{
-    //  printf("\n\t Switch[%d] has %d links", i, linkID[i]);//test value of linkID
-    //}
 
     link = malloc(sizeof * link * count);
 
-    int smaller = min(17, 21);
-    printf("\n MIN: %d", smaller);
-    int bigger = max(17, 21);
-    printf("\n MAX: %d", bigger);
+    //int smaller = min(17, 21);
+    //printf("\n MIN: %d", smaller);
+    //int bigger = max(17, 21);
+    //printf("\n MAX: %d", bigger);
 
-    assignAdjant(switches, hosts, AdjOfSwitches, link, numOfSwitches, numOfPorts);
+    assignAdjant(switches, hosts, AdjOfSwitches, numOfSwitches, numOfPorts);
 
     //InitIntegratedPorts(IntegratedPortOfSwitches, numOfPorts, numOfSwitches);
 
