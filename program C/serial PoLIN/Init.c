@@ -3,10 +3,11 @@
 
 void display(Host *hosts, int length);
 int assignAdj(int **n, int *linkID, int width, int height);
+void addLinks(Switch *switches, Host *hosts, Link *links, int height, int width, int numOfHosts);
 void createLinkBetweenSwitchHost(Switch aSwitch, Host host, int i, int j, int n);
 void createLinkBetweenSwitches(Switch *switches, int i, int j, int n);
 
-void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w);
+void assignAdjant(Switch *switches, Host *hosts, int **n, /* Link *links,*/ int h, int w);
 
 void echo(int **n, int w, int h);
 
@@ -58,7 +59,7 @@ void InitIntegratedPorts(IntegratedPort **n, int w, int h)
 
 void display(Host *hosts, int length)
 {
-    int i, j;
+    int i, j, k;
     for(i=0; i<length; i++) 
     {
         j = 0;
@@ -66,7 +67,10 @@ void display(Host *hosts, int length)
         {
 
             Packet curr = hosts[i]->queue;
-            while(curr != NULL)
+            //printf("\nAt hosts[%d], bufferSize = %d", i, hosts[i]->bufferSize);
+            int count = hosts[i]->bufferSize;
+            //while(curr != NULL)
+            for(k = 0; k < count; k++)
             {
                 j++;
                 printf("\tFrom %d to %d id = %d||||", curr->src, curr -> dst, curr->id);
@@ -83,16 +87,19 @@ void display(Host *hosts, int length)
     }
 }
 
-void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w)
+void assignAdjant(Switch *switches, Host *hosts, int **n, /* Link *links,*/ int h, int w)
 {
     int i,j, temp, idOfNode, size;
     size = sizeof(int);
     size = size * 8 - 1;
+    int indexOfLink = 0;
+    int t;
     
     for(i = 0; i < h; i++)
     {
         for(j = 0; j < w; j++)
         {
+            //printf("\n At here: i=%d j=%d ",i, j);
             idOfNode = n[i][j];
             temp = idOfNode - h;
             temp = temp >> size;
@@ -105,13 +112,22 @@ void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w)
                     switches[i]-> host++;
                     hosts[idOfNode - h]->aSwitch = i;
                     (hosts[idOfNode - h] -> outPort) -> destID = i;
+                    //Link li = malloc(sizeof(Link));
+                    //hosts[idOfNode - h]->linkID = indexOfLink;
+                    //switches[i]->link[j] = indexOfLink;
+                    //li->idsOfNodes[0] = idOfNode; li->isBusy[0] = 0; li->isBusy[1] = 0;
+                    //li->idsOfNodes[1] = i; li->idsOfIntegratedPorts[0] = -1; li->idsOfIntegratedPorts[1] = j;
+                    indexOfLink++;
                     break;
-                default: //la Switch
-                    //(switches[i]-> integratedPorts[j])->destID = j;
+                default: //la Switch. Can kiem tra xem neu Switch[i] ket noi den Switch[j] voi i < j
+                    //thi ta tang indexOfLink them 1. Nguoc lai, ko tang
+                    t = i - j;//int x = (21 - 17)>>(sizeof(int)*8 - 1); => x = 0|||  x = (11 - 17)>>(sizeof(int)*8 - 1); => x = -1
+                    t = t >> size;
+                    t = -t;
+                    indexOfLink += t;
+                    
                     break;
             }
-
-
             (switches[i]-> integratedPorts[j])-> creditCount = 5;
             (switches[i]-> integratedPorts[j])->swFlag = 0;
             (switches[i]-> integratedPorts[j])->stFlag = 0;
@@ -144,7 +160,7 @@ void createLinkBetweenSwitches(Switch *switches, int i, int j, int n)
             t->idsOfIntegratedPorts[0] = -1;
             t->idsOfIntegratedPorts[1] = j;
             //switches[n]->link = t;
-            switches[i]->link[j] = t;
+            //switches[i]->link[j] = t;
             break;
     }
 }
@@ -174,11 +190,41 @@ void createLinkBetweenSwitchHost(Switch aSwitch, Host host, int i, int j, int n)
     //    default://nguoc lai i < n[i][j], luu y dau bang ko xay ra
             t->idsOfIntegratedPorts[0] = -1;
             t->idsOfIntegratedPorts[1] = j;
-            host->link = t;
-            aSwitch->link[j] = t;
+            //host->link = t;
+            //aSwitch->link[j] = t;
     //        break;
     //}
 }
+
+
+void addLinks(Switch *switches, Host *hosts, Link *links, int height, int width, int numOfHosts)
+{
+    int i,j, idOfNode;
+    
+    for(i = 0; i < numOfHosts; i++)
+    {
+       Link li = malloc(sizeof(Link));
+       li->idsOfNodes[0] = i + height; 
+       li->isBusy[0] = 0; 
+       li->isBusy[1] = 0;
+       //idOfNode = hosts[i] -> aSwitch;
+       li->idsOfNodes[1] = idOfNode; 
+       li->idsOfIntegratedPorts[0] = -1; 
+       li->idsOfIntegratedPorts[1] = 0;
+       links[hosts[i]->linkID] = li;
+    }
+    
+
+    for(i = 0; i < height; i++)
+    {
+        for(j = 0; j < width; j++)
+        {
+            idOfNode = (switches[i]->integratedPorts[j])->destID;
+        }
+    }
+}
+
+
 
 int assignAdj(int **n, int *linkID, int width, int height)
 {
@@ -215,16 +261,18 @@ int assignAdj(int **n, int *linkID, int width, int height)
     int i, j;
     int count = 0;
     
+    linkID[0] = 0;
+    count = width;
 
-    for(i = 0; i < height; i++)
+    for(i = 1; i < height; i++)
     {
-        linkID[i] = 0;
+        linkID[i] = count - linkID[i - 1];
         for(j = 0; j < width; j++)
         {
             if(i < n[i][j])
             { 
                 count++;
-                linkID[i] += 1;
+                //linkID[i] += 1;
             }
         }
     }
