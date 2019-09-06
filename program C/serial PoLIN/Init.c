@@ -6,7 +6,7 @@ int assignAdj(int **n, int *linkID, int width, int height);
 void createLinkBetweenSwitchHost(Switch aSwitch, Host host, int i, int j, int n);
 void createLinkBetweenSwitches(Switch *switches, int i, int j, int n);
 
-void assignAdjant(Switch *switches, Host *hosts, int **n, Link *link, int h, int w);
+void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w);
 
 void echo(int **n, int w, int h);
 
@@ -83,7 +83,7 @@ void display(Host *hosts, int length)
     }
 }
 
-void assignAdjant(Switch *switches, Host *hosts, int **n, Link *link, int h, int w)
+void assignAdjant(Switch *switches, Host *hosts, int **n, int h, int w)
 {
     int i,j, temp, idOfNode, size;
     size = sizeof(int);
@@ -103,12 +103,8 @@ void assignAdjant(Switch *switches, Host *hosts, int **n, Link *link, int h, int
             {
                 case 0: //la HOST. GT: temp = 0 nghia la (idOfHost - h) > 0, ma h = No.Switches, tuc la idOfHost > h
                     switches[i]-> host++;
-                    
                     hosts[idOfNode - h]->aSwitch = i;
                     (hosts[idOfNode - h] -> outPort) -> destID = i;
-                    //hosts[idOfHost - h] -> outPort = j;
-                    
-                    //(switches[i]-> integratedPorts[j])->destID = idOfHost;
                     break;
                 default: //la Switch
                     //(switches[i]-> integratedPorts[j])->destID = j;
