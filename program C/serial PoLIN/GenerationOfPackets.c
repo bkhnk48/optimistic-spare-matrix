@@ -83,13 +83,15 @@ void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches)
         outOfBoundException(__LINE__, __FILE__, __func__);    return;
     }
 
-    Packet first, last, current;
+    Packet first = NULL, last = NULL, current = NULL;
     
     int id = (hosts[src - numOfSwitches] -> lastID);
     id++; //Tang gia tri ID len
     current = createPacket(id, src, dst, 0);//Khoi tao Packet voi id = lastID + 1
-    
-    if(hosts[src - numOfSwitches] -> queue == NULL)//Neu phan tu hosts[src - numOfSwitches] khong chua Packet nao ca
+    //printf("\nCall it %s at line: %d with id = %d\n", __func__, __LINE__, id);
+    int count = hosts[src - numOfSwitches] -> bufferSize;
+    //if(hosts[src - numOfSwitches] -> queue == NULL)
+    if(count == 0)//Neu phan tu hosts[src - numOfSwitches] khong chua Packet nao ca
     //noi cach khac, hosts thu (src) van chua tao ra packet nao ca hoac cac packet deu da len duong di roi
     {
         first = current; last = current;
@@ -99,18 +101,22 @@ void insertSourceQueue(Host *hosts, int src, int dst, int numOfSwitches)
         hosts[src - numOfSwitches] -> last = first;
     }
     else{
-        printf("\nCall it %s at line: %d\n", __func__, __LINE__);
+        //printf("\nCall it %s at line: %d with id = %d\n", __func__, __LINE__, id);
+        //printf("\n%p\n", hosts[src - numOfSwitches] -> queue);
         first = hosts[src - numOfSwitches] -> queue;//Lay ra packet dung dau tien trong danh sach sourceQueue
         last = hosts[src - numOfSwitches] -> last;//Lay ra packet dung CUOI CUNG trong danh sach sourceQueue
         
-        if(((Packet)first)->next == NULL)//Neu hien tai sourceQueue chi co mot packet
+        if(count == 1){//Neu hien tai sourceQueue chi co mot packet
+        //if(((Packet)first)->next == NULL){
             ((Packet)first)->next = current;//packet nay tro den packet tiep theo (vua moi tao)
-        else{
+        }else{
             ((Packet)last)-> next = current;//Nguoc lai neu sourceQueue da co nhieu packet ben trong
             //thi phan tu cuoi cung se tro den packet current (vua moi duoc tao ra)
         }
         hosts[src - numOfSwitches] -> last = current;//mang lasts se luu tru packet current vua moi duoc tao ra
     }
+
+    hosts[src - numOfSwitches] -> bufferSize++;
 
     (hosts[src - numOfSwitches] -> lastID) = id; //Cap nhat gia tri cua ID cuc dai
     return;
