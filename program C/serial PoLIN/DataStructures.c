@@ -92,3 +92,16 @@ Packet createPacket(int id, int src, int dst, int nHop){
     temp->next = NULL;// make next point to NULL
     return temp;//return the new node
 }
+
+
+/*Function to find maximum of x and y*/
+int min(int x, int y) 
+{ 
+    return y ^ ((x ^ y) & -(x < y)); 
+} 
+  
+    
+int max(int x, int y) 
+{ 
+    return x ^ ((x ^ y) & -(x < y));  
+} 
