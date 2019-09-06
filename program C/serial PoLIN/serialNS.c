@@ -75,6 +75,11 @@ int main(int argc, char** argv)
 
     link = malloc(sizeof * link * count);
 
+    int smaller = min(17, 21);
+    printf("\n MIN: %d", smaller);
+    int bigger = max(17, 21);
+    printf("\n MAX: %d", bigger);
+
     assignAdjant(switches, hosts, AdjOfSwitches, link, numOfSwitches, numOfPorts);
 
     //InitIntegratedPorts(IntegratedPortOfSwitches, numOfPorts, numOfSwitches);
