@@ -14,7 +14,7 @@ int main(int argc, char** argv)
     //vi chua tao ra duoc ham doc file
     Switch *switches = NULL;//Mang luu tru cac switches cua network
     Host *hosts = NULL;
-    Link *link = NULL;
+    Link *links = NULL;
     int *linkID = NULL;
 
     //IntegratedPort **IntegratedPortOfSwitches = NULL;//Mang luu tru cac Integrated Port cua SWITCHES
@@ -40,10 +40,13 @@ int main(int argc, char** argv)
       hosts[i] -> ID = i + numOfSwitches;
       hosts[i] -> lastID = -1;//nghia la chua gui packet nao ca
       hosts[i] -> front = -1;
+      hosts[i] -> linkID = 0;
+      hosts[i]->bufferSize = 0;
       IntegratedPort integratedPorts = malloc(sizeof * integratedPorts);
       (hosts[i] -> outPort) = integratedPorts;
       (hosts[i] -> outPort) -> swFlag = 0;
       (hosts[i] -> outPort) -> stFlag = 0;
+      
       hosts[i] -> queue = NULL;
       hosts[i] -> last = NULL;
     }
@@ -51,9 +54,11 @@ int main(int argc, char** argv)
     for (int i = 0; i < numOfSwitches; i++ )
     {
       IntegratedPort *integratedPorts = malloc(sizeof * integratedPorts * numOfPorts);
-      Link *link = malloc(sizeof * link * numOfPorts);
+      //Link *link = malloc(sizeof * link * numOfPorts);
+      //int *linkIDOfSwitch = malloc(sizeof * linkIDOfSwitch * numOfPorts);
       Switch aSwitch = malloc(sizeof aSwitch);
       aSwitch-> host = 0;
+      //aSwitch-> link = linkIDOfSwitch;
       switches[i] = aSwitch;
       switches[i] -> ID = i;
       switches[i] -> integratedPorts = integratedPorts;
@@ -63,16 +68,19 @@ int main(int argc, char** argv)
 
 
     int count = assignAdj(AdjOfSwitches, linkID, 4, 20);
+    //int x = (21 - 17)>>(sizeof(int)*8 - 1);
+    //printf("\n\t\t x = %d", -x);
+    //x = (11 - 17)>>(sizeof(int)*8 - 1);
+    //printf("\n\t\t x = %d", -x);
 
-
-    link = malloc(sizeof * link * count);
+    links = malloc(sizeof * links * count);
 
     //int smaller = min(17, 21);
     //printf("\n MIN: %d", smaller);
     //int bigger = max(17, 21);
     //printf("\n MAX: %d", bigger);
 
-    assignAdjant(switches, hosts, AdjOfSwitches, numOfSwitches, numOfPorts);
+    assignAdjant(switches, hosts, AdjOfSwitches, /*links,*/ numOfSwitches, numOfPorts);
 
     //InitIntegratedPorts(IntegratedPortOfSwitches, numOfPorts, numOfSwitches);
 
