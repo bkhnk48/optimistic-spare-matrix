@@ -45,7 +45,7 @@
 #include "ns3/animation-interface.h"
 
 //#define NEED_ANIMATION
-#define EXPORT_STATS
+//	#define EXPORT_STATS
 //#define NEED_TRACE
 
 /*
@@ -89,7 +89,6 @@ using namespace ns3;
 using namespace std;
 NS_LOG_COMPONENT_DEFINE ("Fat-Tree-Architecture");
 
-
 //Function to measure memory usage
 //
 void process_mem_usage(double& vm_usage, double& resident_set)
@@ -111,6 +110,13 @@ void process_mem_usage(double& vm_usage, double& resident_set)
     long page_size_kb = sysconf(_SC_PAGE_SIZE) / 1024; // in case x86-64 is configured to use 2MB pages
     vm_usage = vsize / 1024.0;
     resident_set = rss * page_size_kb;
+}
+
+void printTime()
+{
+	time_t t;
+  time(&t);
+  std::cout<<"\nCurrent date and time: "<<ctime(&t)<<"\n"<<endl;
 }
 
 // Function to create address string from numbers
@@ -144,13 +150,6 @@ char * toString(int a,int b, int c, int d){
 	return address;
 }
 
-void printTime()
-{
-	time_t t;
-  time(&t);
-  
-  printf("\nCurrent date and time : %s\n",ctime(&t));
-}
 // Main function
 //
 int 
@@ -206,16 +205,20 @@ int
 // Initialize parameters for On/Off application
 //
 	int port = 9;
+	//Original code
 	int packetSize = 1024;		// 1024 bytes
-	//int packetSize = 102400;		// 100 Kbytes
+	//Endof Original code
+	//int packetSize = 102400;		// 102400 bytes
 	char dataRate_OnOff [] = "1Mbps";
-	//char dataRate_OnOff [] = "1024Mbps";
+	//char dataRate_OnOff [] = "1000Mbps";
 	char maxBytes [] = "0";		// unlimited
 
 // Initialize parameters for Csma and PointToPoint protocol
 //
-	char dataRate [] = "1000Mbps";	// 1Gbps
-	//char dataRate [] = "1024Mbps";	// real 1Gbps 
+	//Original code
+	//char dataRate [] = "1000Mbps";	// 1Gbps
+	//Endof Original code
+	char dataRate [] = "10Mbps";	
 	int delay = 0.001;		// 0.001 ms
 
 	
@@ -230,7 +233,7 @@ int
 // Initialize Internet Stack and Routing Protocols
 //	
 	InternetStackHelper internet;
-	Ipv4NixVectorHelper nixRouting; //=> ThanhNT: giao thuc nixRouting
+	Ipv4NixVectorHelper nixRouting; 
 	Ipv4StaticRoutingHelper staticRouting;
 	Ipv4ListRoutingHelper list;
 	list.Add (staticRouting, 0);	
@@ -284,8 +287,15 @@ int
 
 	// Initialize On/Off Application with addresss of server
 		OnOffHelper oo = OnOffHelper("ns3::UdpSocketFactory",Address(InetSocketAddress(Ipv4Address(add), port))); // ip address of server
-	        oo.SetAttribute("OnTime",StringValue ("ns3::ExponentialRandomVariable[Mean=1.0|Bound=0.0]"));  
-	        oo.SetAttribute("OffTime",StringValue ("ns3::ExponentialRandomVariable[Mean=1.0|Bound=0.0]"));  
+	        //ThanhNT 13-09-11:53
+			//oo.SetAttribute("OnTime",StringValue ("ns3::ExponentialRandomVariable[Mean=1.0|Bound=0.0]"));  
+	        //oo.SetAttribute("OffTime",StringValue ("ns3::ExponentialRandomVariable[Mean=1.0|Bound=0.0]"));  
+			//Actions: set comment cac cau lenh tren 
+			//Sua thoi gian thanh thoi gian constant
+			oo.SetAttribute("OnTime",StringValue ("ns3::ConstantRandomVariable[Constant=1]"));  
+	        oo.SetAttribute("OffTime",StringValue ("ns3::ConstantRandomVariable[Constant=0]"));    
+			//Endof ThanhNT 13-09-11:53
+
 //	        oo.SetAttribute("OnTime",RandomVariableValue(ExponentialVariable(1)));  
 //	        oo.SetAttribute("OffTime",RandomVariableValue(ExponentialVariable(1))); 
  	        oo.SetAttribute("PacketSize",UintegerValue (packetSize));
@@ -414,11 +424,18 @@ int
 //=========== Start the simulation ===========//
 //
 	std::cout << "Start Simulation.. "<<"\n";
+
 	printTime();
+
 	for (i=0;i<total_host;i++){
 		app[i].Start (Seconds (0.0));
-  	//app[i].Stop (Seconds (101.0));
-		app[i].Stop (Seconds (2.0));
+		//Code cu chuan
+  		app[i].Stop (Seconds (101.0));
+		//Endof Code cu chuan
+		//ThanhNT 13-09-12:10
+		//app[i].Stop (Seconds (11.0));
+		//app[i].Stop (Seconds (6.0));
+		//Endof ThanhNT 13-09-12:10
 	}
   	Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
 // Calculate Throughput using Flowmonitor
@@ -428,8 +445,12 @@ int
 // Run simulation.
 //
   	NS_LOG_INFO ("Run Simulation.");
-  	//Simulator::Stop (Seconds(100.0));
-		Simulator::Stop (Seconds(1.0));
+	//Code cu chuan
+  	Simulator::Stop (Seconds(100.0));
+	//Endof Code cu chuan
+		//Simulator::Stop (Seconds(1.0));
+		//Simulator::Stop (Seconds(10.0));
+		//Simulator::Stop (Seconds(5.0));
 #ifdef NEED_TRACE
   	AsciiTraceHelper ascii;
   	csma.EnableAsciiAll (ascii.CreateFileStream (traceFile));
@@ -521,8 +542,6 @@ int
 	  timesForwarded+=iter->second.timesForwarded;
 	  averageDelay+=iter->second.delaySum.GetNanoSeconds()/iter->second.rxPackets;
 	  throughput+=iter->second.rxBytes * 8.0 / (iter->second.timeLastRxPacket.GetSeconds()-iter->second.timeFirstTxPacket.GetSeconds()) / 1024;
-
-		//std::cout<<"\tThroughput: " << throughput <<"\n"<<endl;
 /*	  Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (iter->first);
 
  	  NS_LOG_UNCOND("Flow ID: " << iter->first << " Src Addr " << t.sourceAddress << " Dst Addr " << t.destinationAddress);
@@ -536,26 +555,26 @@ int
     	  NS_LOG_UNCOND("Average Delay = " << iter->second.delaySum/iter->second.rxPackets);
     	  NS_LOG_UNCOND("Throughput: " << iter->second.rxBytes * 8.0 / (iter->second.timeLastRxPacket.GetSeconds()-iter->second.timeFirstTxPacket.GetSeconds()) / 1024  << " Kbps"); */
   }
-	//std::cout<<"\n"<<nFlows<<"\n"<<endl;
 
 #ifdef EXPORT_STATS
-	//sfile<<"Fat-Tree"<<","<<k<<","<<nFlows<<","<<txPackets<<","<<rxPackets<<","<<delaySum<<","<<jitterSum<<","<<lastDelay;
- 	//sfile<<","<<lostPackets<<","<<timesForwarded<<","<<averageDelay/nFlows<<","<<throughput/nFlows<<endl;
+	sfile<<"Fat-Tree"<<","<<k<<","<<nFlows<<","<<txPackets<<","<<rxPackets<<","<<delaySum<<","<<jitterSum<<","<<lastDelay;
+ 	sfile<<","<<lostPackets<<","<<timesForwarded<<","<<averageDelay/nFlows<<","<<throughput/nFlows<<endl;
 	//sfile<<"Fat-Tree"<<","<<"k"<<","<<"txPackets"<<","<<"rxPackets"<<","<<"delaySum"<<","<<"jitterSum"<<","<<"lastDelay";
 // 	sfile<<","<<"lostPackets"<<","<<"timesForwarded"<<","<<"averageDelay"<<","<<"throughput"<<endl;
 #endif
 	std::cout<<"Fat-Tree"<<","<<"k"<<","<<"txPackets"<<","<<"rxPackets"<<","<<"delaySum"<<","<<"jitterSum"<<","<<"lastDelay";
- 	std::cout<<","<<"lostPackets"<<","<<"timesForwarded"<<","<<"averageDelay"<<","<<"throughput"<<endl;
+ 	std::cout<<","<<"lostPackets"<<","<<"timesForwarded"<<","<<"averageDelay"<<","<<"throughput(Kbps)"<<endl;
 	std::cout<<"Fat-Tree"<<","<<k<<","<<txPackets<<","<<rxPackets<<","<<delaySum<<","<<jitterSum<<","<<lastDelay;
  	std::cout<<","<<lostPackets<<","<<timesForwarded<<","<<averageDelay/nFlows<<","<<throughput/nFlows<<endl;
-  	
-		//monitor->SerializeToXmlFile(filename, true, true); //ThanhNT: set comment to reduce time
-  printTime();
-	std::cout << "Simulation finished "<<"\n";
+  	//monitor->SerializeToXmlFile(filename, true, true);
 
-	double vm, rss;
-  process_mem_usage(vm, rss);
-  std::cout << "VM: " << vm << "; RSS: " << rss << std::endl;
+	printTime();
+
+  //double vm, rss;
+  //process_mem_usage(vm, rss);
+  //std::cout << "VM: " << (vm/1024) << "; RSS: " << rss << std::endl;
+
+	std::cout << "Simulation finished "<<"\n";
   	Simulator::Destroy ();
   	NS_LOG_INFO ("Done.");
 	return 0;
