@@ -1,0 +1,85 @@
+# -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+
+# def options(opt):
+#     pass
+
+# def configure(conf):
+#     conf.check_nonfatal(header_name='stdint.h', define_name='HAVE_STDINT_H')
+
+def build(bld):
+    module = bld.create_ns3_module('tocino', ['core', 'network'])
+    module.source = [
+        'helper/tocino-3d-torus-topology-helper.cc',
+        'helper/tocino-helper.cc',
+        'model/all2all.cc',
+        'model/callback-queue.cc',
+        'model/tocino-arbiter.cc',
+        'model/tocino-channel.cc',
+        'model/tocino-crossbar.cc',
+        'model/tocino-dimension-order-router.cc',
+        'model/tocino-flit-header.cc',
+        'model/tocino-flit-id-tag.cc',
+        'model/tocino-flow-control.cc',
+        'model/tocino-misc.cc',
+        'model/tocino-net-device.cc',
+        'model/tocino-router.cc',
+        'model/tocino-routing-table.cc',
+        'model/tocino-rx.cc',
+        'model/tocino-simple-arbiter.cc',
+        'model/tocino-test-results.cc',
+        'model/tocino-traffic-matrix-application.cc',
+        'model/tocino-tx.cc',
+        ]
+
+    module_test = bld.create_ns3_module_test_library('tocino')
+    module_test.source = [
+#        'test/test-tocino-all2all.cc',
+        'test/test-tocino-3d-torus.cc',
+        'test/test-tocino-3d-torus-all-to-all.cc',
+        'test/test-tocino-3d-torus-corner-to-corner.cc',
+        'test/test-tocino-3d-torus-incast.cc',
+        'test/test-tocino-callbackqueue.cc',
+        'test/test-tocino-deadlock.cc',
+        'test/test-tocino-flit-header.cc',
+        'test/test-tocino-flitter.cc',
+        'test/test-tocino-flow-control.cc',
+        'test/test-tocino-loopback.cc',
+        'test/test-tocino-multihop.cc',
+        'test/test-tocino-point-to-point.cc',
+        'test/test-tocino-ring.cc',
+        'test/tocino-test-suite.cc',
+        ]
+
+    headers = bld(features='ns3header')
+    headers.module = 'tocino'
+    headers.source = [
+        'helper/tocino-helper.h',
+        'helper/tocino-3d-torus-topology-helper.h',
+        'model/all2all.h',
+        'model/callback-queue.h',
+        'model/tocino-address.h',
+        'model/tocino-arbiter.h',
+        'model/tocino-channel.h',
+        'model/tocino-crossbar.h',
+        'model/tocino-dimension-order-router.h',
+        'model/tocino-flit-header.h',
+        'model/tocino-flit-id-tag.h',
+        'model/tocino-flow-control.h',
+        'model/tocino-misc.h',
+        'model/tocino-net-device.h',
+        'model/tocino-queue.h',
+        'model/tocino-router.h',
+        'model/tocino-routing-table.h',
+        'model/tocino-rx.h',
+        'model/tocino-simple-arbiter.h',
+        'model/tocino-test-results.h',
+        'model/tocino-traffic-matrix-application.h',
+        'model/tocino-tx.h',
+	'model/tocino-type-safe-uint32.h'
+        ]
+
+    if bld.env.ENABLE_EXAMPLES:
+        bld.recurse('examples')
+
+    # bld.ns3_python_bindings()
+
