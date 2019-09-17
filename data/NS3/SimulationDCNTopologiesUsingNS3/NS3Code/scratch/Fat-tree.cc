@@ -209,7 +209,9 @@ int
 	int packetSize = 1024;		// 1024 bytes
 	//Endof Original code
 	//int packetSize = 102400;		// 102400 bytes
+	//Original code
 	char dataRate_OnOff [] = "1Mbps";
+	//Endof Original code
 	//char dataRate_OnOff [] = "1000Mbps";
 	char maxBytes [] = "0";		// unlimited
 
@@ -218,7 +220,7 @@ int
 	//Original code
 	//char dataRate [] = "1000Mbps";	// 1Gbps
 	//Endof Original code
-	char dataRate [] = "10Mbps";	
+	char dataRate [] = "1000Mbps";	
 	int delay = 0.001;		// 0.001 ms
 
 	
@@ -316,7 +318,10 @@ int
 	// Install On/Off Application to the client
 		NodeContainer onoff;
 		onoff.Add(host[rand1][rand2].Get(rand3));
-	     	app[i] = oo.Install (onoff);
+	    app[i] = oo.Install (onoff);
+		//ThanhNT: 17-09-19: 16:28
+		std::cout << "Data transfer from " << (hostRand - 2) << " to " << rand3 <<"\n";
+		//endof ThanhNT
 	}
 	std::cout << "Finished creating On/Off traffic"<<"\n";
 
@@ -406,7 +411,7 @@ int
 
 				int second_octet = k+i;		
 				int third_octet = j;
-				//Assign subnet
+				//Assign subnetr
 				char *subnet;
 				subnet = toString(10, second_octet, third_octet, 0);
 				//Assign base
