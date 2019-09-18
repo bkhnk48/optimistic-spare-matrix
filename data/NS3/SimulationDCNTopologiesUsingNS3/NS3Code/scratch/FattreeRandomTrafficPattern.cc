@@ -522,7 +522,8 @@ int
 	  lastDelay+=iter->second.lastDelay;
 	  timesForwarded+=iter->second.timesForwarded;
 	  averageDelay+=iter->second.delaySum.GetNanoSeconds()/iter->second.rxPackets;
-	  throughput+=iter->second.rxBytes * 8.0 / (iter->second.timeLastRxPacket.GetSeconds()-iter->second.timeFirstTxPacket.GetSeconds());// / 1024;
+	  //throughput+=iter->second.rxBytes * 8.0 / (iter->second.timeLastRxPacket.GetSeconds()-iter->second.timeFirstTxPacket.GetSeconds());// / 1024;
+	  throughput+= iter->second.rxBytes * 8.0 / timeDuration;
     }
 
   	std::cout<<"Fat-Tree: Simulation in "<<timeDuration<< "s"<<endl;
@@ -530,10 +531,10 @@ int
 	std::cout<<"\n\tpacket size = "<<packetSize<<" (Bytes)"<<endl;
 	std::cout<<"\tdelay = "<<(delay*1000 * 1000)<<" (nano-sec)"<<endl;
 	std::cout<<"\tqueue size = "<<packetsInQueue<<endl;
-	std::cout<<"\tthroughput = "<<throughput/nFlows/1024<<" (Kbps)"<<endl;
+	std::cout<<"\tthroughput = "<<throughput/(nFlows*1000)<<" (Kbps)"<<endl;
 	std::cout<<"\tlink capacity = "<<link_capacity<<" (Kbps)"<<endl;
-	std::cout<<"\talternative throughput = "<<throughput*100/(1024 * nFlows*link_capacity)<<" %"<<endl;
-	std::cout<<"\t 3.000 packets in queue size results in 93% of throughput"<<endl;
+	std::cout<<"\talternative throughput = "<<throughput*100/(1000 * nFlows*link_capacity)<<" %"<<endl;
+	std::cout<<"\t 3.000 packets in queue size results in 96% of throughput"<<endl;
 	
 
 	printTime();
