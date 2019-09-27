@@ -47,14 +47,14 @@
 	- Simulation Settings:
                 - Number of pods (k): 4-24 (run the simulation with varying values of k)
                 - Number of nodes: 16-3456
-		- Simulation running time: 100 seconds
+		- Simulation running time: about 10 seconds
 		- Packet size: 12500 bytes
 		- Data rate for packet sending: 1000 Mbps
 		- Data rate for device channel: 1000 Mbps
 		- Delay time for device: 25e-6 ms or 5e-7 ms
 		- Communication pairs selection: Random Selection with uniform probability
 		- Traffic flow pattern: CBS
-		- Routing protocol: RandomEcmpRouting
+		- Routing protocol: Nix Vector Routing
 
 */
 
@@ -166,8 +166,8 @@ int
 	
 
 	int port = 9;
-	int packetSize = 12500 ;		// 1024 bytes
-	char MTU_Size [] = "12500" ;    //1024 bytes
+	int packetSize = 12500 ;		// 12500 bytes
+	char MTU_Size [] = "12500" ;    //12500 bytes
 	char dataRate_OnOff [] = "1000Mbps";
 	char maxBytes [] = "0";		// unlimited
 	
@@ -180,7 +180,7 @@ int
 	double delayHost2Switch = 5e-7;//0.1m/ 0.2 (m/ns) = 5e-10 (ns) = 5e-7 (ms)
 
 	double timeDuration = 1.0; //duration of simulation: 1.0s
-	double simulationTime = timeDuration + 5; //timeDuration + 5 = 6s
+	double simulationTime = timeDuration + 9; //timeDuration + 9 = 10s
 	
 // Output some useful information
 //	
