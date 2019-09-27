@@ -157,8 +157,13 @@ int
 
 // Initialize parameters for On/Off application
 //
-
-	std::string packetsInQueue = "120000p";
+	// We needed to generate a random number (rn) to be used to eliminate
+    // the artificial congestion caused by sending the packets at the
+    // same time. This rn is added to AppStartTime to have the sources
+    // start at different time, however they will still send at the same rate.
+	//std::string command = "echo ";
+	int eliminateArtificialCongestion = 1; 
+	std::string packetsInQueue = "125000p";
 	Config::SetDefault ("ns3::QueueBase::MaxSize", StringValue (packetsInQueue));
 	Config::Set ("/NodeList/*/DeviceList/*/TxQueue/MaxSize", StringValue (packetsInQueue));
 	Config::SetDefault("ns3::Ipv4GlobalRouting::RandomEcmpRouting",BooleanValue(true));
@@ -180,15 +185,15 @@ int
 	double delayHost2Switch = 5e-7;//0.1m/ 0.2 (m/ns) = 5e-10 (ns) = 5e-7 (ms)
 
 	double timeDuration = 1.0; //duration of simulation: 1.0s
-	double simulationTime = timeDuration + 9; //timeDuration + 9 = 10s
+	double simulationTime = timeDuration + 2; //timeDuration + 2 = 3s
 	
 // Output some useful information
 //	
 	std::cout << "Value of k =  "<< k<<"\n";
-	std::cout << "Total number of hosts =  "<< total_host<<"\n";
-	std::cout << "Number of hosts under each switch =  "<< num_host<<"\n";
-	std::cout << "Number of edge switch under each pod =  "<< num_edge<<"\n";
-	std::cout << "------------- "<<"\n";
+	//std::cout << "Total number of hosts =  "<< total_host<<"\n";
+	//std::cout << "Number of hosts under each switch =  "<< num_host<<"\n";
+	//std::cout << "Number of edge switch under each pod =  "<< num_edge<<"\n";
+	//std::cout << "------------- "<<"\n";
 
 // Initialize Internet Stack and Routing Protocols
 //	
@@ -260,7 +265,7 @@ int
 	{
 		sources[i] = allIndexes[i];
 		destinations[i] = allIndexes[i + (total_host/2)];
-		std::cout<<"\t"<<i<<") From source: "<<sources[i]<<" to dest: "<<destinations[i]<<endl;
+		//std::cout<<"\t"<<i<<") From source: "<<sources[i]<<" to dest: "<<destinations[i]<<endl;
 	}
 
 	delete [] allIndexes;
@@ -294,7 +299,6 @@ int
 	// Randomly select a client
 
 		client = destinations[i];
-		//client = (server + total_host/2) % total_host;
 		rand1 = //(client - rand3 - (rand2*num_edge))/num_pod;
 				client / numHostPerPod;
 		rand2 = (client - (rand1*numHostPerPod))/num_host;
@@ -302,12 +306,12 @@ int
 		
 	// Install On/Off Application to the client
 		NodeContainer onoff;
-		//std::cout<<"heher i = "<<i<<", client = "<<client<<" with rand1 = "<<rand1<<" rand2 = "<<rand2<<" rand3 = "<<rand3<<endl;
 		onoff.Add(host[rand1][rand2].Get(rand3));
 		app[i] = oo.Install (onoff);
-		std::cout << i <<") Data transfer from host["<< podRand <<"]["<< swRand <<"][" << (hostRand - 2) << "] (" <<add<<") to host["<< rand1 << "][" << rand2 << "][" << rand3 <<"]\n";
+		//std::cout << i <<") Data transfer from host["<< podRand <<"]["<< swRand <<"][" << (hostRand - 2) << "] (" <<add<<") to host["<< rand1 << "][" << rand2 << "][" << rand3 <<"]\n";
 	}
-	std::cout << "Finished creating On/Off traffic"<<"\n";
+
+	//std::cout << "Finished creating On/Off traffic"<<"\n";
 
 	delete [] sources;
 	sources = NULL;
@@ -365,7 +369,7 @@ int
 			ipContainer[i][j] = address.Assign(hostSw[i][j]);			
 		}
 	}
-	std::cout << "Finished connecting edge switches and hosts  "<< "\n";
+	//std::cout << "Finished connecting edge switches and hosts  "<< "\n";
 
 //=========== Connect aggregate switches to edge switches ===========//
 //
@@ -392,7 +396,7 @@ int
 			}			
 		}		
 	}
-	std::cout << "Finished connecting aggregation switches and edge switches  "<< "\n";
+	//std::cout << "Finished connecting aggregation switches and edge switches  "<< "\n";
 
 //=========== Connect core switches to aggregate switches ===========//
 //
@@ -419,7 +423,7 @@ int
 			}
 		}
 	}
-	std::cout << "Finished connecting core switches and aggregation switches  "<< "\n";
+	//std::cout << "Finished connecting core switches and aggregation switches  "<< "\n";
 	std::cout << "------------- "<<"\n";
 
 //=========== Start the simulation ===========//
@@ -428,12 +432,28 @@ int
 
 	printTime();
 
+	double maxStopTime = 0;
+
 	for (i=0;i<total_host/2;i++)
 	{
-		//app[i].Start (Seconds (i % 2));
-		//app[i].Stop (Seconds (i % 2 + timeDuration));
-		app[i].Start (Seconds (0));
-		app[i].Stop (Seconds (timeDuration));
+		if(eliminateArtificialCongestion)
+		{
+			Ptr<UniformRandomVariable> x = CreateObject<UniformRandomVariable> ();
+    		x->SetAttribute ("Min", DoubleValue (0));
+    		x->SetAttribute ("Max", DoubleValue (1));
+    		double rn = x->GetValue ();
+			app[i].Start (Seconds (rn));
+			app[i].Stop (Seconds (rn + timeDuration));
+			if(maxStopTime < rn + timeDuration)
+			{
+				maxStopTime = rn + timeDuration;
+			}
+		}
+		else
+		{
+			app[i].Start (Seconds (0));
+			app[i].Stop (Seconds (timeDuration));
+		}
 	}
 
   	Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
@@ -444,6 +464,7 @@ int
 // Run simulation.
 //
   	NS_LOG_INFO ("Run Simulation.");
+	simulationTime = maxStopTime + (k);
 	Simulator::Stop (Seconds(simulationTime));
 
 	Simulator::Run ();
@@ -489,7 +510,15 @@ int
 		
     }
 
-  	std::cout<<"Fat-Tree: Simulation in "<<(simulationTime)<< "s"<<endl;
+  	std::cout<<"Fat-Tree: Simulation in "<<(simulationTime)<< "s";
+	if(eliminateArtificialCongestion)
+	{
+		std::cout<<" and I eliminated artifical congestion" 
+		//(like: https://github.com/microsoft/Tocino/blob/master/examples/matrix-topology/matrix-topology.cc) "
+			;
+	}
+	std::cout<<endl;
+	
 	std::cout<<"\tk = "<<k<<"\n\ttxPackets = "<<txPackets<<"\n\trxPackets = "<<rxPackets<<"\n\tlostPackets = "<<lostPackets<<"\n\tnFlows = "<<nFlows;
 	std::cout<<"\n\tpacket size = "<<packetSize<<" (Bytes)"<<endl;
 	std::cout<<"\tTime forward = "<<timesForwarded<<endl;
@@ -500,6 +529,13 @@ int
 	std::cout<<"\tthroughput = "<<throughput/(nFlows*1000)<<" (Kbps)"<<endl;
 	std::cout<<"\tlink capacity = "<<link_capacity<<" (Kbps)"<<endl;
 	std::cout<<"\t% ideal throughput = "<<throughput*100/(1024 * nFlows*link_capacity)<<" %"<<endl;
+	if(eliminateArtificialCongestion)
+	{
+		std::cout<<"\tEliminated artificial congestion: YES"<<endl;
+	}
+	else{
+		std::cout<<"\tEliminated artificial congestion: NO"<<endl;
+	}
 
 	printTime();
 
