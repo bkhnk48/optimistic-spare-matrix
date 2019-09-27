@@ -88,6 +88,18 @@ char * toString(int a,int b, int c, int d){
 	return address;
 }
 
+int randBillGen()
+{
+	//return rand();
+	time_t t = time(NULL);
+  	struct tm tm = *localtime(&t);
+	int lim = tm.tm_year + 1900 + tm.tm_mon + 1 + tm.tm_mday + tm.tm_hour + tm.tm_min + tm.tm_sec;
+    static long a = 3;
+    a = (((a * 214013L + 2531011L) >> 16) & 32767);
+        
+    return ((a % lim) + 1);
+}
+
 void printTime()
 {
 	time_t t;
@@ -168,7 +180,7 @@ int
 	double delayHost2Switch = 5e-7;//0.1m/ 0.2 (m/ns) = 5e-10 (ns) = 5e-7 (ms)
 
 	double timeDuration = 1.0; //duration of simulation: 1.0s
-	double simulationTime = timeDuration + 4; //timeDuration + 4 = 5s
+	double simulationTime = timeDuration + 5; //timeDuration + 5 = 6s
 	
 // Output some useful information
 //	
@@ -181,14 +193,14 @@ int
 // Initialize Internet Stack and Routing Protocols
 //	
 	InternetStackHelper internet;
-	//Ipv4NixVectorHelper nixRouting; 
+	Ipv4NixVectorHelper nixRouting; 
 	//Ipv4StaticRoutingHelper staticRouting;
 	//Ipv4GlobalRoutingHelper globalRouting;
-	//Ipv4ListRoutingHelper list;
+	Ipv4ListRoutingHelper list;
 	//list.Add (staticRouting, 0);	
-	//list.Add (nixRouting, 0);	
+	list.Add (nixRouting, 0);	
 	//list.Add(globalRouting, 10);
-	//internet.SetRoutingHelper(list);
+	internet.SetRoutingHelper(list);
 
 //=========== Creation of Node Containers ===========//
 //
@@ -238,7 +250,7 @@ int
 	}
 
 	for (i = 0; i < total_host; i++) {
-    	int r = (rand() % (i + 1)); // choose index uniformly in [0, i]
+    	int r = (randBillGen() % (i + 1)); // choose index uniformly in [0, i]
     	int swap = allIndexes[r];
         allIndexes[r] = allIndexes[i];
         allIndexes[i] = swap;
@@ -254,22 +266,18 @@ int
 	delete [] allIndexes;
 	allIndexes = NULL;
 	
-	int hostIndex = 0;
 	int server = 0, client = 0;
+	int numHostPerPod = k*k/4;
 
 	for (i=0;i<total_host/2;i+= 1){	
 		
 		//select a server, //int num_pod = k;		// number of pod
 		server = sources[i];  //int num_host = (k/2);		// number of hosts under a switch
-		hostRand = server % num_host;//int num_edge = (k/2);		// number of edge switch in a pod
-		hostIndex = server - hostRand;
+			//(randBillGen() % (i*2 + 1));
+		podRand = server / numHostPerPod;
+		swRand = (server - (podRand*numHostPerPod))/num_host;
+		hostRand = (server - podRand*numHostPerPod - swRand*num_host);
 		hostRand = hostRand + 2;
-
-		hostIndex = (hostIndex*num_edge)/k;
-		swRand = hostIndex % num_edge;
-		
-		hostIndex = hostIndex - swRand;
-		podRand = hostIndex / num_edge;
 		
 		char *add;
 		add = toString(10, podRand, swRand, hostRand);
@@ -277,22 +285,24 @@ int
 	// Initialize On/Off Application with addresss of server
 
 		OnOffHelper oo = OnOffHelper("ns3::UdpSocketFactory",Address(InetSocketAddress(Ipv4Address(add), port))); // ip address of server
-			oo.SetAttribute("OnTime",StringValue ("ns3::ConstantRandomVariable[Constant=1]")); 
-	        oo.SetAttribute("OffTime",StringValue ("ns3::ConstantRandomVariable[Constant=0]"));    
- 	        oo.SetAttribute("PacketSize",UintegerValue (packetSize));
- 	       	oo.SetAttribute("DataRate",StringValue (dataRate_OnOff));      
-	        oo.SetAttribute("MaxBytes",StringValue (maxBytes));
+		oo.SetAttribute("OnTime",StringValue ("ns3::ConstantRandomVariable[Constant=1]")); 
+	    oo.SetAttribute("OffTime",StringValue ("ns3::ConstantRandomVariable[Constant=0]"));    
+ 	    oo.SetAttribute("PacketSize",UintegerValue (packetSize));
+ 	    oo.SetAttribute("DataRate",StringValue (dataRate_OnOff));      
+	    oo.SetAttribute("MaxBytes",StringValue (maxBytes));
 
 	// Randomly select a client
 
 		client = destinations[i];
-		rand3 = client % num_host;
-		hostIndex = (client - rand3)*num_edge/k;
-		rand2 = hostIndex % num_edge;
-		rand1 = (hostIndex - rand2)/num_edge;
+		//client = (server + total_host/2) % total_host;
+		rand1 = //(client - rand3 - (rand2*num_edge))/num_pod;
+				client / numHostPerPod;
+		rand2 = (client - (rand1*numHostPerPod))/num_host;
+		rand3 = (client - rand1*numHostPerPod - rand2*num_host);
 		
 	// Install On/Off Application to the client
 		NodeContainer onoff;
+		//std::cout<<"heher i = "<<i<<", client = "<<client<<" with rand1 = "<<rand1<<" rand2 = "<<rand2<<" rand3 = "<<rand3<<endl;
 		onoff.Add(host[rand1][rand2].Get(rand3));
 		app[i] = oo.Install (onoff);
 		std::cout << i <<") Data transfer from host["<< podRand <<"]["<< swRand <<"][" << (hostRand - 2) << "] (" <<add<<") to host["<< rand1 << "][" << rand2 << "][" << rand3 <<"]\n";
@@ -420,8 +430,10 @@ int
 
 	for (i=0;i<total_host/2;i++)
 	{
-		app[i].Start (Seconds (i % 2));
-		app[i].Stop (Seconds (i % 2 + timeDuration));
+		//app[i].Start (Seconds (i % 2));
+		//app[i].Stop (Seconds (i % 2 + timeDuration));
+		app[i].Start (Seconds (0));
+		app[i].Stop (Seconds (timeDuration));
 	}
 
   	Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
@@ -463,7 +475,7 @@ int
 		{
 			averageDelay+=iter->second.delaySum.GetNanoSeconds()/iter->second.rxPackets;
 			privateThroughput =iter->second.rxBytes * 8.0 / 
-							(iter->second.timeLastRxPacket.GetSeconds()-iter->second.timeFirstRxPacket.GetSeconds());// / 1024;
+							(iter->second.timeLastRxPacket.GetSeconds()-iter->second.timeFirstTxPacket.GetSeconds());// / 1024;
 			throughput += privateThroughput;
 		}
 		std::cout<<"========================================"<<endl;
