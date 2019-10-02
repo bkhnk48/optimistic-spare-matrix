@@ -20,6 +20,7 @@
 #include "ns3/ipv4-nix-vector-helper.h"
 #include "ns3/random-variable-stream.h"
 #include "ns3/animation-interface.h"
+#include "ns3/gnuplot.h"
 
 
 //#define NEED_ANIMATION
@@ -107,6 +108,133 @@ void printTime()
   	std::cout<<"\nCurrent date and time: "<<ctime(&t)<<"\n"<<endl;
 }
 
+
+double interval = 0.01; //0.01s
+double *bytesPeriod ; //= new double[600];
+std::string path = "/home/tienthanh/Public/NS3repo/ns-3-allinone/ns-3-dev/scratch/subdir/";
+
+void SinkRxTrace(Ptr<const Packet> pkt, const Address &addr)
+{
+  	double lastRxTime = Simulator::Now().GetSeconds();
+	int index = (int)(lastRxTime / interval);
+	bytesPeriod[index] += pkt->GetSize();
+}
+
+
+
+void Create2DPlotFile (int k, int MAX_INTERVAL, double max, int EAC)//Eliminate Artifical Congestion
+{
+	time_t t = time(NULL);
+  	struct tm tm = *localtime(&t);
+	
+  std::string strEAC = (EAC == 0 ? "EAC=NO" : "EAC=YES");
+  std::string fileNameWithNoExtension = path + "gnuplot/FatTree_" + std::to_string(k) + "_M" + 
+										std::to_string(tm.tm_mon + 1) + "_D" +
+										std::to_string(tm.tm_mday) + "_H" + 
+										std::to_string(tm.tm_hour) + "_Mi" + 
+										std::to_string(tm.tm_min) 
+										;
+  ;
+  std::string graphicsFileName        = fileNameWithNoExtension + ".png";
+  std::string plotFileName            = fileNameWithNoExtension + ".plt";
+  std::string plotTitle               = "Max Thpt of FT at k = "
+											+ std::to_string(k) + " is: "
+											+ std::to_string(max) + "(" + strEAC + ")"
+  										;
+  std::string dataTitle               = "Thpt at k = "
+											+ std::to_string(k) + " Data";
+
+  // Instantiate the plot and set its title.
+  Gnuplot plot (graphicsFileName);
+  plot.SetTitle (plotTitle);
+
+  // Make the graphics file, which the plot file will create when it
+  // is used with Gnuplot, be a PNG file.
+  plot.SetTerminal ("png");
+
+  // Set the labels for each axis.
+  plot.SetLegend ("Times intervals (1e-2s)", "% throughput");
+
+  // Set the range for the x axis.
+  plot.AppendExtra ("set xrange [0:+" + std::to_string(MAX_INTERVAL) + "]");
+
+  // Instantiate the dataset, set its title, and make the points be
+  // plotted along with connecting lines.
+  Gnuplot2dDataset dataset;
+  dataset.SetTitle (dataTitle);
+  dataset.SetStyle (Gnuplot2dDataset::LINES_POINTS);
+
+  double x;
+  double y;
+
+  // Create the 2-D dataset.
+  for (x = 0; x <= MAX_INTERVAL; x += 1.0)
+  {
+	  y = bytesPeriod[(int)x];
+      // Add this point.
+      dataset.Add (x, y);
+  }
+
+  // Add the dataset to the plot.
+  plot.AddDataset (dataset);
+
+  // Open the plot file.
+  std::ofstream plotFile (plotFileName.c_str());
+
+  // Write the plot file.
+  plot.GenerateOutput (plotFile);
+
+  // Close the plot file.
+  plotFile.close ();
+}
+
+void showThroughputOfInterval(int k, int MAX_INTERVAL, int eliminateArtificialCongestion)
+{
+	int i = 0, j = 0;
+	int *indexes = new int[MAX_INTERVAL];
+	for(i = 0; i < MAX_INTERVAL; i++)
+	{
+		indexes[i] = 0;
+	}
+
+	for(i = 0; i < MAX_INTERVAL; i++)
+	{
+		if(bytesPeriod[i] != 0)
+		{
+			for(j = i + 1; j < MAX_INTERVAL; j++)
+			{
+				if(bytesPeriod[i] == bytesPeriod[j])
+				{
+					indexes[i] ++;
+				}
+			}
+		}
+	}
+
+	double maxFrequence = 0; 
+	double max = 0;
+	int count = 0; int count2 = 0; int count3 = 0;
+	for(i = 0; i < MAX_INTERVAL; i++)
+	{
+		if(count < indexes[i])
+		{
+			count = indexes[i];
+			count2 = i;
+		}
+		if(max < bytesPeriod[i])
+		{	
+			max = bytesPeriod[i];
+			count3 = i;
+		}
+	}
+	maxFrequence = bytesPeriod[count2];
+	std::cout<<"\tMAX_INTERVAL = "<<MAX_INTERVAL<<endl;
+	std::cout<<"\tthroughput has max frequency= "<<maxFrequence<<" % at interval "<<count2<<" with # of available "<<indexes[count2]<<endl;
+	std::cout<<"\tThroughput has max value = "<<max<<"% in interval: "<<count3<<" with # of avail "<<indexes[count3]<<endl;
+
+	Create2DPlotFile (k, MAX_INTERVAL, max, eliminateArtificialCongestion);
+}
+
 // Main function
 //
 int 
@@ -161,11 +289,14 @@ int
     // the artificial congestion caused by sending the packets at the
     // same time. This rn is added to AppStartTime to have the sources
     // start at different time, however they will still send at the same rate.
-	//std::string command = "echo ";
+	
 	int eliminateArtificialCongestion = 1; 
+	//std::string command = "echo ";
 	std::string packetsInQueue = "125000p";
+	//std::string packetsInQueue = "5p";
 	Config::SetDefault ("ns3::QueueBase::MaxSize", StringValue (packetsInQueue));
 	Config::Set ("/NodeList/*/DeviceList/*/TxQueue/MaxSize", StringValue (packetsInQueue));
+	Config::Set ("/NodeList/*/DeviceList/*/RxQueue/MaxSize", StringValue (packetsInQueue));
 	Config::SetDefault("ns3::Ipv4GlobalRouting::RandomEcmpRouting",BooleanValue(true));
 	
 	
@@ -189,11 +320,8 @@ int
 	
 // Output some useful information
 //	
-	std::cout << "Value of k =  "<< k<<"\n";
-	//std::cout << "Total number of hosts =  "<< total_host<<"\n";
-	//std::cout << "Number of hosts under each switch =  "<< num_host<<"\n";
-	//std::cout << "Number of edge switch under each pod =  "<< num_edge<<"\n";
-	//std::cout << "------------- "<<"\n";
+	std::cout << "Value of k =  "<< k<<"\n";	//std::cout << "Total number of hosts =  "<< total_host<<"\n";
+	//std::cout << "Number of hosts under each switch =  "<< num_host<<"\n"; 	//std::cout << "Number of edge switch under each pod =  "<< num_edge<<"\n"; 	//std::cout << "------------- "<<"\n";
 
 // Initialize Internet Stack and Routing Protocols
 //	
@@ -278,7 +406,6 @@ int
 		
 		//select a server, //int num_pod = k;		// number of pod
 		server = sources[i];  //int num_host = (k/2);		// number of hosts under a switch
-			//(randBillGen() % (i*2 + 1));
 		podRand = server / numHostPerPod;
 		swRand = (server - (podRand*numHostPerPod))/num_host;
 		hostRand = (server - podRand*numHostPerPod - swRand*num_host);
@@ -296,11 +423,15 @@ int
  	    oo.SetAttribute("DataRate",StringValue (dataRate_OnOff));      
 	    oo.SetAttribute("MaxBytes",StringValue (maxBytes));
 
+		PacketSinkHelper sink(
+          "ns3::UdpSocketFactory",
+          InetSocketAddress(Ipv4Address(add), port));
+      	sink.Install(host[podRand][swRand].Get(hostRand - 2));
+
 	// Randomly select a client
 
 		client = destinations[i];
-		rand1 = //(client - rand3 - (rand2*num_edge))/num_pod;
-				client / numHostPerPod;
+		rand1 = client / numHostPerPod;
 		rand2 = (client - (rand1*numHostPerPod))/num_host;
 		rand3 = (client - rand1*numHostPerPod - rand2*num_host);
 		
@@ -451,6 +582,7 @@ int
 		}
 		else
 		{
+			maxStopTime = timeDuration;
 			app[i].Start (Seconds (0));
 			app[i].Stop (Seconds (timeDuration));
 		}
@@ -465,7 +597,23 @@ int
 //
   	NS_LOG_INFO ("Run Simulation.");
 	simulationTime = maxStopTime + (k);
+	int MAX_INTERVAL = (int)(simulationTime / interval) + 1;
+	bytesPeriod = new double[MAX_INTERVAL];
+//=========== Initialize bytesPeriod ===========//
+//
+	for(i=0; i < MAX_INTERVAL; i++)
+	{
+		bytesPeriod[i] = 0;
+	}
+
 	Simulator::Stop (Seconds(simulationTime));
+
+	//Prepare for write trace into file .tr
+	//AsciiTraceHelper eventTraces;
+	//csma.EnableAsciiAll(eventTraces.CreateFileStream("FatTreeK4TraceOutput.tr"));
+
+	//Setting callback function
+	Config::ConnectWithoutContext("/NodeList/*/ApplicationList/*/$ns3::PacketSink/Rx", MakeCallback(&SinkRxTrace));
 
 	Simulator::Run ();
   	monitor->CheckForLostPackets ();
@@ -480,6 +628,7 @@ int
         double averageDelay = 0.0;
         double throughput = 0.0; 
 		double privateThroughput = 0.0;
+		double lastestRxTime = 0.0;
 	int nFlows=0;
 	for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator iter = stats.begin (); iter != stats.end (); ++iter)
   	{
@@ -492,30 +641,37 @@ int
 		jitterSum+=iter->second.jitterSum;
 		lastDelay+=iter->second.lastDelay;
 		timesForwarded+=iter->second.timesForwarded;
+		if(lastestRxTime < iter->second.timeLastRxPacket.GetSeconds())
+			lastestRxTime = iter->second.timeLastRxPacket.GetSeconds();
 		if(iter->second.rxPackets != 0)
 		{
 			averageDelay+=iter->second.delaySum.GetNanoSeconds()/iter->second.rxPackets;
+			double temp = 0.0;
+			if(iter->second.rxPackets == 1)
+				temp = iter->second.timeFirstTxPacket.GetSeconds();
+			else
+				temp = iter->second.timeFirstRxPacket.GetSeconds();
 			privateThroughput =iter->second.rxBytes * 8.0 / 
-							(iter->second.timeLastRxPacket.GetSeconds()-iter->second.timeFirstTxPacket.GetSeconds());// / 1024;
+							(iter->second.timeLastRxPacket.GetSeconds()- temp);// / 1024;
 			throughput += privateThroughput;
 		}
-		std::cout<<"========================================"<<endl;
-	  	std::cout<<"Flow: "<< nFlows<<") has rxPackets: "<<iter->second.rxPackets<<" throughput: "<<(privateThroughput/1024)<<" and current sum: "<<throughput<<endl;
-		Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (iter->first);
-        std::cout << "Flow " << iter->first << " (" << t.sourceAddress << " -> " << t.destinationAddress << "): ";
-		std::cout<<"\tTime forwarded: "<< iter->second.timesForwarded<<" ";
-		std::cout<<"\tLast Rx = "<<iter->second.timeLastRxPacket.GetSeconds()
+		{
+			std::cout<<"========================================"<<endl;
+	  		std::cout<<"Flow: "<< nFlows<<") has rxPackets: "<<iter->second.rxPackets<<" throughput: "<<(privateThroughput/1024)<<" and current sum: "<<throughput<<endl;
+			Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (iter->first);
+        	std::cout << "Flow " << iter->first << " (" << t.sourceAddress << " -> " << t.destinationAddress << "): ";
+			std::cout<<"\tTime forwarded: "<< iter->second.timesForwarded<<" ";
+			std::cout<<"\tLast Rx = "<<iter->second.timeLastRxPacket.GetSeconds()
 						<<" First Rx = "<<iter->second.timeFirstRxPacket.GetSeconds()
 						<<" First Tx = "<<iter->second.timeFirstTxPacket.GetSeconds()<<endl;
+		}
 		
     }
 
   	std::cout<<"Fat-Tree: Simulation in "<<(simulationTime)<< "s";
 	if(eliminateArtificialCongestion)
 	{
-		std::cout<<" and I eliminated artifical congestion" 
-		//(like: https://github.com/microsoft/Tocino/blob/master/examples/matrix-topology/matrix-topology.cc) "
-			;
+		std::cout<<" and I eliminated artifical congestion (like: https://github.com/microsoft/Tocino/blob/master/examples/matrix-topology/matrix-topology.cc) ";
 	}
 	std::cout<<endl;
 	
@@ -528,7 +684,19 @@ int
 	std::cout<<"\tJitter = "<<(jitterSum/1e9)<<endl;
 	std::cout<<"\tthroughput = "<<throughput/(nFlows*1000)<<" (Kbps)"<<endl;
 	std::cout<<"\tlink capacity = "<<link_capacity<<" (Kbps)"<<endl;
-	std::cout<<"\t% ideal throughput = "<<throughput*100/(1024 * nFlows*link_capacity)<<" %"<<endl;
+	std::cout<<"\tAverage % throughput = "<<throughput*100/(1024 * nFlows*link_capacity)<<" %"<<endl;
+
+	MAX_INTERVAL = (int)(lastestRxTime / interval) + 1;
+	MAX_INTERVAL = (MAX_INTERVAL < 600 ? MAX_INTERVAL : 600);
+
+	
+	for(i = 0; i < MAX_INTERVAL; i++)
+	{
+		bytesPeriod[i] = bytesPeriod[i]*8*100/(nFlows*1024*interval*link_capacity);
+	}
+	
+	showThroughputOfInterval(k, MAX_INTERVAL, eliminateArtificialCongestion);
+
 	if(eliminateArtificialCongestion)
 	{
 		std::cout<<"\tEliminated artificial congestion: YES"<<endl;
