@@ -6,6 +6,9 @@
 #include <time.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <math.h>
+#include <iomanip>
+#include <sstream>
 
 #include "ns3/flow-monitor-module.h"
 #include "ns3/bridge-helper.h"
@@ -112,6 +115,7 @@ void printTime()
 double interval = 0.01; //0.01s
 double *bytesPeriod ; //= new double[600];
 std::string path = "/home/tienthanh/Public/NS3repo/ns-3-allinone/ns-3-dev/scratch/subdir/";
+double throughput = 0.0; 
 
 void SinkRxTrace(Ptr<const Packet> pkt, const Address &addr)
 {
@@ -122,10 +126,20 @@ void SinkRxTrace(Ptr<const Packet> pkt, const Address &addr)
 
 
 
-void Create2DPlotFile (int k, int MAX_INTERVAL, double max, int EAC)//Eliminate Artifical Congestion
+void Create2DPlotFile (int k, int MAX_INTERVAL, double max, int EAC //Eliminate Artifical Congestion
+							, int timeOfRun
+			)
 {
 	time_t t = time(NULL);
   	struct tm tm = *localtime(&t);
+	//max = (int)(max * 100.0)/100.0;
+	std::stringstream streamMax, streamAvgThpt;
+	int digit = 2;
+	streamMax << std::fixed << std::setprecision(digit) << max;
+	std::string sMax = streamMax.str();
+
+	streamAvgThpt << std::fixed << std::setprecision(digit) << throughput;
+	std::string sAvgThpt = streamAvgThpt.str();
 	
   std::string strEAC = (EAC == 0 ? "EAC=NO" : "EAC=YES");
   std::string fileNameWithNoExtension = path + "gnuplot/FatTree_" + std::to_string(k) + "_M" + 
@@ -134,15 +148,18 @@ void Create2DPlotFile (int k, int MAX_INTERVAL, double max, int EAC)//Eliminate 
 										std::to_string(tm.tm_hour) + "_Mi" + 
 										std::to_string(tm.tm_min) 
 										;
-  ;
+  
   std::string graphicsFileName        = fileNameWithNoExtension + ".png";
   std::string plotFileName            = fileNameWithNoExtension + ".plt";
-  std::string plotTitle               = "Max Thpt of FT at k = "
-											+ std::to_string(k) + " is: "
-											+ std::to_string(max) + "(" + strEAC + ")"
+  std::string plotTitle               = std::to_string(timeOfRun) + ") k = " 
+  											+ std::to_string(k) + ", Max Thpt: "
+											+ sMax + "%" //+ "(" + strEAC + ")"
   										;
-  std::string dataTitle               = "Thpt at k = "
-											+ std::to_string(k) + " Data";
+    
+  std::string dataTitle               = "Avg Thpt: " + sAvgThpt +
+											//+ std::to_string(k) + 
+											"% Data"
+											;
 
   // Instantiate the plot and set its title.
   Gnuplot plot (graphicsFileName);
@@ -188,7 +205,7 @@ void Create2DPlotFile (int k, int MAX_INTERVAL, double max, int EAC)//Eliminate 
   plotFile.close ();
 }
 
-void showThroughputOfInterval(int k, int MAX_INTERVAL, int eliminateArtificialCongestion)
+void showThroughputOfInterval(int k, int MAX_INTERVAL, int eliminateArtificialCongestion, int timeOfRun)
 {
 	int i = 0, j = 0;
 	int *indexes = new int[MAX_INTERVAL];
@@ -232,7 +249,7 @@ void showThroughputOfInterval(int k, int MAX_INTERVAL, int eliminateArtificialCo
 	std::cout<<"\tthroughput has max frequency= "<<maxFrequence<<" % at interval "<<count2<<" with # of available "<<indexes[count2]<<endl;
 	std::cout<<"\tThroughput has max value = "<<max<<"% in interval: "<<count3<<" with # of avail "<<indexes[count3]<<endl;
 
-	Create2DPlotFile (k, MAX_INTERVAL, max, eliminateArtificialCongestion);
+	Create2DPlotFile (k, MAX_INTERVAL, max, eliminateArtificialCongestion, timeOfRun);
 }
 
 // Main function
@@ -243,10 +260,13 @@ int
 //=========== Define parameters based on value of k ===========//
 //
 	int k;
-	
+	int eliminateArtificialCongestion = 0; 	
+	int timeOfRun = 0;
 
 	CommandLine cmd;
     	cmd.AddValue("k", "Number of ports per switch", k);
+		cmd.AddValue("EAC", "Eliminate Artificial Congestion or NOT", eliminateArtificialCongestion);
+		cmd.AddValue("i", "Time of Running", timeOfRun);
 	cmd.Parse (argc, argv);   // number of ports per switch
 	int num_pod = k;		// number of pod
 	int num_host = (k/2);		// number of hosts under a switch
@@ -290,7 +310,7 @@ int
     // same time. This rn is added to AppStartTime to have the sources
     // start at different time, however they will still send at the same rate.
 	
-	int eliminateArtificialCongestion = 1; 
+	
 	//std::string command = "echo ";
 	std::string packetsInQueue = "125000p";
 	//std::string packetsInQueue = "5p";
@@ -439,7 +459,7 @@ int
 		NodeContainer onoff;
 		onoff.Add(host[rand1][rand2].Get(rand3));
 		app[i] = oo.Install (onoff);
-		//std::cout << i <<") Data transfer from host["<< podRand <<"]["<< swRand <<"][" << (hostRand - 2) << "] (" <<add<<") to host["<< rand1 << "][" << rand2 << "][" << rand3 <<"]\n";
+		std::cout << i <<") Data transfer from host["<< podRand <<"]["<< swRand <<"][" << (hostRand - 2) << "] (" <<add<<") to host["<< rand1 << "][" << rand2 << "][" << rand3 <<"]\n";
 	}
 
 	//std::cout << "Finished creating On/Off traffic"<<"\n";
@@ -626,7 +646,7 @@ int
         ns3::Time lastDelay = NanoSeconds(0.0);
         double timesForwarded=0.0;
         double averageDelay = 0.0;
-        double throughput = 0.0; 
+        throughput = 0.0; 
 		double privateThroughput = 0.0;
 		double lastestRxTime = 0.0;
 	int nFlows=0;
@@ -684,7 +704,8 @@ int
 	std::cout<<"\tJitter = "<<(jitterSum/1e9)<<endl;
 	std::cout<<"\tthroughput = "<<throughput/(nFlows*1000)<<" (Kbps)"<<endl;
 	std::cout<<"\tlink capacity = "<<link_capacity<<" (Kbps)"<<endl;
-	std::cout<<"\tAverage % throughput = "<<throughput*100/(1024 * nFlows*link_capacity)<<" %"<<endl;
+	throughput = throughput*100/(1024 * nFlows*link_capacity);
+	std::cout<<"\tAverage % throughput = "<<throughput<<" %"<<endl;
 
 	MAX_INTERVAL = (int)(lastestRxTime / interval) + 1;
 	MAX_INTERVAL = (MAX_INTERVAL < 600 ? MAX_INTERVAL : 600);
@@ -695,7 +716,7 @@ int
 		bytesPeriod[i] = bytesPeriod[i]*8*100/(nFlows*1024*interval*link_capacity);
 	}
 	
-	showThroughputOfInterval(k, MAX_INTERVAL, eliminateArtificialCongestion);
+	showThroughputOfInterval(k, MAX_INTERVAL, eliminateArtificialCongestion, timeOfRun);
 
 	if(eliminateArtificialCongestion)
 	{
