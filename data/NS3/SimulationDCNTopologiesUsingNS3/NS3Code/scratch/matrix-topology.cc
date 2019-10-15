@@ -56,6 +56,8 @@
 #include "ns3/assert.h"
 #include "ns3/ipv4-global-routing-helper.h"
 
+#include "ns3/flow-monitor-module.h"
+
 using namespace std;
 using namespace ns3;
 
@@ -75,17 +77,42 @@ int main (int argc, char *argv[])
 
   // Change the variables and file names only in this block!
 
-  double SimTime        = 3.00;
+  double SimTime        = 13.00;
   double SinkStartTime  = 1.0001;
   double SinkStopTime   = 2.90001;
   double AppStartTime   = 2.0001;
   double AppStopTime    = 2.80001;
 
-  std::string AppPacketRate ("40Kbps");
-  Config::SetDefault  ("ns3::OnOffApplication::PacketSize",StringValue ("1000"));
+  std::string AppPacketRate ("1000Mbps");
+
+  //ThanhNT 15-10-19 some configurations
+  int k;
+	int eliminateArtificialCongestion = 0; 	
+	int timeOfRun = 0;
+
+	CommandLine cmd;
+    cmd.AddValue("k", "Number of ports per switch", k);
+		//cmd.AddValue("EAC", "Eliminate Artificial Congestion or NOT", eliminateArtificialCongestion);
+		//cmd.AddValue("i", "Time of Running", timeOfRun);
+	cmd.Parse (argc, argv);   // number of ports per switch
+
+  std::string packetsInQueue = "125000p";
+	//std::string packetsInQueue = "5p";
+	Config::SetDefault ("ns3::QueueBase::MaxSize", StringValue (packetsInQueue));
+	Config::Set ("/NodeList/*/DeviceList/*/TxQueue/MaxSize", StringValue (packetsInQueue));
+	Config::Set ("/NodeList/*/DeviceList/*/RxQueue/MaxSize", StringValue (packetsInQueue));
+	Config::SetDefault("ns3::Ipv4GlobalRouting::RandomEcmpRouting",BooleanValue(true));
+  char maxBytes [] = "0";		// unlimited
+  int num_switches = k*k*5/4;
+  //ThanhNT 15-10-19 some configurations
+
+
+  Config::SetDefault  ("ns3::OnOffApplication::PacketSize",StringValue ("12500"));
   Config::SetDefault ("ns3::OnOffApplication::DataRate",  StringValue (AppPacketRate));
-  std::string LinkRate ("10Mbps");
+  std::string LinkRate ("1000Mbps");
   std::string LinkDelay ("2ms");
+
+
   //  DropTailQueue::MaxPackets affects the # of dropped packets, default value:100
   //  Config::SetDefault ("ns3::DropTailQueue::MaxPackets", UintegerValue (1000));
 
@@ -96,12 +123,14 @@ int main (int argc, char *argv[])
   std::string flow_name ("n-node-ppp.xml");
   std::string anim_name ("n-node-ppp.anim.xml");
 
-  std::string adj_mat_file_name ("examples/matrix-topology/adjacency_matrix.txt");
-  std::string node_coordinates_file_name ("examples/matrix-topology/node_coordinates.txt");
+  double link_capacity = 1000*1000;
 
-  CommandLine cmd;
-  cmd.Parse (argc, argv);
-  
+  //std::string adj_mat_file_name ("/home/tienthanh/Public/NS3repo/ns-3-allinone/ns-3-dev/scratch/subdir/matrixTopo/adjacency_matrix.txt");
+  //std::string node_coordinates_file_name ("/home/tienthanh/Public/NS3repo/ns-3-allinone/ns-3-dev/scratch/subdir/matrixTopo/node_coordinates.txt");
+  std::string adj_mat_file_name ("/home/tienthanh/Public/NS3repo/ns-3-allinone/ns-3-dev/scratch/subdir/matrixTopo/RSN_adjacency_matrix.txt");
+  std::string node_coordinates_file_name ("/home/tienthanh/Public/NS3repo/ns-3-allinone/ns-3-dev/scratch/subdir/matrixTopo/RSN_node_coordinates.txt");
+
+
   // ---------- End of Simulation Variables ----------------------------------
 
   // ---------- Read Adjacency Matrix ----------------------------------------
@@ -223,7 +252,7 @@ int main (int argc, char *argv[])
 
   uint16_t port = 9;
 
-  for (int i = 0; i < n_nodes; i++)
+  for (int i = num_switches; i < n_nodes; i++)
     {
       PacketSinkHelper sink ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), port));
       ApplicationContainer apps_sink = sink.Install (nodes.Get (i));   // sink is installed on all nodes
@@ -233,11 +262,39 @@ int main (int argc, char *argv[])
 
   NS_LOG_INFO ("Setup CBR Traffic Sources.");
 
-  for (int i = 0; i < n_nodes; i++)
+  int total_host = n_nodes - num_switches;
+  int *sources = new int[(total_host/2)];
+	int *destinations = new int[(total_host/2)];
+	int *allIndexes = new int[total_host];
+
+	for(i = 0; i < total_host/2; i++)
+	{
+		allIndexes[i*2] = i*2 + num_switches;
+		allIndexes[i*2 + 1] = i*2 + 1 + num_switches;
+	}
+
+	for (i = 0; i < total_host; i++) {
+    	int r = (randBillGen() % (i + 1)); // choose index uniformly in [0, i]
+    	int swap = allIndexes[r];
+        allIndexes[r] = allIndexes[i];
+        allIndexes[i] = swap;
+    }
+
+	for(i = 0; i < total_host/2; i++)
+	{
+		sources[i] = allIndexes[i];
+		destinations[i] = allIndexes[i + (total_host/2)];
+		//std::cout<<"\t"<<i<<") From source: "<<sources[i]<<" to dest: "<<destinations[i]<<endl;
+	}
+
+	delete [] allIndexes;
+	allIndexes = NULL;
+
+  for (int i = 0; i < n_nodes - num_switches; i++)
     {
-      for (int j = 0; j < n_nodes; j++)
+      //for (int j = 0; j < n_nodes; j++)
         {
-          if (i != j)
+          //if (i != j)
             {
 
               // We needed to generate a random number (rn) to be used to eliminate
@@ -254,10 +311,19 @@ int main (int argc, char *argv[])
               Ipv4InterfaceAddress ipv4_int_addr = ipv4->GetAddress (1, 0);
               Ipv4Address ip_addr = ipv4_int_addr.GetLocal ();
               OnOffHelper onoff ("ns3::UdpSocketFactory", InetSocketAddress (ip_addr, port)); // traffic flows from node[i] to node[j]
+              //ThanhNT add new settings for OnOfHelper
+              onoff.SetAttribute("OnTime",StringValue ("ns3::ConstantRandomVariable[Constant=1]")); 
+	            onoff.SetAttribute("OffTime",StringValue ("ns3::ConstantRandomVariable[Constant=0]"));    
+ 	            
+	            onoff.SetAttribute("MaxBytes",StringValue (maxBytes));
+              //Endof ThanhNT add new settings for OnOfHelper
+
               onoff.SetConstantRate (DataRate (AppPacketRate));
               ApplicationContainer apps = onoff.Install (nodes.Get (i));  // traffic sources are installed on all nodes
               apps.Start (Seconds (AppStartTime + rn));
               apps.Stop (Seconds (AppStopTime));
+
+              
             }
         }
     }
@@ -272,9 +338,9 @@ int main (int argc, char *argv[])
   p2p.EnableAsciiAll (ascii.CreateFileStream (tr_name.c_str ()));
   // p2p.EnablePcapAll (pcap_name.c_str());
 
-  // Ptr<FlowMonitor> flowmon;
-  // FlowMonitorHelper flowmonHelper;
-  // flowmon = flowmonHelper.InstallAll ();
+  Ptr<FlowMonitor> monitor;
+  FlowMonitorHelper flowmonHelper;
+  monitor = flowmonHelper.InstallAll ();
 
   // Configure animator with default settings
 
@@ -283,6 +349,62 @@ int main (int argc, char *argv[])
 
   Simulator::Stop (Seconds (SimTime));
   Simulator::Run ();
+
+  monitor->CheckForLostPackets ();
+
+	Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier> (flowmonHelper.GetClassifier ());
+	std::map<FlowId, FlowMonitor::FlowStats> stats = monitor->GetFlowStats ();
+
+	int txPackets=0,rxPackets=0,lostPackets=0;
+        ns3::Time delaySum = NanoSeconds(0.0);
+        ns3::Time jitterSum = NanoSeconds(0.0);
+        ns3::Time lastDelay = NanoSeconds(0.0);
+        double timesForwarded=0.0;
+        double averageDelay = 0.0;
+        double throughput = 0.0; 
+		double privateThroughput = 0.0;
+	int nFlows=0;
+	for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator iter = stats.begin (); iter != stats.end (); ++iter)
+  {
+		nFlows++;
+		privateThroughput = 0.0;
+		txPackets+=iter->second.txPackets;
+		rxPackets+=iter->second.rxPackets;
+		lostPackets+=iter->second.lostPackets;
+		delaySum+=iter->second.delaySum;
+		jitterSum+=iter->second.jitterSum;
+		lastDelay+=iter->second.lastDelay;
+		timesForwarded+=iter->second.timesForwarded;
+		if(iter->second.rxPackets != 0)
+		{
+			averageDelay+=iter->second.delaySum.GetNanoSeconds()/iter->second.rxPackets;
+			privateThroughput =iter->second.rxBytes * 8.0 / 
+							(iter->second.timeLastRxPacket.GetSeconds()-iter->second.timeFirstTxPacket.GetSeconds());// / 1024;
+			throughput += privateThroughput;
+		}
+		else{
+			std::cout<<"========================================"<<endl;
+	  		std::cout<<"Flow: "<< nFlows<<") has rxPackets: "<<iter->second.rxPackets<<" throughput: "<<(privateThroughput/1024)<<" and current sum: "<<throughput<<endl;
+			Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (iter->first);
+        	std::cout << "Flow " << iter->first << " (" << t.sourceAddress << " -> " << t.destinationAddress << "): ";
+			std::cout<<"\tTime forwarded: "<< iter->second.timesForwarded<<" ";
+			std::cout<<"\tLast Rx = "<<iter->second.timeLastRxPacket.GetSeconds()
+						<<" First Rx = "<<iter->second.timeFirstRxPacket.GetSeconds()
+						<<" First Tx = "<<iter->second.timeFirstTxPacket.GetSeconds()<<endl;
+		}
+		
+  }
+
+  
+	
+	std::cout<<"\n\ttxPackets = "<<txPackets<<"\n\trxPackets = "<<rxPackets<<"\n\tlostPackets = "<<lostPackets<<"\n\tnFlows = "<<nFlows;
+	std::cout<<"\n\tTime forward = "<<timesForwarded<<" or"<<endl;
+	std::cout<<"\tAverage delay = "<<averageDelay/nFlows<<endl;
+	//std::cout<<"\tJitter = "<<(jitterSum/1e9)<<endl;
+	std::cout<<"\tthroughput = "<<throughput/(nFlows*1000)<<" (Kbps)"<<endl;
+	std::cout<<"\tlink capacity = "<<link_capacity<<" (Kbps)"<<endl;
+	std::cout<<"\t% throughput = "<<throughput*100/(1024 * nFlows*link_capacity)<<" %"<<endl;
+	
   // flowmon->SerializeToXmlFile (flow_name.c_str(), true, true);
   Simulator::Destroy ();
 
