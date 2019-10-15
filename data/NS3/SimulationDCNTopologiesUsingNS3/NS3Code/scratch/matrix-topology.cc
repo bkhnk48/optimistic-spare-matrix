@@ -68,6 +68,7 @@ vector<vector<double> > readCordinatesFile (std::string node_coordinates_file_na
 void printCoordinateArray (const char* description, vector<vector<double> > coord_array);
 void printMatrix (const char* description, vector<vector<bool> > array);
 int randBillGen();
+void printTime();
 
 
 NS_LOG_COMPONENT_DEFINE ("GenericTopologyCreation");
@@ -79,7 +80,7 @@ int main (int argc, char *argv[])
 
   // Change the variables and file names only in this block!
 
-  double SimTime        = 13.00;
+  double SimTime        = 5.00; //the original value is 13
   double SinkStartTime  = 1.0001;
   double SinkStopTime   = 2.90001;
   double AppStartTime   = 2.0001;
@@ -114,8 +115,9 @@ int main (int argc, char *argv[])
   Config::SetDefault  ("ns3::OnOffApplication::PacketSize",StringValue ("12500"));
   Config::SetDefault ("ns3::OnOffApplication::DataRate",  StringValue (AppPacketRate));
   std::string LinkRate ("1000Mbps");
-  std::string LinkDelay ("2ms");
-
+  //std::string LinkDelay ("2ms");
+  char MTU_Size [] = "12500" ;    //12500 bytes
+  double delayBetweenSwitches = 5e-6;//1m / 0.2 (m/ns) = 5e-9 (ns) = 5e-6 (ms)
 
   //  DropTailQueue::MaxPackets affects the # of dropped packets, default value:100
   //  Config::SetDefault ("ns3::DropTailQueue::MaxPackets", UintegerValue (1000));
@@ -176,7 +178,14 @@ int main (int argc, char *argv[])
 
   PointToPointHelper p2p;
   p2p.SetDeviceAttribute ("DataRate", StringValue (LinkRate));
-  p2p.SetChannelAttribute ("Delay", StringValue (LinkDelay));
+  //ThanhNT adjust properties of link connection:
+  //(i) add MTU size = 12500
+  //(ii) fix the LinkDelay = 5e-6
+  //To do that, first set comment the following statement and then add two new statements
+  //p2p.SetChannelAttribute ("Delay", StringValue (LinkDelay));
+  p2p.SetChannelAttribute ("Delay", TimeValue (MilliSeconds (delayBetweenSwitches)));
+  p2p.SetDeviceAttribute ("Mtu", StringValue (MTU_Size));
+  //Endof ThanhNT adjust properties of link connection:
 
   NS_LOG_INFO ("Install Internet Stack to Nodes.");
 
@@ -250,7 +259,7 @@ int main (int argc, char *argv[])
 
   // ---------- End of Allocate Node Positions -------------------------------
 
-  // ---------- Create n*(n-1) CBR Flows -------------------------------------
+  // ---------- Create k*k*k/8 CBR Flows -------------------------------------
 
   NS_LOG_INFO ("Setup Packet Sinks.");
 
@@ -353,8 +362,13 @@ int main (int argc, char *argv[])
 
   AnimationInterface anim (anim_name.c_str ());
   NS_LOG_INFO ("Run Simulation.");
-
+  
   Simulator::Stop (Seconds (SimTime));
+
+  std::cout << "Start Simulation.. "<<"\n";
+
+	printTime();
+
   Simulator::Run ();
 
   monitor->CheckForLostPackets ();
@@ -413,6 +427,8 @@ int main (int argc, char *argv[])
 	std::cout<<"\t% throughput = "<<throughput*100/(1024 * nFlows*link_capacity)<<" %"<<endl;
 	
   // flowmon->SerializeToXmlFile (flow_name.c_str(), true, true);
+  printTime();
+	std::cout << "Simulation finished "<<"\n";
   Simulator::Destroy ();
 
   // ---------- End of Simulation Monitoring ---------------------------------
@@ -573,5 +589,12 @@ int randBillGen()
     a = (((a * 214013L + 2531011L) >> 16) & 32767);
         
     return ((a % lim) + 1);
+}
+
+void printTime()
+{
+	time_t t;
+  	time(&t);
+  	std::cout<<"\nCurrent date and time: "<<ctime(&t)<<"\n"<<endl;
 }
 // ---------- End of Function Definitions ------------------------------------
