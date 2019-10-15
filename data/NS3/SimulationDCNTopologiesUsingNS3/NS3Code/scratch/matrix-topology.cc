@@ -89,8 +89,10 @@ int main (int argc, char *argv[])
 
   //ThanhNT 15-10-19 some configurations
   int k;
-	int eliminateArtificialCongestion = 0; 	
-	int timeOfRun = 0;
+	//int eliminateArtificialCongestion = 0; 	
+	//int timeOfRun = 0;
+
+  int i = 0;
 
 	CommandLine cmd;
     cmd.AddValue("k", "Number of ports per switch", k);
@@ -265,6 +267,7 @@ int main (int argc, char *argv[])
   NS_LOG_INFO ("Setup CBR Traffic Sources.");
 
   int total_host = n_nodes - num_switches;
+  //std::cout<<"total_host: "<<total_host<<endl;
   int *sources = new int[(total_host/2)];
 	int *destinations = new int[(total_host/2)];
 	int *allIndexes = new int[total_host];
@@ -277,6 +280,7 @@ int main (int argc, char *argv[])
 
 	for (i = 0; i < total_host; i++) {
     	int r = (randBillGen() % (i + 1)); // choose index uniformly in [0, i]
+      //std::cout<<"\tr = "<<r<<endl;
     	int swap = allIndexes[r];
         allIndexes[r] = allIndexes[i];
         allIndexes[i] = swap;
@@ -286,13 +290,13 @@ int main (int argc, char *argv[])
 	{
 		sources[i] = allIndexes[i];
 		destinations[i] = allIndexes[i + (total_host/2)];
-		//std::cout<<"\t"<<i<<") From source: "<<sources[i]<<" to dest: "<<destinations[i]<<endl;
 	}
 
 	delete [] allIndexes;
 	allIndexes = NULL;
 
-  for (int i = 0; i < n_nodes - num_switches; i++)
+  //for (int i = 0; i < n_nodes; i++)
+  for (int i = 0; i < total_host/2; i++)
     {
       //for (int j = 0; j < n_nodes; j++)
         {
