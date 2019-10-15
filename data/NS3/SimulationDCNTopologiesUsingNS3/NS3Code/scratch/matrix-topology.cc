@@ -67,6 +67,8 @@ vector<vector<bool> > readNxNMatrix (std::string adj_mat_file_name);
 vector<vector<double> > readCordinatesFile (std::string node_coordinates_file_name);
 void printCoordinateArray (const char* description, vector<vector<double> > coord_array);
 void printMatrix (const char* description, vector<vector<bool> > array);
+int randBillGen();
+
 
 NS_LOG_COMPONENT_DEFINE ("GenericTopologyCreation");
 
@@ -306,7 +308,8 @@ int main (int argc, char *argv[])
               x->SetAttribute ("Min", DoubleValue (0));
               x->SetAttribute ("Max", DoubleValue (1));
               double rn = x->GetValue ();
-              Ptr<Node> n = nodes.Get (j);
+              //Ptr<Node> n = nodes.Get (j);
+              Ptr<Node> n = nodes.Get(destinations[i]);
               Ptr<Ipv4> ipv4 = n->GetObject<Ipv4> ();
               Ipv4InterfaceAddress ipv4_int_addr = ipv4->GetAddress (1, 0);
               Ipv4Address ip_addr = ipv4_int_addr.GetLocal ();
@@ -314,12 +317,12 @@ int main (int argc, char *argv[])
               //ThanhNT add new settings for OnOfHelper
               onoff.SetAttribute("OnTime",StringValue ("ns3::ConstantRandomVariable[Constant=1]")); 
 	            onoff.SetAttribute("OffTime",StringValue ("ns3::ConstantRandomVariable[Constant=0]"));    
- 	            
 	            onoff.SetAttribute("MaxBytes",StringValue (maxBytes));
               //Endof ThanhNT add new settings for OnOfHelper
 
               onoff.SetConstantRate (DataRate (AppPacketRate));
-              ApplicationContainer apps = onoff.Install (nodes.Get (i));  // traffic sources are installed on all nodes
+              //ApplicationContainer apps = onoff.Install (nodes.Get (i));  // traffic sources are installed on all nodes
+              ApplicationContainer apps = onoff.Install (nodes.Get (sources[i]));
               apps.Start (Seconds (AppStartTime + rn));
               apps.Stop (Seconds (AppStopTime));
 
@@ -556,4 +559,15 @@ void printCoordinateArray (const char* description, vector<vector<double> > coor
 
 }
 
+int randBillGen()
+{
+	//return rand();
+	time_t t = time(NULL);
+  	struct tm tm = *localtime(&t);
+	int lim = tm.tm_year + 1900 + tm.tm_mon + 1 + tm.tm_mday + tm.tm_hour + tm.tm_min + tm.tm_sec;
+    static long a = 3;
+    a = (((a * 214013L + 2531011L) >> 16) & 32767);
+        
+    return ((a % lim) + 1);
+}
 // ---------- End of Function Definitions ------------------------------------
