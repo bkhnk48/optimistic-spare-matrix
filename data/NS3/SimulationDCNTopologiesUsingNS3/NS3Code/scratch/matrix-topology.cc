@@ -1,6 +1,7 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
  * Copyright (c) 2010 Egemen K. Cetinkaya, Justin P. Rohrer, and Amit Dandekar
+ * Modification: NGUYEN TIEN THANH
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -31,10 +32,11 @@
  * under grant CNS-0626918 (Postmodern Internet Architecture) and 
  * by NSF grant CNS-1050226 (Multilayer Network Resilience Analysis and Experimentation on GENI)
  *
- * This program reads an upper triangular adjacency matrix (e.g. adjacency_matrix.txt) and
- * node coordinates file (e.g. node_coordinates.txt). The program also set-ups a
+ * This program reads an upper triangular adjacency matrix (e.g. RSN_adjacency_matrix.txt) and
+ * node coordinates file (e.g. RSN_node_coordinates.txt). The program also set-ups a
  * wired network topology with P2P links according to the adjacency matrix with
- * nx(n-1) CBR traffic flows, in which n is the number of nodes in the adjacency matrix.
+ * k*k*k/8 CBR traffic flows, in which k is the number of ports inside a node.
+ * Keep in mind that number of hosts and switches are k*k*k/4 and k*k*k/5 respectively
  */
 
 // ---------- Header Includes -------------------------------------------------
@@ -69,6 +71,13 @@ void printCoordinateArray (const char* description, vector<vector<double> > coor
 void printMatrix (const char* description, vector<vector<bool> > array);
 int randBillGen();
 void printTime();
+void SinkRxTrace(Ptr<const Packet> pkt, const Address &addr);
+
+double interval = 0.01; //0.01s
+double *bytesPeriod ; //= new double[600];
+std::string path = "/home/tienthanh/Public/NS3repo/ns-3-allinone/ns-3-dev/scratch/subdir/";
+double throughput = 0.0; 
+
 
 
 NS_LOG_COMPONENT_DEFINE ("GenericTopologyCreation");
@@ -80,7 +89,7 @@ int main (int argc, char *argv[])
 
   // Change the variables and file names only in this block!
 
-  double SimTime        = 5.00; //the original value is 13
+  double SimTime        = 4.00; //the original value is 13
   double SinkStartTime  = 1.0001;
   double SinkStopTime   = 2.90001;
   double AppStartTime   = 2.0001;
@@ -124,10 +133,10 @@ int main (int argc, char *argv[])
 
   srand ( (unsigned)time ( NULL ) );   // generate different seed each time
 
-  std::string tr_name ("n-node-ppp.tr");
-  std::string pcap_name ("n-node-ppp");
-  std::string flow_name ("n-node-ppp.xml");
-  std::string anim_name ("n-node-ppp.anim.xml");
+  //std::string tr_name ("n-node-ppp.tr");
+  //std::string pcap_name ("n-node-ppp");
+  //std::string flow_name ("n-node-ppp.xml");
+  //std::string anim_name ("n-node-ppp.anim.xml");
 
   double link_capacity = 1000*1000;
 
@@ -350,8 +359,12 @@ int main (int argc, char *argv[])
 
   NS_LOG_INFO ("Configure Tracing.");
 
-  AsciiTraceHelper ascii;
-  p2p.EnableAsciiAll (ascii.CreateFileStream (tr_name.c_str ()));
+  //ThanhNT reduce writing efforts
+  //by setting TWO following statements to comments
+  //AsciiTraceHelper ascii;
+  //p2p.EnableAsciiAll (ascii.CreateFileStream (tr_name.c_str ()));
+  //Endof ThanhNT reduce writing efforts
+
   // p2p.EnablePcapAll (pcap_name.c_str());
 
   Ptr<FlowMonitor> monitor;
@@ -360,12 +373,15 @@ int main (int argc, char *argv[])
 
   // Configure animator with default settings
 
-  AnimationInterface anim (anim_name.c_str ());
+  //ThanhNT reduce writing efforts
+  //by setting THE following statement to comment
+  //AnimationInterface anim (anim_name.c_str ());
+  //Endof ThanhNT reduce writing efforts
   NS_LOG_INFO ("Run Simulation.");
   
   Simulator::Stop (Seconds (SimTime));
 
-  std::cout << "Start Simulation.. "<<"\n";
+  std::cout << "Start Simulation.. will be ended after "<<SimTime<<" (s)\n";
 
 	printTime();
 
@@ -382,7 +398,7 @@ int main (int argc, char *argv[])
         ns3::Time lastDelay = NanoSeconds(0.0);
         double timesForwarded=0.0;
         double averageDelay = 0.0;
-        double throughput = 0.0; 
+        
 		double privateThroughput = 0.0;
 	int nFlows=0;
 	for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator iter = stats.begin (); iter != stats.end (); ++iter)
@@ -403,7 +419,8 @@ int main (int argc, char *argv[])
 							(iter->second.timeLastRxPacket.GetSeconds()-iter->second.timeFirstTxPacket.GetSeconds());// / 1024;
 			throughput += privateThroughput;
 		}
-		else{
+		//else
+    {
 			std::cout<<"========================================"<<endl;
 	  		std::cout<<"Flow: "<< nFlows<<") has rxPackets: "<<iter->second.rxPackets<<" throughput: "<<(privateThroughput/1024)<<" and current sum: "<<throughput<<endl;
 			Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (iter->first);
@@ -597,4 +614,12 @@ void printTime()
   	time(&t);
   	std::cout<<"\nCurrent date and time: "<<ctime(&t)<<"\n"<<endl;
 }
+
+void SinkRxTrace(Ptr<const Packet> pkt, const Address &addr)
+{
+  double lastRxTime = Simulator::Now().GetSeconds();
+	int index = (int)(lastRxTime / interval);
+	bytesPeriod[index] += pkt->GetSize();
+}
+
 // ---------- End of Function Definitions ------------------------------------
