@@ -46,6 +46,8 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <math.h>
+#include <iomanip>
 
 #include "ns3/core-module.h"
 #include "ns3/network-module.h"
@@ -57,7 +59,7 @@
 #include "ns3/netanim-module.h"
 #include "ns3/assert.h"
 #include "ns3/ipv4-global-routing-helper.h"
-
+#include "ns3/gnuplot.h"
 #include "ns3/flow-monitor-module.h"
 
 using namespace std;
@@ -72,11 +74,16 @@ void printMatrix (const char* description, vector<vector<bool> > array);
 int randBillGen();
 void printTime();
 void SinkRxTrace(Ptr<const Packet> pkt, const Address &addr);
+void Create2DPlotFile (int k, int MAX_INTERVAL, double max, int EAC //Eliminate Artifical Congestion
+							, int timeOfRun
+			);
+
+void showThroughputOfInterval(int k, int MAX_INTERVAL, int eliminateArtificialCongestion, int timeOfRun);
 
 double interval = 0.01; //0.01s
 double *bytesPeriod ; //= new double[600];
 std::string path = "/home/tienthanh/Public/NS3repo/ns-3-allinone/ns-3-dev/scratch/subdir/";
-double throughput = 0.0; 
+//double throughput = 0.0; 
 
 
 
@@ -100,18 +107,17 @@ int main (int argc, char *argv[])
   //ThanhNT 15-10-19 some configurations
   int k;
 	//int eliminateArtificialCongestion = 0; 	
-	//int timeOfRun = 0;
+	int timeOfRun = 0;
 
   int i = 0;
 
 	CommandLine cmd;
     cmd.AddValue("k", "Number of ports per switch", k);
 		//cmd.AddValue("EAC", "Eliminate Artificial Congestion or NOT", eliminateArtificialCongestion);
-		//cmd.AddValue("i", "Time of Running", timeOfRun);
+		cmd.AddValue("i", "Time of Running", timeOfRun);
 	cmd.Parse (argc, argv);   // number of ports per switch
 
   std::string packetsInQueue = "125000p";
-	//std::string packetsInQueue = "5p";
 	Config::SetDefault ("ns3::QueueBase::MaxSize", StringValue (packetsInQueue));
 	Config::Set ("/NodeList/*/DeviceList/*/TxQueue/MaxSize", StringValue (packetsInQueue));
 	Config::Set ("/NodeList/*/DeviceList/*/RxQueue/MaxSize", StringValue (packetsInQueue));
@@ -124,24 +130,15 @@ int main (int argc, char *argv[])
   Config::SetDefault  ("ns3::OnOffApplication::PacketSize",StringValue ("12500"));
   Config::SetDefault ("ns3::OnOffApplication::DataRate",  StringValue (AppPacketRate));
   std::string LinkRate ("1000Mbps");
-  //std::string LinkDelay ("2ms");
   char MTU_Size [] = "12500" ;    //12500 bytes
   double delayBetweenSwitches = 5e-6;//1m / 0.2 (m/ns) = 5e-9 (ns) = 5e-6 (ms)
 
-  //  DropTailQueue::MaxPackets affects the # of dropped packets, default value:100
-  //  Config::SetDefault ("ns3::DropTailQueue::MaxPackets", UintegerValue (1000));
 
   srand ( (unsigned)time ( NULL ) );   // generate different seed each time
 
-  //std::string tr_name ("n-node-ppp.tr");
-  //std::string pcap_name ("n-node-ppp");
-  //std::string flow_name ("n-node-ppp.xml");
-  //std::string anim_name ("n-node-ppp.anim.xml");
 
   double link_capacity = 1000*1000;
 
-  //std::string adj_mat_file_name ("/home/tienthanh/Public/NS3repo/ns-3-allinone/ns-3-dev/scratch/subdir/matrixTopo/adjacency_matrix.txt");
-  //std::string node_coordinates_file_name ("/home/tienthanh/Public/NS3repo/ns-3-allinone/ns-3-dev/scratch/subdir/matrixTopo/node_coordinates.txt");
   std::string adj_mat_file_name ("/home/tienthanh/Public/NS3repo/ns-3-allinone/ns-3-dev/scratch/subdir/matrixTopo/RSN_adjacency_matrix.txt");
   std::string node_coordinates_file_name ("/home/tienthanh/Public/NS3repo/ns-3-allinone/ns-3-dev/scratch/subdir/matrixTopo/RSN_node_coordinates.txt");
 
@@ -153,18 +150,12 @@ int main (int argc, char *argv[])
   vector<vector<bool> > Adj_Matrix;
   Adj_Matrix = readNxNMatrix (adj_mat_file_name);
 
-  // Optionally display 2-dimensional adjacency matrix (Adj_Matrix) array
-  // printMatrix (adj_mat_file_name.c_str (),Adj_Matrix);
-
   // ---------- End of Read Adjacency Matrix ---------------------------------
 
   // ---------- Read Node Coordinates File -----------------------------------
 
   vector<vector<double> > coord_array;
   coord_array = readCordinatesFile (node_coordinates_file_name);
-
-  // Optionally display node co-ordinates file
-  // printCoordinateArray (node_coordinates_file_name.c_str (),coord_array);
 
   int n_nodes = coord_array.size ();
   int matrixDimension = Adj_Matrix.size ();
@@ -298,7 +289,6 @@ int main (int argc, char *argv[])
 
 	for (i = 0; i < total_host; i++) {
     	int r = (randBillGen() % (i + 1)); // choose index uniformly in [0, i]
-      //std::cout<<"\tr = "<<r<<endl;
     	int swap = allIndexes[r];
         allIndexes[r] = allIndexes[i];
         allIndexes[i] = swap;
@@ -312,6 +302,8 @@ int main (int argc, char *argv[])
 
 	delete [] allIndexes;
 	allIndexes = NULL;
+
+  double maxStopTime = 0;
 
   //for (int i = 0; i < n_nodes; i++)
   for (int i = 0; i < total_host/2; i++)
@@ -346,9 +338,10 @@ int main (int argc, char *argv[])
               //ApplicationContainer apps = onoff.Install (nodes.Get (i));  // traffic sources are installed on all nodes
               ApplicationContainer apps = onoff.Install (nodes.Get (sources[i]));
               apps.Start (Seconds (AppStartTime + rn));
+              AppStopTime = AppStartTime + rn + 1;
               apps.Stop (Seconds (AppStopTime));
-
-              
+              if(maxStopTime < AppStopTime)
+                maxStopTime = AppStopTime;
             }
         }
     }
@@ -378,10 +371,23 @@ int main (int argc, char *argv[])
   //AnimationInterface anim (anim_name.c_str ());
   //Endof ThanhNT reduce writing efforts
   NS_LOG_INFO ("Run Simulation.");
+
+  SimTime = maxStopTime + k;
   
+  int MAX_INTERVAL = (int)(SimTime / interval) + 1;
+	bytesPeriod = new double[MAX_INTERVAL];
+//=========== Initialize bytesPeriod ===========//
+//
+	for(i=0; i < MAX_INTERVAL; i++)
+	{
+		bytesPeriod[i] = 0;
+	}
+
   Simulator::Stop (Seconds (SimTime));
 
-  std::cout << "Start Simulation.. will be ended after "<<SimTime<<" (s)\n";
+  Config::ConnectWithoutContext("/NodeList/*/ApplicationList/*/$ns3::PacketSink/Rx", MakeCallback(&SinkRxTrace));
+
+  std::cout << "Start Simulation.. with simulation time is: "<<SimTime<<" (s)\n";
 
 	printTime();
 
@@ -398,13 +404,14 @@ int main (int argc, char *argv[])
         ns3::Time lastDelay = NanoSeconds(0.0);
         double timesForwarded=0.0;
         double averageDelay = 0.0;
+        double lastestRxTime = 0.0;
         
-		double privateThroughput = 0.0;
+	//double privateThroughput = 0.0;
 	int nFlows=0;
 	for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator iter = stats.begin (); iter != stats.end (); ++iter)
   {
 		nFlows++;
-		privateThroughput = 0.0;
+		//privateThroughput = 0.0;
 		txPackets+=iter->second.txPackets;
 		rxPackets+=iter->second.rxPackets;
 		lostPackets+=iter->second.lostPackets;
@@ -412,17 +419,19 @@ int main (int argc, char *argv[])
 		jitterSum+=iter->second.jitterSum;
 		lastDelay+=iter->second.lastDelay;
 		timesForwarded+=iter->second.timesForwarded;
+    if(lastestRxTime < iter->second.timeLastRxPacket.GetSeconds())
+			lastestRxTime = iter->second.timeLastRxPacket.GetSeconds();
 		if(iter->second.rxPackets != 0)
 		{
 			averageDelay+=iter->second.delaySum.GetNanoSeconds()/iter->second.rxPackets;
-			privateThroughput =iter->second.rxBytes * 8.0 / 
-							(iter->second.timeLastRxPacket.GetSeconds()-iter->second.timeFirstTxPacket.GetSeconds());// / 1024;
-			throughput += privateThroughput;
+			//privateThroughput =iter->second.rxBytes * 8.0 / 
+			//				(iter->second.timeLastRxPacket.GetSeconds()-iter->second.timeFirstTxPacket.GetSeconds());// / 1024;
+			//throughput += privateThroughput;
 		}
 		//else
     {
 			std::cout<<"========================================"<<endl;
-	  		std::cout<<"Flow: "<< nFlows<<") has rxPackets: "<<iter->second.rxPackets<<" throughput: "<<(privateThroughput/1024)<<" and current sum: "<<throughput<<endl;
+	  		std::cout<<"Flow: "<< nFlows<<") has rxPackets: "<<iter->second.rxPackets<<endl; //<<" throughput: "<<(privateThroughput/1024)<<" and current sum: "<<throughput<<endl;
 			Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (iter->first);
         	std::cout << "Flow " << iter->first << " (" << t.sourceAddress << " -> " << t.destinationAddress << "): ";
 			std::cout<<"\tTime forwarded: "<< iter->second.timesForwarded<<" ";
@@ -438,12 +447,21 @@ int main (int argc, char *argv[])
 	std::cout<<"\n\ttxPackets = "<<txPackets<<"\n\trxPackets = "<<rxPackets<<"\n\tlostPackets = "<<lostPackets<<"\n\tnFlows = "<<nFlows;
 	std::cout<<"\n\tTime forward = "<<timesForwarded<<" or"<<endl;
 	std::cout<<"\tAverage delay = "<<averageDelay/nFlows<<endl;
-	//std::cout<<"\tJitter = "<<(jitterSum/1e9)<<endl;
-	std::cout<<"\tthroughput = "<<throughput/(nFlows*1000)<<" (Kbps)"<<endl;
 	std::cout<<"\tlink capacity = "<<link_capacity<<" (Kbps)"<<endl;
-	std::cout<<"\t% throughput = "<<throughput*100/(1024 * nFlows*link_capacity)<<" %"<<endl;
+	//throughput = throughput*100/(1024 * nFlows*link_capacity);
+	//std::cout<<"\tAverage % throughput = "<<throughput<<" %"<<endl;
+
+  MAX_INTERVAL = (int)(lastestRxTime / interval) + 1;
+	MAX_INTERVAL = (MAX_INTERVAL < 600 ? MAX_INTERVAL : 600);
+
 	
-  // flowmon->SerializeToXmlFile (flow_name.c_str(), true, true);
+	for(i = 0; i < MAX_INTERVAL; i++)
+	{
+		bytesPeriod[i] = bytesPeriod[i]*8*100/(nFlows*1024*interval*link_capacity);
+	}
+	
+	showThroughputOfInterval(k, MAX_INTERVAL, 1, timeOfRun);
+	
   printTime();
 	std::cout << "Simulation finished "<<"\n";
   Simulator::Destroy ();
@@ -622,4 +640,133 @@ void SinkRxTrace(Ptr<const Packet> pkt, const Address &addr)
 	bytesPeriod[index] += pkt->GetSize();
 }
 
+void Create2DPlotFile (int k, int MAX_INTERVAL, double max, int EAC //Eliminate Artifical Congestion
+							, int timeOfRun
+			)
+{
+	time_t t = time(NULL);
+  	struct tm tm = *localtime(&t);
+	//max = (int)(max * 100.0)/100.0;
+	std::stringstream streamMax;
+  //std::stringstream streamAvgThpt;
+	int digit = 2;
+	streamMax << std::fixed << std::setprecision(digit) << max;
+	std::string sMax = streamMax.str();
+
+	//streamAvgThpt << std::fixed << std::setprecision(digit) << throughput;
+	//std::string sAvgThpt = streamAvgThpt.str();
+	
+  std::string strEAC = (EAC == 0 ? "EAC=NO" : "EAC=YES");
+  std::string fileNameWithNoExtension = path + "gnuplot/RSN/RSN_" + std::to_string(k) + "_M" + 
+										std::to_string(tm.tm_mon + 1) + "_D" +
+										std::to_string(tm.tm_mday) + "_H" + 
+										std::to_string(tm.tm_hour) + "_Mi" + 
+										std::to_string(tm.tm_min) 
+										;
+  
+  std::string graphicsFileName        = fileNameWithNoExtension + ".png";
+  std::string plotFileName            = fileNameWithNoExtension + ".plt";
+  std::string plotTitle               = std::to_string(timeOfRun) + ") # of Ports = " 
+  											+ std::to_string(k) + ", Max Thpt: "
+											+ sMax + "%" //+ "(" + strEAC + ")"
+  										;
+
+  int numOfSwitches = k*k*5/4;
+  int numOfHosts = k*k*k/4;
+    
+  std::string dataTitle               = "# of Hosts: " + std::to_string(numOfHosts) +
+											//+ std::to_string(k) + 
+											" and # of Switches: " + std::to_string(numOfSwitches)
+											;
+
+  // Instantiate the plot and set its title.
+  Gnuplot plot (graphicsFileName);
+  plot.SetTitle (plotTitle);
+
+  // Make the graphics file, which the plot file will create when it
+  // is used with Gnuplot, be a PNG file.
+  plot.SetTerminal ("png");
+
+  // Set the labels for each axis.
+  plot.SetLegend ("Times intervals (1e-2s)", "% throughput");
+
+  // Set the range for the x axis.
+  plot.AppendExtra ("set xrange [0:+" + std::to_string(MAX_INTERVAL) + "]");
+
+  // Instantiate the dataset, set its title, and make the points be
+  // plotted along with connecting lines.
+  Gnuplot2dDataset dataset;
+  dataset.SetTitle (dataTitle);
+  dataset.SetStyle (Gnuplot2dDataset::LINES_POINTS);
+
+  double x;
+  double y;
+
+  // Create the 2-D dataset.
+  for (x = 0; x <= MAX_INTERVAL; x += 1.0)
+  {
+	  y = bytesPeriod[(int)x];
+      // Add this point.
+      dataset.Add (x, y);
+  }
+
+  // Add the dataset to the plot.
+  plot.AddDataset (dataset);
+
+  // Open the plot file.
+  std::ofstream plotFile (plotFileName.c_str());
+
+  // Write the plot file.
+  plot.GenerateOutput (plotFile);
+
+  // Close the plot file.
+  plotFile.close ();
+}
+
+void showThroughputOfInterval(int k, int MAX_INTERVAL, int eliminateArtificialCongestion, int timeOfRun)
+{
+	int i = 0, j = 0;
+	int *indexes = new int[MAX_INTERVAL];
+	for(i = 0; i < MAX_INTERVAL; i++)
+	{
+		indexes[i] = 0;
+	}
+
+	for(i = 0; i < MAX_INTERVAL; i++)
+	{
+		if(bytesPeriod[i] != 0)
+		{
+			for(j = i + 1; j < MAX_INTERVAL; j++)
+			{
+				if(bytesPeriod[i] == bytesPeriod[j])
+				{
+					indexes[i] ++;
+				}
+			}
+		}
+	}
+
+	double maxFrequence = 0; 
+	double max = 0;
+	int count = 0; int count2 = 0; int count3 = 0;
+	for(i = 0; i < MAX_INTERVAL; i++)
+	{
+		if(count < indexes[i])
+		{
+			count = indexes[i];
+			count2 = i;
+		}
+		if(max < bytesPeriod[i])
+		{	
+			max = bytesPeriod[i];
+			count3 = i;
+		}
+	}
+	maxFrequence = bytesPeriod[count2];
+	std::cout<<"\tMAX_INTERVAL = "<<MAX_INTERVAL<<endl;
+	std::cout<<"\tthroughput has max frequency= "<<maxFrequence<<" % at interval "<<count2<<" with # of available "<<indexes[count2]<<endl;
+	std::cout<<"\tThroughput has max value = "<<max<<"% in interval: "<<count3<<" with # of avail "<<indexes[count3]<<endl;
+
+	Create2DPlotFile (k, MAX_INTERVAL, max, eliminateArtificialCongestion, timeOfRun);
+}
 // ---------- End of Function Definitions ------------------------------------
