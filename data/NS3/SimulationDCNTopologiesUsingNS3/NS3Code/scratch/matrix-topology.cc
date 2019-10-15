@@ -19,6 +19,7 @@
  * Author: Egemen K. Cetinkaya <ekc@ittc.ku.edu>
  * Author: Justin P. Rohrer    <rohrej@ittc.ku.edu>
  * Author: Amit Dandekar       <dandekar@ittc.ku.edu>
+ * Last modification: Nguyen Tien Thanh <nguyenthanh@soict.hust.edu.vn>
  *
  * James P.G. Sterbenz <jpgs@ittc.ku.edu>, director
  * ResiliNets Research Group  http://wiki.ittc.ku.edu/resilinets
@@ -84,6 +85,7 @@ double interval = 0.01; //0.01s
 double *bytesPeriod ; //= new double[600];
 std::string path = "/home/tienthanh/Public/NS3repo/ns-3-allinone/ns-3-dev/scratch/subdir/";
 //double throughput = 0.0; 
+long counter = 0;
 
 
 
@@ -97,10 +99,10 @@ int main (int argc, char *argv[])
   // Change the variables and file names only in this block!
 
   double SimTime        = 4.00; //the original value is 13
-  double SinkStartTime  = 1.0001;
+  double SinkStartTime  = 0.0001;
   double SinkStopTime   = 2.90001;
-  double AppStartTime   = 2.0001;
-  double AppStopTime    = 2.80001;
+  double AppStartTime   = 0.0003;
+  double AppStopTime    = 1.80001;//Would be editted later
 
   std::string AppPacketRate ("1000Mbps");
 
@@ -268,7 +270,7 @@ int main (int argc, char *argv[])
   for (int i = num_switches; i < n_nodes; i++)
     {
       PacketSinkHelper sink ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), port));
-      ApplicationContainer apps_sink = sink.Install (nodes.Get (i));   // sink is installed on all nodes
+      ApplicationContainer apps_sink = sink.Install (nodes.Get (i));   // sink is installed on all hosts
       apps_sink.Start (Seconds (SinkStartTime));
       apps_sink.Stop (Seconds (SinkStopTime));
     }
@@ -305,45 +307,37 @@ int main (int argc, char *argv[])
 
   double maxStopTime = 0;
 
-  //for (int i = 0; i < n_nodes; i++)
   for (int i = 0; i < total_host/2; i++)
     {
-      //for (int j = 0; j < n_nodes; j++)
-        {
-          //if (i != j)
-            {
 
-              // We needed to generate a random number (rn) to be used to eliminate
-              // the artificial congestion caused by sending the packets at the
-              // same time. This rn is added to AppStartTime to have the sources
-              // start at different time, however they will still send at the same rate.
+      // We needed to generate a random number (rn) to be used to eliminate
+      // the artificial congestion caused by sending the packets at the
+      // same time. This rn is added to AppStartTime to have the sources
+      // start at different time, however they will still send at the same rate.
 
-              Ptr<UniformRandomVariable> x = CreateObject<UniformRandomVariable> ();
-              x->SetAttribute ("Min", DoubleValue (0));
-              x->SetAttribute ("Max", DoubleValue (1));
-              double rn = x->GetValue ();
-              //Ptr<Node> n = nodes.Get (j);
-              Ptr<Node> n = nodes.Get(destinations[i]);
-              Ptr<Ipv4> ipv4 = n->GetObject<Ipv4> ();
-              Ipv4InterfaceAddress ipv4_int_addr = ipv4->GetAddress (1, 0);
-              Ipv4Address ip_addr = ipv4_int_addr.GetLocal ();
-              OnOffHelper onoff ("ns3::UdpSocketFactory", InetSocketAddress (ip_addr, port)); // traffic flows from node[i] to node[j]
-              //ThanhNT add new settings for OnOfHelper
-              onoff.SetAttribute("OnTime",StringValue ("ns3::ConstantRandomVariable[Constant=1]")); 
-	            onoff.SetAttribute("OffTime",StringValue ("ns3::ConstantRandomVariable[Constant=0]"));    
-	            onoff.SetAttribute("MaxBytes",StringValue (maxBytes));
-              //Endof ThanhNT add new settings for OnOfHelper
+      Ptr<UniformRandomVariable> x = CreateObject<UniformRandomVariable> ();
+      x->SetAttribute ("Min", DoubleValue (0));
+      x->SetAttribute ("Max", DoubleValue (1));
+      double rn = x->GetValue ();
+      Ptr<Node> n = nodes.Get(destinations[i]);
+      Ptr<Ipv4> ipv4 = n->GetObject<Ipv4> ();
+      Ipv4InterfaceAddress ipv4_int_addr = ipv4->GetAddress (1, 0);
+      Ipv4Address ip_addr = ipv4_int_addr.GetLocal ();
+      OnOffHelper onoff ("ns3::UdpSocketFactory", InetSocketAddress (ip_addr, port)); // traffic flows from node[i] to node[j]
+      //ThanhNT add new settings for OnOfHelper
+      onoff.SetAttribute("OnTime",StringValue ("ns3::ConstantRandomVariable[Constant=1]")); 
+      onoff.SetAttribute("OffTime",StringValue ("ns3::ConstantRandomVariable[Constant=0]"));    
+      onoff.SetAttribute("MaxBytes",StringValue (maxBytes));
+      //Endof ThanhNT add new settings for OnOfHelper
 
-              onoff.SetConstantRate (DataRate (AppPacketRate));
-              //ApplicationContainer apps = onoff.Install (nodes.Get (i));  // traffic sources are installed on all nodes
-              ApplicationContainer apps = onoff.Install (nodes.Get (sources[i]));
-              apps.Start (Seconds (AppStartTime + rn));
-              AppStopTime = AppStartTime + rn + 1;
-              apps.Stop (Seconds (AppStopTime));
-              if(maxStopTime < AppStopTime)
-                maxStopTime = AppStopTime;
-            }
-        }
+      onoff.SetConstantRate (DataRate (AppPacketRate));
+      //ApplicationContainer apps = onoff.Install (nodes.Get (i));  // traffic sources are installed on all nodes
+      ApplicationContainer apps = onoff.Install (nodes.Get (sources[i]));
+      apps.Start (Seconds (AppStartTime + rn));
+      AppStopTime = AppStartTime + rn + 1;
+      apps.Stop (Seconds (AppStopTime));
+      if(maxStopTime < AppStopTime)
+        maxStopTime = AppStopTime;
     }
 
   // ---------- End of Create n*(n-1) CBR Flows ------------------------------
@@ -352,13 +346,6 @@ int main (int argc, char *argv[])
 
   NS_LOG_INFO ("Configure Tracing.");
 
-  //ThanhNT reduce writing efforts
-  //by setting TWO following statements to comments
-  //AsciiTraceHelper ascii;
-  //p2p.EnableAsciiAll (ascii.CreateFileStream (tr_name.c_str ()));
-  //Endof ThanhNT reduce writing efforts
-
-  // p2p.EnablePcapAll (pcap_name.c_str());
 
   Ptr<FlowMonitor> monitor;
   FlowMonitorHelper flowmonHelper;
@@ -366,10 +353,6 @@ int main (int argc, char *argv[])
 
   // Configure animator with default settings
 
-  //ThanhNT reduce writing efforts
-  //by setting THE following statement to comment
-  //AnimationInterface anim (anim_name.c_str ());
-  //Endof ThanhNT reduce writing efforts
   NS_LOG_INFO ("Run Simulation.");
 
   SimTime = maxStopTime + k;
@@ -448,6 +431,7 @@ int main (int argc, char *argv[])
 	std::cout<<"\n\tTime forward = "<<timesForwarded<<" or"<<endl;
 	std::cout<<"\tAverage delay = "<<averageDelay/nFlows<<endl;
 	std::cout<<"\tlink capacity = "<<link_capacity<<" (Kbps)"<<endl;
+  std::cout<<"\tAssert(counter == rxPackets) ? as counter = "<<counter<<" and RxPackets = "<<rxPackets<<endl;
 	//throughput = throughput*100/(1024 * nFlows*link_capacity);
 	//std::cout<<"\tAverage % throughput = "<<throughput<<" %"<<endl;
 
@@ -638,6 +622,7 @@ void SinkRxTrace(Ptr<const Packet> pkt, const Address &addr)
   double lastRxTime = Simulator::Now().GetSeconds();
 	int index = (int)(lastRxTime / interval);
 	bytesPeriod[index] += pkt->GetSize();
+  counter++;
 }
 
 void Create2DPlotFile (int k, int MAX_INTERVAL, double max, int EAC //Eliminate Artifical Congestion
