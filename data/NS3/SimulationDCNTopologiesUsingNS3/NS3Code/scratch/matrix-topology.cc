@@ -297,6 +297,7 @@ int main (int argc, char *argv[])
 	allIndexes = NULL;
 
   double maxStopTime = 0;
+  uint16_t port = 9;
 
   for (int i = 0; i < total_host/2; i++)
     {
@@ -335,7 +336,7 @@ int main (int argc, char *argv[])
 
   NS_LOG_INFO ("Setup Packet Sinks.");
 
-  uint16_t port = 9;
+  
 
   SimTime = maxStopTime + k;
 
