@@ -86,7 +86,7 @@ double *bytesPeriod ; //= new double[600];
 std::string path = "/home/tienthanh/Public/NS3repo/ns-3-allinone/ns-3-dev/scratch/subdir/";
 //double throughput = 0.0; 
 long counter = 0;
-
+int matching = 0;
 
 
 NS_LOG_COMPONENT_DEFINE ("GenericTopologyCreation");
@@ -439,6 +439,12 @@ int main (int argc, char *argv[])
 	std::cout<<"\tAverage delay = "<<averageDelay/nFlows<<endl;
 	std::cout<<"\tlink capacity = "<<link_capacity<<" (Kbps)"<<endl;
   std::cout<<"\tAssert(counter == rxPackets) ? as counter = "<<counter<<" and RxPackets = "<<rxPackets<<endl;
+  matching = 1;
+  if(counter != rxPackets)
+  {
+    std::cout<<"ALERT: NO MATCHING FROM STATISTIC AND CALLBACK FUNCTION"<<endl;
+    matching = 0;
+  }
 	//throughput = throughput*100/(1024 * nFlows*link_capacity);
 	//std::cout<<"\tAverage % throughput = "<<throughput<<" %"<<endl;
 
@@ -662,6 +668,10 @@ void Create2DPlotFile (int k, int MAX_INTERVAL, double max, int EAC //Eliminate 
   											+ std::to_string(k) + ", Max Thpt: "
 											+ sMax + "%" //+ "(" + strEAC + ")"
   										;
+  if(matching == 0)
+  {
+    plotTitle = "ALERT!!! NO MATCH " + plotTitle;
+  }
 
   int numOfSwitches = k*k*5/4;
   int numOfHosts = k*k*k/4;
