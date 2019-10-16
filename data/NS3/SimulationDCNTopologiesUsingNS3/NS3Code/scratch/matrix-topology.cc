@@ -99,10 +99,10 @@ int main (int argc, char *argv[])
   // Change the variables and file names only in this block!
 
   double SimTime        = 4.00; //the original value is 13
-  double SinkStartTime  = 0.0001;
+  double SinkStartTime  = 1.0001;
   double SinkStopTime   = 2.90001;
-  double AppStartTime   = 0.0003;
-  double AppStopTime    = 1.80001;//Would be editted later
+  double AppStartTime   = 2.0001;
+  double AppStopTime    = 2.80001;//Would be editted later
 
   std::string AppPacketRate ("1000Mbps");
 
@@ -263,17 +263,7 @@ int main (int argc, char *argv[])
 
   // ---------- Create k*k*k/8 CBR Flows -------------------------------------
 
-  NS_LOG_INFO ("Setup Packet Sinks.");
 
-  uint16_t port = 9;
-
-  for (int i = num_switches; i < n_nodes; i++)
-    {
-      PacketSinkHelper sink ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), port));
-      ApplicationContainer apps_sink = sink.Install (nodes.Get (i));   // sink is installed on all hosts
-      apps_sink.Start (Seconds (SinkStartTime));
-      apps_sink.Stop (Seconds (SinkStopTime));
-    }
 
   NS_LOG_INFO ("Setup CBR Traffic Sources.");
 
@@ -300,6 +290,7 @@ int main (int argc, char *argv[])
 	{
 		sources[i] = allIndexes[i];
 		destinations[i] = allIndexes[i + (total_host/2)];
+    std::cout<<"\t"<<(i + 1)<<") From source: "<<sources[i]<<" to dest: "<<destinations[i]<<endl;
 	}
 
 	delete [] allIndexes;
@@ -342,6 +333,22 @@ int main (int argc, char *argv[])
 
   // ---------- End of Create n*(n-1) CBR Flows ------------------------------
 
+  NS_LOG_INFO ("Setup Packet Sinks.");
+
+  uint16_t port = 9;
+
+  SimTime = maxStopTime + k;
+
+  SinkStopTime = SimTime - 0.5;
+
+  for (int i = num_switches; i < n_nodes; i++)
+    {
+      PacketSinkHelper sink ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), port));
+      ApplicationContainer apps_sink = sink.Install (nodes.Get (i));   // sink is installed on all hosts
+      apps_sink.Start (Seconds (SinkStartTime));
+      apps_sink.Stop (Seconds (SinkStopTime));
+    }
+
   // ---------- Simulation Monitoring ----------------------------------------
 
   NS_LOG_INFO ("Configure Tracing.");
@@ -355,7 +362,7 @@ int main (int argc, char *argv[])
 
   NS_LOG_INFO ("Run Simulation.");
 
-  SimTime = maxStopTime + k;
+  
   
   int MAX_INTERVAL = (int)(SimTime / interval) + 1;
 	bytesPeriod = new double[MAX_INTERVAL];
@@ -659,9 +666,9 @@ void Create2DPlotFile (int k, int MAX_INTERVAL, double max, int EAC //Eliminate 
   int numOfSwitches = k*k*5/4;
   int numOfHosts = k*k*k/4;
     
-  std::string dataTitle               = "# of Hosts: " + std::to_string(numOfHosts) +
+  std::string dataTitle               = "Hosts: " + std::to_string(numOfHosts) +
 											//+ std::to_string(k) + 
-											" and # of Switches: " + std::to_string(numOfSwitches)
+											" and switches: " + std::to_string(numOfSwitches)
 											;
 
   // Instantiate the plot and set its title.
