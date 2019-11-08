@@ -22,9 +22,13 @@ int main(int argc, char** argv)
     int *Link = NULL;
     Link = malloc(sizeof * Link * (numOfLinks * countOfInfoInLink));
 
-    assignAdj(Link, numOfPorts, numOfSwitches, bandwidth);
+    assignLink(Link, numOfPorts, numOfSwitches, bandwidth);
 
-    echo(Link, numOfLinks );
+    int **Host = NULL;
+    Host = malloc( sizeof * Host * numOfHosts);
+
+
+    //echo(Link, numOfLinks);
     return 0;
 }
 

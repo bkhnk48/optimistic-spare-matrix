@@ -3,7 +3,7 @@
 #include <limits.h> 
 #include "ErrorReport.c"
 
-int assignAdj(int *Link, int width, int height, int bandwidth);
+int assignLink(int *Link, int width, int height, int bandwidth);
 
 
 void echo(int *Link, int count);
@@ -21,7 +21,7 @@ void echo(int *Link, int count)
 }
 
 
-int assignAdj(int *Link, int width, int height, int bandwidth)
+int assignLink(int *Link, int width, int height, int bandwidth)
 {
     int **n = NULL;      n = malloc( sizeof * n * height );
     for (int i = 0; i < height; i++ ){   n[i] = malloc( sizeof *n[i] * width);    }
