@@ -1,0 +1,65 @@
+#include<stdio.h>
+
+int CYCLE_PACKET = 100;
+
+int getDestination(int idOfPacket)
+{
+    return 0;
+}
+
+void show(int **Hosts, int numOfHosts)
+{
+    int i = 0, j = 0;
+    for(i = 0; i < numOfHosts; i++)
+    {
+        if(Hosts[i][1] == -1 && Hosts[i][2] == -1)
+        {
+            printf("Hosts[%d] khong co goi tin nao ca", Hosts[i][14]);
+        }
+        if(Hosts[i][9] == -1 ||  Hosts[i][10] == -1)
+        {
+            printf(", khong co su kien (h) nao ca");
+        }
+        if(Hosts[i][11] == -1 ||  Hosts[i][12] == -1)
+        {
+            printf(", khong co su kien (c) nao ca");
+        }
+        if(Hosts[i][13] == 0)
+        {
+            printf(", khong co packet nao duoc gui den ca");
+        }
+        printf("\n");
+    }
+
+}
+
+int assignHosts(int **Hosts, int numOfHosts, int numOfSwitches)
+{
+    int i = 0, j = 0;
+    for(i = 0; i < numOfHosts; i++)
+    {
+        //Moi Hosts[i]
+      //co thong tin ve chu ky tao goi tin,
+      Hosts[i][0] = CYCLE_PACKET;
+      //id be nhat cua goi tin con trong SourceQueue
+      Hosts[i][1] = -1;
+      //id lon nhat cua goi tin con trong SourceQueue
+      Hosts[i][2] = -1;
+      //5 ids cua 5 goi tin trong outport (-1 neu nhu trong tai cho trong do cua outport ko chua goi tin nao ca)
+      for(j = 0; j < 5; j++)
+      {
+        Hosts[i][3 + j] = -1;
+      }
+      //id cua nut dich
+      Hosts[i][8] = -1;
+      //event (h): thoi diem sinh ra, thoi diem ket thuc (thoi diem sinh ra + CREDIT_DELAY)
+      Hosts[i][9] = -1;  Hosts[i][10] = -1;
+      //event (c) cho gui goi tin tu outport cua Host len LINK: thoi diem sinh ra, thoi diem ket thuc (thoi diem sinh ra + RETRY_TIME)
+      Hosts[i][11] = -1;  Hosts[i][12] = -1;
+      
+      /////=> chac ko can: event (b) cho gui goi tin tu source queue den outport cua host: thoi diem sinh ra, thoi diem ket thuc (thoi diem sinh ra)
+      //# of packets received in current interval
+      Hosts[i][13] = 0; 
+      Hosts[i][14] = i + numOfSwitches;
+    }
+}

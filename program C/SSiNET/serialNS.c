@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "Init.c"
+#include "Host.h"
 
 
 
@@ -10,6 +11,8 @@ int main(int argc, char** argv)
     int numOfHosts = 16;
     int numOfInforAboutSwitch = 12;
     int bandwidth = 1000*1000;
+
+    int i, j;
 
     //De luu thong tin ve link va cac goi du lieu truyen tren link
     //cung nhu cac su kien xay ra tren link
@@ -24,11 +27,18 @@ int main(int argc, char** argv)
 
     assignLink(Link, numOfPorts, numOfSwitches, bandwidth);
 
-    int **Host = NULL;
-    Host = malloc( sizeof * Host * numOfHosts);
+    int **Hosts = NULL;
+    int countOfInfoInHost = 15;
+    Hosts = malloc( sizeof * Hosts * numOfHosts);
 
+    for(i = 0; i < numOfHosts; i++)
+    {
+      Hosts[i] = malloc( sizeof * Hosts[i] * countOfInfoInHost);
+    }
 
-    //echo(Link, numOfLinks);
+    assignHosts(Hosts, numOfHosts, numOfSwitches);
+    //show(Hosts, numOfHosts);
+    echo(Link, numOfLinks);
     return 0;
 }
 
