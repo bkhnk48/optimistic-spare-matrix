@@ -13,7 +13,11 @@ void echo(int *Link, int count)
     int i = 0, j; int index = 0;
     while(i < count)
     {
-        printf("\tFrom %d to %d at Link[%d]\n", Link[index], Link[index+1], index);
+        //printf("\tFrom %d to %d at Link[%d]", Link[index], Link[index+1], index);
+        printf("\tFrom %d to %d", Link[index], Link[index+1]);
+        if(Link[index + 2] == -1)
+            printf(", khong co goi tin nao ca");
+        printf("\n");
         index += 10;
         //i += 10;
         i++;
