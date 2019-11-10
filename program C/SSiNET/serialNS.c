@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "Init.c"
 #include "Host.h"
-
+#include "Switch.h"
 
 
 int main(int argc, char** argv) 
@@ -28,17 +28,51 @@ int main(int argc, char** argv)
     assignLink(Link, numOfPorts, numOfSwitches, bandwidth);
 
     int **Hosts = NULL;
-    int countOfInfoInHost = 15;
+    int NUM_OF_FIELD_IN_HOST = 16;
     Hosts = malloc( sizeof * Hosts * numOfHosts);
 
     for(i = 0; i < numOfHosts; i++)
     {
-      Hosts[i] = malloc( sizeof * Hosts[i] * countOfInfoInHost);
+      Hosts[i] = malloc( sizeof * Hosts[i] * NUM_OF_FIELD_IN_HOST);
     }
+
+    int *SwitchIDs = NULL;
+    int countOfInfoInSwitch = 15;
+
+    SwitchIDs = malloc( sizeof * SwitchIDs * numOfSwitches);
+
+    int **SwitchInportIDPcks = NULL; //Array stores IDs of packets in inport
+    int **SwitchOutportIDPcks = NULL;
+
+    int BUFFER_SIZE = 5;
+
+    SwitchInportIDPcks = malloc( sizeof * SwitchInportIDPcks * numOfSwitches);
+    SwitchOutportIDPcks = malloc( sizeof * SwitchOutportIDPcks * numOfSwitches);
+
+    for(i = 0; i < numOfSwitches; i++)
+    {
+      SwitchInportIDPcks[i] = malloc( sizeof * SwitchInportIDPcks[i] * BUFFER_SIZE);
+      SwitchOutportIDPcks[i] = malloc( sizeof * SwitchOutportIDPcks[i] * BUFFER_SIZE);
+    }
+
+
+    int **SwitchInportSrcIDs = NULL;
+    int **SwitchInportDstIDs = NULL;
+
+    int **SwitchOutportSrcIDs = NULL;
+    int **SwitchOutportDstIDs = NULL;
+
+    char **SwitchEvtTypes = NULL;
+    int **SwitchEvtTimes = NULL;//Co 2*k inport, 2*k outport, 2*k channel tai 1 thoi diem
+    //Vay co tong cong toi da 2*k + 2*2*k + 2*k = 8*k events tai 1 switch tai 1 thoi diem
+
+    assignSwitchIDs(SwitchIDs, numOfSwitches);
+    //assignSwitchPackets(SwitchInportIDPcks, SwitchOutportIDPcks, BUFFER_SIZE, numOfSwitches);
+    showSwitchIDs(SwitchIDs, numOfSwitches);
 
     assignHosts(Hosts, numOfHosts, numOfSwitches);
     //show(Hosts, numOfHosts);
-    echo(Link, numOfLinks);
+    //echo(Link, numOfLinks);
     return 0;
 }
 

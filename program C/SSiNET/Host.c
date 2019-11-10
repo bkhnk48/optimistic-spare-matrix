@@ -60,6 +60,11 @@ int assignHosts(int **Hosts, int numOfHosts, int numOfSwitches)
       /////=> chac ko can: event (b) cho gui goi tin tu source queue den outport cua host: thoi diem sinh ra, thoi diem ket thuc (thoi diem sinh ra)
       //# of packets received in current interval
       Hosts[i][13] = 0; 
+
+      //id cua host (trong danh sach cac nut cua toan mang)
       Hosts[i][14] = i + numOfSwitches;
+
+      //interval hien tai
+      Hosts[i][15] = 0;
     }
 }
