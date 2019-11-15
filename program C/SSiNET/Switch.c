@@ -72,7 +72,7 @@ void assignSwitchIDs(int *SwitchIDs, int numOfPorts)
     int numPodSwitches = numOfPorts * numOfPorts;
 
     // IDs for pod's switches
-    for (int p = 0; p < numOfPorts; p++) {
+    for (p = 0; p < numOfPorts; p++) {
         int offset = numEachPod * p;
         for (int s = 0; s < numOfPorts; s++) {
             int switchId = offset + numOfPorts * numOfPorts / 4 + s;
@@ -82,8 +82,8 @@ void assignSwitchIDs(int *SwitchIDs, int numOfPorts)
     }
 
     // IDs for core switches
-    for (int j = 1; j <= numOfPorts / 2; j++) {
-        for (int i = 1; i <= numOfPorts / 2; i++) {
+    for (j = 1; j <= numOfPorts / 2; j++) {
+        for (i = 1; i <= numOfPorts / 2; i++) {
             int offset = numPodSwitches + numServers;
             int switchId = offset + (j - 1) * numOfPorts / 2 + i - 1;
             SwitchIDs[index] = switchId;
