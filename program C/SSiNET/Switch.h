@@ -3,11 +3,17 @@
 
 void showSwitchIDs(int *SwitchIDs, int numOfSwitches);
 
+void showSwitchPacketsAtPort(int **SwitchInportPID, 
+                int **SwitchInportSrcIDs, int **SwitchInportDstIDs,
+                int bufferSize, int numOfSwitches);
+
 void assignSwitchIDs(int *SwitchIDs, int numOfSwitches);
 
-/*void assignSwitchPackets(int **SwitchInportIDPcks, 
-                int **SwitchOutportIDPcks, 
+void assignSwitchPackets(int **SwitchInportPID, 
                 int **SwitchInportSrcIDs,
-                int **SwitchportSrcIDs,
-                int bufferSize, int numOfSwitches);*/
+                int **SwitchInportDstIDs,
+                int bufferSize, int numOfSwitches);
+
+//void assignEvent(int **SwitchEvtTypes, int **SwitchEvtTimes, 
+//                int numOfPorts, int numOfSwitches);
 
