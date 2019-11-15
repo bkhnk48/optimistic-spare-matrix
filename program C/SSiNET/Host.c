@@ -33,7 +33,27 @@ void show(int **Hosts, int numOfHosts)
 
 }
 
-int assignHosts(int **Hosts, int numOfHosts, int numOfSwitches)
+int getHostID(int index)
+{
+    if(index >= 0 && index <= 3)
+    {
+        return index;
+    }
+    if(index >= 4 && index <= 7)
+    {
+        return ((index - 4) + 8);
+    }
+    if(index >= 8 && index <= 11)
+    {
+        return ((index - 8) + 16);
+    }
+    if(index >= 12 && index <= 15)
+    {
+        return ((index - 12) + 24);
+    }
+}
+
+int assignHosts(int **Hosts, int numOfHosts)
 {
     int i = 0, j = 0;
     for(i = 0; i < numOfHosts; i++)
@@ -62,9 +82,10 @@ int assignHosts(int **Hosts, int numOfHosts, int numOfSwitches)
       Hosts[i][13] = 0; 
 
       //id cua host (trong danh sach cac nut cua toan mang)
-      Hosts[i][14] = i + numOfSwitches;
+      Hosts[i][14] = getHostID(i);
 
       //interval hien tai
       Hosts[i][15] = 0;
     }
 }
+
