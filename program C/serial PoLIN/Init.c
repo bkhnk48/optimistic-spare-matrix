@@ -3,7 +3,7 @@
 
 void display(Host *hosts, int length);
 int assignAdj(int **n, int *linkID, int width, int height);
-void addLinks(Switch *switches, Host *hosts, Link *links, int height, int width, int numOfHosts);
+void addLinks(Switch *switches, Host *hosts, Link *links, int *linkID, int height, int width, int numOfHosts);
 void createLinkBetweenSwitchHost(Switch aSwitch, Host host, int i, int j, int n);
 void createLinkBetweenSwitches(Switch *switches, int i, int j, int n);
 
@@ -113,9 +113,7 @@ void assignAdjant(Switch *switches, Host *hosts, int **n, /* Link *links,*/ int 
                     //Link li = malloc(sizeof(Link));
                     hosts[idOfNode - h]->linkID = indexOfLink;
                     (hosts[idOfNode - h]->outPort)->linkID = indexOfLink;
-                    //switches[i]->link[j] = indexOfLink;
-                    //li->idsOfNodes[0] = idOfNode; li->isBusy[0] = 0; li->isBusy[1] = 0;
-                    //li->idsOfNodes[1] = i; li->idsOfIntegratedPorts[0] = -1; li->idsOfIntegratedPorts[1] = j;
+                    (switches[i]->integratedPorts[j])->linkID = indexOfLink;
                     indexOfLink++;
                     break;
                 default: //la Switch. Can kiem tra xem neu Switch[i] ket noi den Switch[j] voi i < j
@@ -130,6 +128,9 @@ void assignAdjant(Switch *switches, Host *hosts, int **n, /* Link *links,*/ int 
             (switches[i]-> integratedPorts[j])-> creditCount = 5;
             (switches[i]-> integratedPorts[j])->swFlag = 0;
             (switches[i]-> integratedPorts[j])->stFlag = 0;
+            if(i == 5 && j == 1)
+                printf("\nRTRTYUTYUTY    %d\n", (switches[i]->integratedPorts[j])->destID);
+            
         }
     }
 }
@@ -196,9 +197,12 @@ void createLinkBetweenSwitchHost(Switch aSwitch, Host host, int i, int j, int n)
 }
 
 
-void addLinks(Switch *switches, Host *hosts, Link *links, int height, int width, int numOfHosts)
+void addLinks(Switch *switches, Host *hosts, Link *links, int *linkID, int height, int width, int numOfHosts)
 {
-    int i,j, idOfNode;
+    int i = 0,j = 0, idOfNode = 0;
+    int size = sizeof(int);
+    size = size * 8 - 1;
+    int temp = 0, t = 0;
     
     for(i = 0; i < numOfHosts; i++)
     {
@@ -214,12 +218,54 @@ void addLinks(Switch *switches, Host *hosts, Link *links, int height, int width,
        links[hosts[i]->linkID] = li;
     }
     
+    int segment = 0;
 
     for(i = 0; i < height; i++)
     {
+        segment = 0;
         for(j = 0; j < width; j++)
         {
-            //idOfNode = (switches[i]->integratedPorts[j])->destID;
+            printf("\n\t Here: i = %d, j = %d ____", i, j);
+            
+            idOfNode = (switches[i]->integratedPorts[j])->destID;
+            if(i == 5 && j == 1)
+                printf("\nRTRTYUTYUTY    %d\n", idOfNode);
+            temp = idOfNode - height;
+            temp = temp >> size;
+            t = idOfNode - i;
+            t = t >> size;
+            //printf("\n\t Here: i = %d, j = %d and (temp + t) = %d at HOST %d", i, j, (temp + t), idOfNode-height);
+            switch (temp + t)
+            {
+                case 0://idOfNode > height > i
+                    t = hosts[idOfNode-height]->linkID;
+                    
+                    (switches[i]->integratedPorts[j]) ->linkID = t;
+                    links[t]->idsOfIntegratedPorts[1] = j;
+                    //printf("\n\t\t t = %d", t);
+                    break;
+                case -1: //height > idOfNode > i
+                    t = linkID[i] + segment;
+                    Link li = malloc(sizeof * li);
+
+                    li->idsOfNodes[0] = idOfNode; 
+                    li->idsOfNodes[1] = i; 
+                    li->isBusy[0] = 0; 
+                    li->isBusy[1] = 0;
+                    li->idsOfIntegratedPorts[0] = -1; 
+                    li->idsOfIntegratedPorts[1] = j;
+                    links[t] = li;
+                    (switches[i]->integratedPorts[j]) ->linkID = t;
+                    segment++;
+                    break;
+                case -2://height > i > idOfNode
+                    t = idOfNode;
+                    links[t] ->idsOfIntegratedPorts[0] = i;
+                    (switches[i]->integratedPorts[j]) ->linkID = t;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
@@ -263,15 +309,18 @@ int assignAdj(int **n, int *linkID, int width, int height)
     
     linkID[0] = 0;
     count = width;
+    int deltaIndex = width;
 
     for(i = 1; i < height; i++)
     {
-        linkID[i] = count - linkID[i - 1];
+        linkID[i] = deltaIndex + linkID[i - 1];
+        deltaIndex = 0;
         for(j = 0; j < width; j++)
         {
             if(i < n[i][j])
             { 
                 count++;
+                deltaIndex++;
                 //linkID[i] += 1;
             }
         }

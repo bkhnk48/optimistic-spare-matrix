@@ -75,7 +75,7 @@ int main(int argc, char** argv)
 
     assignAdjant(switches, hosts, AdjOfSwitches, /*links,*/ numOfSwitches, numOfPorts);
 
-    addLinks(switches, hosts, links, numOfSwitches, numOfPorts, numOfHosts);
+    addLinks(switches, hosts, links, linkID, numOfSwitches, numOfPorts, numOfHosts);
 
     //InitIntegratedPorts(IntegratedPortOfSwitches, numOfPorts, numOfSwitches);
 
@@ -83,6 +83,10 @@ int main(int argc, char** argv)
     insertSourceQueue(hosts, 32, 21, numOfSwitches);
 
     display(hosts, numOfHosts);
+    for(int i = 0; i < numOfSwitches; i++)
+    {
+      printf("\n\t links of switch[%d] starts at %d", i, linkID[i]);
+    }
 
     printf("\n====================\n");
     insertSourceQueue(hosts, 32, 21, numOfSwitches);
