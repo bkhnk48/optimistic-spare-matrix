@@ -41,20 +41,8 @@ int main(int argc, char** argv)
 
     SwitchIDs = malloc( sizeof * SwitchIDs * numOfSwitches);
 
-    int **SwitchInportIDPcks = NULL; //Array stores IDs of packets in inport
-    int **SwitchOutportIDPcks = NULL;
-
-    int BUFFER_SIZE = 5;
-
-    SwitchInportIDPcks = malloc( sizeof * SwitchInportIDPcks * numOfSwitches);
-    SwitchOutportIDPcks = malloc( sizeof * SwitchOutportIDPcks * numOfSwitches);
-
-    for(i = 0; i < numOfSwitches; i++)
-    {
-      SwitchInportIDPcks[i] = malloc( sizeof * SwitchInportIDPcks[i] * BUFFER_SIZE);
-      SwitchOutportIDPcks[i] = malloc( sizeof * SwitchOutportIDPcks[i] * BUFFER_SIZE);
-    }
-
+    int **SwitchInportPID = NULL; //Array stores IDs of packets in inport
+    int **SwitchOutportPID = NULL;//Array stores IDs of packets in outport
 
     int **SwitchInportSrcIDs = NULL;
     int **SwitchInportDstIDs = NULL;
@@ -62,12 +50,56 @@ int main(int argc, char** argv)
     int **SwitchOutportSrcIDs = NULL;
     int **SwitchOutportDstIDs = NULL;
 
+    int BUFFER_SIZE = 5;
+
+    SwitchInportPID = malloc( sizeof * SwitchInportPID * numOfSwitches);
+    SwitchInportSrcIDs = malloc( sizeof * SwitchInportSrcIDs * numOfSwitches);
+    SwitchInportDstIDs = malloc( sizeof * SwitchInportDstIDs * numOfSwitches);
+
+    SwitchOutportPID = malloc( sizeof * SwitchOutportPID * numOfSwitches);
+    SwitchOutportSrcIDs = malloc( sizeof * SwitchOutportSrcIDs * numOfSwitches);
+    SwitchOutportDstIDs = malloc( sizeof * SwitchOutportDstIDs * numOfSwitches);
+
+    for(i = 0; i < numOfSwitches; i++)
+    {
+      SwitchInportPID[i] = malloc( sizeof * SwitchInportPID[i] * BUFFER_SIZE);
+      SwitchOutportPID[i] = malloc( sizeof * SwitchOutportPID[i] * BUFFER_SIZE);
+
+      SwitchInportSrcIDs[i] = malloc( sizeof * SwitchInportSrcIDs[i] * BUFFER_SIZE);
+      SwitchInportDstIDs[i] = malloc( sizeof * SwitchInportDstIDs[i] * BUFFER_SIZE);
+
+      SwitchOutportSrcIDs[i] = malloc( sizeof * SwitchOutportSrcIDs[i] * BUFFER_SIZE);
+      SwitchOutportDstIDs[i] = malloc( sizeof * SwitchOutportDstIDs[i] * BUFFER_SIZE);
+    }
+
+
+    
+
     char **SwitchEvtTypes = NULL;
     int **SwitchEvtTimes = NULL;//Co 2*k inport, 2*k outport, 2*k channel tai 1 thoi diem
     //Vay co tong cong toi da 2*k + 2*2*k + 2*k = 8*k events tai 1 switch tai 1 thoi diem
 
     assignSwitchIDs(SwitchIDs, numOfSwitches);
-    //assignSwitchPackets(SwitchInportIDPcks, SwitchOutportIDPcks, BUFFER_SIZE, numOfSwitches);
+
+
+    assignSwitchPackets(SwitchInportPID, 
+                SwitchInportSrcIDs,
+                SwitchInportDstIDs,
+                BUFFER_SIZE, numOfSwitches);
+
+
+    assignSwitchPackets(SwitchOutportPID, 
+                SwitchOutportSrcIDs,
+                SwitchOutportDstIDs,
+                BUFFER_SIZE, numOfSwitches);
+
+
+    showSwitchPacketsAtPort(SwitchInportPID, SwitchInportSrcIDs, 
+                    SwitchInportDstIDs, BUFFER_SIZE, numOfSwitches);
+
+    showSwitchPacketsAtPort(SwitchOutportPID, SwitchOutportSrcIDs, 
+                    SwitchOutportDstIDs, BUFFER_SIZE, numOfSwitches);
+                
     showSwitchIDs(SwitchIDs, numOfSwitches);
 
     assignHosts(Hosts, numOfHosts, numOfSwitches);
