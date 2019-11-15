@@ -7,8 +7,8 @@
 int main(int argc, char** argv) 
 {
     int numOfPorts = 4;
-    int numOfSwitches = 20;
-    int numOfHosts = 16;
+    int numOfSwitches = numOfPorts * numOfPorts * 5 / 4;
+    int numOfHosts = numOfPorts * numOfPorts * numOfPorts / 4;
     int numOfInforAboutSwitch = 12;
     int bandwidth = 1000*1000;
 
@@ -79,30 +79,46 @@ int main(int argc, char** argv)
     int **SwitchEvtTimes = NULL;//Co 2*k inport, 2*k outport, 2*k channel tai 1 thoi diem
     //Vay co tong cong toi da 2*k + 2*2*k + 2*k = 8*k events tai 1 switch tai 1 thoi diem
 
-    assignSwitchIDs(SwitchIDs, numOfSwitches);
+    SwitchEvtTypes = malloc( sizeof * SwitchEvtTypes * numOfSwitches);
+    SwitchEvtTimes = malloc( sizeof * SwitchEvtTimes * numOfSwitches);
 
+    for(i = 0; i < numOfSwitches; i++)
+    {
+      SwitchEvtTypes[i] = malloc(sizeof * SwitchEvtTypes[i] * (8*numOfPorts));
+      SwitchEvtTimes[i] = malloc(sizeof * SwitchEvtTimes[i] * (8*numOfPorts));
+    }
+
+    //int **Addresses = NULL;
+    //Addresses = malloc(sizeof * Addresses * (numOfHosts + numOfSwitches));
+
+    assignSwitchIDs(SwitchIDs, numOfPorts);
+    showSwitchIDs(SwitchIDs, numOfSwitches);
 
     assignSwitchPackets(SwitchInportPID, 
                 SwitchInportSrcIDs,
                 SwitchInportDstIDs,
                 BUFFER_SIZE, numOfSwitches);
-
+    //printf("Here\n");
 
     assignSwitchPackets(SwitchOutportPID, 
                 SwitchOutportSrcIDs,
                 SwitchOutportDstIDs,
                 BUFFER_SIZE, numOfSwitches);
 
+    assignEvents(SwitchEvtTypes, SwitchEvtTimes, numOfPorts, numOfSwitches);
 
     showSwitchPacketsAtPort(SwitchInportPID, SwitchInportSrcIDs, 
                     SwitchInportDstIDs, BUFFER_SIZE, numOfSwitches);
 
     showSwitchPacketsAtPort(SwitchOutportPID, SwitchOutportSrcIDs, 
                     SwitchOutportDstIDs, BUFFER_SIZE, numOfSwitches);
-                
-    showSwitchIDs(SwitchIDs, numOfSwitches);
+    
+    
+    
 
-    assignHosts(Hosts, numOfHosts, numOfSwitches);
+    showEvents(SwitchEvtTypes, SwitchEvtTimes, numOfPorts, numOfSwitches);
+
+    assignHosts(Hosts, numOfHosts);
     //show(Hosts, numOfHosts);
     //echo(Link, numOfLinks);
     return 0;
