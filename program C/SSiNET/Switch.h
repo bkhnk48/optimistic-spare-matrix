@@ -7,13 +7,19 @@ void showSwitchPacketsAtPort(int **SwitchInportPID,
                 int **SwitchInportSrcIDs, int **SwitchInportDstIDs,
                 int bufferSize, int numOfSwitches);
 
-void assignSwitchIDs(int *SwitchIDs, int numOfSwitches);
+void showEvents(char **SwitchEvtTypes, int **SwitchEvtTimes, 
+                int numOfPorts, int numOfSwitches);
+
+void assignSwitchIDs(int *SwitchIDs, int numOfPorts);
 
 void assignSwitchPackets(int **SwitchInportPID, 
                 int **SwitchInportSrcIDs,
                 int **SwitchInportDstIDs,
                 int bufferSize, int numOfSwitches);
 
-//void assignEvent(int **SwitchEvtTypes, int **SwitchEvtTimes, 
-//                int numOfPorts, int numOfSwitches);
+void assignEvents(char **SwitchEvtTypes, int **SwitchEvtTimes, 
+                int numOfPorts, int numOfSwitches);
+
+
+
 
