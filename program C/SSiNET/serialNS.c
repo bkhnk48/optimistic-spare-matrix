@@ -88,11 +88,17 @@ int main(int argc, char** argv)
       SwitchEvtTimes[i] = malloc(sizeof * SwitchEvtTimes[i] * (8*numOfPorts));
     }
 
-    //int **Addresses = NULL;
-    //Addresses = malloc(sizeof * Addresses * (numOfHosts + numOfSwitches));
+    int **Addresses = NULL;
+    Addresses = malloc(sizeof * Addresses * (numOfHosts + numOfSwitches));
+    for(i = 0; i < numOfSwitches + numOfHosts; i++)
+    {
+      Addresses[i] = malloc(sizeof * Addresses[i] * 5);
+    }
+
+    setAddresses(Addresses, numOfPorts);
 
     assignSwitchIDs(SwitchIDs, numOfPorts);
-    showSwitchIDs(SwitchIDs, numOfSwitches);
+    //showSwitchIDs(SwitchIDs, numOfSwitches);
 
     assignSwitchPackets(SwitchInportPID, 
                 SwitchInportSrcIDs,
