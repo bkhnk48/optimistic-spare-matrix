@@ -72,12 +72,18 @@ int assignHosts(int **Hosts, int numOfHosts)
       }
       //id cua nut dich
       Hosts[i][8] = -1;
-      //event (h): thoi diem sinh ra, thoi diem ket thuc (thoi diem sinh ra + CREDIT_DELAY)
-      Hosts[i][9] = -1;  Hosts[i][10] = -1;
-      //event (c) cho gui goi tin tu outport cua Host len LINK: thoi diem sinh ra, thoi diem ket thuc (thoi diem sinh ra + RETRY_TIME)
-      Hosts[i][11] = -1;  Hosts[i][12] = -1;
+      //event (I): thoi diem ket thuc (thoi diem sinh ra + CREDIT_DELAY)
+      Hosts[i][9] = -1;  //Hosts[i][10] = -1;
+      //event (C) cho gui goi tin tu outport cua Host len LINK: thoi diem ket thuc (thoi diem sinh ra + RETRY_TIME)
+      Hosts[i][10] = -1;
+      //Hosts[i][11] = -1;  Hosts[i][12] = -1;
       
-      /////=> chac ko can: event (b) cho gui goi tin tu source queue den outport cua host: thoi diem sinh ra, thoi diem ket thuc (thoi diem sinh ra)
+      //event (B) cho gui goi tin tu source queue den outport cua host: thoi diem sinh ra, thoi diem ket thuc (thoi diem sinh ra)
+      Hosts[i][11] = -1;
+
+      //ID of link:
+      Hosts[i][12] = -1;
+
       //# of packets received in current interval
       Hosts[i][13] = 0; 
 
