@@ -2,24 +2,17 @@
 #include <stdlib.h> 
   
 
-void addEdge(int **adjacentMatrix, int u, int v)
-{
-    //printf("\tLink between %d and %d\n", u, v);
-    adjacentMatrix[u][v] = 1;
-    adjacentMatrix[v][u] = 1;
-}
-
-void addLink(int **Link, int **adjacentMatrix, int width, int height)
+void addLink(int **Link, int **adjacentMatrix, int width, int numOfLinks)
 {
     int i = 0, j = 0; int count = 0, index = 0;
+    int height = width;
+    
     for(i = 0; i < width; i++)
     {
         for(j = 0; j < height; j++)
         {   
             count += adjacentMatrix[i][j];
-            index = count - adjacentMatrix[i][j]*1;
-            if(adjacentMatrix[i][j] != 0)
-                printf("index = %d at %d , %d adj[][] = %d\n ", index, i, j, adjacentMatrix[i][j]);
+            index = (count - adjacentMatrix[i][j]*1) % numOfLinks;
             Link[index][0] += i*adjacentMatrix[i][j];/*id cua nut nguon*/
             Link[index][1] += j*adjacentMatrix[i][j];/*id cua nut dich*/
             Link[index][2] = -1;/*id cua goi tin*/
@@ -34,20 +27,24 @@ void addLink(int **Link, int **adjacentMatrix, int width, int height)
     }
 }
 
-void showLink(int **adjacentMatrix, int width, int height)
+void showLink(int **Links, int count)
 {
-    int i = 0, j = 0;
-    for(i = 0; i < width; i++)
+    int i = 0;
+    /*for(i = 0; i < width; i++)
     {
         for(j = 0; j < height; j++)
         {   
             if(adjacentMatrix[i][j] == 1)
                 printf("\tLink between %d and %d\n", i, j);
         }
+    }*/
+    for(i = 0; i < count; i++)
+    {
+        printf("\tLink between %d and %d\n", Links[i][0], Links[i][1]);
     }
 }
 
-void assignLink(int **Link, int k)
+void assignLink(int **Links, int k)
 {
     int p = 0, offset = 0, e, edgeSwitch, server, s, a;
     int aggSwitch, c, coreSwitch;
@@ -60,11 +57,10 @@ void assignLink(int **Link, int k)
     {
         adjacentMatrix[i] = malloc(sizeof * adjacentMatrix[i] * (numServers + numSwitches));
         for(j = 0; j < numServers + numSwitches; j++)
-        {   
-            adjacentMatrix[i][j] = 0;
-        }
+        {   adjacentMatrix[i][j] = 0;  }
     }
     // each pod has k^2/4 servers and k switches
+    int numOfLinks = 0;
     int numEachPod = k * k / 4 + k;
     for (p = 0; p < k; p++) {
         offset = numEachPod * p;
@@ -73,24 +69,26 @@ void assignLink(int **Link, int k)
             // between server and edge
             for (s = 0; s < k / 2; s++) {
                 server = offset + e * k / 2 + s;
-                addEdge(adjacentMatrix, edgeSwitch, server);
+                adjacentMatrix[edgeSwitch][server] = adjacentMatrix[server][edgeSwitch] = 1;
+                numOfLinks+= 2;
             }
             // between agg and edge
             for (a = k / 2; a < k; a++) {
                 aggSwitch = offset + k * k / 4 + a;
-                addEdge(adjacentMatrix, edgeSwitch, aggSwitch);
+                adjacentMatrix[edgeSwitch][aggSwitch] = adjacentMatrix[aggSwitch][edgeSwitch] = 1;
+                numOfLinks+= 2;
             }
             aggSwitch = offset + k * k / 4 + k / 2 + e;
             for (c = 0; c < k / 2; c++) {
                 coreSwitch = e * k / 2 + c + numPodSwitches + numServers;
-                addEdge(adjacentMatrix, aggSwitch, coreSwitch);
+                adjacentMatrix[aggSwitch][coreSwitch] = adjacentMatrix[coreSwitch][aggSwitch] = 1;
+                numOfLinks+= 2;
             }
         }
     }
 
-
-    //addLink(Link, adjacentMatrix, numServers + numSwitches, numServers + numSwitches);
-    showLink(adjacentMatrix, numServers + numSwitches, numServers + numSwitches);
+    addLink(Links, adjacentMatrix, numServers + numSwitches, numOfLinks);
+    showLink(Links, numOfLinks);
 }
 
 
