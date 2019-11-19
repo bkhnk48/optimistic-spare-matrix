@@ -32,6 +32,7 @@ int main(int argc, char** argv)
     }
 
     
+    assignLink(Link, numOfPorts);
 
     int **Hosts = NULL;
     int NUM_OF_FIELD_IN_HOST = 16;
@@ -97,24 +98,24 @@ int main(int argc, char** argv)
     assignSwitchIDs(SwitchIDs, numOfPorts);
     //showSwitchIDs(SwitchIDs, numOfSwitches);
 
-    assignSwitchPackets(SwitchInportPID, 
+    /* assignSwitchPackets(SwitchInportPID, 
                 SwitchInportSrcIDs,
                 SwitchInportDstIDs,
-                BUFFER_SIZE, numOfSwitches);
+                BUFFER_SIZE, numOfSwitches);*/
     //printf("Here\n");
 
-    assignSwitchPackets(SwitchOutportPID, 
+    /*assignSwitchPackets(SwitchOutportPID, 
                 SwitchOutportSrcIDs,
                 SwitchOutportDstIDs,
-                BUFFER_SIZE, numOfSwitches);
+                BUFFER_SIZE, numOfSwitches);*/
 
     assignEvents(SwitchEvtTypes, SwitchEvtTimes, numOfPorts, numOfSwitches);
 
-    showSwitchPacketsAtPort(SwitchInportPID, SwitchInportSrcIDs, 
-                    SwitchInportDstIDs, BUFFER_SIZE, numOfSwitches);
+    //showSwitchPacketsAtPort(SwitchInportPID, SwitchInportSrcIDs, 
+    //                SwitchInportDstIDs, BUFFER_SIZE, numOfSwitches);
 
-    showSwitchPacketsAtPort(SwitchOutportPID, SwitchOutportSrcIDs, 
-                    SwitchOutportDstIDs, BUFFER_SIZE, numOfSwitches);
+    //showSwitchPacketsAtPort(SwitchOutportPID, SwitchOutportSrcIDs, 
+    //                SwitchOutportDstIDs, BUFFER_SIZE, numOfSwitches);
     
     showEvents(SwitchEvtTypes, SwitchEvtTimes, numOfPorts, numOfSwitches);
 
