@@ -7,5 +7,5 @@ void show(int **Hosts, int numOfHosts);
 
 int getHostID(int index);
 
-int assignHosts(int **Hosts, int numOfHosts);
+void assignHosts(int **Hosts, int *IsHost, int numOfHosts);
 
