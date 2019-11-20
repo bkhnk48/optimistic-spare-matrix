@@ -23,16 +23,17 @@ int main(int argc, char** argv)
     //  toan bo goi tin se den nut dich khi nao?, bang thong
     int countOfInfoInLink = 10;
     int numOfLinks = numOfSwitches * numOfPorts + numOfHosts;
-    int **Link = NULL;
-    Link = malloc(sizeof * Link * numOfLinks);
+    int **Links = NULL;
+    Links = malloc(sizeof * Links * numOfLinks);
 
     for(i = 0; i < numOfLinks; i++)
     {
-      Link[i] = malloc(sizeof * Link[i] * countOfInfoInLink);
+      Links[i] = malloc(sizeof * Links[i] * countOfInfoInLink);
     }
 
     
-    assignLink(Link, numOfPorts);
+    assignLink(Links, numOfPorts);
+    showLink(Links, numOfLinks);
 
     int *IsHost = NULL;
     IsHost = malloc( sizeof * IsHost * (numOfHosts + numOfSwitches)); 
@@ -51,10 +52,14 @@ int main(int argc, char** argv)
     }
     assignHosts(Hosts, IsHost, numOfHosts);
 
-    int *SwitchIDs = NULL;
+    int *SwitchIndexes = NULL;//This array holds the indexes of switch IDs. For example, we have 4 switches with IDs: 4, 8, 9, 10
+                              //their indexes are: 1, 2, 3, 4
     int countOfInfoInSwitch = 15;
 
-    SwitchIDs = malloc( sizeof * SwitchIDs * numOfSwitches);
+    SwitchIndexes = malloc( sizeof * SwitchIndexes * (numOfSwitches + numOfHosts));
+
+    assignSwitchIndexes(SwitchIndexes, IsHost, numOfHosts + numOfSwitches);
+    //showSwitchIDs(SwitchIndexes, numOfHosts + numOfSwitches);
 
     int **SwitchPortPID = NULL; //Array stores IDs of packets in inport
     //int **SwitchOutportPID = NULL;//Array stores IDs of packets in outport
@@ -67,9 +72,9 @@ int main(int argc, char** argv)
 
     int BUFFER_SIZE = 5;
 
-    SwitchPortPID = malloc( sizeof * SwitchPortPID * (numOfSwitches * numOfPorts));
-    SwitchPortSrcIDs = malloc( sizeof * SwitchPortSrcIDs * (numOfSwitches * numOfPorts));
-    SwitchPortDstIDs = malloc( sizeof * SwitchPortDstIDs * (numOfSwitches * numOfPorts));
+    SwitchPortPID = malloc( sizeof * SwitchPortPID * (numOfSwitches * 2* numOfPorts));
+    SwitchPortSrcIDs = malloc( sizeof * SwitchPortSrcIDs * (numOfSwitches * 2 * numOfPorts));
+    SwitchPortDstIDs = malloc( sizeof * SwitchPortDstIDs * (numOfSwitches * 2 * numOfPorts));
 
     for(i = 0; i < numOfSwitches; i++)
     {
@@ -103,7 +108,7 @@ int main(int argc, char** argv)
 
     setAddresses(Addresses, numOfPorts);
 
-    assignSwitchIDs(SwitchIDs, numOfPorts);
+    
     //showSwitchIDs(SwitchIDs, numOfSwitches);
 
     /* assignSwitchPackets(SwitchInportPID, 
