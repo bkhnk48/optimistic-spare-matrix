@@ -6,7 +6,7 @@ void showSwitchIDs(int *SwitchIDs, int numOfSwitches)
     int i = 0;
     for(i = 0; i < numOfSwitches; i++)
     {
-        printf("\tWe have SwitchIDs[%d] with its ID: %d\n", i, SwitchIDs[i]);
+        printf("\tWe have SwitchIDs[%d] along with its index is: %d\n", i, SwitchIDs[i]);
     }
 }
 
@@ -63,32 +63,13 @@ void showEvents(char **SwitchEvtTypes, int **SwitchEvtTimes, int numOfPorts, int
     }
 }
 
-void assignSwitchIDs(int *SwitchIDs, int numOfPorts)
+void assignSwitchIndexes(int *SwitchIndexes, int *IsHost, int size)
 {
-    int i = 0, j = 0, p = 0, index = 0;
-    int numOfSwitches = 5 * numOfPorts * numOfPorts / 4;
-    int numEachPod = numOfPorts * numOfPorts / 4 + numOfPorts;
-    int numServers = numOfPorts * numOfPorts * numOfPorts / 4;
-    int numPodSwitches = numOfPorts * numOfPorts;
-
-    // IDs for pod's switches
-    for (p = 0; p < numOfPorts; p++) {
-        int offset = numEachPod * p;
-        for (int s = 0; s < numOfPorts; s++) {
-            int switchId = offset + numOfPorts * numOfPorts / 4 + s;
-            SwitchIDs[index] = switchId;  //address[switchId] = new Address(10, p, s, 1);
-            index++;
-        }
-    }
-
-    // IDs for core switches
-    for (j = 1; j <= numOfPorts / 2; j++) {
-        for (i = 1; i <= numOfPorts / 2; i++) {
-            int offset = numPodSwitches + numServers;
-            int switchId = offset + (j - 1) * numOfPorts / 2 + i - 1;
-            SwitchIDs[index] = switchId;
-            index++;  //address[switchId] = new Address(10, k, j, i);
-        }
+    int i = 0, index = 0;
+    for(i = 0; i < size; i++)
+    {
+        SwitchIndexes[i] = index*(1 - IsHost[i]) - IsHost[i];
+        index+= 1 - IsHost[i];
     }
 }
 
