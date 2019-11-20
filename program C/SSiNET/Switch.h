@@ -10,7 +10,7 @@ void showSwitchPacketsAtPort(int **SwitchInportPID,
 void showEvents(char **SwitchEvtTypes, int **SwitchEvtTimes, 
                 int numOfPorts, int numOfSwitches);
 
-void assignSwitchIDs(int *SwitchIDs, int numOfPorts);
+void assignSwitchIndexes(int *SwitchIndexes, int *IsHost, int size);
 
 void assignSwitchPackets(int **SwitchInportPID, 
                 int **SwitchInportSrcIDs,
