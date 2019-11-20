@@ -51,9 +51,10 @@ int getHostID(int index)
     {
         return ((index - 12) + 24);
     }
+    return 0;
 }
 
-int assignHosts(int **Hosts, int numOfHosts)
+void assignHosts(int **Hosts, int *IsHost, int numOfHosts)
 {
     int i = 0, j = 0;
     for(i = 0; i < numOfHosts; i++)
@@ -81,7 +82,7 @@ int assignHosts(int **Hosts, int numOfHosts)
       //event (B) cho gui goi tin tu source queue den outport cua host: thoi diem sinh ra, thoi diem ket thuc (thoi diem sinh ra)
       Hosts[i][11] = -1;
 
-      //ID of link:
+      //ID of link from it:
       Hosts[i][12] = -1;
 
       //# of packets received in current interval
@@ -89,6 +90,7 @@ int assignHosts(int **Hosts, int numOfHosts)
 
       //id cua host (trong danh sach cac nut cua toan mang)
       Hosts[i][14] = getHostID(i);
+      IsHost[Hosts[i][14]] = 1;
 
       //interval hien tai
       Hosts[i][15] = 0;
