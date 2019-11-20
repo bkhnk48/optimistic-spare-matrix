@@ -34,6 +34,13 @@ int main(int argc, char** argv)
     
     assignLink(Link, numOfPorts);
 
+    int *IsHost = NULL;
+    IsHost = malloc( sizeof * IsHost * (numOfHosts + numOfSwitches)); 
+    for(i = 0; i < numOfHosts + numOfSwitches; i++)
+    {
+      IsHost[i] = 0;
+    }
+
     int **Hosts = NULL;
     int NUM_OF_FIELD_IN_HOST = 16;
     Hosts = malloc( sizeof * Hosts * numOfHosts);
@@ -42,6 +49,7 @@ int main(int argc, char** argv)
     {
       Hosts[i] = malloc( sizeof * Hosts[i] * NUM_OF_FIELD_IN_HOST);
     }
+    assignHosts(Hosts, IsHost, numOfHosts);
 
     int *SwitchIDs = NULL;
     int countOfInfoInSwitch = 15;
@@ -65,7 +73,7 @@ int main(int argc, char** argv)
 
     for(i = 0; i < numOfSwitches; i++)
     {
-      SwitchPortPID[i] = malloc( sizeof * SwitchPortPID[i] * (2*BUFFER_SIZE));
+      SwitchPortPID[i] = malloc( sizeof * SwitchPortPID[i] * (2*BUFFER_SIZE + 2));
       SwitchPortSrcIDs[i] = malloc( sizeof * SwitchPortSrcIDs[i] * (2*BUFFER_SIZE));
       SwitchPortDstIDs[i] = malloc( sizeof * SwitchPortDstIDs[i] * (2*BUFFER_SIZE));
     }
@@ -119,7 +127,7 @@ int main(int argc, char** argv)
     
     showEvents(SwitchEvtTypes, SwitchEvtTimes, numOfPorts, numOfSwitches);
 
-    assignHosts(Hosts, numOfHosts);
+    
     //show(Hosts, numOfHosts);
     //echo(Link, numOfLinks);
     return 0;
