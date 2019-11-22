@@ -12,21 +12,24 @@ void show(int **Hosts, int numOfHosts)
     int i = 0, j = 0;
     for(i = 0; i < numOfHosts; i++)
     {
+        printf("\tHost[%d] dai dien cho node: %d, ket noi ben ngoai qua Link %d",
+                    i, Hosts[i][14], Hosts[i][12]
+                );
         if(Hosts[i][1] == -1 && Hosts[i][2] == -1)
         {
-            printf("Hosts[%d] khong co goi tin nao ca", Hosts[i][14]);
+            //printf("Hosts[%d] khong co goi tin nao ca", Hosts[i][14]);
         }
         if(Hosts[i][9] == -1 ||  Hosts[i][10] == -1)
         {
-            printf(", khong co su kien (h) nao ca");
+            //printf(", khong co su kien (h) nao ca");
         }
         if(Hosts[i][11] == -1 ||  Hosts[i][12] == -1)
         {
-            printf(", khong co su kien (c) nao ca");
+            //printf(", khong co su kien (c) nao ca");
         }
         if(Hosts[i][13] == 0)
         {
-            printf(", khong co packet nao duoc gui den ca");
+            //printf(", khong co packet nao duoc gui den ca");
         }
         printf("\n");
     }
@@ -97,3 +100,19 @@ void assignHosts(int **Hosts, int *IsHost, int numOfHosts)
     }
 }
 
+void assignLinkID(int **Hosts, int **Links, int *IsHost, int numOfLinks)
+{
+    int i, j;
+    int isHost = 0, index = 0, count = 0;
+    for(i = 0; i < numOfLinks; i++)
+    {
+        int idSrcNode = Links[i][0];
+        //printf("\tidSrcNode = %d ", idSrcNode);
+        isHost = IsHost[idSrcNode];
+        count += isHost;
+        //printf("isHost = %d ", isHost);
+        index = index*(1 - isHost) + isHost*(count - isHost);
+        //printf("index = %d\n", index);
+        Hosts[index][12] = Hosts[index][12]*(1 - isHost) + isHost*i;
+    }
+}
