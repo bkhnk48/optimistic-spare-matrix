@@ -102,17 +102,20 @@ void assignHosts(int **Hosts, int *IsHost, int numOfHosts)
 
 void assignLinkID(int **Hosts, int **Links, int *IsHost, int numOfLinks)
 {
-    int i, j;
-    int isHost = 0, index = 0, count = 0;
+    int i, j; //int isHostAtDst = 0;
+    int isHostAtSrc = 0, index = 0, count = 0; 
     for(i = 0; i < numOfLinks; i++)
     {
         int idSrcNode = Links[i][0];
+        int idDstNode = Links[i][1];
         //printf("\tidSrcNode = %d ", idSrcNode);
-        isHost = IsHost[idSrcNode];
-        count += isHost;
+        isHostAtSrc = IsHost[idSrcNode];
+        Links[i][10] = IsHost[idSrcNode];
+        Links[i][11] = IsHost[idDstNode];
+        count += isHostAtSrc;
         //printf("isHost = %d ", isHost);
-        index = index*(1 - isHost) + isHost*(count - isHost);
+        index = index*(1 - isHostAtSrc) + isHostAtSrc*(count - isHostAtSrc);
         //printf("index = %d\n", index);
-        Hosts[index][12] = Hosts[index][12]*(1 - isHost) + isHost*i;
+        Hosts[index][12] = Hosts[index][12]*(1 - isHostAtSrc) + isHostAtSrc*i;
     }
 }
