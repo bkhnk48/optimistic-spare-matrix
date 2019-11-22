@@ -51,6 +51,8 @@ int main(int argc, char** argv)
       Hosts[i] = malloc( sizeof * Hosts[i] * NUM_OF_FIELD_IN_HOST);
     }
     assignHosts(Hosts, IsHost, numOfHosts);
+    assignLinkID(Hosts, Links, IsHost, numOfLinks);
+    //show(Hosts, numOfHosts);
 
     int *SwitchIndexes = NULL;//This array holds the indexes of switch IDs. For example, we have 4 switches with IDs: 4, 8, 9, 10
                               //their indexes are: 1, 2, 3, 4
@@ -60,6 +62,14 @@ int main(int argc, char** argv)
 
     assignSwitchIndexes(SwitchIndexes, IsHost, numOfHosts + numOfSwitches);
     //showSwitchIDs(SwitchIndexes, numOfHosts + numOfSwitches);
+
+    int *MapFromNodesToPorts = NULL;//Array stores all mapping from Destination ID to Port 
+          //of switches
+    MapFromNodesToPorts = malloc( sizeof * MapFromNodesToPorts * (numOfSwitches * numOfPorts));
+    for(i = 0; i < numOfSwitches * numOfPorts; i++)
+    {
+      MapFromNodesToPorts[i] = 0;
+    }
 
     int **SwitchPortPID = NULL; //Array stores IDs of packets in inport
     //int **SwitchOutportPID = NULL;//Array stores IDs of packets in outport
@@ -72,28 +82,29 @@ int main(int argc, char** argv)
 
     int BUFFER_SIZE = 5;
 
-    SwitchPortPID = malloc( sizeof * SwitchPortPID * (numOfSwitches * 2* numOfPorts));
-    SwitchPortSrcIDs = malloc( sizeof * SwitchPortSrcIDs * (numOfSwitches * 2 * numOfPorts));
-    SwitchPortDstIDs = malloc( sizeof * SwitchPortDstIDs * (numOfSwitches * 2 * numOfPorts));
+    SwitchPortPID = malloc( sizeof * SwitchPortPID * (numOfSwitches * numOfPorts));
+    SwitchPortSrcIDs = malloc( sizeof * SwitchPortSrcIDs * (numOfSwitches * numOfPorts));
+    SwitchPortDstIDs = malloc( sizeof * SwitchPortDstIDs * (numOfSwitches * numOfPorts));
 
     for(i = 0; i < numOfSwitches; i++)
     {
-      SwitchPortPID[i] = malloc( sizeof * SwitchPortPID[i] * (2*BUFFER_SIZE + 2));
+      SwitchPortPID[i] = malloc( sizeof * SwitchPortPID[i] * (2*BUFFER_SIZE + 2));//Nhan 2 vi chua ca
+                      //inport va outport, ngoai ra luu tru 2 ID dau tien cua link
       SwitchPortSrcIDs[i] = malloc( sizeof * SwitchPortSrcIDs[i] * (2*BUFFER_SIZE));
       SwitchPortDstIDs[i] = malloc( sizeof * SwitchPortDstIDs[i] * (2*BUFFER_SIZE));
     }
 
     char **SwitchEvtTypes = NULL;
-    int **SwitchEvtTimes = NULL;//Co 2*k inport, 2*k outport, 2*k channel tai 1 thoi diem
-    //Vay co tong cong toi da 2*k + 2*2*k + 2*k = 8*k events tai 1 switch tai 1 thoi diem
+    int **SwitchEvtTimes = NULL;//Co k inport, k outport, k channel tai 1 thoi diem
+    //Vay co tong cong toi da k + 2*k + k = 4*k events tai 1 switch tai 1 thoi diem
 
     SwitchEvtTypes = malloc( sizeof * SwitchEvtTypes * (numOfSwitches * numOfPorts));
     SwitchEvtTimes = malloc( sizeof * SwitchEvtTimes * (numOfSwitches * numOfPorts));
 
     for(i = 0; i < numOfSwitches; i++)
     {
-      SwitchEvtTypes[i] = malloc(sizeof * SwitchEvtTypes[i] * (8));
-      SwitchEvtTimes[i] = malloc(sizeof * SwitchEvtTimes[i] * (8));
+      SwitchEvtTypes[i] = malloc(sizeof * SwitchEvtTypes[i] * (4));
+      SwitchEvtTimes[i] = malloc(sizeof * SwitchEvtTimes[i] * (4));
     }
 
     int **switchRT = NULL;
