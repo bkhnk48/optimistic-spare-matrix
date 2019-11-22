@@ -63,13 +63,20 @@ int main(int argc, char** argv)
     assignSwitchIndexes(SwitchIndexes, IsHost, numOfHosts + numOfSwitches);
     //showSwitchIDs(SwitchIndexes, numOfHosts + numOfSwitches);
 
-    int *MapFromNodesToPorts = NULL;//Array stores all mapping from Destination ID to Port 
+    int **MapFromNodesToPorts = NULL;//Array stores all mapping from Destination ID to Port 
           //of switches
-    MapFromNodesToPorts = malloc( sizeof * MapFromNodesToPorts * (numOfSwitches * numOfPorts));
-    for(i = 0; i < numOfSwitches * numOfPorts; i++)
+    MapFromNodesToPorts = malloc( sizeof * MapFromNodesToPorts * (numOfSwitches + numOfHosts));
+    for(i = 0; i < numOfSwitches + numOfHosts; i++)
     {
-      MapFromNodesToPorts[i] = 0;
+      MapFromNodesToPorts[i] = malloc( sizeof * MapFromNodesToPorts[i] * numOfPorts);
+      for(j = 0; j < numOfPorts; j++)
+      {
+        MapFromNodesToPorts[i][j] = 0;
+      }
     }
+    mappingNodeToPort(MapFromNodesToPorts, Links, //int *SwitchIndexes, 
+                            numOfLinks, numOfPorts);
+    
 
     int **SwitchPortPID = NULL; //Array stores IDs of packets in inport
     //int **SwitchOutportPID = NULL;//Array stores IDs of packets in outport
