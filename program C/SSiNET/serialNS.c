@@ -65,7 +65,7 @@ int main(int argc, char** argv)
 
     int **MapFromNodesToPorts = NULL;//Array stores all mapping from Destination ID to Port 
           //of switches
-    MapFromNodesToPorts = malloc( sizeof * MapFromNodesToPorts * (numOfSwitches + numOfHosts));
+    MapFromNodesToPorts = malloc( sizeof * MapFromNodesToPorts * numOfSwitches);
     for(i = 0; i < numOfSwitches + numOfHosts; i++)
     {
       MapFromNodesToPorts[i] = malloc( sizeof * MapFromNodesToPorts[i] * numOfPorts);
@@ -74,7 +74,7 @@ int main(int argc, char** argv)
         MapFromNodesToPorts[i][j] = 0;
       }
     }
-    mappingNodeToPort(MapFromNodesToPorts, Links, //int *SwitchIndexes, 
+    mappingNodeToPort(MapFromNodesToPorts, Links, SwitchIndexes, 
                             numOfLinks, numOfPorts);
     
 
