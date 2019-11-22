@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 
     
     assignLink(Links, numOfPorts);
-    showLink(Links, numOfLinks);
+    //showLink(Links, numOfLinks);
 
     int *IsHost = NULL;
     IsHost = malloc( sizeof * IsHost * (numOfHosts + numOfSwitches)); 
