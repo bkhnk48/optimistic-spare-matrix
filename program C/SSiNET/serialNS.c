@@ -21,7 +21,7 @@ int main(int argc, char** argv)
     //  tren mot chieu se co id cua nut nguon, id cua nut dich, id cua goi tin, id cua Host nguon,
     //  id cua Host dich, nix-vector (?), kich thuoc goi tin, bit dau tien cua goi tin se den vao luc nao,
     //  toan bo goi tin se den nut dich khi nao?, bang thong
-    int countOfInfoInLink = 10;
+    int countOfInfoInLink = 12;
     int numOfLinks = numOfSwitches * numOfPorts + numOfHosts;
     int **Links = NULL;
     Links = malloc(sizeof * Links * numOfLinks);
@@ -68,7 +68,7 @@ int main(int argc, char** argv)
     MapFromNodesToPorts = malloc( sizeof * MapFromNodesToPorts * numOfSwitches);
     for(i = 0; i < numOfSwitches + numOfHosts; i++)
     {
-      MapFromNodesToPorts[i] = malloc( sizeof * MapFromNodesToPorts[i] * numOfPorts);
+      MapFromNodesToPorts[i] = malloc( sizeof * MapFromNodesToPorts[i] * (numOfPorts));
       for(j = 0; j < numOfPorts; j++)
       {
         MapFromNodesToPorts[i][j] = 0;
@@ -96,7 +96,7 @@ int main(int argc, char** argv)
     for(i = 0; i < numOfSwitches; i++)
     {
       SwitchPortPID[i] = malloc( sizeof * SwitchPortPID[i] * (2*BUFFER_SIZE + 2));//Nhan 2 vi chua ca
-                      //inport va outport, ngoai ra luu tru 2 ID dau tien cua link
+                      //inport va outport, ngoai ra luu tru ID cua link
       SwitchPortSrcIDs[i] = malloc( sizeof * SwitchPortSrcIDs[i] * (2*BUFFER_SIZE));
       SwitchPortDstIDs[i] = malloc( sizeof * SwitchPortDstIDs[i] * (2*BUFFER_SIZE));
     }
