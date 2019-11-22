@@ -21,6 +21,6 @@ void assignEvents(char **SwitchEvtTypes, int **SwitchEvtTimes,
                 int numOfPorts, int numOfSwitches);
 
 void mappingNodeToPort(int **MapFromNodesToPorts, int **Links, 
-            //int *SwitchIndexes, 
+            int *SwitchIndexes, 
             int numOfLinks, int numOfPorts);
 
