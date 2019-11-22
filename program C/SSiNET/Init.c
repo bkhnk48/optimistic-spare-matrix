@@ -43,7 +43,7 @@ void setAddresses(int **Addresses, int numOfPorts)
             int switchId = offset + numOfPorts * numOfPorts / 4 + s;
             Addresses[switchId][0] = 10;   Addresses[switchId][1] = p;
             Addresses[switchId][2] = s;    Addresses[switchId][3] = 1;
-            printf("Address of pod switch: %d is %d.%d.%d.%d\n", switchId, 10, p, s, 1);
+            //printf("Address of pod switch: %d is %d.%d.%d.%d\n", switchId, 10, p, s, 1);
         }
     }
     offset = numPodSwitches + numServers;
@@ -53,7 +53,7 @@ void setAddresses(int **Addresses, int numOfPorts)
             int switchId = offset + (j - 1) * numOfPorts / 2 + i - 1;
             Addresses[switchId][0] = 10;       Addresses[switchId][1] = numOfPorts;
             Addresses[switchId][2] = j;        Addresses[switchId][3] = i;
-            printf("Address of core switch: %d is %d.%d.%d.%d\n", switchId, 10, numOfPorts, j, i);
+            //printf("Address of core switch: %d is %d.%d.%d.%d\n", switchId, 10, numOfPorts, j, i);
         }
     }
     offset = numEachPod * p;
@@ -64,7 +64,7 @@ void setAddresses(int **Addresses, int numOfPorts)
                 int serverId = offset + e * numOfPorts / 2 + h - 2;
                 Addresses[serverId][0] = 10;   Addresses[serverId][1] = p;
                 Addresses[serverId][2] = e;    Addresses[serverId][3] = h;
-                printf("Address of server: %d is %d.%d.%d.%d\n", serverId, 10, p, e, h);
+                //printf("Address of server: %d is %d.%d.%d.%d\n", serverId, 10, p, e, h);
             }
         }
     }
