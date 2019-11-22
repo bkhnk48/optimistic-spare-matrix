@@ -89,6 +89,7 @@ void assignLink(int **Links, int k)
 
     addLink(Links, adjacentMatrix, numServers + numSwitches, numOfLinks);
     //showLink(Links, numOfLinks);
+    free(adjacentMatrix);
 }
 
 
