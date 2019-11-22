@@ -107,21 +107,26 @@ void assignEvents(char **SwitchEvtTypes, int **SwitchEvtTimes,
 }
 
 
-void mappingNodeToPort(int **MapFromNodesToPorts, int **Links, //int *SwitchIndexes, 
+void mappingNodeToPort(int **MapFromNodesToPorts, int **Links, int *SwitchIndexes, 
                             int numOfLinks, int numOfPorts)
 {
-    int i = 0, x = 0, y = 0; int index = 0;int count = 0; int previousNode = 0;
+    int i = 0, x = 0, y = 0, z = 0; int index = 0;int count = 0; int previousNode = 0;
     for(i = 0; i < numOfLinks; i++)
     {
         int idSrcNode = Links[i][0];
         int idDstNode = Links[i][1];
+        index = SwitchIndexes[idSrcNode];
+        z = (index)>>(sizeof(int)*8 - 1);
+        //Neu index < 0 thi z = -1, nguoc lai z = 0
+        z = z + 1; //z = 0 neu day la Host hoac 1 neu day la Switch
 
         y = (previousNode - idSrcNode)>>(sizeof(int)*8 - 1);
         //Neu previousNode < idSrcnode thi y = -1, nguoc lai y = 0
         count = count*(1 + y);
 
-        MapFromNodesToPorts[idSrcNode][count] = idDstNode;
-        printf("\nMapFromNodesToPorts[%d][%d] = %d", idSrcNode, count, idDstNode);
+        MapFromNodesToPorts[z*index][count] = MapFromNodesToPorts[z*index][count] + z*idDstNode;
+        if(SwitchIndexes[idSrcNode] != -1)
+            printf("\nMapFromNodesToPorts[%d][%d] at switch ID: %d -> %d", index, count, idSrcNode, idDstNode);
         count++;
         x = (count - numOfPorts)>>(sizeof(int)*8 - 1);
         //Neu count < numOfPorts thi x = -1, nguoc lai x = 0
