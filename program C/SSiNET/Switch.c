@@ -74,21 +74,29 @@ void assignSwitchIndexes(int *SwitchIndexes, int *IsHost, int size)
 }
 
 
-void assignSwitchPackets(int **SwitchInportPID, 
-                int **SwitchInportSrcIDs,
-                int **SwitchInportDstIDs,
-                int bufferSize, int numOfSwitches)
+void assignSwitchPackets(int **SwitchPortPID, 
+                //int **SwitchInportSrcIDs,
+                //int **SwitchInportDstIDs,
+                int **Links,
+                int bufferSize, int numOfLinks
+                , int numOfPorts)
 {
-    int i = 0, j = 0;
-    for(i = 0; i < numOfSwitches; i++)
+    int i = 0, x = 0, y = 0, z = 0; 
+    int index = 0;int count = 0; int previousNode = 0;
+    int srcIsHost = 0, dstIsHost = 0;
+    for(i = 0; i < numOfLinks; i++)
     {
-        for(j = 0; j < bufferSize; j++)
-        {
-            SwitchInportPID[i][j] = -1;
-            SwitchInportSrcIDs[i][j] = -1;
-            SwitchInportDstIDs[i][j] = -1;
-        }
-    } 
+        int idSrcNode = Links[i][0];
+        int idDstNode = Links[i][1];
+        index = Links[i][10];//index = 1 nghia la nut hien tai la Host, otherwise switch
+        z = (-index)>>(sizeof(int)*8 - 1);
+        //Neu index = 1 thi z = -1, nguoc lai z = 0
+        z = z + 1; //z = 0 neu day la Host hoac 1 neu day la Switch
+        
+        y = (previousNode - idSrcNode)>>(sizeof(int)*8 - 1);
+        //Neu previousNode < idSrcnode thi y = -1, nguoc lai y = 0
+        count = count*(1 + y);
+    }
 }
 
 
