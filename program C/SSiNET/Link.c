@@ -23,6 +23,9 @@ void addLink(int **Link, int **adjacentMatrix, int width, int numOfLinks)
             Link[index][7] = 0;/*thoi diem bit dau den*/
             Link[index][8] = 0;/*thoi diem bit cuoi den*/
             Link[index][9] = 0;/*bandwidth*/
+            Link[index][10] = 0;/*bang 0 nghia la nut nguon ko phai la Host*/
+            Link[index][11] = 0;/*bang 1 nghia la nut dich la Host*/
+
         }
     }
 }
