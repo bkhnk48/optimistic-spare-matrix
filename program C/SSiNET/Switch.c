@@ -105,3 +105,34 @@ void assignEvents(char **SwitchEvtTypes, int **SwitchEvtTimes,
         }
     } 
 }
+
+
+void mappingNodeToPort(int **MapFromNodesToPorts, int **Links, //int *SwitchIndexes, 
+                            int numOfLinks, int numOfPorts)
+{
+    int i = 0, x = 0, y = 0; int index = 0;int count = 0; int previousNode = 0;
+    for(i = 0; i < numOfLinks; i++)
+    {
+        int idSrcNode = Links[i][0];
+        int idDstNode = Links[i][1];
+
+        y = (previousNode - idSrcNode)>>(sizeof(int)*8 - 1);
+        //Neu previousNode < idSrcnode thi y = -1, nguoc lai y = 0
+        count = count*(1 + y);
+
+        MapFromNodesToPorts[idSrcNode][count] = idDstNode;
+        printf("\nMapFromNodesToPorts[%d][%d] = %d", idSrcNode, count, idDstNode);
+        count++;
+        x = (count - numOfPorts)>>(sizeof(int)*8 - 1);
+        //Neu count < numOfPorts thi x = -1, nguoc lai x = 0
+        
+        //printf(" x = %d, y = %d", x, y);
+        //printf(" old count = %d", count);
+        count = (-x)*count; 
+        //printf(" new count = %d", count);
+        previousNode = idSrcNode;
+        //printf("Test am duong \n\t\t x = %d", -x);
+        //x = (11 - 17)>>(sizeof(int)*8 - 1);
+        //printf("Test am duong \n\t\t x = %d", -x);
+    } 
+}
