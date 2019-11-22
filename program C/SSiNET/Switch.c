@@ -125,19 +125,11 @@ void mappingNodeToPort(int **MapFromNodesToPorts, int **Links, int *SwitchIndexe
         count = count*(1 + y);
 
         MapFromNodesToPorts[z*index][count] = MapFromNodesToPorts[z*index][count] + z*idDstNode;
-        if(SwitchIndexes[idSrcNode] != -1)
-            printf("\nMapFromNodesToPorts[%d][%d] at switch ID: %d -> %d", index, count, idSrcNode, idDstNode);
         count++;
         x = (count - numOfPorts)>>(sizeof(int)*8 - 1);
         //Neu count < numOfPorts thi x = -1, nguoc lai x = 0
         
-        //printf(" x = %d, y = %d", x, y);
-        //printf(" old count = %d", count);
         count = (-x)*count; 
-        //printf(" new count = %d", count);
         previousNode = idSrcNode;
-        //printf("Test am duong \n\t\t x = %d", -x);
-        //x = (11 - 17)>>(sizeof(int)*8 - 1);
-        //printf("Test am duong \n\t\t x = %d", -x);
     } 
 }
