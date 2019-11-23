@@ -3,6 +3,7 @@
 #include "Host.h"
 #include "Switch.h"
 #include "Link.h"
+#include "RoutingTable.h"
 
 
 int main(int argc, char** argv) 
@@ -147,7 +148,54 @@ int main(int argc, char** argv)
     
     showEvents(SwitchEvtTypes, SwitchEvtTimes, numOfPorts, numOfSwitches);
 
+    int **HavingSuffix = NULL;
+    int **HavingPrefix = NULL;
+    int **HavingCorePrefix = NULL;
     
+    HavingSuffix = malloc(sizeof * HavingSuffix * (numOfHosts + numOfSwitches));
+    HavingPrefix = malloc(sizeof * HavingPrefix * (numOfHosts + numOfSwitches));
+    HavingCorePrefix = malloc(sizeof * HavingCorePrefix * (numOfHosts + numOfSwitches));
+    for(i = 0; i < numOfSwitches + numOfHosts; i++)
+    {
+      HavingSuffix[i] = malloc(sizeof * HavingSuffix[i] * 2);
+      HavingSuffix[i][0] = 0; HavingSuffix[i][1] = 0;
+      HavingPrefix[i] = malloc(sizeof * HavingPrefix[i] * 2);
+      HavingPrefix[i][0] = 0; HavingPrefix[i][1] = 0;
+      HavingCorePrefix[i] = malloc(sizeof * HavingCorePrefix[i] * 2);
+      HavingCorePrefix[i][0] = 0; HavingCorePrefix[i][1] = 0;
+    }
+
+    int numOfSuffix = setHavingSuffix(HavingSuffix, numOfPorts);
+
+    int numOfPrefix = setHavingPrefix(HavingPrefix, numOfPorts);
+
+    int numOfCorePrefix = setHavingCorePrefix(HavingCorePrefix, numOfPorts);
+
+    int **Suffix = NULL; int **Prefix = NULL;
+    Suffix = malloc(sizeof * Suffix * numOfSuffix);
+    Prefix = malloc(sizeof * Prefix * numOfPrefix);
+
+    for(i = 0; i < numOfSuffix; i++)
+    {
+      Suffix[i] = malloc(sizeof * Suffix[i] * numOfPorts);
+      for(j = 0; j < numOfPorts; j++)
+      {
+        Suffix[i][j] = 0; 
+      }
+    }
+
+    for(i = 0; i < numOfPrefix; i++)
+    {
+      Prefix[i] = malloc(sizeof * Prefix[i] * (2 * numOfPorts));
+      for(j = 0; j < 2*numOfPorts; j++)
+      {
+        Prefix[i][j] = 0; 
+      }
+    }
+
+    setSuffix(Suffix, numOfPorts);
+    setPrefix(Prefix, numOfPorts);
+
     //show(Hosts, numOfHosts);
     //echo(Link, numOfLinks);
     return 0;
