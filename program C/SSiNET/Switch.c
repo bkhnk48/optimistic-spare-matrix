@@ -75,8 +75,6 @@ void assignSwitchIndexes(int *SwitchIndexes, int *IsHost, int size)
 
 
 void assignSwitchPackets(int **SwitchPortPID, 
-                //int **SwitchInportSrcIDs,
-                //int **SwitchInportDstIDs,
                 int **Links,
                 int bufferSize, int numOfLinks
                 , int numOfPorts)
@@ -88,15 +86,25 @@ void assignSwitchPackets(int **SwitchPortPID,
     {
         int idSrcNode = Links[i][0];
         int idDstNode = Links[i][1];
-        index = Links[i][10];//index = 1 nghia la nut hien tai la Host, otherwise switch
-        z = (-index)>>(sizeof(int)*8 - 1);
-        //Neu index = 1 thi z = -1, nguoc lai z = 0
-        z = z + 1; //z = 0 neu day la Host hoac 1 neu day la Switch
-        
-        y = (previousNode - idSrcNode)>>(sizeof(int)*8 - 1);
-        //Neu previousNode < idSrcnode thi y = -1, nguoc lai y = 0
-        count = count*(1 + y);
+        srcIsHost = Links[i][10];//index = 1 nghia la nut hien tai la Host, otherwise switch
+        z = 1 - srcIsHost; //z = 0 neu day la Host hoac 1 neu day la Switch
+        SwitchPortPID[z*index + (1-z)*previousNode][0] = 
+                        SwitchPortPID[z*index + (1-z)*previousNode][0] + z*idSrcNode;
+        SwitchPortPID[z*index + (1-z)*previousNode][6] = 
+                        SwitchPortPID[z*index + (1-z)*previousNode][6] + z*idDstNode;
+        //printf("\n\t Access: %d", z*i + (1-z)*previousNode);
+        previousNode = index;
+        index += z;
     }
+
+    /*for(i = 0; i < index; i++)
+    {
+        if(Links[i][10] == 0)
+        {
+            printf("\t port of %d connect from %d to %d\n", SwitchPortPID[i][0],
+                                   SwitchPortPID[i][0],  SwitchPortPID[i][6]);             
+        }
+    }*/
 }
 
 
