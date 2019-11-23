@@ -13,8 +13,6 @@ void showEvents(char **SwitchEvtTypes, int **SwitchEvtTimes,
 void assignSwitchIndexes(int *SwitchIndexes, int *IsHost, int size);
 
 void assignSwitchPackets(int **SwitchPortPID, 
-                //int **SwitchInportSrcIDs,
-                //int **SwitchInportDstIDs,
                 int **Links,
                 int bufferSize, int numOfSwitches
                 , int numOfPorts);
