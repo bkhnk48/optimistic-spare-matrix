@@ -1,6 +1,6 @@
 #include <stdio.h> 
 #include <stdlib.h> 
-  
+#include "Switch.h"
 
 void addLink(int **Link, int **adjacentMatrix, int width, int numOfLinks)
 {
@@ -95,6 +95,11 @@ void assignLink(int **Links, int k)
     free(adjacentMatrix);
 }
 
+
+void showLinksInGraph(Graph graph)
+{
+    showLink(graph->Links, graph->numOfLinks);
+}
 
 
 
