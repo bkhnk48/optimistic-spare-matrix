@@ -172,8 +172,10 @@ int main(int argc, char** argv)
     int numOfCorePrefix = setHavingCorePrefix(HavingCorePrefix, numOfPorts);
 
     int **Suffix = NULL; int **Prefix = NULL;
+    int **CorePrefix = NULL;
     Suffix = malloc(sizeof * Suffix * numOfSuffix);
     Prefix = malloc(sizeof * Prefix * numOfPrefix);
+    CorePrefix = malloc(sizeof * CorePrefix * numOfCorePrefix);
 
     for(i = 0; i < numOfSuffix; i++)
     {
@@ -193,8 +195,23 @@ int main(int argc, char** argv)
       }
     }
 
+    for(i = 0; i < numOfCorePrefix; i++)
+    {
+      CorePrefix[i] = malloc(sizeof * CorePrefix[i] * (3 * numOfPorts));
+      for(j = 0; j < 3*numOfPorts; j++)
+      {
+        CorePrefix[i][j] = 0; 
+      }
+    }
+
     setSuffix(Suffix, numOfPorts);
     setPrefix(Prefix, numOfPorts);
+
+    setCorePrefix(CorePrefix, numOfPorts);
+
+    showTwoLevelsRoutingTable(HavingSuffix, HavingPrefix, HavingCorePrefix
+                        , Suffix, Prefix, CorePrefix, numOfPorts
+                            );
 
     //show(Hosts, numOfHosts);
     //echo(Link, numOfLinks);
