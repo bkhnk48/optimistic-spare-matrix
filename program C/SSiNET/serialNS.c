@@ -232,11 +232,31 @@ int main(int argc, char** argv)
     //showLinksInGraph(graph);
     //showHosts(graph);
     //showSwitchGraph(graph);
-    showAddresses(graph->Addresses, graph->numOfHosts + graph->numOfSwitches);
+    //showAddresses(graph->Addresses, graph->numOfHosts + graph->numOfSwitches);
     
     RAlgorithm ra;
     ra = (RAlgorithm)malloc(sizeof(struct ROUTING_ALGORITHM));
+    ra->numOfLinks = numOfLinks;
+    ra->numOfHosts = numOfHosts;
+    ra->numOfPorts = numOfPorts;
+    ra->numOfSwitches = numOfSwitches;
+    ra->SwitchEvtTypes = SwitchEvtTypes;
+    ra->SwitchEvtTimes = SwitchEvtTimes; 
+    ra->SwitchPortPID = SwitchPortPID; //Array stores IDs of packets in inport
+    ra->SwitchPortSrcIDs = SwitchPortSrcIDs;
+    ra->SwitchPortDstIDs = SwitchPortDstIDs;
+    ra->HavingSuffix = HavingSuffix;
+    ra->HavingPrefix = HavingPrefix;
+    ra->HavingCorePrefix = HavingCorePrefix;
+    ra->Suffix = Suffix; 
+    ra->Prefix = Prefix;
+    ra->CorePrefix = CorePrefix;
 
+    //show2LevelsRTable(ra);
+    //int hopCount = 0;
+    printf("cooerser");
+    getNixVector(0, 8, ra, graph//, &hopCount 
+                    );
     return 0;
 }
 
