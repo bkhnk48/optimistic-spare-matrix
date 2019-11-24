@@ -2,6 +2,7 @@
 #include <stdlib.h> 
 #include <limits.h> 
 #include "ErrorReport.c"
+#include "Graph.c"
 
 
 
@@ -57,15 +58,19 @@ void setAddresses(int **Addresses, int numOfPorts)
         }
     }
     offset = numEachPod * p;
+    //int countServer = 0;
     for (p = 0; p < numOfPorts; p++) {
         offset = numEachPod * p;
         for (e = 0; e < numOfPorts / 2; e++) {
             for (h = 2; h <= numOfPorts / 2 + 1; h++) {
                 int serverId = offset + e * numOfPorts / 2 + h - 2;
+                //countServer++;
                 Addresses[serverId][0] = 10;   Addresses[serverId][1] = p;
                 Addresses[serverId][2] = e;    Addresses[serverId][3] = h;
                 //printf("Address of server: %d is %d.%d.%d.%d\n", serverId, 10, p, e, h);
             }
         }
     }
+
+    //printf("\n\nCOUNT SERVER = %d\n\n", countServer);
 }
