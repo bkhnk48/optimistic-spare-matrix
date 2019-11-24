@@ -224,3 +224,12 @@ void showTwoLevelsRoutingTable(int **HavingSuffix, int **HavingPrefix, int **Hav
         }
     }
 }
+
+void show2LevelsRTable(RAlgorithm ra
+                            )
+{
+    showTwoLevelsRoutingTable(ra->HavingSuffix,
+            ra->HavingPrefix, ra->HavingCorePrefix,
+            ra->Suffix, ra->Prefix, ra->CorePrefix, ra->numOfPorts
+        );
+}
