@@ -233,8 +233,10 @@ int main(int argc, char** argv)
     //showHosts(graph);
     //showSwitchGraph(graph);
     showAddresses(graph->Addresses, graph->numOfHosts + graph->numOfSwitches);
-    //show(Hosts, numOfHosts);
-    //echo(Link, numOfLinks);
+    
+    RAlgorithm ra;
+    ra = (RAlgorithm)malloc(sizeof(struct ROUTING_ALGORITHM));
+
     return 0;
 }
 
