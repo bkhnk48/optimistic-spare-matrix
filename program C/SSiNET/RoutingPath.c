@@ -6,15 +6,12 @@ void getNixVector(int src,int dst, RAlgorithm ra, Graph g
                         )
 {
     Step step = NULL;
-    printf("src=%d %d",src, dst);
     step = malloc(sizeof(Step));
-    printf("src=%d %d",src, dst);
     step->node = -1;
     step->port = -1;
     Step tail = NULL;
     int current = src;
-    //printf("\n");
-    printf("%d %d",current, dst);
+    printf("\n%d",src);
     while (current != dst) {
         if (current != src) {
             if(step->node == -1)
@@ -30,11 +27,10 @@ void getNixVector(int src,int dst, RAlgorithm ra, Graph g
                 tail = next;
             }
         }
-        printf("fdsdfsdf");
         current = getNextNode(src, current, dst, ra, g
                         //, &hopCount
                         );
-        printf("->%d->", current);
+        printf("->%d", current);
     }
 }
 
@@ -73,9 +69,9 @@ int getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCo
     if(find) return nextIsDst;
 
 
-    int addr[] = {0, 0, 0, 0};
-    addr[0] = g->Addresses[curr][0]; addr[1] = g->Addresses[curr][1];
-    addr[2] = g->Addresses[curr][2]; addr[3] = g->Addresses[curr][3];
+    int addr[4] = {0, 0, 0, 0};
+    addr[0] = g->Addresses[dst][0]; addr[1] = g->Addresses[dst][1];
+    addr[2] = g->Addresses[dst][2]; addr[3] = g->Addresses[dst][3];
 
     //if (type == FatTreeGraph.CORE) {
     int isCore = ra->HavingCorePrefix[curr][0];//0 hoac 1
@@ -121,6 +117,14 @@ int getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCo
             }
             break;
         case 4://La Agg
+            AggIndex = ra->HavingPrefix[curr][1];
+            for (p = 0; p < k / 2; p++) {
+                if(ra->Prefix[AggIndex][p*4] == addr[0] && 
+                    ra->Prefix[AggIndex][p*4 + 1] == addr[1] &&
+                    ra->Prefix[AggIndex][p*4 + 2] == addr[2])
+                    return ra->Prefix[AggIndex][p*4 + 3];
+            }
+
             AggIndex = ra->HavingSuffix[curr][1];
             for(p = 0; p < k/2; p++)
             {
@@ -130,14 +134,6 @@ int getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCo
                     return nextIsSwitch;
                     break;
                 }
-            }
-
-            AggIndex = ra->HavingPrefix[curr][1];
-            for (p = 0; p < k / 2; p++) {
-                if(ra->Prefix[AggIndex][p*4] == addr[0] && 
-                    ra->Prefix[AggIndex][p*4 + 1] == addr[1] &&
-                    ra->Prefix[AggIndex][p*4 + 2] == addr[2])
-                    return ra->Prefix[AggIndex][p*4 + 3];
             }
             break;
     }
