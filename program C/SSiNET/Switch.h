@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "Switch.c"
 
-void showSwitchIDs(int *SwitchIDs, int numOfSwitches);
+void showSwitchIDs(int *SwitchIndexes, int numOfNodes);
 
 void showSwitchPacketsAtPort(int **SwitchInportPID, 
                 int **SwitchInportSrcIDs, int **SwitchInportDstIDs,
@@ -24,3 +24,4 @@ void mappingNodeToPort(int **MapFromNodesToPorts, int **Links,
             int *SwitchIndexes, 
             int numOfLinks, int numOfPorts);
 
+void showSwitchGraph(Graph graph);
