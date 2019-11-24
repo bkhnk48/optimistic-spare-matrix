@@ -254,7 +254,6 @@ int main(int argc, char** argv)
 
     //show2LevelsRTable(ra);
     //int hopCount = 0;
-    printf("cooerser");
     getNixVector(0, 8, ra, graph//, &hopCount 
                     );
     return 0;
