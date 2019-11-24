@@ -1,10 +1,5 @@
 #include <stdio.h>
-#include "Init.c"
-#include "Host.h"
-#include "Switch.h"
-#include "Link.h"
-#include "RoutingTable.h"
-
+#include "RoutingPath.h"
 
 int main(int argc, char** argv) 
 {
@@ -121,7 +116,7 @@ int main(int argc, char** argv)
     SwitchEvtTypes = malloc( sizeof * SwitchEvtTypes * (numOfSwitches * numOfPorts));
     SwitchEvtTimes = malloc( sizeof * SwitchEvtTimes * (numOfSwitches * numOfPorts));
 
-    for(i = 0; i < numOfSwitches; i++)
+    for(i = 0; i < numOfSwitches * numOfPorts; i++)
     {
       SwitchEvtTypes[i] = malloc(sizeof * SwitchEvtTypes[i] * (4));
       SwitchEvtTimes[i] = malloc(sizeof * SwitchEvtTimes[i] * (4));
@@ -139,15 +134,21 @@ int main(int argc, char** argv)
     Addresses = malloc(sizeof * Addresses * (numOfHosts + numOfSwitches));
     for(i = 0; i < numOfSwitches + numOfHosts; i++)
     {
-      Addresses[i] = malloc(sizeof * Addresses[i] * 5);
+      Addresses[i] = malloc(sizeof * Addresses[i] * 4);
     }
 
     setAddresses(Addresses, numOfPorts);
 
-    assignEvents(SwitchEvtTypes, SwitchEvtTimes, numOfPorts, numOfSwitches);
+    
+
+    //assignEvents(SwitchEvtTypes, SwitchEvtTimes, numOfPorts, numOfSwitches);
+
+    //showAddresses(Addresses, numOfHosts + numOfSwitches);
+
     
     showEvents(SwitchEvtTypes, SwitchEvtTimes, numOfPorts, numOfSwitches);
 
+    
     int **HavingSuffix = NULL;
     int **HavingPrefix = NULL;
     int **HavingCorePrefix = NULL;
@@ -164,6 +165,8 @@ int main(int argc, char** argv)
       HavingCorePrefix[i] = malloc(sizeof * HavingCorePrefix[i] * 2);
       HavingCorePrefix[i][0] = 0; HavingCorePrefix[i][1] = 0;
     }
+
+    
 
     int numOfSuffix = setHavingSuffix(HavingSuffix, numOfPorts);
 
@@ -209,10 +212,27 @@ int main(int argc, char** argv)
 
     setCorePrefix(CorePrefix, numOfPorts);
 
-    showTwoLevelsRoutingTable(HavingSuffix, HavingPrefix, HavingCorePrefix
+    /*showTwoLevelsRoutingTable(HavingSuffix, HavingPrefix, HavingCorePrefix
                         , Suffix, Prefix, CorePrefix, numOfPorts
-                            );
+                            );*/
 
+    
+    Graph graph ;
+    graph = (Graph)malloc(sizeof(struct GRAPH));
+    graph->numOfLinks = numOfLinks;
+    graph->numOfHosts = numOfHosts;
+    graph->numOfPorts = numOfPorts;
+    graph->numOfSwitches = numOfSwitches;
+    graph->Links = Links;
+    graph->IsHost = IsHost;
+    graph->Hosts = Hosts;
+    graph->SwitchIndexes = SwitchIndexes;
+    graph->MapFromNodesToPorts = MapFromNodesToPorts;
+    graph->Addresses = Addresses;
+    //showLinksInGraph(graph);
+    //showHosts(graph);
+    //showSwitchGraph(graph);
+    showAddresses(graph->Addresses, graph->numOfHosts + graph->numOfSwitches);
     //show(Hosts, numOfHosts);
     //echo(Link, numOfLinks);
     return 0;
