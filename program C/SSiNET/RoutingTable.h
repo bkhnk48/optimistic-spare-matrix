@@ -13,3 +13,5 @@ void setCorePrefix(int **CorePrefix, int numOfPorts);
 void showTwoLevelsRoutingTable(int **HavingSuffix, int **HavingPrefix, int **HavingCorePrefix
                         , int **Suffix, int **Prefix, int **CorePrefix, int numOfPorts
                             );
+
+void show2LevelsRTable(RAlgorithm ra);                            
