@@ -11,4 +11,6 @@ void assignHosts(int **Hosts, int *IsHost, int numOfHosts);
 
 void assignLinkID(int **Hosts, int **Links, int *IsHost, int numOfHosts);
 
+void showHosts(Graph graph);
+
 
