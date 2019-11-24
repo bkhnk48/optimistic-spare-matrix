@@ -1,4 +1,6 @@
 #include<stdio.h>
+#include "Init.c"
+
 
 int CYCLE_PACKET = 100;
 
@@ -118,4 +120,10 @@ void assignLinkID(int **Hosts, int **Links, int *IsHost, int numOfLinks)
         //printf("index = %d\n", index);
         Hosts[index][12] = Hosts[index][12]*(1 - isHostAtSrc) + isHostAtSrc*i;
     }
+}
+
+
+void showHosts(Graph graph)
+{
+    show(graph->Hosts, graph->numOfHosts);
 }
