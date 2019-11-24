@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "Link.h"
 
 int setHavingSuffix(int **HavingSuffix, int numOfPorts)
 {
