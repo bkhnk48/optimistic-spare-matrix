@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h> 
+#include "Host.h"
 
-void showSwitchIDs(int *SwitchIDs, int numOfSwitches)
+void showSwitchIDs(int *SwitchIndexes, int numOfNodes)
 {
     int i = 0;
-    for(i = 0; i < numOfSwitches; i++)
+    for(i = 0; i < numOfNodes; i++)
     {
-        printf("\tWe have SwitchIDs[%d] along with its index is: %d\n", i, SwitchIDs[i]);
+        printf("\tWe have SwitchIDs[%d] along with its index is: %d\n", i, SwitchIndexes[i]);
     }
 }
 
@@ -35,27 +36,29 @@ void showSwitchPacketsAtPort(int **SwitchPortPID,
 void showEvents(char **SwitchEvtTypes, int **SwitchEvtTimes, int numOfPorts, int numOfSwitches)
 {
     int i = 0, j = 0;
-    for(i = 0; i < numOfSwitches; i++)
+    for(i = 0; i < numOfSwitches*numOfPorts; i++)
     {
-        for(j = 0; j < 8*numOfPorts; j++)
+        for(j = 0; j < 4; j++)
         {
+            //printf("\nshowevent %d %d", i, j);
             if(SwitchEvtTypes[i][j] != 0)
             {
-                if(j < 4*numOfPorts){
-                    printf("\tEvent type %c at outport of Switch %d will occur at the time: %d", 
-                            SwitchEvtTypes[i][j], i, SwitchEvtTimes[i][j]);
-                }
-                else
+                switch (j)
                 {
-                    if(j < 6*numOfPorts)
-                    {    printf("\tEvent type %c at channel of Switch %d will occur at the time: %d", 
+                    case 0:
+                    case 1:
+                        printf("\tEvent type %c at outport of Switch %d will occur at the time: %d", 
                             SwitchEvtTypes[i][j], i, SwitchEvtTimes[i][j]);
-                    }
-                    else{
-                        if(j < 8*numOfPorts)
-                            printf("\tEvent type %c at inport of Switch %d will occur at the time: %d", 
+                        break;
+                    case 2:
+                        printf("\tEvent type %c at channel of Switch %d will occur at the time: %d", 
+                            SwitchEvtTypes[i][j], i, SwitchEvtTimes[i][j]);
+                        break;
+                    case 3:
+                        printf("\tEvent type %c at inport of Switch %d will occur at the time: %d", 
                                 SwitchEvtTypes[i][j], i, SwitchEvtTimes[i][j]);
-                    }
+                    default:
+                    break;
                 }
                 
             }
@@ -148,4 +151,10 @@ void mappingNodeToPort(int **MapFromNodesToPorts, int **Links, int *SwitchIndexe
         count = (-x)*count; 
         previousNode = idSrcNode;
     } 
+}
+
+void showSwitchGraph(Graph graph)
+{
+    showSwitchIDs(graph->SwitchIndexes, (graph->numOfSwitches) 
+                                        + (graph->numOfHosts));
 }
