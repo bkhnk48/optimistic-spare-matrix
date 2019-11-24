@@ -10,7 +10,10 @@ int setHavingSuffix(int **HavingSuffix, int numOfPorts)
         for (e = 0; e < numOfPorts / 2; e++) {
             int edgeSwitch = offset + numOfPorts * numOfPorts / 4 + e;
             HavingSuffix[edgeSwitch][0] = 1;//Chi co suffix (tuc la chi la edge switch)
-            HavingSuffix[edgeSwitch][0] = index;
+            //printf("\nEdge switch: %d has index: %d", edgeSwitch, index);
+            //int position = index;
+            HavingSuffix[edgeSwitch][1] = index; //position;
+            //printf("\nEdge switch: %d has index: %d or %d", edgeSwitch, index, HavingSuffix[edgeSwitch][1]);
             index++;
         }
     }
@@ -50,7 +53,7 @@ int setHavingCorePrefix(int **HavingCorePrefix, int numOfPorts)
 {
     int c, index = 0;
     int numEachPod = numOfPorts * numOfPorts / 4 + numOfPorts;
-    for (int c = 0; c < numOfPorts * numOfPorts / 4; c++) {
+    for (c = 0; c < numOfPorts * numOfPorts / 4; c++) {
         int core = numOfPorts * numOfPorts * numOfPorts / 4 + numOfPorts * numOfPorts + c;
         HavingCorePrefix[core][0] = 1; //Co core prefix
         HavingCorePrefix[core][1] = index;
@@ -76,6 +79,10 @@ void setSuffix(int **Suffix, int numOfPorts)
                 Suffix[index][delta] = suffix;
                 delta ++;
                 Suffix[index][delta] = agg;
+                delta ++;
+                //printf("\nSuffix[%d][%d] = %d, Suffix[%d][%d] = %d",
+                //        index, delta - 2, Suffix[index][delta - 2], index, delta - 1, Suffix[index][delta - 1]
+                //        );
             }
             index++;
         }
@@ -92,6 +99,9 @@ void setSuffix(int **Suffix, int numOfPorts)
                     delta++;
                     Suffix[index][delta] = core;
                     delta++;
+                    //printf("\nSuffix[%d][%d] = %d, Suffix[%d][%d] = %d",
+                    //    index, delta, suffix, index, delta, core
+                    //    );
             }
             index++;
         }
@@ -124,5 +134,92 @@ void setPrefix(int **Prefix, int numOfPorts)
         }
 
 
+    }
+}
+
+void setCorePrefix(int **CorePrefix, int numOfPorts)
+{
+    int p, c, index = 0;
+    int k = numOfPorts;
+    int numEachPod = numOfPorts * numOfPorts / 4 + numOfPorts;
+    for (c = 0; c < numOfPorts * numOfPorts / 4; c++) {
+        int core = numOfPorts * numOfPorts * numOfPorts / 4 + numOfPorts * numOfPorts + c;
+        int delta = 0;
+        for(p = 0; p < k; p++) {
+            int offset = numEachPod * p;
+            int agg = (c / (k / 2)) + k / 2 + k * k / 4 + offset;
+            CorePrefix[index][delta] = 10;
+            CorePrefix[index][delta + 1] = p;
+            CorePrefix[index][delta + 2] = agg;
+            delta += 3;
+        }
+        index++;
+    }
+
+}
+
+
+void showTwoLevelsRoutingTable(int **HavingSuffix, int **HavingPrefix, int **HavingCorePrefix
+                        , int **Suffix, int **Prefix, int **CorePrefix, int numOfPorts
+                            )
+{
+    int k = numOfPorts;
+    int p = 0;
+    int numOfSwitches = 5*k*k/4;
+    int numOfHosts = k*k*k/4;
+    int i, j, c, e, a;
+    for(i = 0; i < numOfHosts + numOfSwitches; i++)
+    {
+        if(HavingSuffix[i][0] == 1)
+        {
+            int index = HavingSuffix[i][1];
+            printf("\nAt %d", index);
+            for(j = 0; j < k/2; j++)
+            {
+                printf("\n\tSwitch %d has Suffix Table %d reversed for %d", i, 
+                    Suffix[index][j*2], Suffix[index][j*2 + 1]
+                    );
+            }
+            //printf("\n\tSwitch %d has Suffix Table %d reversed for %d", i, 
+            //        Suffix[index][2], Suffix[index][3]
+            //        );
+        }
+    }
+
+    printf("\n====================================\n");
+
+    for(i = 0; i < numOfHosts + numOfSwitches; i++)
+    {
+        if(HavingPrefix[i][0] == 1)
+        {
+            for (j = 0; j < k / 2; j++) {
+                printf("\nSwitch %d has PREfix Table (%d.%d.%d) reversed for %d", i, 
+                    Prefix[HavingPrefix[i][1]][j*4], 
+                    Prefix[HavingPrefix[i][1]][j*4 + 1], 
+                    Prefix[HavingPrefix[i][1]][j*4 + 2]
+                    , Prefix[HavingPrefix[i][1]][j*4 + 3]
+                    );
+            }
+        }
+    }
+
+    printf("\n====================================\n");
+
+    for(i = 0; i < numOfHosts + numOfSwitches; i++)
+    {
+        if(HavingCorePrefix[i][0] == 1)
+        {
+            c = HavingCorePrefix[i][1];
+            printf("\nCoreprefix of the core id: %d", i);
+            printf(" it has: \n");
+            int delta = 0;
+            for(p = 0; p < k; p++) {
+                printf("\t %d.%d => %d\n", CorePrefix[c][delta]
+                            ,CorePrefix[c][delta + 1]
+                            , CorePrefix[c][delta + 2]
+                );
+                delta += 3;
+            }
+        }
     }
 }
