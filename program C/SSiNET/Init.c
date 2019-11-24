@@ -2,7 +2,7 @@
 #include <stdlib.h> 
 #include <limits.h> 
 #include "ErrorReport.c"
-#include "Graph.c"
+#include "RAlgorithm.h"
 
 
 
