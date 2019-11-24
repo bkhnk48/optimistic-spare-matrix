@@ -7,3 +7,5 @@ void showLink(int **Links, int count);
 
 void assignLink(int **Link, int k);
 
+void showLinksInGraph(Graph graph);
+
