@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "RoutingTable.h"
 
+//int *getPath(Step step);
 void getNixVector(int src,int dst, RAlgorithm ra, Graph g
                     //, int* hopCount
                     );
@@ -9,6 +10,11 @@ Step getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopC
                     );
 
 int findPort(int **MapFromNodesToPorts, int switchIndex, int port, int numOfPort);
+
+//int *getPath(Step step)
+//{
+//    int count = step->port;
+//}
 
 
 void getNixVector(int src,int dst, RAlgorithm ra, Graph g
@@ -28,6 +34,7 @@ void getNixVector(int src,int dst, RAlgorithm ra, Graph g
 
     int curr = src;
     printf("\n%d",src);
+    int hopCount = 1;
     while (curr != dst) {
         if (curr != src) {
             tail->next = newItem;
@@ -40,9 +47,11 @@ void getNixVector(int src,int dst, RAlgorithm ra, Graph g
         if(step->next == NULL)
             step->next = newItem;
         curr = newItem->node;
+        hopCount++;
         printf(":%d->%d", newItem->port, curr);
     }
-    printf("\n");
+    step->port = hopCount;
+    printf("\nHop Count = %d\n", step->port);
 }
 
 Step getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCount
