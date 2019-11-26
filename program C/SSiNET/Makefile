@@ -2,6 +2,7 @@ all: serial
 
 serial: 
 	gcc -g -c ErrorReport.c
+	gcc -g -c TrafficPattern.c
 	gcc -g -c Graph.c 
 	gcc -g -c RAlgorithm.c
 	gcc -g -c Init.c
