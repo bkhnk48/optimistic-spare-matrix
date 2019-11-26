@@ -62,7 +62,7 @@ int main(int argc, char** argv)
     int **MapFromNodesToPorts = NULL;//Array stores all mapping from Destination ID to Port 
           //of switches
     MapFromNodesToPorts = malloc( sizeof * MapFromNodesToPorts * numOfSwitches);
-    for(i = 0; i < numOfSwitches + numOfHosts; i++)
+    for(i = 0; i < numOfSwitches /*+ numOfHosts*/; i++)
     {
       MapFromNodesToPorts[i] = malloc( sizeof * MapFromNodesToPorts[i] * (numOfPorts));
       for(j = 0; j < numOfPorts; j++)
@@ -106,6 +106,8 @@ int main(int argc, char** argv)
       SwitchPortPID[i][j + 2] = 0;
     }
 
+    
+
     assignSwitchPackets(SwitchPortPID, Links, 
                               BUFFER_SIZE, numOfLinks, numOfPorts);
 
@@ -139,7 +141,6 @@ int main(int argc, char** argv)
 
     setAddresses(Addresses, numOfPorts);
 
-    
 
     //assignEvents(SwitchEvtTypes, SwitchEvtTimes, numOfPorts, numOfSwitches);
 
@@ -166,7 +167,6 @@ int main(int argc, char** argv)
       HavingCorePrefix[i][0] = 0; HavingCorePrefix[i][1] = 0;
     }
 
-    
 
     int numOfSuffix = setHavingSuffix(HavingSuffix, numOfPorts);
 
@@ -215,7 +215,7 @@ int main(int argc, char** argv)
     /*showTwoLevelsRoutingTable(HavingSuffix, HavingPrefix, HavingCorePrefix
                         , Suffix, Prefix, CorePrefix, numOfPorts
                             );*/
-
+   
     
     Graph graph ;
     graph = (Graph)malloc(sizeof(struct GRAPH));
@@ -233,6 +233,8 @@ int main(int argc, char** argv)
     //showHosts(graph);
     //showSwitchGraph(graph);
     //showAddresses(graph->Addresses, graph->numOfHosts + graph->numOfSwitches);
+    //showPortOfSwitch(graph->MapFromNodesToPorts, graph->Links, 
+    //                  graph->SwitchIndexes, graph->numOfLinks, graph->numOfPorts);
     
     RAlgorithm ra;
     ra = (RAlgorithm)malloc(sizeof(struct ROUTING_ALGORITHM));
