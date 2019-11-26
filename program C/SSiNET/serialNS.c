@@ -254,10 +254,15 @@ int main(int argc, char** argv)
     ra->Prefix = Prefix;
     ra->CorePrefix = CorePrefix;
 
+    TrafficPattern tp = NULL;
+    int srcs[1] = {0}; int dsts[1] = {8};
+    //tp = getTrafficPattern(srcs, dsts, 1);
     //show2LevelsRTable(ra);
     //int hopCount = 0;
     getNixVector(0, 8, ra, graph//, &hopCount 
                     );
+
+
     return 0;
 }
 
