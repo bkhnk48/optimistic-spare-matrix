@@ -5,43 +5,47 @@ void getNixVector(int src,int dst, RAlgorithm ra, Graph g
                     //, int* hopCount
                     );
 
-int getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCount
+Step getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCount
                     );
-                    
+
+int findPort(int **MapFromNodesToPorts, int switchIndex, int port, int numOfPort);
+
+
 void getNixVector(int src,int dst, RAlgorithm ra, Graph g
                         //, int* hopCount
                         )
 {
     Step step = NULL;
     step = malloc(sizeof(Step));
-    step->node = -1;
+    step->node = src;
     step->port = -1;
+    step->next = NULL;
     Step tail = NULL;
-    int current = src;
+    //tail = malloc(sizeof(Step));
+    tail = step;
+    Step newItem = NULL;
+    newItem = malloc(sizeof(Step));
+
+    int curr = src;
     printf("\n%d",src);
-    while (current != dst) {
-        if (current != src) {
-            if(step->node == -1)
-            {
-                step->node = current;
-                tail = step;
-            }
-            else{
-                Step next = NULL;
-                next = malloc(sizeof(Step));
-                next->node = current;
-                tail->next = next;
-                tail = next;
-            }
+    while (curr != dst) {
+        if (curr != src) {
+            tail->next = newItem;
+            tail = newItem;
         }
-        current = getNextNode(src, current, dst, ra, g
+        
+        newItem = getNextNode(src, curr, dst, ra, g
                         //, &hopCount
                         );
-        printf("->%d", current);
+        if(step->next == NULL)
+            step->next = newItem;
+        curr = newItem->node;
+        printf(":%d->%d", newItem->port, curr);
     }
+    printf("\n");
 }
 
-int getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCount
+Step getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCount
             )
 {
     int adjant = 0, nextOfCore = 0, nextOfAgg = 0;
@@ -53,13 +57,19 @@ int getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCo
     int linkID = g->Hosts[host][12];
     int nextNode = g->Links[linkID][1];
     adjant = (g->IsHost[curr])*nextNode;//tinh ra duoc adjant neu nut curr la nut nguon
-    if(g->IsHost[curr]) return nextNode;
+    Step temp = NULL;
+    temp = malloc(sizeof(Step));
+    if(g->IsHost[curr]){
+        temp->node = nextNode;
+        temp->port = 0;
+        return temp;
+    } 
     //else
     //if (G.adj(current).contains(destination))
     //neu dst la mot trong so cac nut lien ke cua curr
     int isSwitch = 1 - g->IsHost[curr];//neu curr la Switch thi gia tri nay = 1
     int switchIndex = g->SwitchIndexes[curr*isSwitch];
-    int i = 0; int find = 0;
+    int i = 0; int find = 0; int p = 0;
     for(i = 0; i < g->numOfPorts; i++ )
     {
         int less = 1 + ((g->MapFromNodesToPorts[switchIndex][i] - dst)>>(sizeof(int)*8 - 1));
@@ -70,10 +80,15 @@ int getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCo
         //tuc la more = 0 neu dst < g->MapFromNodesToPorts[switchIndex][i], nguoc lai 1
         int sum = (less + more)/2; //= 1 neu dst = g->MapFromNodesToPorts[switchIndex][i], nguoc lai 0
         find += sum;//neu tim thay thi find = 1, khong thay thi find = 0
+        p += sum*i;//ban cu la find*i, nhung se xay ra bug, nen da sua lai la sum*i
     }
 
     nextIsDst = find * dst;//tra ve dst neu nut lien ke cua curr la dst
-    if(find) return nextIsDst;
+    if(find){
+        temp->node = nextIsDst;
+        temp->port = p;
+        return temp;
+    } 
 
 
     int addr[4] = {0, 0, 0, 0};
@@ -87,8 +102,8 @@ int getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCo
     int isEdge = ra->HavingSuffix[curr][0]; 
     // //Vay bang 1 hoac bang 0.
     int total = isCore + isAgg;
-    int k = g->numOfPorts; int p = 0;
-    int nextIsSwitch = 0;
+    int k = g->numOfPorts; 
+    int nextIsSwitch = 0; p = 0;
     int coreIndex;
     int delta;
     int edgeIndex;
@@ -98,14 +113,18 @@ int getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCo
         case 1://la Core
             coreIndex = isCore*ra->HavingCorePrefix[curr][1];
 
-            delta = 0;
+            delta = 0; 
             for(p = 0; p < k; p++) {
                 if(ra->CorePrefix[coreIndex][delta] == addr[0]
                     && ra->CorePrefix[coreIndex][delta + 1] == addr[1]
                     )
                 {
                     nextIsSwitch = ra->CorePrefix[coreIndex][delta + 2];
-                    return nextIsSwitch;
+                    
+                    temp->node = nextIsSwitch;
+                    temp->port = findPort(g->MapFromNodesToPorts, switchIndex,
+                            nextIsSwitch, k);
+                    return temp;
                     break;
                 }
                 delta += 3;
@@ -118,7 +137,10 @@ int getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCo
                 if(ra->Suffix[edgeIndex][p*2] == addr[3])
                 { 
                     nextIsSwitch = ra->Suffix[edgeIndex][p*2 + 1];
-                    return nextIsSwitch;
+                    temp->node = nextIsSwitch;
+                    temp->port = findPort(g->MapFromNodesToPorts, switchIndex,
+                            nextIsSwitch, k);
+                    return temp;
                     break;
                 }
             }
@@ -129,7 +151,12 @@ int getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCo
                 if(ra->Prefix[AggIndex][p*4] == addr[0] && 
                     ra->Prefix[AggIndex][p*4 + 1] == addr[1] &&
                     ra->Prefix[AggIndex][p*4 + 2] == addr[2])
-                    return ra->Prefix[AggIndex][p*4 + 3];
+                {
+                    temp->node = ra->Prefix[AggIndex][p*4 + 3];
+                    temp->port = findPort(g->MapFromNodesToPorts, switchIndex,
+                            temp->node, k);
+                    return temp;
+                }
             }
 
             AggIndex = ra->HavingSuffix[curr][1];
@@ -138,11 +165,26 @@ int getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCo
                 if(ra->Suffix[AggIndex][p*2] == addr[3])
                 { 
                     nextIsSwitch = ra->Suffix[AggIndex][p*2 + 1];
-                    return nextIsSwitch;
+                    temp->node = nextIsSwitch;
+                    temp->port = findPort(g->MapFromNodesToPorts, switchIndex,
+                            temp->node, k);
+                    return temp;
                     break;
                 }
             }
             break;
     }
-    return -1;
+    free(temp);
+    return NULL;
+}
+
+int findPort(int **MapFromNodesToPorts, int switchIndex, int node, int numOfPort)
+{
+    int i = 0;
+    for(i = 0; i < numOfPort; i++)
+    {
+        if(MapFromNodesToPorts[switchIndex][i] == node)
+            return i;
+    }
+    return 0;
 }
