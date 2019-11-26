@@ -2,7 +2,7 @@
 #include "RoutingTable.h"
 
 int *getPath(Step step);
-void getNixVector(int src,int dst, RAlgorithm ra, Graph g
+int *getNixVector(int src,int dst, RAlgorithm ra, Graph g
                     //, int* hopCount
                     );
 
@@ -28,7 +28,7 @@ int *getPath(Step step)
 }
 
 
-void getNixVector(int src,int dst, RAlgorithm ra, Graph g
+int *getNixVector(int src,int dst, RAlgorithm ra, Graph g
                         //, int* hopCount
                         )
 {
@@ -44,7 +44,7 @@ void getNixVector(int src,int dst, RAlgorithm ra, Graph g
     newItem = malloc(sizeof(Step));
 
     int curr = src;
-    printf("\n%d",src);
+    //printf("\n%d",src);
     int hopCount = 1;
     while (curr != dst) {
         if (curr != src) {
@@ -59,19 +59,20 @@ void getNixVector(int src,int dst, RAlgorithm ra, Graph g
             step->next = newItem;
         curr = newItem->node;
         hopCount++;
-        printf(":%d->%d", newItem->port, curr);
+        //printf(":%d->%d", newItem->port, curr);
     }
     step->port = hopCount;
-    printf("\nHop Count = %d\n", step->port);
+    //printf("\nHop Count = %d\n", step->port);
     int *path = NULL;
     path = getPath(step);
-    int i;
-    printf("\nPort: ");
-    for(i = 0; i < hopCount - 1; i++)
-    {
-        printf("%d->", path[i]);
-    }
-    printf("\n");
+    //int i;
+    //printf("\nPort: ");
+    //for(i = 0; i < hopCount - 1; i++)
+    //{
+    //    printf("%d->", path[i]);
+    //}
+    //printf("\n");
+    return path;
 }
 
 Step getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopCount
