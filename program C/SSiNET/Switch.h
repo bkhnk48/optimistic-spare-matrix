@@ -25,3 +25,6 @@ void mappingNodeToPort(int **MapFromNodesToPorts, int **Links,
             int numOfLinks, int numOfPorts);
 
 void showSwitchGraph(Graph graph);
+
+void showPortOfSwitch(int **MapFromNodesToPorts, int **Links,
+                        int *SwitchIndexes, int numOfLinks, int numOfPorts);

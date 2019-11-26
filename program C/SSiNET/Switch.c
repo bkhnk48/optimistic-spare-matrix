@@ -142,7 +142,12 @@ void mappingNodeToPort(int **MapFromNodesToPorts, int **Links, int *SwitchIndexe
         y = (previousNode - idSrcNode)>>(sizeof(int)*8 - 1);
         //Neu previousNode < idSrcnode thi y = -1, nguoc lai y = 0
         count = count*(1 + y);
-
+       
+        //printf("\n\tAt switch %d port %d gonna connect to %d + %d", idSrcNode, count, 
+        //        MapFromNodesToPorts[z*index][count]
+        //            , z*idDstNode
+        //            );
+        
         MapFromNodesToPorts[z*index][count] = MapFromNodesToPorts[z*index][count] + z*idDstNode;
         count++;
         x = (count - numOfPorts)>>(sizeof(int)*8 - 1);
@@ -157,4 +162,25 @@ void showSwitchGraph(Graph graph)
 {
     showSwitchIDs(graph->SwitchIndexes, (graph->numOfSwitches) 
                                         + (graph->numOfHosts));
+}
+
+void showPortOfSwitch(int **MapFromNodesToPorts, int **Links, 
+                            int *SwitchIndexes, 
+                            int numOfLinks, int numOfPorts)
+{
+    int i, j, index, previousNode = -1;
+    for(i = 0; i < numOfLinks; i++)
+    {
+        int idSrcNode = Links[i][0];
+        index = SwitchIndexes[idSrcNode];
+        if(index >= 0 && idSrcNode != previousNode)
+        {
+            printf("\nSwitch %d has", idSrcNode);
+            for(j = 0; j < numOfPorts; j++)
+            {
+                printf("\n\tport %d connect to %d", j, MapFromNodesToPorts[index][j]);
+            }
+        }
+        previousNode = idSrcNode;
+    }
 }
