@@ -4,16 +4,18 @@
 #include "RoutingPath.h"
 
 
-void run(Graph g, RAlgorithm ra, int *path, int stop)
+void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
 {
-    int curr = 0;
+    //int curr = 0;
     int i, j;
     int **Hosts = g->Hosts;
     int **Links = g->Links;
+    int **SwitchIndexes = g->SwitchIndexes;
     int numOfHosts = g->numOfHosts;
     int BUFFER_SIZE = g->BUFFER_SIZE;
     int CYCLE = g->Hosts[0][0];
-    while(curr < stop)
+    int RETRY_TIME = 3;
+    //while(curr < stop)
     {
         for(i = 0; i < numOfHosts; i++)
         {
@@ -22,7 +24,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop)
             {
                 if(Hosts[i][1] == -1)//if source queue KHONG con goi tin
                 {
-                    Hosts[i][1] = curr / CYCLE;//execute event A
+                    Hosts[i][1] = curr / CYCLE;//curr/CYCLE la id cua goi tin
                     Hosts[i][11] = curr;//create event B
                 }
                 else
@@ -32,6 +34,15 @@ void run(Graph g, RAlgorithm ra, int *path, int stop)
             }
             //execute event C
             int idOfLink = Hosts[i][12];
+            if( Links[idOfLink][2] != -1)//KHONG co goi tin tren duong truyen
+            {
+                if(Hosts[i][3] != -1)//Neu co goi tin o top cua outport
+                {
+                    int idNextNode = Links[idOfLink][1];//Lay ra id cua nut tiep theo
+                    int nextNodeIndex = SwitchIndexes[idNextNode];
+                    //tiep theo can tim ra port nao cua Switch co lien ket den Host
+                }
+            }
             //execute event B             
             if(Hosts[i][11] == curr)
             {
@@ -59,6 +70,14 @@ void run(Graph g, RAlgorithm ra, int *path, int stop)
                         }
                         Hosts[i][1]++;//push the following packet on the top
                     }
+                    if(slot == 0)//neu toan bo outport cua Host trong
+                    {
+                        Hosts[i][10] = curr;//thiet lap cho viec gui goi tin
+                    }
+                }
+                else
+                {
+                    Hosts[i][11] == curr + RETRY_TIME;//Khong co outport nao trong, danh phai doi.
                 }
             }
             
