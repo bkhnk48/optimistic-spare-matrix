@@ -30,6 +30,8 @@ void run(Graph g, RAlgorithm ra, int *path, int stop)
                     Hosts[i][2] = curr / CYCLE; //execute event A
                 }   
             }
+            //execute event C
+            int idOfLink = Hosts[i][12];
             //execute event B             
             if(Hosts[i][11] == curr)
             {
@@ -59,8 +61,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop)
                     }
                 }
             }
-            //execute event C
-            int idOfLink = Hosts[i][12];
+            
             
         }
         curr++;
