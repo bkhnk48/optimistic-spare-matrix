@@ -25,6 +25,7 @@ void addLink(int **Link, int **adjacentMatrix, int width, int numOfLinks)
             Link[index][9] = 0;/*bandwidth*/
             Link[index][10] = 0;/*bang 0 nghia la nut nguon ko phai la Host*/
             Link[index][11] = 0;/*bang 1 nghia la nut dich la Host*/
+            Link[index][12] = 0;//Hop count
 
         }
     }
