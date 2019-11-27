@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "RoutingPath.h"
+#include "Simulation.c"
 
 int main(int argc, char** argv) 
 {
@@ -17,7 +17,7 @@ int main(int argc, char** argv)
     //  tren mot chieu se co id cua nut nguon, id cua nut dich, id cua goi tin, id cua Host nguon,
     //  id cua Host dich, nix-vector (?), kich thuoc goi tin, bit dau tien cua goi tin se den vao luc nao,
     //  toan bo goi tin se den nut dich khi nao?, bang thong
-    int countOfInfoInLink = 12;
+    int countOfInfoInLink = 13;
     int numOfLinks = numOfSwitches * numOfPorts + numOfHosts;
     int **Links = NULL;
     Links = malloc(sizeof * Links * numOfLinks);
@@ -80,6 +80,8 @@ int main(int argc, char** argv)
     int **SwitchPortSrcIDs = NULL;
     int **SwitchPortDstIDs = NULL;
 
+    int **SwitchPortHopCount = NULL;
+
     //int **SwitchOutportSrcIDs = NULL;
     //int **SwitchOutportDstIDs = NULL;
 
@@ -88,6 +90,7 @@ int main(int argc, char** argv)
     SwitchPortPID = malloc( sizeof * SwitchPortPID * (numOfSwitches * numOfPorts));
     SwitchPortSrcIDs = malloc( sizeof * SwitchPortSrcIDs * (numOfSwitches * numOfPorts));
     SwitchPortDstIDs = malloc( sizeof * SwitchPortDstIDs * (numOfSwitches * numOfPorts));
+    SwitchPortHopCount = malloc( sizeof * SwitchPortHopCount * (numOfSwitches * numOfPorts));
 
     for(i = 0; i < numOfSwitches * numOfPorts; i++)
     {
@@ -96,11 +99,13 @@ int main(int argc, char** argv)
                       //va ID cua destination node
       SwitchPortSrcIDs[i] = malloc( sizeof * SwitchPortSrcIDs[i] * (2*BUFFER_SIZE));
       SwitchPortDstIDs[i] = malloc( sizeof * SwitchPortDstIDs[i] * (2*BUFFER_SIZE));
+      SwitchPortHopCount[i] = malloc( sizeof * SwitchPortHopCount[i] * (2*BUFFER_SIZE));
       for(j = 0; j < 2*BUFFER_SIZE; j++)
       {
         SwitchPortPID[i][j] = 0;
         SwitchPortSrcIDs[i] = 0;
         SwitchPortDstIDs[i] = 0;
+        SwitchPortHopCount[i] = 0;
       }
       SwitchPortPID[i][j + 1] = 0;
       SwitchPortPID[i][j + 2] = 0;
@@ -223,6 +228,7 @@ int main(int argc, char** argv)
     graph->numOfHosts = numOfHosts;
     graph->numOfPorts = numOfPorts;
     graph->numOfSwitches = numOfSwitches;
+    graph->BUFFER_SIZE = BUFFER_SIZE;
     graph->Links = Links;
     graph->IsHost = IsHost;
     graph->Hosts = Hosts;
@@ -259,8 +265,10 @@ int main(int argc, char** argv)
     //tp = getTrafficPattern(srcs, dsts, 1);
     //show2LevelsRTable(ra);
     //int hopCount = 0;
-    getNixVector(0, 8, ra, graph//, &hopCount 
+    int *path = getNixVector(0, 8, ra, graph//, &hopCount 
                     );
+
+    
 
 
     return 0;
