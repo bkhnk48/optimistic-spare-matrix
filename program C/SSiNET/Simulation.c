@@ -13,23 +13,23 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
     int *SwitchIndexes = g->SwitchIndexes;
     int numOfHosts = g->numOfHosts;
     int BUFFER_SIZE = g->BUFFER_SIZE;
-    int CYCLE = g->Hosts[0][0];
+    int CYCLE_PACKET = g->CYCLE_PACKET;
     int RETRY_TIME = 3;
     //while(curr < stop)
     {
         for(i = 0; i < numOfHosts; i++)
         {
             //create event A:
-            if(curr % CYCLE == 0)
+            if(curr % CYCLE_PACKET == 0)
             {
                 if(Hosts[i][1] == -1)//if source queue KHONG con goi tin
                 {
-                    Hosts[i][1] = curr / CYCLE;//curr/CYCLE la id cua goi tin
+                    Hosts[i][1] = curr / CYCLE_PACKET;//curr/CYCLE la id cua goi tin
                     Hosts[i][11] = curr;//create event B
                 }
                 else
                 {
-                    Hosts[i][2] = curr / CYCLE; //execute event A
+                    Hosts[i][2] = curr / CYCLE_PACKET; //execute event A
                 }   
             }
             //execute event C
