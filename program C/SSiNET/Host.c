@@ -65,8 +65,8 @@ void assignHosts(int **Hosts, int *IsHost, int numOfHosts)
     for(i = 0; i < numOfHosts; i++)
     {
         //Moi Hosts[i]
-      //co thong tin ve chu ky tao goi tin,
-      Hosts[i][0] = CYCLE_PACKET;
+      //luu tru credit: so slot con trong o inport cua switch ke tiep
+      Hosts[i][0] = 0;
       //id be nhat cua goi tin con trong SourceQueue
       Hosts[i][1] = -1;
       //id lon nhat cua goi tin con trong SourceQueue
