@@ -10,7 +10,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
     int i, j;
     int **Hosts = g->Hosts;
     int **Links = g->Links;
-    int **SwitchIndexes = g->SwitchIndexes;
+    int *SwitchIndexes = g->SwitchIndexes;
     int numOfHosts = g->numOfHosts;
     int BUFFER_SIZE = g->BUFFER_SIZE;
     int CYCLE = g->Hosts[0][0];
