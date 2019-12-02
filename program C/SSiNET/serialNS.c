@@ -51,13 +51,13 @@ int main(int argc, char** argv)
     //int **Hosts = NULL;
     Host *Hosts = NULL;
     //int NUM_OF_FIELD_IN_HOST = 16;
-    //Hosts = malloc( sizeof * Hosts * numOfHosts);
+    Hosts = malloc( sizeof * Hosts * numOfHosts);
 
-    for(i = 0; i < numOfHosts; i++)
+    /*for(i = 0; i < numOfHosts; i++)
     {
-      //Hosts[i] = malloc( sizeof * Hosts[i] * NUM_OF_FIELD_IN_HOST);
-    }
-    //assignHosts(Hosts, IsHost, numOfHosts);
+      Hosts[i] = malloc( sizeof * Hosts[i] * NUM_OF_FIELD_IN_HOST);
+    }*/
+    assignHosts(Hosts, IsHost, numOfHosts);
     //assignLinkID(Hosts, Links, IsHost, numOfLinks);
 
     for(i = 0; i < numOfHosts + numOfSwitches; i++)
