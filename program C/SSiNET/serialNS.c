@@ -38,6 +38,10 @@ int main(int argc, char** argv)
       IsHost[i] = 0;
     }
 
+    Queue *sourceQueue = NULL;
+    sourceQueue = malloc(sizeof * sourceQueue * (numOfHosts + numOfSwitches));
+    
+
     int **Hosts = NULL;
     int NUM_OF_FIELD_IN_HOST = 16;
     Hosts = malloc( sizeof * Hosts * numOfHosts);
@@ -48,6 +52,19 @@ int main(int argc, char** argv)
     }
     assignHosts(Hosts, IsHost, numOfHosts);
     assignLinkID(Hosts, Links, IsHost, numOfLinks);
+
+    for(i = 0; i < numOfHosts + numOfSwitches; i++)
+    {
+      if(IsHost[i] == 0)
+      {
+        sourceQueue[i] = NULL;
+      }
+      else
+      {
+        sourceQueue[i] = malloc(sizeof(Queue));
+      }
+    }
+
     //show(Hosts, numOfHosts);
 
     int *SwitchIndexes = NULL;//This array holds the indexes of switch IDs. For example, we have 4 switches with IDs: 4, 8, 9, 10
