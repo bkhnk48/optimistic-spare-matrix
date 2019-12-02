@@ -8,6 +8,7 @@ int main(int argc, char** argv)
     int numOfHosts = numOfPorts * numOfPorts * numOfPorts / 4;
     int numOfInforAboutSwitch = 12;
     int bandwidth = 1000*1000;
+    int BUFFER_SIZE = 5;
 
     int i, j;
 
@@ -57,7 +58,7 @@ int main(int argc, char** argv)
     {
       Hosts[i] = malloc( sizeof * Hosts[i] * NUM_OF_FIELD_IN_HOST);
     }*/
-    assignHosts(Hosts, IsHost, numOfHosts);
+    assignHosts(Hosts, IsHost, numOfHosts, BUFFER_SIZE);
     //assignLinkID(Hosts, Links, IsHost, numOfLinks);
 
     for(i = 0; i < numOfHosts + numOfSwitches; i++)
@@ -110,7 +111,7 @@ int main(int argc, char** argv)
     //int **SwitchOutportSrcIDs = NULL;
     //int **SwitchOutportDstIDs = NULL;
 
-    int BUFFER_SIZE = 5;
+    
 
     SwitchPortPID = malloc( sizeof * SwitchPortPID * (numOfSwitches * numOfPorts));
     SwitchPortSrcIDs = malloc( sizeof * SwitchPortSrcIDs * (numOfSwitches * numOfPorts));
