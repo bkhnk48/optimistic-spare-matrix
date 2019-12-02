@@ -64,7 +64,7 @@ void assignHosts(int **Hosts, int *IsHost, int numOfHosts)
     int i = 0, j = 0;
     for(i = 0; i < numOfHosts; i++)
     {
-        //Moi Hosts[i]
+      //Moi Hosts[i]
       //luu tru credit: so slot con trong o inport cua switch ke tiep
       Hosts[i][0] = 0;
       //id be nhat cua goi tin con trong SourceQueue
