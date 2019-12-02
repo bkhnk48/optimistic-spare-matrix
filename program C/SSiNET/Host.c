@@ -130,7 +130,7 @@ void assignHosts(Host *Hosts, int *IsHost, int numOfHosts, int BUFFER_SIZE)
     }
 }
 
-void assignLinkID(int **Hosts, int **Links, int *IsHost, int numOfLinks)
+void assignLinkID(Host *Hosts, int **Links, int *IsHost, int numOfLinks)
 {
     int i, j; //int isHostAtDst = 0;
     int isHostAtSrc = 0, index = 0, count = 0; 
@@ -146,7 +146,7 @@ void assignLinkID(int **Hosts, int **Links, int *IsHost, int numOfLinks)
         //printf("isHost = %d ", isHost);
         index = index*(1 - isHostAtSrc) + isHostAtSrc*(count - isHostAtSrc);
         //printf("index = %d\n", index);
-        Hosts[index][12] = Hosts[index][12]*(1 - isHostAtSrc) + isHostAtSrc*i;
+        Hosts[index]->linkID = Hosts[index]->linkID*(1 - isHostAtSrc) + isHostAtSrc*i;
     }
 }
 
