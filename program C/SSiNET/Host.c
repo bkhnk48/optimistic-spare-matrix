@@ -59,7 +59,21 @@ int getHostID(int index)
     return 0;
 }
 
-void assignHosts(int **Hosts, int *IsHost, int numOfHosts)
+/*
+//This data structure respresents the host
+struct HOST{
+    int *basicInfo;//basicInfo[0]: BUFFER_SIZE
+                   //basicInfo[1]: ID of link from host itself
+                   //basicInfo[2]: id cua host (trong danh sach cac nut cua toan mang)
+    int **allEvents;
+                   //allEvents[0]: credit count
+                   //allEvents[1]: id of the sent packet
+                   //allEvents[2]: id of received packet in next switch
+                   //allEvents[3]: time to execute event (I)
+                   //allEvents[4]: id of 
+};
+ */
+void assignHosts(Host *Hosts, int *IsHost, int numOfHosts)
 {
     int i = 0, j = 0;
     for(i = 0; i < numOfHosts; i++)
