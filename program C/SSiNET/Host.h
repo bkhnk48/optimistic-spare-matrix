@@ -7,7 +7,8 @@ void show(int **Hosts, int numOfHosts);
 
 int getHostID(int index);
 
-void assignHosts(int **Hosts, int *IsHost, int numOfHosts);
+//void assignHosts(int **Hosts, int *IsHost, int numOfHosts);
+void assignHosts(Host *Hosts, int *IsHost, int numOfHosts);
 
 void assignLinkID(int **Hosts, int **Links, int *IsHost, int numOfHosts);
 
