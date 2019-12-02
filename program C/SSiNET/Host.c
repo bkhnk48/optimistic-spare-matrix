@@ -78,47 +78,55 @@ struct HOST{
         //outport[1][i]: all destinations of packets in outport
 };
  */
-void assignHosts(Host *Hosts, int *IsHost, int numOfHosts)
+void assignHosts(Host *Hosts, int *IsHost, int numOfHosts, int BUFFER_SIZE)
 {
     int i = 0, j = 0;
     for(i = 0; i < numOfHosts; i++)
     {
+        Hosts[i] = malloc(sizeof(struct HOST));
+        int *allEvents = NULL;
+        allEvents = malloc(sizeof * allEvents * 6);
+        //luu tru credit: so slot con trong o inport cua switch ke tiep
+        allEvents[0] = -1; 
+        //luu tru id cua packet vua duoc gui di
+        allEvents[1] = -1;
+        //luu tru id cua packet vua duoc cai next switch nhan. La packet gan lien voi su kien (I)
+        allEvents[2] = -1;
+        //luu tru thoi gian su kien (I) ket thuc
+        allEvents[3] = -1;
+        //luu tru thoi gian su kien (B) ket thuc
+        allEvents[4] = -1;
+        //luu tru thoi gian su kien (C) ket thuc
+        allEvents[5] = -1;
 
-      //Moi Hosts[i]
-      //luu tru credit: so slot con trong o inport cua switch ke tiep
-      //Hosts[i][0] = 0;
-      //id be nhat cua goi tin con trong SourceQueue
-      //Hosts[i][1] = -1;
-      //id lon nhat cua goi tin con trong SourceQueue
-      //Hosts[i][2] = -1;
-      //5 ids cua 5 goi tin trong outport (-1 neu nhu trong tai cho trong do cua outport ko chua goi tin nao ca)
-      for(j = 0; j < 5; j++)
-      {
-        //Hosts[i][3 + j] = -1;
-      }
-      //id cua nut dich
-      //Hosts[i][8] = -1;
-      //event (I): thoi diem ket thuc (thoi diem sinh ra + CREDIT_DELAY)
-      //Hosts[i][9] = -1;  //Hosts[i][10] = -1;
-      //event (C) cho gui goi tin tu outport cua Host len LINK: thoi diem ket thuc (thoi diem sinh ra + RETRY_TIME)
-      //Hosts[i][10] = -1;
-      //Hosts[i][11] = -1;  Hosts[i][12] = -1;
+        Hosts[i]->allEvents = allEvents;
+
+        Hosts[i]->BUFFER_SIZE = BUFFER_SIZE;
+
+        int **outport = NULL;
+        outport = malloc(sizeof * outport * 2);
+        outport[0] = malloc(sizeof * outport[0] * BUFFER_SIZE);
+        outport[1] = malloc(sizeof * outport[1] * BUFFER_SIZE);
+        for(j = 0; j < BUFFER_SIZE; j++)
+        {
+            outport[0][j] = -1;
+            outport[1][j] = -1;
+        }
+
+        Hosts[i]->outport = outport;
       
-      //event (B) cho gui goi tin tu source queue den outport cua host: thoi diem sinh ra, thoi diem ket thuc (thoi diem sinh ra)
-      //Hosts[i][11] = -1;
+        //ID of link from it:
+        Hosts[i]->linkID = -1;
 
-      //ID of link from it:
-      //Hosts[i][12] = -1;
+        //# of packets received in current interval
+        //Hosts[i][13] = 0; 
 
-      //# of packets received in current interval
-      //Hosts[i][13] = 0; 
+        //id cua host (trong danh sach cac nut cua toan mang)
+        Hosts[i]->hostID = getHostID(i);
+        IsHost[Hosts[i]->hostID] = 1;
 
-      //id cua host (trong danh sach cac nut cua toan mang)
-      //Hosts[i][14] = getHostID(i);
-      //IsHost[Hosts[i][14]] = 1;
-
-      //interval hien tai
-      //Hosts[i][15] = 0;
+        //interval hien tai
+        //Hosts[i][15] = 0;
     }
 }
 
