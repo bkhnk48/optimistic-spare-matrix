@@ -62,15 +62,20 @@ int getHostID(int index)
 /*
 //This data structure respresents the host
 struct HOST{
-    int *basicInfo;//basicInfo[0]: BUFFER_SIZE
-                   //basicInfo[1]: ID of link from host itself
-                   //basicInfo[2]: id cua host (trong danh sach cac nut cua toan mang)
+    int BUFFER_SIZE: BUFFER_SIZE
+    int linkID: ID of link from host itself
+    int hostID: id cua host (trong danh sach cac nut cua toan mang)
+
     int **allEvents;
                    //allEvents[0]: credit count
                    //allEvents[1]: id of the sent packet
                    //allEvents[2]: id of received packet in next switch
                    //allEvents[3]: time to execute event (I)
-                   //allEvents[4]: id of 
+                   //allEvents[4]: time to execute event (B)
+                   //allEvents[5]: time to execute event (C)
+    int **outport; //an array with size = 2 x BUFFER_SIZE
+        //outport[0][i]: all ids of packets in outport
+        //outport[1][i]: all destinations of packets in outport
 };
  */
 void assignHosts(Host *Hosts, int *IsHost, int numOfHosts)
@@ -78,41 +83,42 @@ void assignHosts(Host *Hosts, int *IsHost, int numOfHosts)
     int i = 0, j = 0;
     for(i = 0; i < numOfHosts; i++)
     {
+
       //Moi Hosts[i]
       //luu tru credit: so slot con trong o inport cua switch ke tiep
-      Hosts[i][0] = 0;
+      //Hosts[i][0] = 0;
       //id be nhat cua goi tin con trong SourceQueue
-      Hosts[i][1] = -1;
+      //Hosts[i][1] = -1;
       //id lon nhat cua goi tin con trong SourceQueue
-      Hosts[i][2] = -1;
+      //Hosts[i][2] = -1;
       //5 ids cua 5 goi tin trong outport (-1 neu nhu trong tai cho trong do cua outport ko chua goi tin nao ca)
       for(j = 0; j < 5; j++)
       {
-        Hosts[i][3 + j] = -1;
+        //Hosts[i][3 + j] = -1;
       }
       //id cua nut dich
-      Hosts[i][8] = -1;
+      //Hosts[i][8] = -1;
       //event (I): thoi diem ket thuc (thoi diem sinh ra + CREDIT_DELAY)
-      Hosts[i][9] = -1;  //Hosts[i][10] = -1;
+      //Hosts[i][9] = -1;  //Hosts[i][10] = -1;
       //event (C) cho gui goi tin tu outport cua Host len LINK: thoi diem ket thuc (thoi diem sinh ra + RETRY_TIME)
-      Hosts[i][10] = -1;
+      //Hosts[i][10] = -1;
       //Hosts[i][11] = -1;  Hosts[i][12] = -1;
       
       //event (B) cho gui goi tin tu source queue den outport cua host: thoi diem sinh ra, thoi diem ket thuc (thoi diem sinh ra)
-      Hosts[i][11] = -1;
+      //Hosts[i][11] = -1;
 
       //ID of link from it:
-      Hosts[i][12] = -1;
+      //Hosts[i][12] = -1;
 
       //# of packets received in current interval
-      Hosts[i][13] = 0; 
+      //Hosts[i][13] = 0; 
 
       //id cua host (trong danh sach cac nut cua toan mang)
-      Hosts[i][14] = getHostID(i);
-      IsHost[Hosts[i][14]] = 1;
+      //Hosts[i][14] = getHostID(i);
+      //IsHost[Hosts[i][14]] = 1;
 
       //interval hien tai
-      Hosts[i][15] = 0;
+      //Hosts[i][15] = 0;
     }
 }
 
