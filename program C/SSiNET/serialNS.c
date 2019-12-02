@@ -48,16 +48,17 @@ int main(int argc, char** argv)
     sourceQueue = malloc(sizeof * sourceQueue * (numOfHosts + numOfSwitches));
     
 
-    int **Hosts = NULL;
-    int NUM_OF_FIELD_IN_HOST = 16;
-    Hosts = malloc( sizeof * Hosts * numOfHosts);
+    //int **Hosts = NULL;
+    Host *Hosts = NULL;
+    //int NUM_OF_FIELD_IN_HOST = 16;
+    //Hosts = malloc( sizeof * Hosts * numOfHosts);
 
     for(i = 0; i < numOfHosts; i++)
     {
-      Hosts[i] = malloc( sizeof * Hosts[i] * NUM_OF_FIELD_IN_HOST);
+      //Hosts[i] = malloc( sizeof * Hosts[i] * NUM_OF_FIELD_IN_HOST);
     }
-    assignHosts(Hosts, IsHost, numOfHosts);
-    assignLinkID(Hosts, Links, IsHost, numOfLinks);
+    //assignHosts(Hosts, IsHost, numOfHosts);
+    //assignLinkID(Hosts, Links, IsHost, numOfLinks);
 
     for(i = 0; i < numOfHosts + numOfSwitches; i++)
     {
@@ -94,8 +95,8 @@ int main(int argc, char** argv)
         MapFromNodesToPorts[i][j] = 0;
       }
     }
-    mappingNodeToPort(MapFromNodesToPorts, Links, SwitchIndexes, 
-                            numOfLinks, numOfPorts);
+    //mappingNodeToPort(MapFromNodesToPorts, Links, SwitchIndexes, 
+    //                        numOfLinks, numOfPorts);
     
 
     int **SwitchPortPID = NULL; //Array stores IDs of packets in inport
@@ -137,8 +138,8 @@ int main(int argc, char** argv)
 
     
 
-    assignSwitchPackets(SwitchPortPID, Links, 
-                              BUFFER_SIZE, numOfLinks, numOfPorts);
+    //assignSwitchPackets(SwitchPortPID, Links, 
+    //                          BUFFER_SIZE, numOfLinks, numOfPorts);
 
     char **SwitchEvtTypes = NULL;
     int **SwitchEvtTimes = NULL;//Co k inport, k outport, k channel tai 1 thoi diem
@@ -255,7 +256,7 @@ int main(int argc, char** argv)
     graph->BUFFER_SIZE = BUFFER_SIZE;
     graph->Links = Links;
     graph->IsHost = IsHost;
-    graph->Hosts = Hosts;
+    //graph->Hosts = Hosts;
     graph->SwitchIndexes = SwitchIndexes;
     graph->MapFromNodesToPorts = MapFromNodesToPorts;
     graph->Addresses = Addresses;
@@ -289,8 +290,8 @@ int main(int argc, char** argv)
     //tp = getTrafficPattern(srcs, dsts, 1);
     //show2LevelsRTable(ra);
     //int hopCount = 0;
-    int *path = getNixVector(0, 8, ra, graph//, &hopCount 
-                    );
+    //int *path = getNixVector(0, 8, ra, graph//, &hopCount 
+    //                );
 
     
 
