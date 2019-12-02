@@ -38,6 +38,12 @@ int main(int argc, char** argv)
       IsHost[i] = 0;
     }
 
+
+    /*
+      this array: *sourceQueue stores all source queues of all hosts.
+      the total number is: numOfHosts + numOfSwitches, 
+      the index of sourceQueue is the index of hosts
+     */
     Queue *sourceQueue = NULL;
     sourceQueue = malloc(sizeof * sourceQueue * (numOfHosts + numOfSwitches));
     
@@ -61,7 +67,8 @@ int main(int argc, char** argv)
       }
       else
       {
-        sourceQueue[i] = malloc(sizeof(Queue));
+        //two elements for top and bottom one in source queue
+        sourceQueue[i] = malloc(2*sizeof(Queue));
       }
     }
 
