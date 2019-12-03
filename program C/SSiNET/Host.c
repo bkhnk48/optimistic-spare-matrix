@@ -85,9 +85,9 @@ void assignHosts(Host *Hosts, int *IsHost, int numOfHosts, int BUFFER_SIZE)
     {
         Hosts[i] = malloc(sizeof(struct HOST));
         int *allEvents = NULL;
-        allEvents = malloc(sizeof * allEvents * 6);
+        allEvents = malloc(sizeof * allEvents * 7);
         //luu tru credit: so slot con trong o inport cua switch ke tiep
-        allEvents[0] = -1; 
+        allEvents[0] = BUFFER_SIZE; 
         //luu tru id cua packet vua duoc gui di
         allEvents[1] = -1;
         //luu tru id cua packet vua duoc cai next switch nhan. La packet gan lien voi su kien (I)
@@ -98,22 +98,30 @@ void assignHosts(Host *Hosts, int *IsHost, int numOfHosts, int BUFFER_SIZE)
         allEvents[4] = -1;
         //luu tru thoi gian su kien (C) ket thuc
         allEvents[5] = -1;
+        //luu tru so luong cac goi tin co trong outport
+        allEvents[6] = 0;
 
         Hosts[i]->allEvents = allEvents;
 
         Hosts[i]->BUFFER_SIZE = BUFFER_SIZE;
 
-        int **outport = NULL;
-        outport = malloc(sizeof * outport * 2);
-        outport[0] = malloc(sizeof * outport[0] * BUFFER_SIZE);
-        outport[1] = malloc(sizeof * outport[1] * BUFFER_SIZE);
+        int *outport = NULL;
+        outport = malloc(sizeof * outport * BUFFER_SIZE);
         for(j = 0; j < BUFFER_SIZE; j++)
         {
-            outport[0][j] = -1;
-            outport[1][j] = -1;
+            outport[j] = -1;
         }
 
+        int *dstIDs = NULL;
+        dstIDs = malloc(sizeof * dstIDs * BUFFER_SIZE);
+        for(j = 0; j < BUFFER_SIZE; j++)
+        {
+            dstIDs[j] = -1;
+        }
+
+
         Hosts[i]->outport = outport;
+        Hosts[i]->dstIDs = dstIDs;
       
         //ID of link from it:
         Hosts[i]->linkID = -1;
@@ -138,6 +146,7 @@ void assignLinkID(Host *Hosts, int **Links, int *IsHost, int numOfLinks)
     {
         int idSrcNode = Links[i][0];
         int idDstNode = Links[i][1];
+        Links[i][2] = -1;//Khong co goi tin tren duong truyen
         //printf("\tidSrcNode = %d ", idSrcNode);
         isHostAtSrc = IsHost[idSrcNode];
         Links[i][10] = IsHost[idSrcNode];
