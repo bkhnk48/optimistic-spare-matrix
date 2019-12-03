@@ -249,6 +249,7 @@ int main(int argc, char** argv)
     graph->numOfPorts = numOfPorts;
     graph->numOfSwitches = numOfSwitches;
     graph->BUFFER_SIZE = BUFFER_SIZE;
+    graph->CYCLE_PACKET = 100;
     graph->Links = Links;
     graph->IsHost = IsHost;
     graph->Hosts = Hosts;
@@ -289,7 +290,7 @@ int main(int argc, char** argv)
     int *path = getNixVector(0, 8, ra, graph//, &hopCount 
                     );
 
-    
+    run(graph, ra, path, 10, 0);
 
 
     return 0;
