@@ -6,21 +6,29 @@
 
 void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
 {
-    //Moi Hosts[i]
-      //Hosts[i][0]: luu tru credit, tuc so slot con trong o inport cua switch ke tiep
-      //Hosts[i][1]: id be nhat cua goi tin con trong SourceQueue
-      //Hosts[i][2]: id lon nhat cua goi tin con trong SourceQueue
-      //Hosts[i][3 + j] voi j = 0..4: 5 ids cua 5 goi tin trong outport (-1 neu nhu trong tai cho trong do cua outport ko chua goi tin nao ca)
-      //Hosts[i][8]: id cua nut dich
-      //Hosts[i][9]: event (I) thoi diem ket thuc (thoi diem sinh ra + CREDIT_DELAY)
-      //Hosts[i][10]: event (C) cho gui goi tin tu outport cua Host len LINK: thoi diem ket thuc (thoi diem sinh ra + RETRY_TIME)
-      //Hosts[i][11]: event (B) cho gui goi tin tu source queue den outport cua host: thoi diem sinh ra, thoi diem ket thuc (thoi diem sinh ra)
-      //Hosts[i][12]: ID of link from host itself
-      //Hosts[i][13]: # of packets received in current interval
-      //Hosts[i][14]: id cua host (trong danh sach cac nut cua toan mang)
-      //Hosts[i][15]: interval hien tai
+    /*
+    This data structure respresents the host
+    struct HOST{
+        int BUFFER_SIZE: BUFFER_SIZE
+        int linkID: ID of link from host itself
+        int hostID: id cua host (trong danh sach cac nut cua toan mang)
+
+        int **allEvents;
+                    //allEvents[0]: credit count
+                    //allEvents[1]: id of the sent packet
+                    //allEvents[2]: id of received packet in next switch
+                    //allEvents[3]: time to execute event (I)
+                    //allEvents[4]: time to execute event (B)
+                    //allEvents[5]: time to execute event (C)
+        int **outport; //an array with size = 2 x BUFFER_SIZE
+            //outport[0][i]: all ids of packets in outport
+            //outport[1][i]: all destinations of packets in outport
+    };
+    */
+
     int i, j;
-    int **Hosts = g->Hosts;
+    //Host Hosts = g->Hosts;
+    int **Hosts;
     int **Links = g->Links;
     int *SwitchIndexes = g->SwitchIndexes;
     int numOfHosts = g->numOfHosts;
