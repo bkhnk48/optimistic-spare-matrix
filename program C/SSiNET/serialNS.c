@@ -59,7 +59,7 @@ int main(int argc, char** argv)
       Hosts[i] = malloc( sizeof * Hosts[i] * NUM_OF_FIELD_IN_HOST);
     }*/
     assignHosts(Hosts, IsHost, numOfHosts, BUFFER_SIZE);
-    //assignLinkID(Hosts, Links, IsHost, numOfLinks);
+    assignLinkID(Hosts, Links, IsHost, numOfLinks);
 
     for(i = 0; i < numOfHosts + numOfSwitches; i++)
     {
@@ -96,8 +96,8 @@ int main(int argc, char** argv)
         MapFromNodesToPorts[i][j] = 0;
       }
     }
-    //mappingNodeToPort(MapFromNodesToPorts, Links, SwitchIndexes, 
-    //                        numOfLinks, numOfPorts);
+    mappingNodeToPort(MapFromNodesToPorts, Links, SwitchIndexes, 
+                            numOfLinks, numOfPorts);
     
 
     int **SwitchPortPID = NULL; //Array stores IDs of packets in inport
