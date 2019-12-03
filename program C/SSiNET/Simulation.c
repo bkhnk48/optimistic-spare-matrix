@@ -20,9 +20,10 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
                     //allEvents[3]: time to execute event (I)
                     //allEvents[4]: time to execute event (B)
                     //allEvents[5]: time to execute event (C)
-        int **outport; //an array with size = 2 x BUFFER_SIZE
-            //outport[0][i]: all ids of packets in outport
-            //outport[1][i]: all destinations of packets in outport
+                    //allEvents[6]: num of packets in outport
+        int *outport; //an array with size = BUFFER_SIZE
+                    //outport: all ids of packets in outport
+        int *dstIDs; //dstIDs: all destinations of packets in outport
     };
     */
 
@@ -49,8 +50,10 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
         int timeOfI = allEvents[3];
         int timeOfB = allEvents[4];
         int timeOfC = allEvents[5];
+        int avail = allEvents[6];
         Queue *q = queues[i];
-        int **outport = Hosts[i]->outport;
+        int *outport = Hosts[i]->outport;
+        int *dstIDs = Hosts[i]->dstIDs;
 
         //execute event A:
         if(curr % CYCLE_PACKET == 0)//if this is the time to generate packet
@@ -60,7 +63,6 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
                 q[0]->id = curr / CYCLE_PACKET;//curr/CYCLE la id cua goi tin
                 q[0]->hostID = hostID;
                 q[0]->dstID = dst;
-                q[0]->next = NULL;
                 timeOfB = curr;//create event B
             }
             else
@@ -94,14 +96,14 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
             if(sentID == receivedID && sentID != -1)
             {
                 timeOfC = curr;//create event C
-                credit--;//thay doi gia tri credit
+                credit++;//thay doi gia tri credit
             }
             timeOfI = -1;
         }
 
         //execute event C
         //NOTE: THIS CODE HAS A CLONE which begins at line 200
-        if( Links[idOfLink][2] != -1)//KHONG co goi tin tren duong truyen
+        if( Links[idOfLink][2] == -1)//KHONG co goi tin tren duong truyen
         {
             //Link[index][0]: id cua nut nguon
             //Link[index][1]: id cua nut dich
@@ -121,31 +123,32 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
             //outport[0][i]: all ids of packets in outport
             //outport[1][i]: all destinations of packets in outport
 
-            if(outport[0][0] != -1//Neu co goi tin o top cua outport
+            if(avail > 0//Neu co goi tin o top cua outport
                 && timeOfC == curr //va goi tin o vi tri top nay co nhu cau duoc gui di
                 //&& Hosts[i][3] != -1
                 )
             {
-                if(credit < BUFFER_SIZE)//neu inport cua switch tiep theo con cho trong
+                if(credit > 0)//neu inport cua switch tiep theo con cho trong
                 {
                     //tao su kien tren link
-                    Links[idOfLink][2] = outport[0][0];//gan id cua goi tin vao Link
+                    Links[idOfLink][2] = outport[0];//gan id cua goi tin vao Link
                     Links[idOfLink][3] = hostID;//id cua host nguon
-                    Links[idOfLink][4] = outport[1][0];//id cua host dich
+                    Links[idOfLink][4] = dstIDs[0];//id cua host dich
                     Links[idOfLink][5] = path[1];//nix vector
                     Links[idOfLink][6] = (int)1e5;
                     Links[idOfLink][7] = (int)(1e9 * Links[idOfLink][6] / Links[idOfLink][9]);
                     Links[idOfLink][8] = 1001;
                     Links[idOfLink][12] = 0;
                     timeOfC = -1;//xoa di thoi diem thuc thi su kien (C)
-                    credit ++;//thay doi gia tri credit
+                    credit --;//thay doi gia tri credit
                     for(j = 0; j < BUFFER_SIZE - 1; j++)
                     {
-                        outport[0][j] = outport[0][j+1];
-                        outport[1][j] = outport[1][j+1];
+                        outport[j] = outport[j+1];
+                        dstIDs[j] = outport[j+1];
                     }
-                    outport[0][BUFFER_SIZE - 1] = -1;
-                    outport[1][BUFFER_SIZE - 1] = -1;
+                    outport[BUFFER_SIZE - 1] = -1;
+                    dstIDs[BUFFER_SIZE - 1] = -1;
+                    avail--;
                     timeOfB = curr;
                 }
             }
@@ -155,20 +158,13 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
         if(timeOfB == curr)
         {
             //Check the empty slot in outport
-            int slot = -1;
-            for(j = BUFFER_SIZE - 1; j >= 0; j--)
-            {
-                if(outport[0][j] == -1)
-                {
-                    slot = j;
-                    break;
-                }
-            }
+            int slot = BUFFER_SIZE - avail -1;
+            
 
-            if(slot != -1)//if there is a empty slot
+            if(slot > 0)//if there is a empty slot
             {
-                outport[0][slot] = q[0]->id;//push the packet in the top source queue to this slot
-                outport[1][slot] = q[0]->dstID;
+                outport[avail-1] = q[0]->id;//push the packet in the top source queue to this slot
+                dstIDs[avail-1] = q[0]->dstID;
                 Queue next = q[0]->next;
                 if(next->id == q[1]->id)//if there is zero to one remaining packet in source queue
                 {    
@@ -199,32 +195,34 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
 
         //execute event C
         //NOTE: THE FOLLOWING CODE IS A CLONE OF lines between 103 and 151
-        if( Links[idOfLink][2] != -1)//KHONG co goi tin tren duong truyen
+        if( Links[idOfLink][2] == -1)//KHONG co goi tin tren duong truyen
         {
-            if(outport[0][0] != -1//Neu co goi tin o top cua outport
+            if(avail > 0//Neu co goi tin o top cua outport
                 && timeOfC == curr //va goi tin o vi tri top nay co nhu cau duoc gui di
+                //&& Hosts[i][3] != -1
                 )
             {
-                if(credit < BUFFER_SIZE)//neu inport cua switch tiep theo con cho trong
+                if(credit > 0)//neu inport cua switch tiep theo con cho trong
                 {
                     //tao su kien tren link
-                    Links[idOfLink][2] = outport[0][0];//gan id cua goi tin vao Link
+                    Links[idOfLink][2] = outport[0];//gan id cua goi tin vao Link
                     Links[idOfLink][3] = hostID;//id cua host nguon
-                    Links[idOfLink][4] = outport[1][0];//id cua host dich
+                    Links[idOfLink][4] = dstIDs[0];//id cua host dich
                     Links[idOfLink][5] = path[1];//nix vector
                     Links[idOfLink][6] = (int)1e5;
                     Links[idOfLink][7] = (int)(1e9 * Links[idOfLink][6] / Links[idOfLink][9]);
                     Links[idOfLink][8] = 1001;
                     Links[idOfLink][12] = 0;
                     timeOfC = -1;//xoa di thoi diem thuc thi su kien (C)
-                    credit ++;//thay doi gia tri credit
+                    credit --;//thay doi gia tri credit
                     for(j = 0; j < BUFFER_SIZE - 1; j++)
                     {
-                        outport[0][j] = outport[0][j+1];
-                        outport[1][j] = outport[1][j+1];
+                        outport[j] = outport[j+1];
+                        dstIDs[j] = outport[j+1];
                     }
-                    outport[0][BUFFER_SIZE - 1] = -1;
-                    outport[1][BUFFER_SIZE - 1] = -1;
+                    outport[BUFFER_SIZE - 1] = -1;
+                    dstIDs[BUFFER_SIZE - 1] = -1;
+                    avail--;
                     timeOfB = curr;
                 }
             }
