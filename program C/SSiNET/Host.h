@@ -15,6 +15,6 @@ void assignLinkID(Host *Hosts, int **Links, int *IsHost, int numOfLinks);
 void showHosts(Graph graph);
 
 
-void setSourceQueue(Queue **sourceQueue);
+void setSourceQueue(Queue **sourceQueue, int numOfHosts);
 
 
