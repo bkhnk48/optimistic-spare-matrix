@@ -17,6 +17,7 @@ struct GRAPH{
                         //their indexes are: 1, 2, 3, 4
     int **MapFromNodesToPorts;
     int **Addresses;
+    Queue **queues;
 };
 
 	
