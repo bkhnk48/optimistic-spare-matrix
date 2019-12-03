@@ -156,7 +156,24 @@ void showHosts(Graph graph)
     //show(graph->Hosts, graph->numOfHosts);
 }
 
-void setSourceQueue(Queue **sourceQueue)
+void setSourceQueue(Queue **sourceQueue, int numOfHosts)
 {
-
+    int i, j;
+    for(i = 0; i < numOfHosts; i++)
+    {
+        Queue first = NULL;
+        first = malloc(sizeof(Queue));
+        first->id = -1;
+        first->dstID = -1;
+        first->hostID = -1;
+        Queue last = NULL;
+        last = malloc(sizeof(Queue));
+        last->id = -1;
+        last->dstID = -1;
+        last->hostID = -1;
+        first->next = last;
+        last->next = NULL;
+        sourceQueue[i][0] = first;
+        sourceQueue[i][1] = last;
+    }
 }
