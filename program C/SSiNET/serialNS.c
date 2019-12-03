@@ -45,8 +45,8 @@ int main(int argc, char** argv)
       the total number is: numOfHosts + numOfSwitches, 
       the index of sourceQueue is the index of hosts
      */
-    Queue *sourceQueue = NULL;
-    sourceQueue = malloc(sizeof * sourceQueue * (numOfHosts + numOfSwitches));
+    Queue **sourceQueue = NULL;
+    sourceQueue = malloc(sizeof * sourceQueue * (numOfHosts));
     
 
     //int **Hosts = NULL;
@@ -61,13 +61,13 @@ int main(int argc, char** argv)
     assignHosts(Hosts, IsHost, numOfHosts, BUFFER_SIZE);
     assignLinkID(Hosts, Links, IsHost, numOfLinks);
 
-    for(i = 0; i < numOfHosts + numOfSwitches; i++)
+    for(i = 0; i < numOfHosts; i++)
     {
-      if(IsHost[i] == 0)
-      {
-        sourceQueue[i] = NULL;
-      }
-      else
+      //if(IsHost[i] == 0)
+      //{
+      //  sourceQueue[i] = NULL;
+      //}
+      //else
       {
         //two elements for top and bottom one in source queue
         sourceQueue[i] = malloc(2*sizeof(Queue));
