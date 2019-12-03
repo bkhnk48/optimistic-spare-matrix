@@ -47,7 +47,12 @@ int main(int argc, char** argv)
      */
     Queue **sourceQueue = NULL;
     sourceQueue = malloc(sizeof * sourceQueue * (numOfHosts));
-    
+    for(i = 0; i < numOfHosts; i++)
+    {
+      sourceQueue[i] = malloc(sizeof * sourceQueue[i] * 2);
+    }
+
+    setSourceQueue(sourceQueue, numOfHosts);
 
     //int **Hosts = NULL;
     Host *Hosts = NULL;
@@ -61,18 +66,7 @@ int main(int argc, char** argv)
     assignHosts(Hosts, IsHost, numOfHosts, BUFFER_SIZE);
     assignLinkID(Hosts, Links, IsHost, numOfLinks);
 
-    for(i = 0; i < numOfHosts; i++)
-    {
-      //if(IsHost[i] == 0)
-      //{
-      //  sourceQueue[i] = NULL;
-      //}
-      //else
-      {
-        //two elements for top and bottom one in source queue
-        sourceQueue[i] = malloc(2*sizeof(Queue));
-      }
-    }
+    
 
     //show(Hosts, numOfHosts);
 
@@ -261,6 +255,7 @@ int main(int argc, char** argv)
     graph->SwitchIndexes = SwitchIndexes;
     graph->MapFromNodesToPorts = MapFromNodesToPorts;
     graph->Addresses = Addresses;
+    graph->queues = sourceQueue;
     //showLinksInGraph(graph);
     //showHosts(graph);
     //showSwitchGraph(graph);
