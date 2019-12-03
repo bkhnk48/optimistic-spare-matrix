@@ -15,7 +15,8 @@ struct HOST{
     int hostID;
 
     int *allEvents;
-    int **outport;
+    int *outport;
+    int *dstIDs;
 };
 
 typedef struct HOST *Host;
