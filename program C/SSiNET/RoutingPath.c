@@ -84,7 +84,7 @@ Step getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopC
     //if (G.isHostVertex(current)) 
     int host = 0;
     host = curr*(g->IsHost[curr]);
-    int linkID = g->Hosts[host][12];
+    int linkID = g->Hosts[host]->linkID;
     int nextNode = g->Links[linkID][1];
     adjant = (g->IsHost[curr])*nextNode;//tinh ra duoc adjant neu nut curr la nut nguon
     Step temp = NULL;
