@@ -10,7 +10,8 @@ struct GRAPH{
     int CYCLE_PACKET;
     int **Links;
     int *IsHost;
-    int **Hosts;
+    //int **Hosts;
+    Host *Hosts;
     int *SwitchIndexes;//This array holds the indexes of switch IDs. 
                         //For example, we have 4 switches with IDs: 4, 8, 9, 10
                         //their indexes are: 1, 2, 3, 4
