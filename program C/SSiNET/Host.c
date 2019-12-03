@@ -60,7 +60,7 @@ int getHostID(int index)
 }
 
 /*
-//This data structure respresents the host
+This data structure respresents the host
 struct HOST{
     int BUFFER_SIZE: BUFFER_SIZE
     int linkID: ID of link from host itself
@@ -153,5 +153,5 @@ void assignLinkID(Host *Hosts, int **Links, int *IsHost, int numOfLinks)
 
 void showHosts(Graph graph)
 {
-    show(graph->Hosts, graph->numOfHosts);
+    //show(graph->Hosts, graph->numOfHosts);
 }
