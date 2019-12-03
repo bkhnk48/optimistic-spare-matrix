@@ -155,3 +155,8 @@ void showHosts(Graph graph)
 {
     //show(graph->Hosts, graph->numOfHosts);
 }
+
+void setSourceQueue(Queue **sourceQueue)
+{
+
+}
