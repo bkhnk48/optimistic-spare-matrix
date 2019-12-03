@@ -257,7 +257,7 @@ int main(int argc, char** argv)
     graph->BUFFER_SIZE = BUFFER_SIZE;
     graph->Links = Links;
     graph->IsHost = IsHost;
-    //graph->Hosts = Hosts;
+    graph->Hosts = Hosts;
     graph->SwitchIndexes = SwitchIndexes;
     graph->MapFromNodesToPorts = MapFromNodesToPorts;
     graph->Addresses = Addresses;
@@ -291,8 +291,8 @@ int main(int argc, char** argv)
     //tp = getTrafficPattern(srcs, dsts, 1);
     //show2LevelsRTable(ra);
     //int hopCount = 0;
-    //int *path = getNixVector(0, 8, ra, graph//, &hopCount 
-    //                );
+    int *path = getNixVector(0, 8, ra, graph//, &hopCount 
+                    );
 
     
 
