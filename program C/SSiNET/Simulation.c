@@ -121,38 +121,46 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
         int *outport = Hosts[i]->outport;
         int *dstIDs = Hosts[i]->dstIDs;
 
-        //execute event A:
-        if(curr % CYCLE_PACKET == 0)//if this is the time to generate packet
-        {
-            if(q[0]->id == -1)//if source queue KHONG con goi tin
-            {
-                q[0]->id = curr / CYCLE_PACKET;//curr/CYCLE la id cua goi tin
-                q[0]->hostID = hostID;
-                q[0]->dstID = dst;
-                timeOfB = curr;//create event B
-            }
-            else
-            {
+        Queue t = NULL;
 
-                if(q[1]->id == -1)
+        //execute event A:
+        switch(curr % CYCLE_PACKET)
+        {
+            case 0: //if this is the time to generate packet
+                switch (q[0]->id)
                 {
-                    q[1]->id = curr / CYCLE_PACKET;//curr/CYCLE la id cua goi tin
-                    q[1]->hostID = hostID;
-                    q[1]->dstID = dst;
-                    q[1]->next = NULL;
+                    case -1:
+                        q[0]->id = curr / CYCLE_PACKET;//curr/CYCLE la id cua goi tin
+                        q[0]->hostID = hostID;
+                        q[0]->dstID = dst;
+                        timeOfB = curr;//create event B
+                        break;
+                
+                    default:
+                        switch (q[1]->id)
+                        {
+                            case -1:
+                                q[1]->id = curr / CYCLE_PACKET;//curr/CYCLE la id cua goi tin
+                                q[1]->hostID = hostID;
+                                q[1]->dstID = dst;
+                                q[1]->next = NULL;
+                                break;
+                        
+                            default:
+                                t = malloc(sizeof(Queue));
+                                t->id = curr / CYCLE_PACKET;//curr/CYCLE la id cua goi tin
+                                t->hostID = hostID;
+                                t->dstID = dst;
+                                t->next = NULL;
+                                q[1]->next = t;
+                                q[1] = t;
+                                break;
+                        }
+                        break;
                 }
-                else{
-                    Queue t = NULL;
-                    t = malloc(sizeof(Queue));
-                    t->id = curr / CYCLE_PACKET;//curr/CYCLE la id cua goi tin
-                    t->hostID = hostID;
-                    t->dstID = dst;
-                    t->next = NULL;
-                    q[1]->next = t;
-                    q[1] = t;
-                }
-            }   
+                break;
         }
+        
         //endof if(curr % CYCLE_PACKET == 0)
 
         //execute event I
