@@ -60,7 +60,10 @@ void executeEventC(int* avail, int* timeOfB, int* credit, int *outport, int *dst
             dstIDs[BUFFER_SIZE - 1] = -1;
             temp = *avail;
             *avail = temp - 1;
-            //*timeOfB = curr;
+            if(*avail < BUFFER_SIZE)
+            {
+              *timeOfB = curr;  
+            }
             *timeOfC = -1;
         }
     }
