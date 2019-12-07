@@ -161,7 +161,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
                 break;
         }
         
-        //endof if(curr % CYCLE_PACKET == 0)
+        //endof executing event A:
 
         //execute event I
         if(curr == timeOfI
