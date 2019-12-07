@@ -27,43 +27,44 @@ void executeEventC(int* avail, int* timeOfB, int* credit, int *outport, int *dst
             //int **outport; //an array with size = 2 x BUFFER_SIZE
             //outport[0][i]: all ids of packets in outport
             //outport[1][i]: all destinations of packets in outport*/
-    if( Links/*[idOfLink]*/
-                [2] == -1)//KHONG co goi tin tren duong truyen
+    
+    
+    if(*avail > 0//Neu co goi tin o top cua outport
+        && *timeOfC == curr //va goi tin o vi tri top nay co nhu cau duoc gui di
+        )
     {
-        if(*avail > 0//Neu co goi tin o top cua outport
-            && *timeOfC == curr //va goi tin o vi tri top nay co nhu cau duoc gui di
-            )
+        if(*credit > 0)//neu inport cua switch tiep theo con cho trong
         {
-            if(*credit > 0)//neu inport cua switch tiep theo con cho trong
+            //tao su kien tren link
+            Links/*[idOfLink]*/[2] = outport[0];//gan id cua goi tin vao Link
+            Links/*[idOfLink]*/[3] = hostID;//id cua host nguon
+            Links/*[idOfLink]*/[4] = dstIDs[0];//id cua host dich
+            Links/*[idOfLink]*/[5] = path;//nix vector
+            Links/*[idOfLink]*/[6] = (int)1e5;
+            Links/*[idOfLink]*/
+                    [7] = (int)(1e9 * Links/*[idOfLink]*/
+                                        [6] / Links/*[idOfLink]*/
+                                                    [9]);
+            Links/*[idOfLink]*/[8] = 1001;
+            Links/*[idOfLink]*/[12] = 0;
+            *timeOfC = -1;//xoa di thoi diem thuc thi su kien (C)
+            int temp = *credit;
+            *credit = temp - 1;//thay doi gia tri credit
+            int j;
+            for(j = 0; j < BUFFER_SIZE - 1; j++)
             {
-                //tao su kien tren link
-                Links/*[idOfLink]*/[2] = outport[0];//gan id cua goi tin vao Link
-                Links/*[idOfLink]*/[3] = hostID;//id cua host nguon
-                Links/*[idOfLink]*/[4] = dstIDs[0];//id cua host dich
-                Links/*[idOfLink]*/[5] = path;//nix vector
-                Links/*[idOfLink]*/[6] = (int)1e5;
-                Links/*[idOfLink]*/
-                        [7] = (int)(1e9 * Links/*[idOfLink]*/
-                                            [6] / Links/*[idOfLink]*/
-                                                        [9]);
-                Links/*[idOfLink]*/[8] = 1001;
-                Links/*[idOfLink]*/[12] = 0;
-                *timeOfC = -1;//xoa di thoi diem thuc thi su kien (C)
-                *credit --;//thay doi gia tri credit
-                int j;
-                for(j = 0; j < BUFFER_SIZE - 1; j++)
-                {
-                    outport[j] = outport[j+1];
-                    dstIDs[j] = outport[j+1];
-                }
-                outport[BUFFER_SIZE - 1] = -1;
-                dstIDs[BUFFER_SIZE - 1] = -1;
-                *avail--;
-                //*timeOfB = curr;
-                *timeOfC = -1;
+                outport[j] = outport[j+1];
+                dstIDs[j] = outport[j+1];
             }
+            outport[BUFFER_SIZE - 1] = -1;
+            dstIDs[BUFFER_SIZE - 1] = -1;
+            temp = *avail;
+            *avail = temp - 1;
+            //*timeOfB = curr;
+            *timeOfC = -1;
         }
     }
+    
 }
 
 void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
@@ -165,9 +166,13 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
 
         //execute event C
         //NOTE: THIS CODE HAS A CLONE which begins at line 200
-        executeEventC(&avail, &timeOfB, &credit, outport, dstIDs, &timeOfC, curr, hostID, BUFFER_SIZE, path[1], 
+        if( Links[idOfLink]
+                [2] == -1)//KHONG co goi tin tren duong truyen
+        {
+            executeEventC(&avail, &timeOfB, &credit, outport, dstIDs, &timeOfC, curr, hostID, BUFFER_SIZE, path[1], 
                     Links[idOfLink]
-        );
+            );
+        }
         
         //execute event B             
         if(timeOfB == curr)
@@ -205,12 +210,17 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
             }
         }
 
-
         //execute event C
         //NOTE: THE FOLLOWING CODE IS A CLONE OF lines between 103 and 151
-        executeEventC(&avail, &timeOfB, &credit, outport, dstIDs, &timeOfC, curr, hostID, BUFFER_SIZE, path[1], 
+        if( Links[idOfLink]
+                [2] == -1)//KHONG co goi tin tren duong truyen
+        {
+            executeEventC(&avail, &timeOfB, &credit, outport, dstIDs, &timeOfC, curr, hostID, BUFFER_SIZE, path[1], 
                     Links[idOfLink]
-        );
+            );
+
+            printf("Check here");
+        }
         
         
     }
