@@ -171,19 +171,10 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
         int gamma = (sentID - receivedID) >> (8*sizeof(int)-1);//bang 0 hoac -1
         int delta = (receivedID - sentID) >> (8*sizeof(int)-1);//bang 0 hoac -1
         int espilon = sentID >> (8*sizeof(int)-1);//bang 0 hoac -1
-        timeOfC = (1 + espilon)*(1 + gamma + delta)*curr - (gamma + delta)*timeOfC;
+        timeOfC = (1 + espilon)*(1 + gamma + delta)*curr - ((espilon + gamma + delta)%2)*timeOfC;
         credit += (1 + espilon)*(1 + gamma + delta);
 
-        /* if(curr == timeOfI
-            )
-        {
-            if(sentID == receivedID && sentID != -1)
-            {
-                timeOfC = curr;//create event C
-                credit++;//thay doi gia tri credit
-            }
-            timeOfI = -1;
-        }*/
+        
 
         //execute event C
         //NOTE: THIS CODE HAS A CLONE which begins at line 200
