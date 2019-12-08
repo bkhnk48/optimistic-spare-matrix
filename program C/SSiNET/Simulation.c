@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include "Simulation.h"
 #include "RoutingPath.h"
-
+#include <limits.h>
 
 void executeEventC(int* avail, int* timeOfB, int* credit, int *outport, int *dstIDs, int* timeOfC, int curr, int hostID
                         , int BUFFER_SIZE, int path, int *Links
@@ -260,7 +260,13 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
                 );
                 break;
         }
-        
+        int x = timeOfI, y = timeOfB, z = timeOfC;
+        //int check = x - y;
+        //check = check >> (8*sizeof(int)- 1);//check = -1 nghia la x < y, 0 nghia la x >= y
+        //x = (1 + check)*y -check*x;
+        //check = x - z;
+        //check = check >> (8*sizeof(int)- 1);//check = -1 nghia la x < y, 0 nghia la x >= y 
+
         allEvents[0] = credit;
         allEvents[3] = timeOfI;
         allEvents[4] = timeOfB;
