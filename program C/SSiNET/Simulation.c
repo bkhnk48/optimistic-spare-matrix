@@ -177,61 +177,71 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
         
 
         //execute event C
-        //NOTE: THIS CODE HAS A CLONE which begins at line 200
-        if( Links[idOfLink]
-                [2] == -1)//KHONG co goi tin tren duong truyen
+        //NOTE: THIS CODE HAS A CLONE which begins at line 229
+        switch( Links[idOfLink]
+                [2])//KHONG co goi tin tren duong truyen
         {
-            executeEventC(&avail, &timeOfB, &credit, outport, dstIDs, &timeOfC, curr, hostID, BUFFER_SIZE, path[1], 
-                    Links[idOfLink]
-            );
+            case -1:
+                executeEventC(&avail, &timeOfB, &credit, outport, dstIDs, &timeOfC, curr, 
+                            hostID, BUFFER_SIZE, path[1], 
+                            Links[idOfLink]
+                );
+                break;
         }
         
         //execute event B             
-        if(timeOfB == curr)
+        switch(timeOfB - curr)
         {
-            if(avail < BUFFER_SIZE)//if there is a empty slot
-            {
-                outport[avail] = q[0]->id;//push the packet in the top source queue to this slot
-                dstIDs[avail] = q[0]->dstID;
-                avail++;
-                Queue next = q[0]->next;
-                if(next->id == q[1]->id)//if there is zero to one remaining packet in source queue
-                {    
-                    q[0] = q[0]->next;
-                    Queue t = NULL;
-                    t = malloc(sizeof(Queue));
-                    t->id = -1;
-                    t->dstID = -1;
-                    t->hostID = -1;
-                    t->next = 0;
-                    q[1] = t;
-                }
-                else//otherwise
+            case 0:
+                alpha = (avail - BUFFER_SIZE) >> (8*sizeof(int)-1); //(avail < BUFFER_SIZE)//if there is a empty slot
+                switch (alpha)
                 {
-                    q[0] = q[0]->next;
+                    case -1:
+                        outport[avail] = q[0]->id;//push the packet in the top source queue to this slot
+                        dstIDs[avail] = q[0]->dstID;
+                        avail++;
+                        Queue next = q[0]->next;
+                        switch(next->id - q[1]->id)//if there is zero to one remaining packet in source queue
+                        {    
+                            case 0:
+                                q[0] = q[0]->next;
+                                Queue t = NULL;
+                                t = malloc(sizeof(Queue));
+                                t->id = -1;
+                                t->dstID = -1;
+                                t->hostID = -1;
+                                t->next = 0;
+                                q[1] = t;
+                                break;
+                            default:
+                                q[0] = q[0]->next;
+                                break;
+                        }
+                        //if(avail == 1)//neu goi tin moi vao outport cung la goi tin duy nhat
+                        beta = (avail - 1)>>(8*sizeof(int) - 1);
+                        gamma = (1 - avail)>>(8*sizeof(int) - 1);
+                        timeOfC = (1 + beta + gamma) * curr - (beta + gamma)*timeOfC;
+                        timeOfB = -1;
+                        break;
+                
+                    default: 
+                        timeOfB = curr + RETRY_TIME;//Khong co outport nao trong, danh phai doi.
+                        break;
                 }
-                if(avail == 1)//neu goi tin moi vao outport cung la goi tin duy nhat
-                {
-                    timeOfC = curr;
-                }
-                timeOfB = -1;
-            }
-            else
-            {
-                timeOfB = curr + RETRY_TIME;//Khong co outport nao trong, danh phai doi.
-            }
+            break;
         }
 
         //execute event C
-        //NOTE: THE FOLLOWING CODE IS A CLONE OF lines between 103 and 151
-        if( Links[idOfLink]
-                [2] == -1)//KHONG co goi tin tren duong truyen
+        //NOTE: THIS CODE HAS A CLONE which begins at line 179
+        switch( Links[idOfLink]
+                [2])//KHONG co goi tin tren duong truyen
         {
-            executeEventC(&avail, &timeOfB, &credit, outport, dstIDs, &timeOfC, curr, hostID, BUFFER_SIZE, path[1], 
-                    Links[idOfLink]
-            );
-
-            printf("Check here");
+            case -1:
+                executeEventC(&avail, &timeOfB, &credit, outport, dstIDs, &timeOfC, curr, 
+                            hostID, BUFFER_SIZE, path[1], 
+                            Links[idOfLink]
+                );
+                break;
         }
         
         
