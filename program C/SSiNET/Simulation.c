@@ -120,7 +120,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
     int dst = path[path[0] - 1];
     int RETRY_TIME = 3;
     Queue **queues = g->queues;
-    int minNextTime = 0;
+    int minNextTime = INT_MAX;
     
     for(i = 0; i < numOfHosts; i++)
     {
@@ -137,6 +137,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
         Queue *q = queues[i];
         int *outport = Hosts[i]->outport;
         int *dstIDs = Hosts[i]->dstIDs;
+        int nextCycle = INT_MAX;
 
         Queue t = NULL;
 
@@ -144,6 +145,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
         switch(curr % CYCLE_PACKET)
         {
             case 0: //if this is the time to generate packet
+                nextCycle = curr + CYCLE_PACKET;
                 switch (q[0]->id)
                 {
                     case -1:
@@ -261,11 +263,28 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
                 break;
         }
         int x = timeOfI, y = timeOfB, z = timeOfC;
-        //int check = x - y;
-        //check = check >> (8*sizeof(int)- 1);//check = -1 nghia la x < y, 0 nghia la x >= y
-        //x = (1 + check)*y -check*x;
-        //check = x - z;
-        //check = check >> (8*sizeof(int)- 1);//check = -1 nghia la x < y, 0 nghia la x >= y 
+        int sizeOfShift = (8*sizeof(int)- 1);
+        int check = x >> sizeOfShift;
+        x = (1 + check)*x - check*INT_MAX;
+        check = y >> sizeOfShift;
+        y = (1 + check)*y - check*INT_MAX;
+        check = z >> sizeOfShift;
+        z = (1 + check)*z - check*INT_MAX;
+
+        check = x - y;
+        check = check >> sizeOfShift;//check = -1 nghia la x < y, 0 nghia la x >= y
+        x = (1 + check)*y -check*x;
+        check = x - z;
+        check = check >> sizeOfShift;//check = -1 nghia la x < z, 0 nghia la x >= z
+        x = (1 + check)*z -check*x;
+
+        check = x - nextCycle;
+        check = check >> sizeOfShift;//check = -1 nghia la x < z, 0 nghia la x >= z
+        x = (1 + check)*nextCycle -check*x;
+
+        check = minNextTime - x;
+        check = check >> sizeOfShift;//check = -1 nghia la minNextTime < x, 0 nghia la minNextTime >= x
+        minNextTime = (1 + check)*x - check*minNextTime; 
 
         allEvents[0] = credit;
         allEvents[3] = timeOfI;
