@@ -28,44 +28,60 @@ void executeEventC(int* avail, int* timeOfB, int* credit, int *outport, int *dst
             //outport[0][i]: all ids of packets in outport
             //outport[1][i]: all destinations of packets in outport*/
     
-    
-    if(*avail > 0//Neu co goi tin o top cua outport
-        && *timeOfC == curr //va goi tin o vi tri top nay co nhu cau duoc gui di
-        )
+    int alpha = *avail;
+    alpha = (alpha)>>(8*sizeof(int) - 1);
+    int beta = *timeOfC;
+    beta = (beta - curr) >> (8*sizeof(int) - 1);
+    int gamma = *timeOfC;
+    gamma = (curr - gamma) >> (8*sizeof(int) - 1);
+    int temp, t;
+    //if(*avail > 0//Neu co goi tin o top cua outport
+    //    && *timeOfC == curr //va goi tin o vi tri top nay co nhu cau duoc gui di
+    //    )
+    switch(alpha + beta + gamma)
     {
-        if(*credit > 0)//neu inport cua switch tiep theo con cho trong
-        {
-            //tao su kien tren link
-            Links/*[idOfLink]*/[2] = outport[0];//gan id cua goi tin vao Link
-            Links/*[idOfLink]*/[3] = hostID;//id cua host nguon
-            Links/*[idOfLink]*/[4] = dstIDs[0];//id cua host dich
-            Links/*[idOfLink]*/[5] = path;//nix vector
-            Links/*[idOfLink]*/[6] = (int)1e5;
-            Links/*[idOfLink]*/
-                    [7] = (int)(1e9 * Links/*[idOfLink]*/
-                                        [6] / Links/*[idOfLink]*/
-                                                    [9]);
-            Links/*[idOfLink]*/[8] = 1001;
-            Links/*[idOfLink]*/[12] = 0;
-            *timeOfC = -1;//xoa di thoi diem thuc thi su kien (C)
-            int temp = *credit;
-            *credit = temp - 1;//thay doi gia tri credit
-            int j;
-            for(j = 0; j < BUFFER_SIZE - 1; j++)
+        case 0:
+            t = *credit;
+            t = t>>(8*sizeof(int) - 1);
+            //if(*credit > 0)//neu inport cua switch tiep theo con cho trong
+            switch(t)
             {
-                outport[j] = outport[j+1];
-                dstIDs[j] = outport[j+1];
+                case 0:
+                    //tao su kien tren link
+                    Links/*[idOfLink]*/[2] = outport[0];//gan id cua goi tin vao Link
+                    Links/*[idOfLink]*/[3] = hostID;//id cua host nguon
+                    Links/*[idOfLink]*/[4] = dstIDs[0];//id cua host dich
+                    Links/*[idOfLink]*/[5] = path;//nix vector
+                    Links/*[idOfLink]*/[6] = (int)1e5;
+                    Links/*[idOfLink]*/
+                            [7] = (int)(1e9 * Links/*[idOfLink]*/
+                                                [6] / Links/*[idOfLink]*/
+                                                            [9]);
+                    Links/*[idOfLink]*/[8] = 1001;
+                    Links/*[idOfLink]*/[12] = 0;
+                    *timeOfC = -1;//xoa di thoi diem thuc thi su kien (C)
+                    temp = *credit;
+                    *credit = temp - 1;//thay doi gia tri credit
+                    int j;
+                    for(j = 0; j < BUFFER_SIZE - 1; j++)
+                    {
+                        outport[j] = outport[j+1];
+                        dstIDs[j] = outport[j+1];
+                    }
+                    outport[BUFFER_SIZE - 1] = -1;
+                    dstIDs[BUFFER_SIZE - 1] = -1;
+                    temp = *avail;
+                    *avail = temp - 1;
+                    temp = *avail;
+                    temp = (temp - BUFFER_SIZE)>>(8*sizeof(int)- 1);
+                    //if(*avail < BUFFER_SIZE)
+                    t = *timeOfB;
+                    //{
+                    *timeOfB = -temp*curr + (1 + temp)*t;  
+                    //}
+                    *timeOfC = -1;
+                    break;
             }
-            outport[BUFFER_SIZE - 1] = -1;
-            dstIDs[BUFFER_SIZE - 1] = -1;
-            temp = *avail;
-            *avail = temp - 1;
-            if(*avail < BUFFER_SIZE)
-            {
-              *timeOfB = curr;  
-            }
-            *timeOfC = -1;
-        }
     }
     
 }
@@ -104,6 +120,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
     int dst = path[path[0] - 1];
     int RETRY_TIME = 3;
     Queue **queues = g->queues;
+    int minNextTime = 0;
     
     for(i = 0; i < numOfHosts; i++)
     {
@@ -244,7 +261,11 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
                 break;
         }
         
-        
+        allEvents[0] = credit;
+        allEvents[3] = timeOfI;
+        allEvents[4] = timeOfB;
+        allEvents[5] = timeOfC;
+        allEvents[6] = avail;
     }
     curr++;
 }
