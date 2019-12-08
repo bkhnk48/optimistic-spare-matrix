@@ -164,7 +164,17 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
         //endof executing event A:
 
         //execute event I
-        if(curr == timeOfI
+        int alpha = (curr - timeOfI) >> (8*sizeof(int)-1);//bang 0 hoac -1
+        int beta = (timeOfI - curr) >> (8*sizeof(int)-1);//bang 0 hoac -1
+        timeOfI = (1 + alpha + beta)*(-1) - (alpha + beta)*timeOfI;
+
+        int gamma = (sentID - receivedID) >> (8*sizeof(int)-1);//bang 0 hoac -1
+        int delta = (receivedID - sentID) >> (8*sizeof(int)-1);//bang 0 hoac -1
+        int espilon = sentID >> (8*sizeof(int)-1);//bang 0 hoac -1
+        timeOfC = (1 + espilon)*(1 + gamma + delta)*curr - (gamma + delta)*timeOfC;
+        credit += (1 + espilon)*(1 + gamma + delta);
+
+        /* if(curr == timeOfI
             )
         {
             if(sentID == receivedID && sentID != -1)
@@ -173,7 +183,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
                 credit++;//thay doi gia tri credit
             }
             timeOfI = -1;
-        }
+        }*/
 
         //execute event C
         //NOTE: THIS CODE HAS A CLONE which begins at line 200
