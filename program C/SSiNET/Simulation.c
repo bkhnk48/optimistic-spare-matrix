@@ -4,7 +4,7 @@
 #include "RoutingPath.h"
 #include <limits.h>
 
-int executeEventC(int* avail, int* timeOfB, int* credit, int *outport, int *dstIDs, int* timeOfC, int curr, int hostID
+int executeEventC(int* avail, int* credit, int *outport, int *dstIDs, int* timeOfC, int curr, int hostID
                         , int BUFFER_SIZE, int path, int *Links
                     )
 {
@@ -76,9 +76,9 @@ int executeEventC(int* avail, int* timeOfB, int* credit, int *outport, int *dstI
                     temp = *avail;
                     temp = (temp - BUFFER_SIZE)>>(8*sizeof(int)- 1);
                     //if(*avail < BUFFER_SIZE)
-                    t = *timeOfB;
+                    //t = *timeOfB;
                     //{
-                    *timeOfB = -temp*curr + (1 + temp)*t;  
+                    //*timeOfB = -temp*curr + (1 + temp)*t;  
                     hasANewEventB = -temp;
                     //}
                     *timeOfC = -1;
@@ -207,10 +207,11 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
                 [2])//KHONG co goi tin tren duong truyen
         {
             case -1:
-                hasNewEventB = executeEventC(&avail, &timeOfB, &credit, outport, dstIDs, &timeOfC, curr, 
+                hasNewEventB = executeEventC(&avail, &credit, outport, dstIDs, &timeOfC, curr, 
                             hostID, BUFFER_SIZE, path[1], 
                             Links[idOfLink]
                 );
+                timeOfB = hasNewEventB * curr + (1 - hasNewEventB) * timeOfB;
                 break;
         }
         
@@ -263,13 +264,14 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
                 [2])//KHONG co goi tin tren duong truyen
         {
             case -1:
-                hasNewEventB = executeEventC(&avail, &timeOfB, &credit, outport, dstIDs, &timeOfC, curr, 
+                hasNewEventB = executeEventC(&avail, &credit, outport, dstIDs, &timeOfC, curr, 
                             hostID, BUFFER_SIZE, path[1], 
                             Links[idOfLink]
                 );
 
-                int itemInQueue = (q[0]->id) >> sizeOfShift;
-                timeOfB = hasNewEventB * (1 + itemInQueue)*curr - (1 - hasNewEventB)*itemInQueue*timeOfB;
+                int itemInQueue = (q[0]->id) >> sizeOfShift;//0 neu co goi tin ben trong, bang -1 neu khong co goi tin
+                hasNewEventB = hasNewEventB*(1 + itemInQueue);
+                timeOfB = hasNewEventB*curr + (1 - hasNewEventB)*timeOfB;
                 break;
         }
         int x = timeOfI, y = timeOfB, z = timeOfC;
