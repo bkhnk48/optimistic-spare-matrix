@@ -4,7 +4,7 @@
 #include "RoutingPath.h"
 #include <limits.h>
 
-void executeEventC(int* avail, int* timeOfB, int* credit, int *outport, int *dstIDs, int* timeOfC, int curr, int hostID
+int executeEventC(int* avail, int* timeOfB, int* credit, int *outport, int *dstIDs, int* timeOfC, int curr, int hostID
                         , int BUFFER_SIZE, int path, int *Links
                     )
 {
@@ -35,6 +35,7 @@ void executeEventC(int* avail, int* timeOfB, int* credit, int *outport, int *dst
     int gamma = *timeOfC;
     gamma = (curr - gamma) >> (8*sizeof(int) - 1);
     int temp, t;
+    int hasANewEventB = 0;
     //if(*avail > 0//Neu co goi tin o top cua outport
     //    && *timeOfC == curr //va goi tin o vi tri top nay co nhu cau duoc gui di
     //    )
@@ -78,11 +79,14 @@ void executeEventC(int* avail, int* timeOfB, int* credit, int *outport, int *dst
                     t = *timeOfB;
                     //{
                     *timeOfB = -temp*curr + (1 + temp)*t;  
+                    hasANewEventB = -temp;
                     //}
                     *timeOfC = -1;
-                    break;
+                break;
             }
+        break;
     }
+    return hasANewEventB;
     
 }
 
@@ -121,6 +125,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
     int RETRY_TIME = 3;
     Queue **queues = g->queues;
     int minNextTime = INT_MAX;
+    int sizeOfShift = (8*sizeof(int)- 1);
     
     for(i = 0; i < numOfHosts; i++)
     {
@@ -138,6 +143,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
         int *outport = Hosts[i]->outport;
         int *dstIDs = Hosts[i]->dstIDs;
         int nextCycle = INT_MAX;
+        int hasNewEventB = 0;
 
         Queue t = NULL;
 
@@ -192,7 +198,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
         int espilon = sentID >> (8*sizeof(int)-1);//bang 0 hoac -1
         timeOfC = (1 + espilon)*(1 + gamma + delta)*curr - ((espilon + gamma + delta)%2)*timeOfC;
         credit += (1 + espilon)*(1 + gamma + delta);
-
+        //endof executing event I
         
 
         //execute event C
@@ -201,7 +207,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
                 [2])//KHONG co goi tin tren duong truyen
         {
             case -1:
-                executeEventC(&avail, &timeOfB, &credit, outport, dstIDs, &timeOfC, curr, 
+                hasNewEventB = executeEventC(&avail, &timeOfB, &credit, outport, dstIDs, &timeOfC, curr, 
                             hostID, BUFFER_SIZE, path[1], 
                             Links[idOfLink]
                 );
@@ -249,6 +255,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
                 }
             break;
         }
+        //endof executing event B
 
         //execute event C
         //NOTE: THIS CODE HAS A CLONE which begins at line 179
@@ -256,14 +263,17 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
                 [2])//KHONG co goi tin tren duong truyen
         {
             case -1:
-                executeEventC(&avail, &timeOfB, &credit, outport, dstIDs, &timeOfC, curr, 
+                hasNewEventB = executeEventC(&avail, &timeOfB, &credit, outport, dstIDs, &timeOfC, curr, 
                             hostID, BUFFER_SIZE, path[1], 
                             Links[idOfLink]
                 );
+
+                int itemInQueue = (q[0]->id) >> sizeOfShift;
+                timeOfB = hasNewEventB * (1 + itemInQueue)*curr - (1 - hasNewEventB)*itemInQueue*timeOfB;
                 break;
         }
         int x = timeOfI, y = timeOfB, z = timeOfC;
-        int sizeOfShift = (8*sizeof(int)- 1);
+        
         int check = x >> sizeOfShift;
         x = (1 + check)*x - check*INT_MAX;
         check = y >> sizeOfShift;
