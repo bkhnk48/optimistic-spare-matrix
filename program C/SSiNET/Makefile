@@ -13,6 +13,7 @@ serial:
 	gcc -g -c RoutingTable.c 
 	gcc -g -c RoutingPath.c
 	gcc -g -c Simulation.c
+	gcc -g -c LinkSimulation.c
 #gcc serialNS.c -o serialNS.exe  DataStructures.o
 	gcc serialNS.c -g -o out
 r:
