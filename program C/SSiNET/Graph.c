@@ -8,6 +8,7 @@ struct GRAPH{
     int numOfSwitches;
     int BUFFER_SIZE;
     int CYCLE_PACKET;
+    int RETRY_TIME;
     int **Links;
     int *IsHost;
     //int **Hosts;
