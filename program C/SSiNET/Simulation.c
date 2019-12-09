@@ -90,7 +90,7 @@ int executeEventC(int* avail, int* credit, int *outport, int *dstIDs, int* timeO
     
 }
 
-void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
+void runHosts(Graph g, int *path, int curr)
 {
     /*
     This data structure respresents the host
@@ -124,6 +124,8 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
     int dst = path[path[0] - 1];
     int RETRY_TIME = g->RETRY_TIME;
     Queue **queues = g->queues;
+
+
     int minNextTime = INT_MAX;
     int sizeOfShift = (8*sizeof(int)- 1);
     
