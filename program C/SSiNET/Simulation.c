@@ -304,5 +304,6 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
         allEvents[5] = timeOfC;
         allEvents[6] = avail;
     }
-    curr++;
+    curr = minNextTime;
+    printf("\nthe next event will be executed at %d\n", curr);
 }
