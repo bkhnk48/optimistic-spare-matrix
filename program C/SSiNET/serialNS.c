@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "Simulation.c"
+#include "LinkSimulation.c"
 
 int main(int argc, char** argv) 
 {
@@ -250,6 +250,7 @@ int main(int argc, char** argv)
     graph->numOfSwitches = numOfSwitches;
     graph->BUFFER_SIZE = BUFFER_SIZE;
     graph->CYCLE_PACKET = 100;
+    graph->RETRY_TIME = 3;
     graph->Links = Links;
     graph->IsHost = IsHost;
     graph->Hosts = Hosts;
@@ -290,7 +291,7 @@ int main(int argc, char** argv)
     int *path = getNixVector(0, 8, ra, graph//, &hopCount 
                     );
 
-    run(graph, ra, path, 10, 0);
+    runHosts(graph, path, 0);
 
 
     return 0;
