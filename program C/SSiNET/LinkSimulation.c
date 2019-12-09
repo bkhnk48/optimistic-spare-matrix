@@ -21,7 +21,6 @@ void runLinks(Graph g, int *path, int curr)
     */
     int i, j;
     Host *Hosts = g->Hosts;
-    //int **Hosts;
     int **Links = g->Links;
     int *SwitchIndexes = g->SwitchIndexes;
     int numOfLinks = g->numOfLinks;
