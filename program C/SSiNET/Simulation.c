@@ -122,7 +122,7 @@ void run(Graph g, RAlgorithm ra, int *path, int stop, int curr)
     int BUFFER_SIZE = g->BUFFER_SIZE;
     int CYCLE_PACKET = g->CYCLE_PACKET;
     int dst = path[path[0] - 1];
-    int RETRY_TIME = 3;
+    int RETRY_TIME = g->RETRY_TIME;
     Queue **queues = g->queues;
     int minNextTime = INT_MAX;
     int sizeOfShift = (8*sizeof(int)- 1);
