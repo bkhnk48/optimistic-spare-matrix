@@ -14,12 +14,12 @@ serial:
 	gcc -g -c RoutingPath.c
 	gcc -g -c Simulation.c
 #gcc serialNS.c -o serialNS.exe  DataStructures.o
-	gcc serialNS.c -g -o serialNS.exe 
+	gcc serialNS.c -g -o out
 r:
-	./serialNS.exe
+	./out
 clean: 
-	-rm *.exe
 	-rm *.o
+	-rm out
 clear: 
-	-rm *.exe
 	-rm *.o
+	-rm out
