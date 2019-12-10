@@ -3,7 +3,7 @@
 #include "Simulation.c"
 #include <limits.h>
 
-void runLinks(Graph g, int *path, int curr)
+int runLinks(Graph g, int *path, int curr)
 {
     /* Link[index][0] id cua nut nguon
             Link[index][1] id cua nut dich
@@ -32,5 +32,36 @@ void runLinks(Graph g, int *path, int curr)
     
     for(i = 0; i < numOfLinks; i++)
     {
+        if(curr < Links[i][7])
+        {
+            if(Links[i][2] != -1)
+            {
+                printf("Co goi tin dang di tren link, tu %d den %d: \n", Links[i][3], Links[i][4]);
+            }
+            if(minNextTime > Links[i][7])
+            {
+                minNextTime = Links[i][7];
+            }
+        }
+        if(curr == Links[i][7])
+        {
+
+        }
+        if(curr < Links[i][8])
+        {
+            if(minNextTime > Links[i][8])
+            {
+                minNextTime = Links[i][8];
+            }
+        }
+        if(curr == Links[i][8])
+        {
+
+        }
+
     }
+
+    curr = minNextTime;
+    printf("\nthe next event will be executed at %d\n", curr);
+    return minNextTime;
 }
