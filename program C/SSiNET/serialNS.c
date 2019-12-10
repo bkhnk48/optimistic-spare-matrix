@@ -10,6 +10,7 @@ int main(int argc, char** argv)
     int bandwidth = 1000*1000;
     int BUFFER_SIZE = 5;
 
+
     int i, j;
 
     //De luu thong tin ve link va cac goi du lieu truyen tren link
@@ -64,7 +65,7 @@ int main(int argc, char** argv)
       Hosts[i] = malloc( sizeof * Hosts[i] * NUM_OF_FIELD_IN_HOST);
     }*/
     assignHosts(Hosts, IsHost, numOfHosts, BUFFER_SIZE);
-    assignLinkID(Hosts, Links, IsHost, numOfLinks);
+    assignLinkID(Hosts, Links, IsHost, numOfLinks, bandwidth);
 
     
 
@@ -304,6 +305,8 @@ int main(int argc, char** argv)
       check = check >> (8*sizeof(int) - 1);//check = -1 nghia la minNextTime < x, 0 nghia la minNextTime >= x
       minNextTime = (1 + check)*minFromElements - check*minNextTime; 
       curr = minNextTime;
+
+
     }
     
     
