@@ -207,16 +207,19 @@ int runHosts(Graph g, int *path, int curr)
 
         //execute event C
         //NOTE: THIS CODE HAS A CLONE which begins at line 229
-        switch( Links[idOfLink]
-                [2])//KHONG co goi tin tren duong truyen
+        int hasPacketInLink = Links[idOfLink][2] >> sizeOfShift;
+        switch( hasPacketInLink)
         {
-            case -1:
+            case -1://KHONG co goi tin tren duong truyen
                 hasNewEventB = executeEventC(&avail, &credit, outport, dstIDs, &timeOfC, curr, 
                             hostID, BUFFER_SIZE, path[1], 
                             Links[idOfLink]
                 );
                 timeOfB = hasNewEventB * curr + (1 - hasNewEventB) * timeOfB;
                 break;
+            //default://dang CO goi tin tren duong truyen
+            //    timeOfC = -1;
+            //    break;
         }
         
         //execute event B             
@@ -265,10 +268,10 @@ int runHosts(Graph g, int *path, int curr)
 
         //execute event C
         //NOTE: THIS CODE HAS A CLONE which begins at line 179
-        switch( Links[idOfLink]
-                [2])//KHONG co goi tin tren duong truyen
+        hasPacketInLink = Links[idOfLink][2] >> sizeOfShift;
+        switch(hasPacketInLink)
         {
-            case -1:
+            case -1://KHONG co goi tin tren duong truyen
                 hasNewEventB = executeEventC(&avail, &credit, outport, dstIDs, &timeOfC, curr, 
                             hostID, BUFFER_SIZE, path[1], 
                             Links[idOfLink]
@@ -277,6 +280,9 @@ int runHosts(Graph g, int *path, int curr)
                 int itemInQueue = (q[0]->id) >> sizeOfShift;//0 neu co goi tin ben trong, bang -1 neu khong co goi tin
                 hasNewEventB = hasNewEventB*(1 + itemInQueue);
                 timeOfB = hasNewEventB*curr + (1 - hasNewEventB)*timeOfB;
+                break;
+            default://dang CO mot goi tin tren duong truyen
+                timeOfC = -1;
                 break;
         }
         int x = timeOfI, y = timeOfB, z = timeOfC;
