@@ -223,25 +223,26 @@ int runHosts(Graph g, int *path, int curr)
         switch(timeOfB - curr)
         {
             case 0:
-                alpha = (avail - BUFFER_SIZE) >> (8*sizeof(int)-1); //(avail < BUFFER_SIZE)//if there is a empty slot
+                alpha = (avail - BUFFER_SIZE) >> (8*sizeof(int)-1); 
                 switch (alpha)
                 {
-                    case -1:
+                    case -1://(avail < BUFFER_SIZE)//if there is a empty slot
                         outport[avail] = q[0]->id;//push the packet in the top source queue to this slot
                         dstIDs[avail] = q[0]->dstID;
                         avail++;
                         Queue next = q[0]->next;
-                        switch(next->id - q[1]->id)//if there is zero to one remaining packet in source queue
+                        switch(next->id - q[1]->id)
                         {    
-                            case 0:
+                            case 0://if there is zero to one remaining packet in source queue
                                 q[0] = q[0]->next;
                                 Queue t = NULL;
                                 t = malloc(sizeof(Queue));
                                 t->id = -1;
                                 t->dstID = -1;
                                 t->hostID = -1;
-                                t->next = 0;
+                                t->next = NULL;
                                 q[1] = t;
+                                q[0]->next = q[1];
                                 break;
                             default:
                                 q[0] = q[0]->next;
