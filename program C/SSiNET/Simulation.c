@@ -90,7 +90,7 @@ int executeEventC(int* avail, int* credit, int *outport, int *dstIDs, int* timeO
     
 }
 
-void runHosts(Graph g, int *path, int curr)
+int runHosts(Graph g, int *path, int curr)
 {
     /*
     This data structure respresents the host
@@ -308,4 +308,5 @@ void runHosts(Graph g, int *path, int curr)
     }
     curr = minNextTime;
     printf("\nthe next event will be executed at %d\n", curr);
+    return minNextTime;
 }
