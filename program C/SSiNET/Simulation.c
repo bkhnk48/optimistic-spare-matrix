@@ -55,11 +55,11 @@ int executeEventC(int* avail, int* credit, int *outport, int *dstIDs, int* timeO
                     Links/*[idOfLink]*/[5] = path;//nix vector
                     Links/*[idOfLink]*/[6] = (int)1e5;
                     Links/*[idOfLink]*/
-                            [7] = (int)(1e9 * Links/*[idOfLink]*/
-                                                [6] / Links/*[idOfLink]*/
+                            [7] = (int)(/*1e9*/ Links/*[idOfLink]*///bo gia tri 1e9 di vi tu nay
+                                                [6] / Links/*[idOfLink]*///tro di Bandwidth se tinh don vi Gb.
                                                             [9]);
-                    printf("Links[7] = %d as Links[6] = %d and Links[9] = %d\n", Links[7], Links[6], Links[9]);
-                    Links/*[idOfLink]*/[8] = 1001;
+                    //printf("Links[7] = %d as Links[6] = %d and Links[9] = %d\n", Links[7], Links[6], Links[9]);
+                    Links/*[idOfLink]*/[8] = Links[7] + 5;//length = 1m, Constant.PROPAGATION_VELOCITY = 0.2
                     Links/*[idOfLink]*/[12] = 0;
                     *timeOfC = -1;//xoa di thoi diem thuc thi su kien (C)
                     temp = *credit;
@@ -122,7 +122,7 @@ int runHosts(Graph g, int *path, int curr)
     int numOfHosts = g->numOfHosts;
     int BUFFER_SIZE = g->BUFFER_SIZE;
     int CYCLE_PACKET = g->CYCLE_PACKET;
-    int dst = path[path[0] - 1];
+    int dst = 8; //path[path[0] - 1];
     int RETRY_TIME = g->RETRY_TIME;
     Queue **queues = g->queues;
 
@@ -145,6 +145,7 @@ int runHosts(Graph g, int *path, int curr)
         Queue *q = queues[i];
         int *outport = Hosts[i]->outport;
         int *dstIDs = Hosts[i]->dstIDs;
+        //printf("\n Destination of Host[%d] is %d", i, Hosts[i]->dstIDs[0]);
         int nextCycle = INT_MAX;
         int hasNewEventB = 0;
 
