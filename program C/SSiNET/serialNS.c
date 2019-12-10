@@ -7,7 +7,7 @@ int main(int argc, char** argv)
     int numOfSwitches = numOfPorts * numOfPorts * 5 / 4;
     int numOfHosts = numOfPorts * numOfPorts * numOfPorts / 4;
     int numOfInforAboutSwitch = 12;
-    int bandwidth = 1000*1000;
+    int bandwidth = 1; //bo nhan voi 1 ty, vi tu nay bandwith se tinh don vi Gb, 1000*1000*1000;
     int BUFFER_SIZE = 5;
 
 
@@ -291,7 +291,7 @@ int main(int argc, char** argv)
     //int hopCount = 0;
     int *path = getNixVector(0, 8, ra, graph//, &hopCount 
                     );
-    int curr = 0, stop = 1;
+    int curr = 0, stop = 104;
     while (curr < stop)
     {
       int minNextTime = stop;
@@ -306,7 +306,7 @@ int main(int argc, char** argv)
       minNextTime = (1 + check)*minFromElements - check*minNextTime; 
       curr = minNextTime;
 
-
+      printf("\n\tNext curr finally is %d\n", curr);
     }
     
     
