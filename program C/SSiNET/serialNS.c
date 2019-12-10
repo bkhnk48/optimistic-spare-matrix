@@ -290,8 +290,23 @@ int main(int argc, char** argv)
     //int hopCount = 0;
     int *path = getNixVector(0, 8, ra, graph//, &hopCount 
                     );
+    int curr = 0, stop = 1;
+    while (curr < stop)
+    {
+      int minNextTime = stop;
+      int minFromElements = runHosts(graph, path, curr);
+      int check = minNextTime - minFromElements;
+      check = check >> (8*sizeof(int) - 1);//check = -1 nghia la minNextTime < x, 0 nghia la minNextTime >= x
+      minNextTime = (1 + check)*minFromElements - check*minNextTime; 
 
-    runHosts(graph, path, 0);
+      minFromElements = runLinks(graph, path, curr);
+      check = minNextTime - minFromElements;
+      check = check >> (8*sizeof(int) - 1);//check = -1 nghia la minNextTime < x, 0 nghia la minNextTime >= x
+      minNextTime = (1 + check)*minFromElements - check*minNextTime; 
+      curr = minNextTime;
+    }
+    
+    
 
 
     return 0;
