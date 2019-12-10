@@ -65,13 +65,7 @@ int *getNixVector(int src,int dst, RAlgorithm ra, Graph g
     //printf("\nHop Count = %d\n", step->port);
     int *path = NULL;
     path = getPath(step);
-    //int i;
-    //printf("\nPort: ");
-    //for(i = 0; i < hopCount - 1; i++)
-    //{
-    //    printf("%d->", path[i]);
-    //}
-    //printf("\n");
+
     return path;
 }
 
@@ -85,6 +79,7 @@ Step getNextNode(int src, int curr, int dst, RAlgorithm ra, Graph g//, int* hopC
     int host = 0;
     host = curr*(g->IsHost[curr]);
     int linkID = g->Hosts[host]->linkID;
+    
     int nextNode = g->Links[linkID][1];
     adjant = (g->IsHost[curr])*nextNode;//tinh ra duoc adjant neu nut curr la nut nguon
     Step temp = NULL;
