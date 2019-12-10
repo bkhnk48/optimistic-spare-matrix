@@ -58,6 +58,7 @@ int executeEventC(int* avail, int* credit, int *outport, int *dstIDs, int* timeO
                             [7] = (int)(1e9 * Links/*[idOfLink]*/
                                                 [6] / Links/*[idOfLink]*/
                                                             [9]);
+                    printf("Links[7] = %d as Links[6] = %d and Links[9] = %d\n", Links[7], Links[6], Links[9]);
                     Links/*[idOfLink]*/[8] = 1001;
                     Links/*[idOfLink]*/[12] = 0;
                     *timeOfC = -1;//xoa di thoi diem thuc thi su kien (C)
