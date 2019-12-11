@@ -291,7 +291,7 @@ int main(int argc, char** argv)
     //int hopCount = 0;
     int *path = getNixVector(0, 8, ra, graph//, &hopCount 
                     );
-    int curr = 0, stop = 104;
+    int curr = 0, stop = 2004;
     while (curr < stop)
     {
       int minNextTime = stop;
@@ -309,7 +309,7 @@ int main(int argc, char** argv)
       printf("\n\tNext curr finally is %d\n", curr);
     }
     
-    
+    showPacketsInHost(graph->Hosts, graph->queues, graph->numOfHosts, graph->BUFFER_SIZE);
 
 
     return 0;
