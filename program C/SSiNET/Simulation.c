@@ -321,7 +321,53 @@ int runHosts(Graph g, int *path, int curr)
 }
 
 
-void showPacketsInHost(Host *Hosts, Queue **q)
+void showPacketsInHost(Host *Hosts, Queue **queues, int numOfHosts, int BUFFER_SIZE)
 {
-
+    int i, j;
+    for(i = 0; i < numOfHosts; i++)
+    {
+        int hostID = Hosts[i]->hostID;
+        Queue *q = queues[i];
+        int *outport = Hosts[i]->outport;
+        if(outport[0] != -1)
+        {
+            printf("\n");
+            for(j = 0; j < 10; j++){   printf("*");  }
+            printf("HOST %d", i);
+            for(j = 0; j < 10; j++){   printf("*");  }
+            printf("\n");
+            printf("*        |");
+            for(j = BUFFER_SIZE - 1; j >= 0; j--)
+            {
+                if(outport[j] == -1)
+                {
+                    printf("  |");
+                }
+                else{
+                    printf("%d|", outport[j]);
+                }
+            }
+            printf("  *//outport\n");
+            printf("*   |");
+            if(q[0]->id == -1)
+            {
+                printf("  | ... |");
+            }
+            else{
+                printf("%d| ... |", q[0]->id);
+            }
+            if(q[1]->id == -1)
+            {
+                printf("  |         *");
+            }
+            else{
+                printf("%d|         *", q[1]->id);
+            }
+            printf("//Source Queue\n");
+            for(j = 0; j < 10; j++){   printf("*");  }
+            printf("*******");
+            for(j = 0; j < 10; j++){   printf("*");  }
+            printf("\n");
+        }
+    }
 }
