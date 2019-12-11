@@ -319,3 +319,9 @@ int runHosts(Graph g, int *path, int curr)
     printf("\nthe next event will be executed at %d\n", curr);
     return minNextTime;
 }
+
+
+void showPacketsInHost(Host *Hosts, Queue **q)
+{
+
+}
