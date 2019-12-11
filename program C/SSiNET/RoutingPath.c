@@ -18,12 +18,16 @@ int *getPath(Step step)
     path = malloc(sizeof * path * count);
     Step temp = step->next;
     int i = 0;
+    //printf("\n");
     while(temp != NULL)
     {   
         path[i] = temp->port;
         i++;
+        //printf("%d->", temp->node);
         temp = temp->next;
+        
     }
+    //printf("\n");
     return path;
 }
 
