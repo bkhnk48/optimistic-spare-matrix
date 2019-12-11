@@ -37,7 +37,7 @@ int runLinks(Graph g, int *path, int curr)
             //printf("less than curr < Links[i][7]\n");
             if(Links[i][2] != -1)
             {
-                printf("Co goi tin dang di tren link, tu %d den %d \n", Links[i][3], Links[i][4]);
+                //printf("Co goi tin dang di tren link, tu %d den %d \n", Links[i][3], Links[i][4]);
             }
             if(minNextTime > Links[i][7])
             {
