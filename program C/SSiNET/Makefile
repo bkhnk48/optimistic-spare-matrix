@@ -17,7 +17,7 @@ serial:
 #gcc serialNS.c -o serialNS.exe  DataStructures.o
 	gcc serialNS.c -g -o out
 r:
-	./out
+	./out 704
 clean: 
 	-rm *.o
 	-rm out
