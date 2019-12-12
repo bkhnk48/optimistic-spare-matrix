@@ -11,6 +11,9 @@ int main(int argc, char** argv)
     int BUFFER_SIZE = 5;
 
 
+    char *a = argv[1];
+    int stop = atoi(a);
+
     int i, j;
 
     //De luu thong tin ve link va cac goi du lieu truyen tren link
@@ -291,7 +294,7 @@ int main(int argc, char** argv)
     //int hopCount = 0;
     int *path = getNixVector(0, 8, ra, graph//, &hopCount 
                     );
-    int curr = 0, stop = 2004;
+    int curr = 0; //, stop = 2004;
     while (curr < stop)
     {
       int minNextTime = stop;
