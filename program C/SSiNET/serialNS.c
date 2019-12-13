@@ -7,8 +7,13 @@ int main(int argc, char** argv)
     int numOfSwitches = numOfPorts * numOfPorts * 5 / 4;
     int numOfHosts = numOfPorts * numOfPorts * numOfPorts / 4;
     int numOfInforAboutSwitch = 12;
-    int bandwidth = 1; //bo nhan voi 1 ty, vi tu nay bandwith se tinh don vi Gb, 1000*1000*1000;
+    double bandwidth = 1; //bo nhan voi 1 ty, vi tu nay bandwith se tinh don vi Gb, 1000*1000*1000;
     int BUFFER_SIZE = 5;
+    int PACKET_SIZE = 1e5;
+    int serialTime = (int)PACKET_SIZE/bandwidth;
+    double length = 1; //1m
+    double PROPAGATION_VELOCITY = 0.2;
+    int propagationTime = (int)(length/PROPAGATION_VELOCITY);
 
 
     char *a = argv[1];
@@ -33,7 +38,7 @@ int main(int argc, char** argv)
     }
 
     
-    assignLink(Links, numOfPorts);
+    assignLink(Links, numOfPorts, serialTime, propagationTime);
     //showLink(Links, numOfLinks);
 
     int *IsHost = NULL;
@@ -68,7 +73,7 @@ int main(int argc, char** argv)
       Hosts[i] = malloc( sizeof * Hosts[i] * NUM_OF_FIELD_IN_HOST);
     }*/
     assignHosts(Hosts, IsHost, numOfHosts, BUFFER_SIZE);
-    assignLinkField(Hosts, Links, IsHost, numOfLinks, bandwidth);
+    assignLinkID(Hosts, Links, IsHost, numOfLinks);
 
     
 
