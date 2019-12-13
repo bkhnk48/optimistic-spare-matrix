@@ -14,6 +14,7 @@ void addLink(int **Link, int **adjacentMatrix, int width, int numOfLinks, int se
     {
         for(j = 0; j < height; j++)
         {   
+            ///LINK DEFINITION
             count += adjacentMatrix[i][j];
             index = (count - adjacentMatrix[i][j]*1) % numOfLinks;
             Link[index][0] += i*adjacentMatrix[i][j];/*id cua nut nguon*/
@@ -25,7 +26,7 @@ void addLink(int **Link, int **adjacentMatrix, int width, int numOfLinks, int se
             //Link[index][6] = packet_size;/*kich thuoc cua goi tin*/
             Link[index][7] = serialTime;/*thoi diem bit dau den*/
             Link[index][8] = serialTime + propagationTime;/*thoi diem bit cuoi den*/
-            //Link[index][9] = bandwith;/*bandwidth*/
+            Link[index][9] = 0;/*id cua port o nut dich*/
             Link[index][10] = 0;/*bang 0 nghia la nut nguon ko phai la Host*/
             Link[index][11] = 0;/*bang 1 nghia la nut dich la Host*/
             Link[index][12] = 0;//Hop count
@@ -97,6 +98,37 @@ void assignLink(int **Links, int k, int serialTime, int propagationTime)
     addLink(Links, adjacentMatrix, numServers + numSwitches, numOfLinks, serialTime, propagationTime);
     //showLink(Links, numOfLinks);
     free(adjacentMatrix);
+}
+
+void assignPortInfo(int **MapFromNodesToPorts, int **Links, 
+                            int *SwitchIndexes, 
+                            int numOfLinks, int numOfPorts)
+{
+    int i, j;
+    for(i = 0; i < numOfLinks; i++)
+    {
+        int srcNode = Links[i][0];
+        int dstNode = Links[i][1];
+        int index = SwitchIndexes[dstNode];
+        if(index >= 0)
+        {
+            //printf("\nSwitch %d has", idSrcNode);
+            for(j = 0; j < numOfPorts; j++)
+            {
+                if(MapFromNodesToPorts[index][j] == srcNode)
+                {
+                    Links[i][9] = j;
+                }
+            }
+        }
+    }
+
+    for(i = 0; i < numOfLinks; i++)
+    {
+        int srcNode = Links[i][0];
+        int dstNode = Links[i][1];
+        printf("Node %d connects via the port %d of node %d\n", srcNode, Links[i][9], dstNode);
+    }
 }
 
 
