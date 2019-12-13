@@ -2,10 +2,13 @@
 #include <stdlib.h> 
 #include "Switch.h"
 
-void addLink(int **Link, int **adjacentMatrix, int width, int numOfLinks)
+void addLink(int **Link, int **adjacentMatrix, int width, int numOfLinks, int serialTime, int propagationTime)
 {
     int i = 0, j = 0; int count = 0, index = 0;
     int height = width;
+    //double doubleBandwith = (double)bandwith / 1e9;
+    //int serialTime = (int)(packet_size/bandwith);
+    //int propagationTime = length / 
     
     for(i = 0; i < width; i++)
     {
@@ -19,10 +22,10 @@ void addLink(int **Link, int **adjacentMatrix, int width, int numOfLinks)
             Link[index][3] = -1;/*id cua host nguon*/
             Link[index][4] = -1;/*id cua host dich*/
             Link[index][5] = 0;/*nix-vector*/
-            Link[index][6] = 0;/*kich thuoc cua goi tin*/
-            Link[index][7] = 0;/*thoi diem bit dau den*/
-            Link[index][8] = 0;/*thoi diem bit cuoi den*/
-            Link[index][9] = 0;/*bandwidth*/
+            //Link[index][6] = packet_size;/*kich thuoc cua goi tin*/
+            Link[index][7] = serialTime;/*thoi diem bit dau den*/
+            Link[index][8] = serialTime + propagationTime;/*thoi diem bit cuoi den*/
+            //Link[index][9] = bandwith;/*bandwidth*/
             Link[index][10] = 0;/*bang 0 nghia la nut nguon ko phai la Host*/
             Link[index][11] = 0;/*bang 1 nghia la nut dich la Host*/
             Link[index][12] = 0;//Hop count
@@ -48,7 +51,7 @@ void showLink(int **Links, int count)
     }
 }
 
-void assignLink(int **Links, int k)
+void assignLink(int **Links, int k, int serialTime, int propagationTime)
 {
     int p = 0, offset = 0, e, edgeSwitch, server, s, a;
     int aggSwitch, c, coreSwitch;
@@ -91,7 +94,7 @@ void assignLink(int **Links, int k)
         }
     }
 
-    addLink(Links, adjacentMatrix, numServers + numSwitches, numOfLinks);
+    addLink(Links, adjacentMatrix, numServers + numSwitches, numOfLinks, serialTime, propagationTime);
     //showLink(Links, numOfLinks);
     free(adjacentMatrix);
 }
