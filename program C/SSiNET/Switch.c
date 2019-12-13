@@ -149,6 +149,10 @@ void mappingNodeToPort(int **MapFromNodesToPorts, int **Links, int *SwitchIndexe
         //            );
         
         MapFromNodesToPorts[z*index][count] = MapFromNodesToPorts[z*index][count] + z*idDstNode;
+
+        //Links[i][9] = z*count;///Gan id cua port cua nut dich vao link giua nut nguon va nut dich
+        //printf("Node %d connects via the port %d of node %d\n", idSrcNode, Links[i][9], idDstNode);
+
         count++;
         x = (count - numOfPorts)>>(sizeof(int)*8 - 1);
         //Neu count < numOfPorts thi x = -1, nguoc lai x = 0
