@@ -295,11 +295,14 @@ int main(int argc, char** argv)
     int *path = getNixVector(0, 8, ra, graph//, &hopCount 
                     );
     int curr = 0; //, stop = 2004;
-    while (curr < stop)
+    int numOfRepeat = 0;
+    while (curr <= stop)
     {
-      int minNextTime = stop;
+      int check = (curr - stop) >> (8*sizeof(int) - 1);//this calculation fixes the bug [BUG][SSiNET][00002]Can not execute at the stop time
+      int minNextTime = stop + (1 + check);
+      
       int minFromElements = runHosts(graph, path, curr);
-      int check = minNextTime - minFromElements;
+      check = minNextTime - minFromElements;
       check = check >> (8*sizeof(int) - 1);//check = -1 nghia la minNextTime < x, 0 nghia la minNextTime >= x
       minNextTime = (1 + check)*minFromElements - check*minNextTime; 
 
