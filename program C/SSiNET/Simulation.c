@@ -53,13 +53,13 @@ int executeEventC(int* avail, int* credit, int *outport, int *dstIDs, int* timeO
                     Links/*[idOfLink]*/[3] = hostID;//id cua host nguon
                     Links/*[idOfLink]*/[4] = dstIDs[0];//id cua host dich
                     Links/*[idOfLink]*/[5] = path;//nix vector
-                    Links/*[idOfLink]*/[6] = (int)1e5;
-                    Links/*[idOfLink]*/
-                            [7] = (int)(/*1e9*/ Links/*[idOfLink]*///bo gia tri 1e9 di vi tu nay
-                                                [6] / Links/*[idOfLink]*///tro di Bandwidth se tinh don vi Gb.
-                                                            [9]);
+                    //Links/*[idOfLink]*/[6] = (int)1e5;
+                    //Links/*[idOfLink]*/
+                    //        [7] = (int)(/*1e9*/ Links/*[idOfLink]*///bo gia tri 1e9 di vi tu nay
+                    //                            [6] / Links/*[idOfLink]*///tro di Bandwidth se tinh don vi Gb.
+                    //                                        [9]);
                     //printf("Links[7] = %d as Links[6] = %d and Links[9] = %d\n", Links[7], Links[6], Links[9]);
-                    Links/*[idOfLink]*/[8] = Links[7] + 5;//length = 1m, Constant.PROPAGATION_VELOCITY = 0.2
+                    //Links/*[idOfLink]*/[8] = Links[7] + 5;//length = 1m, Constant.PROPAGATION_VELOCITY = 0.2
                     Links/*[idOfLink]*/[12] = 0;
                     *timeOfC = -1;//xoa di thoi diem thuc thi su kien (C)
                     temp = *credit;
