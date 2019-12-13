@@ -364,6 +364,19 @@ void showPacketsInHost(Host *Hosts, Queue **queues, int numOfHosts, int BUFFER_S
                 printf("%d|         *", q[1]->id);
             }
             printf("//Source Queue\n");
+            
+            printf("Detail of source queue: ");
+            Queue temp = q[0];
+            while(temp != NULL)
+            {
+                if(temp->id != -1)
+                {
+                    printf("%d ", temp->id);
+                }
+                temp = temp->next;
+            }
+            printf("\n");
+
             for(j = 0; j < 10; j++){   printf("*");  }
             printf("*******");
             for(j = 0; j < 10; j++){   printf("*");  }
