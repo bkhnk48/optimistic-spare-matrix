@@ -146,7 +146,7 @@ int runHosts(Graph g, int *path, int curr)
         int *outport = Hosts[i]->outport;
         int *dstIDs = Hosts[i]->dstIDs;
         //printf("\n Destination of Host[%d] is %d", i, Hosts[i]->dstIDs[0]);
-        int nextCycle = INT_MAX;
+        int nextCycle = curr - (curr % CYCLE_PACKET) + CYCLE_PACKET;;
         int hasNewEventB = 0;
 
         Queue t = NULL;
@@ -155,7 +155,7 @@ int runHosts(Graph g, int *path, int curr)
         switch(curr % CYCLE_PACKET)
         {
             case 0: //if this is the time to generate packet
-                nextCycle = curr + CYCLE_PACKET;
+                
                 switch (q[0]->id)
                 {
                     case -1:
@@ -315,8 +315,8 @@ int runHosts(Graph g, int *path, int curr)
         allEvents[5] = timeOfC;
         allEvents[6] = avail;
     }
-    curr = minNextTime;
-    printf("\nthe next event will be executed at %d\n", curr);
+    //curr = minNextTime;
+    //printf("\nthe next event will be executed at %d\n", curr);
     return minNextTime;
 }
 
