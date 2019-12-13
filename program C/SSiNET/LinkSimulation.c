@@ -11,10 +11,10 @@ int runLinks(Graph g, int *path, int curr)
             Link[index][3] id cua host nguon
             Link[index][4] id cua host dich
             Link[index][5] nix-vector
-            Link[index][6] kich thuoc cua goi tin
+            Link[index][6] kich thuoc cua goi tin =>>Redundant
             Link[index][7] thoi diem bit dau den
             Link[index][8] thoi diem bit cuoi den
-            Link[index][9] bandwidth
+            Link[index][9] bandwidth =>>Redundant
             Link[index][10] bang 0 nghia la nut nguon ko phai la Host
             Link[index][11] bang 1 nghia la nut dich la Host
             Link[index][12] = 0;//Hop count
@@ -44,8 +44,11 @@ int runLinks(Graph g, int *path, int curr)
                 minNextTime = Links[i][7];
             }
         }
-        if(curr == Links[i][7])
+        if(curr == Links[i][7])//event D ended
         {
+            //We assume the packet comes to switch node
+            int idTargetNode = Links[i][1];//id of target node
+            int switchIndex = SwitchIndexes[idTargetNode];
 
         }
         if(curr < Links[i][8])
@@ -55,9 +58,9 @@ int runLinks(Graph g, int *path, int curr)
                 minNextTime = Links[i][8];
             }
         }
-        if(curr == Links[i][8])
+        if(curr == Links[i][8])//event E ended
         {
-
+            
         }
 
     }
