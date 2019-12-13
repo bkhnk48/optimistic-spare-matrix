@@ -138,7 +138,7 @@ void assignHosts(Host *Hosts, int *IsHost, int numOfHosts, int BUFFER_SIZE)
     }
 }
 
-void assignLinkField(Host *Hosts, int **Links, int *IsHost, int numOfLinks, int Bandwidth)
+void assignLinkID(Host *Hosts, int **Links, int *IsHost, int numOfLinks)
 {
     int i, j; //int isHostAtDst = 0;
     int isHostAtSrc = 0, index = 0, count = 0; 
@@ -149,7 +149,7 @@ void assignLinkField(Host *Hosts, int **Links, int *IsHost, int numOfLinks, int 
         Links[i][2] = -1;//Khong co goi tin tren duong truyen
         //printf("\tidSrcNode = %d ", idSrcNode);
         isHostAtSrc = IsHost[idSrcNode];
-        Links[i][9] = Bandwidth;
+        //Links[i][9] = Bandwidth;
         Links[i][10] = IsHost[idSrcNode];
         Links[i][11] = IsHost[idDstNode];
         count += isHostAtSrc;
