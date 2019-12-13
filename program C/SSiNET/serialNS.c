@@ -101,6 +101,8 @@ int main(int argc, char** argv)
     }
     mappingNodeToPort(MapFromNodesToPorts, Links, SwitchIndexes, 
                             numOfLinks, numOfPorts);
+    assignPortInfo(MapFromNodesToPorts, Links, SwitchIndexes, numOfLinks, numOfPorts);
+    //showPortOfSwitch(MapFromNodesToPorts, Links, SwitchIndexes, numOfLinks, numOfPorts);
     
 
     int **SwitchPortPID = NULL; //Array stores IDs of packets in inport
@@ -301,7 +303,7 @@ int main(int argc, char** argv)
                     );
     int curr = 0; //, stop = 2004;
     int numOfRepeat = 0;
-    while (curr <= stop)
+    while (curr <= stop && 0)
     {
       int check = (curr - stop) >> (8*sizeof(int) - 1);//this calculation fixes the bug [BUG][SSiNET][00002]Can not execute at the stop time
       int minNextTime = stop + (1 + check);
