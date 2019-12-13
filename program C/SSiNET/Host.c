@@ -138,7 +138,7 @@ void assignHosts(Host *Hosts, int *IsHost, int numOfHosts, int BUFFER_SIZE)
     }
 }
 
-void assignLinkID(Host *Hosts, int **Links, int *IsHost, int numOfLinks, int Bandwidth)
+void assignLinkField(Host *Hosts, int **Links, int *IsHost, int numOfLinks, int Bandwidth)
 {
     int i, j; //int isHostAtDst = 0;
     int isHostAtSrc = 0, index = 0, count = 0; 
