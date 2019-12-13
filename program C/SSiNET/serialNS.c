@@ -68,7 +68,7 @@ int main(int argc, char** argv)
       Hosts[i] = malloc( sizeof * Hosts[i] * NUM_OF_FIELD_IN_HOST);
     }*/
     assignHosts(Hosts, IsHost, numOfHosts, BUFFER_SIZE);
-    assignLinkID(Hosts, Links, IsHost, numOfLinks, bandwidth);
+    assignLinkField(Hosts, Links, IsHost, numOfLinks, bandwidth);
 
     
 
