@@ -100,4 +100,20 @@ int main(int argc, char** argv)
         }
     }
 
+    // each pod has numOfPorts^2/4 servers and numOfPorts switches
+    int numEachPod = numOfPorts * numOfPorts / 4 + numOfPorts;
+    int p, e;
+    for (p = 0; p < numOfPorts; p++) {
+        int offset = numEachPod * p;
+
+        // between server and edge
+        for (e = 0; e < numOfPorts / 2; e++) {
+            int edgeSwitch = offset + numOfPorts * numOfPorts / 4 + e;
+            for (int s = 0; s < numOfPorts / 2; s++) {
+                int server = offset + e * numOfPorts / 2 + s;
+                addEdge(edgeSwitch, server);
+            }
+        }
+    }
+
 }
