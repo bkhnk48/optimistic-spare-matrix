@@ -16,6 +16,7 @@ serial:
 #gcc -g -c LinkSimulation.c
 #gcc serialNS.c -o serialNS.exe  DataStructures.o
 #gcc serialNS.c -g -o out
+	gcc FatTree.c -g -o out
 r:
 	./out
 clean: 
