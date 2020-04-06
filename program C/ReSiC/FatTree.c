@@ -77,7 +77,7 @@ int main(int argc, char** argv)
             adjAgg[i][j*3] = 0; //Cong thu j*3 se ket noi voi node co id adjAgg[i][j*3]
             adjAgg[i][j*3 + 1] = 0;//Gia tri 0 bieu thi node lang gieng day la host, 
                                     // 1 la Edge Switch, 2 la Agg Switch, 3 la Core Switch
-            adjAgg[i][j*3 + 2] = 0;//id cua phan tu trong mang SourceHosts, hoac Edge Switch hoac
+            adjAgg[i][j*3 + 2] = 0;//id cua phan tu trong mang Hosts, hoac Edge Switch hoac
                                     //trong Agg Switch hoac trong Core Switch
         }
     }
