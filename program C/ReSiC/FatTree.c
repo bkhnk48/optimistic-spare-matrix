@@ -111,7 +111,10 @@ int main(int argc, char** argv)
             int edgeSwitch = offset + numOfPorts * numOfPorts / 4 + e;
             for (int s = 0; s < numOfPorts / 2; s++) {
                 int server = offset + e * numOfPorts / 2 + s;
-                addEdge(edgeSwitch, server);
+                //addEdge(edgeSwitch, server);
+                adjEdge[e][s*3] = server;
+                adjEdge[e][s*3 + 1] = 0;
+                adjEdge[e][s*3 + 2] = s;
             }
         }
     }
