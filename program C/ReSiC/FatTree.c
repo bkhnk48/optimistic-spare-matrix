@@ -95,9 +95,8 @@ int main(int argc, char** argv)
         {
             //adjCore[i][j] ung voi Core Switch thu i, o cong thu j 
             //se ket noi voi Switch hoac Host
-            adjCore[i][j*2] = 0; //Cong thu j*2 se ket noi voi node co id adjAgg[i][j*2]
-            adjCore[i][j*2 + 1] = 0;//id cua phan tu trong mang SourceHosts, hoac Edge Switch hoac
-                                    //trong Agg Switch hoac trong Core Switch
+            adjCore[i][j*2] = 0; //Cong thu j*2 se ket noi voi node co id adjCore[i][j*2]
+            adjCore[i][j*2 + 1] = 0;//id cua phan tu trong mang Agg Switch
         }
     }
 
