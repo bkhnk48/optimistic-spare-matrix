@@ -124,6 +124,7 @@ int main(int argc, char** argv)
             }
 
             int indexAgg = p*numOfPorts/2;
+            
             // between agg and edge
             for (int a = numOfPorts / 2; a < numOfPorts; a++) {
                 int aggSwitch = offset + numOfPorts * numOfPorts / 4 + a;
@@ -132,15 +133,15 @@ int main(int argc, char** argv)
                 adjEdge[indexEdge][a*3 + 1] = 2;
                 adjEdge[indexEdge][a*3 + 2] = indexAgg;
                 
-                adjAgg[indexAgg][indexEdge*3] = edgeSwitch;
-                adjAgg[indexAgg][indexEdge*3 + 1] = 1;
-                adjAgg[indexAgg][indexEdge*3 + 2] = indexEdge;
+                adjAgg[indexAgg][e*3] = edgeSwitch;
+                adjAgg[indexAgg][e*3 + 1] = 1;
+                adjAgg[indexAgg][e*3 + 2] = indexEdge;
                 indexAgg++;
             }
         }
     }
 
-    testAdjEdge(4, adjEdge);
+    testAdjEdge(4, adjEdge, adjAgg);
 
     return 0;
 }
