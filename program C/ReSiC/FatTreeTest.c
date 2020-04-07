@@ -53,6 +53,22 @@ void testAdjEdge(int k, int** adjEdge)
                 //adjEdge[i][j*3 + 2] = 0;//id cua phan tu trong mang SourceHosts, hoac Edge Switch hoac
                                         //trong Agg Switch hoac trong Core Switch
             }
+            else{
+                if(adjEdge[i][j*3 + 1] != 2)//Gia tri 0 bieu thi day la host, 
+                                        // 1 la Edge Switch, 2 la Agg Switch, 3 la Core Switch
+                {
+                    printf("\nInvalid: at big ports (index > %d) of Edge Switch, there must be an aggre switch.\n", 
+                                (numOfPorts/2));
+                }
+            }
+
+            if(j > 0)
+            {
+                if(adjEdge[i][j*3] <= adjEdge[i][(j-1)*3])
+                {
+                    printf("\nInvalid: server with small number should locate in front of\n");
+                }
+            }
         }
     }
 
