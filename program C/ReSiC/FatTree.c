@@ -3,6 +3,7 @@
 #include <limits.h>
 
 #include "ErrorReport.c"
+#include "FatTreeTest.c"
 //#include "FatTree.h"
 
 int main(int argc, char** argv) 
@@ -26,8 +27,8 @@ int main(int argc, char** argv)
     int propagationTime = (int)(length/PROPAGATION_VELOCITY);
 
 
-    char *a = argv[1];
-    int stop = atoi(a);
+    //char *a = argv[1];
+    //int stop = atoi(a);
 
     int i, j;
 
@@ -99,6 +100,8 @@ int main(int argc, char** argv)
             adjCore[i][j*2 + 1] = 0;//id cua phan tu trong mang Agg Switch
         }
     }
+
+    
 
     // each pod has numOfPorts^2/4 servers and numOfPorts switches
     int numEachPod = numOfPorts * numOfPorts / 4 + numOfPorts;
