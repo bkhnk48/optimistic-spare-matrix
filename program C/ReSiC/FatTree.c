@@ -140,6 +140,7 @@ int main(int argc, char** argv)
         }
     }
 
+    testAdjEdge(4, adjEdge);
 
     return 0;
 }
