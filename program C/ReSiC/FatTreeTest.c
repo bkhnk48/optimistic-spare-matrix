@@ -3,10 +3,10 @@
 #include <limits.h>
 
 
-void testAdjEdge(int k, int** adjEdge);
+void testAdjEdge(int k, int** adjEdge, int** adjAgg);
 
 
-void testAdjEdge(int k, int** adjEdge) 
+void testAdjEdge(int k, int** adjEdge, int** adjAgg) 
 {
     int numOfPorts = k;
     int numOfSwitches = numOfPorts * numOfPorts * 5 / 4;
@@ -32,7 +32,7 @@ void testAdjEdge(int k, int** adjEdge)
     int numOfLinks = numOfSwitches * numOfPorts + numOfHosts;
 
     /*
-    * Khai bao va khoi tao ma tran lien ke cho cac Edge Switches
+    * Kiem tra ma tran lien ke cua cac Edge Switches
     */
 
     for(i = 0; i < numEdgeSwitches; i++)
@@ -73,5 +73,19 @@ void testAdjEdge(int k, int** adjEdge)
     }
 
 
-
+    for(i = 0; i < numEdgeSwitches; i++)
+    {
+        for(j = 0; j < numOfPorts; j++)
+        {
+            if(j < numOfPorts / 2)
+            {
+                if(adjAgg[i][j*3 + 1] != 1)//Gia tri 0 bieu thi day la host, 
+                                        // 1 la Edge Switch, 2 la Agg Switch, 3 la Core Switch
+                {
+                    printf("\n%d Invalid: at small ports (index < %d) of Agg Switch, there must be an edge switch.\n", 
+                                adjAgg[i][j*3 + 1], (numOfPorts/2));
+                }
+            }
+        }
+    }
 }
