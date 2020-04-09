@@ -101,16 +101,13 @@ void testAdjEdge(int k, int** adjEdge, int** adjAgg, int** adjCore)
     {
         for(j = 0; j < numOfPorts; j++)
         {
-            //if(adjCore[i][j*2 + 1] != 2)//Gia tri 0 bieu thi day la host, 
-                                        // 1 la Edge Switch, 2 la Agg Switch, 3 la Core Switch
-            //{
-            //    printf("\n%d Invalid: at %d port of Core Switch, there must be an agg switch.\n", 
-            //                    adjAgg[i][j*2 + 1], j);
-            //}
             if(j > 0)
             {
-                if(adjCore[i][j*2] > adjCore[i][(j-1)*2])
+                if(adjCore[i][j*2] <= adjCore[i][(j-1)*2])
                 {
+                    //printf("adjCore[%d][%d] = %d > adjCore[%d][%d] = %d\n"
+                    //    , i, j*2, adjCore[i][j*2], i, (j-1)*2, adjCore[i][(j-1)*2]
+                    //    );
                     printf("\nInvalid: agg switch with small number should locate in front of\n");
                 }
             }
