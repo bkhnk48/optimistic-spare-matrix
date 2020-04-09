@@ -106,8 +106,10 @@ int main(int argc, char** argv)
     // each pod has numOfPorts^2/4 servers and numOfPorts switches
     int numEachPod = numOfPorts * numOfPorts / 4 + numOfPorts;
     int p, e;
+    int indexRow; //, indexCol ;
     for (p = 0; p < numOfPorts; p++) {
         int offset = numEachPod * p;
+        int a;
 
         // between server and edge
         for (e = 0; e < numOfPorts / 2; e++) {
@@ -125,7 +127,7 @@ int main(int argc, char** argv)
 
             int indexAgg = p*numOfPorts/2;
             
-            int a;
+            
             // between agg and edge
             for (a = numOfPorts / 2; a < numOfPorts; a++) {
                 int aggSwitch = offset + numOfPorts * numOfPorts / 4 + a;
@@ -138,6 +140,28 @@ int main(int argc, char** argv)
                 adjAgg[indexAgg][e*3 + 1] = 1;
                 adjAgg[indexAgg][e*3 + 2] = indexEdge;
                 indexAgg++;
+            }
+
+            
+        }
+
+
+        // between agg and core
+        int c;
+        for (a = 0; a < numOfPorts / 2; a++) {
+            int aggSwitch = offset + numOfPorts * numOfPorts / 4 + numOfPorts / 2 + a;
+            for (c = 0; c < numOfPorts / 2; c++) {
+                int coreSwitch = a * numOfPorts / 2 + c + numPodSwitches + numOfHosts;
+                int d = (c + numOfPorts/2)*3;
+                //addEdge(aggSwitch, coreSwitch);
+                adjAgg[a][d] = coreSwitch;
+                adjAgg[a][d + 1] = 3;
+                adjAgg[a][d + 2] = c;
+
+                indexRow = a * numOfPorts / 2 + c;
+                //indexCol = p;
+                adjCore[indexRow][p*2] = aggSwitch;
+                adjCore[indexRow][p*2 + 1] = a;
             }
         }
     }
