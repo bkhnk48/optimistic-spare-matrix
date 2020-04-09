@@ -107,9 +107,11 @@ int main(int argc, char** argv)
     int numEachPod = numOfPorts * numOfPorts / 4 + numOfPorts;
     int p, e;
     int indexRow; //, indexCol ;
+    int indexAgg;
     for (p = 0; p < numOfPorts; p++) {
         int offset = numEachPod * p;
         int a;
+        
 
         // between server and edge
         for (e = 0; e < numOfPorts / 2; e++) {
@@ -124,10 +126,9 @@ int main(int argc, char** argv)
                 adjEdge[indexEdge][s*3 + 1] = 0;
                 adjEdge[indexEdge][s*3 + 2] = s;
             }
+            
+            indexAgg = p*numOfPorts/2;
 
-            int indexAgg = p*numOfPorts/2;
-            
-            
             // between agg and edge
             for (a = numOfPorts / 2; a < numOfPorts; a++) {
                 int aggSwitch = offset + numOfPorts * numOfPorts / 4 + a;
@@ -145,28 +146,32 @@ int main(int argc, char** argv)
             
         }
 
-
+        indexAgg = p*numOfPorts/2;
+        
         // between agg and core
         int c;
         for (a = 0; a < numOfPorts / 2; a++) {
             int aggSwitch = offset + numOfPorts * numOfPorts / 4 + numOfPorts / 2 + a;
+            
             for (c = 0; c < numOfPorts / 2; c++) {
                 int coreSwitch = a * numOfPorts / 2 + c + numPodSwitches + numOfHosts;
                 int d = (c + numOfPorts/2)*3;
                 //addEdge(aggSwitch, coreSwitch);
-                adjAgg[a][d] = coreSwitch;
-                adjAgg[a][d + 1] = 3;
-                adjAgg[a][d + 2] = c;
+                adjAgg[indexAgg][d] = coreSwitch;
+                adjAgg[indexAgg][d + 1] = 3;
+                adjAgg[indexAgg][d + 2] = c;
 
                 indexRow = a * numOfPorts / 2 + c;
                 //indexCol = p;
                 adjCore[indexRow][p*2] = aggSwitch;
-                adjCore[indexRow][p*2 + 1] = a;
+                adjCore[indexRow][p*2 + 1] = indexAgg;
+                
             }
+            indexAgg++;
         }
     }
 
-    testAdjEdge(4, adjEdge, adjAgg);
+    testAdjEdge(4, adjEdge, adjAgg, adjCore);
 
     return 0;
 }
