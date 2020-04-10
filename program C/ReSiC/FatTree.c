@@ -105,11 +105,11 @@ int main(int argc, char** argv)
 
     // each pod has numOfPorts^2/4 servers and numOfPorts switches
     int numEachPod = numOfPorts * numOfPorts / 4 + numOfPorts;
-    int p, e;
+    int p, e, offset;
     int indexRow; //, indexCol ;
     int indexAgg;
     for (p = 0; p < numOfPorts; p++) {
-        int offset = numEachPod * p;
+        offset = numEachPod * p;
         int a;
         
 
@@ -171,7 +171,93 @@ int main(int argc, char** argv)
         }
     }
 
-    testAdjEdge(4, adjEdge, adjAgg, adjCore);
+    //testAdjEdge(4, adjEdge, adjAgg, adjCore);
+
+    int** addServer = NULL;
+    int** addEdge = NULL;
+    int** addAgg = NULL;
+    int** addCore = NULL;
+
+    addServer = malloc(sizeof * addServer * numOfHosts);
+    addEdge = malloc(sizeof * addEdge * numEdgeSwitches);
+    addAgg = malloc(sizeof * addAgg * numAggSwitches);
+    addCore = malloc(sizeof * addAgg * numCoreSwitches);
+
+    for(i = 0; i < numOfHosts; i++)
+    {
+        addServer[i] = malloc(sizeof * addServer[i] * 5);
+        for(j = 0; j < 5; j++)
+        {
+            addServer[i][j] = 0;
+        }
+    }
+
+    for(i = 0; i < numEdgeSwitches; i++)
+    {
+        addEdge[i] = malloc(sizeof * addEdge[i] * 5);
+        for(j = 0; j < 5; j++)
+        {
+            addEdge[i][j] = 0;
+        }
+    }
+
+    for(i = 0; i < numAggSwitches; i++)
+    {
+        addAgg[i] = malloc(sizeof * addAgg[i] * 5);
+        for(j = 0; j < 5; j++)
+        {
+            addAgg[i][j] = 0;
+        }
+    }
+
+    for(i = 0; i < numCoreSwitches; i++)
+    {
+        addCore[i] = malloc(sizeof * addCore[i] * 5);
+        for(j = 0; j < 5; j++)
+        {
+            addCore[i][j] = 0;
+        }
+    }
+
+    int switchId = 0;
+    int h, s;
+
+    for (p = 0; p < numOfPorts; p++) {
+        offset = numEachPod * p;
+        for (s = 0; s < numOfPorts/2; s++) {
+            switchId = offset + numOfPorts * numOfPorts / 4 + s;
+            //addEdge[switchId] = new Address(10, p, s, 1);
+        }
+    }
+    /*for (j = 1; j <= numOfPorts / 2; j++) {
+        for (i = 1; i <= numOfPorts / 2; i++) {
+            int offset = numPodSwitches + numServers;
+            int switchId = offset + (j - 1) * numOfPorts / 2 + i - 1;
+            address[switchId] = new Address(10, k, j, i);
+        }
+    }*/
+
+    int serverId = 0;
+    int delta = 0;
+    // address for servers
+    for (p = 0; p < numOfPorts; p++) {
+        int offset = numEachPod * p;
+        for (e = 0; e < numOfPorts / 2; e++) {
+            for (h = 2; h <= numOfPorts / 2 + 1; h++) {
+                serverId = offset + e * numOfPorts / 2 + h - 2;
+                delta = numOfPorts*p*(1 + ((serverId - numOfPorts) >> 31));
+                //int delta = serverId - p*numOfPorts;
+                //printf("%d, server ID = %d, delta = %d, p = %d, e = %d, h = %d\n", 
+                //                serverId - delta, serverId, delta, p, e, h);
+                delta = serverId - delta;
+                addServer[delta][0] = serverId; //new Address(10, p, e, h);
+                addServer[delta][1] = 10;
+                addServer[delta][2] = p;
+                addServer[delta][3] = e;
+                addServer[delta][4] = h;
+            }
+        }
+    }
 
     return 0;
 }
