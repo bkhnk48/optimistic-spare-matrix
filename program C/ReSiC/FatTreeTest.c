@@ -114,3 +114,25 @@ void testAdjEdge(int k, int** adjEdge, int** adjAgg, int** adjCore)
         }
     }
 }
+
+void testAddresses(int k, int** addEdge, int** addAgg, int** addCore, int** addServer)
+{
+    int numOfPorts = k;
+    int numOfSwitches = numOfPorts * numOfPorts * 5 / 4;
+    int numPodSwitches = numOfPorts * numOfPorts;
+    int numEdgeSwitches = numPodSwitches / 2;
+    int numAggSwitches = numPodSwitches / 2;
+
+    int numCoreSwitches = numOfPorts * numOfPorts / 4;
+
+    int numOfHosts = numOfPorts * numOfPorts * numOfPorts / 4;
+
+    int i, j;
+    for(i = 1; i < numEdgeSwitches; i++)
+    {
+        if(addEdge[i][0] < addEdge[i-1][0])
+        {
+            printf("\nInvalid: Server that has small number should locate in front of\n");
+        }
+    }
+}
