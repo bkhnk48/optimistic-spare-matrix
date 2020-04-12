@@ -108,6 +108,7 @@ int main(int argc, char** argv)
     int p, e, offset;
     int indexRow; //, indexCol ;
     int indexAgg;
+    int indexEdge;
     for (p = 0; p < numOfPorts; p++) {
         offset = numEachPod * p;
         int a;
@@ -116,7 +117,7 @@ int main(int argc, char** argv)
         // between server and edge
         for (e = 0; e < numOfPorts / 2; e++) {
             int edgeSwitch = offset + numOfPorts * numOfPorts / 4 + e;
-            int indexEdge = e + (p*numOfPorts/2);
+            indexEdge = e + (p*numOfPorts/2);
             
             for (int s = 0; s < numOfPorts / 2; s++) {
                 int server = offset + e * numOfPorts / 2 + s;
@@ -226,6 +227,21 @@ int main(int argc, char** argv)
         offset = numEachPod * p;
         for (s = 0; s < numOfPorts/2; s++) {
             switchId = offset + numOfPorts * numOfPorts / 4 + s;
+            //printf("switchID of Edge = %d\n", switchId);
+            indexEdge = p*numOfPorts/2 + s;
+            addEdge[indexEdge][0] = switchId;
+            addEdge[indexEdge][1] = 10;
+            addEdge[indexEdge][2] = p;
+            addEdge[indexEdge][3] = s;
+            addEdge[indexEdge][4] = 1;
+            
+            switchId += numOfPorts/2;
+            
+            addAgg[indexEdge][0] = switchId;
+            addAgg[indexEdge][1] = 10;
+            addAgg[indexEdge][2] = p;
+            addAgg[indexEdge][3] = s + (numOfPorts / 2);
+            addAgg[indexEdge][4] = 1;
             //addEdge[switchId] = new Address(10, p, s, 1);
         }
     }
