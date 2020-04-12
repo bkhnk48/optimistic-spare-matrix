@@ -275,5 +275,9 @@ int main(int argc, char** argv)
         }
     }
 
+
+
+    testAddresses(numOfPorts, addEdge, addAgg, addCore, addServer);
+
     return 0;
 }
