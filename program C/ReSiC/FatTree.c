@@ -238,10 +238,10 @@ int main(int argc, char** argv)
             switchId += numOfPorts/2;
             
             addAgg[indexEdge][0] = switchId;
-            addAgg[indexEdge][1] = 10;
-            addAgg[indexEdge][2] = p;
-            addAgg[indexEdge][3] = s + (numOfPorts / 2);
-            addAgg[indexEdge][4] = 1;
+            addAgg[indexEdge][1] = 0 | (10 << 24);
+            addAgg[indexEdge][1] |= (p << 16);
+            addAgg[indexEdge][1] |= ((s + numOfPorts / 2) << 8);
+            addAgg[indexEdge][1] |= 1;
             //addEdge[switchId] = new Address(10, p, s, 1);
         }
     }
