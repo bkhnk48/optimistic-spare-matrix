@@ -275,6 +275,21 @@ int main(int argc, char** argv)
         }
     }
 
+    //addresses for Core switches
+    for (int j = 1; j <= numOfPorts / 2; j++) {
+        for (int i = 1; i <= numOfPorts / 2; i++) {
+            offset = numPodSwitches + numOfHosts;
+            indexRow = (j - 1) * numOfPorts / 2 + i - 1;
+            switchId = offset + indexRow;
+            //address[switchId] = new Address(10, k, j, I);
+            addCore[indexRow][0] = switchId;
+            addCore[indexRow][1] = 10;
+            addCore[indexRow][2] = numOfPorts;
+            addCore[indexRow][3] = j;
+            addCore[indexRow][4] = i;
+        }
+    }
+
 
 
     testAddresses(numOfPorts, addEdge, addAgg, addCore, addServer);
