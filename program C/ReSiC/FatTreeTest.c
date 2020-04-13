@@ -207,4 +207,13 @@ void testAddresses(int k, int** addEdge, int** addAgg, int** addCore, int** addS
             break;
         }
     }
+
+    for(i = 1; i < numOfHosts; i++)
+    {
+        if(addServer[i][0] <= addServer[i-1][0])
+        {
+            printf("\nInvalid: Host that has small number ID should be located at small index\n");
+            break;
+        }
+    }
 }
