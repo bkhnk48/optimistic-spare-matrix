@@ -230,7 +230,7 @@ int main(int argc, char** argv)
             //printf("switchID of Edge = %d\n", switchId);
             indexEdge = p*numOfPorts/2 + s;
             addEdge[indexEdge][0] = switchId;
-            addEdge[indexEdge][1] = 0 | (10 << 24);
+            addEdge[indexEdge][1] = (10 << 24);
             addEdge[indexEdge][1] |= (p << 16);
             addEdge[indexEdge][1] |= (s << 8);
             addEdge[indexEdge][1] |= 1;
@@ -238,7 +238,7 @@ int main(int argc, char** argv)
             switchId += numOfPorts/2;
             
             addAgg[indexEdge][0] = switchId;
-            addAgg[indexEdge][1] = 0 | (10 << 24);
+            addAgg[indexEdge][1] = (10 << 24);
             addAgg[indexEdge][1] |= (p << 16);
             addAgg[indexEdge][1] |= ((s + numOfPorts / 2) << 8);
             addAgg[indexEdge][1] |= 1;
