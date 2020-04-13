@@ -277,10 +277,10 @@ int main(int argc, char** argv)
             switchId = offset + indexRow;
             //address[switchId] = new Address(10, k, j, I);
             addCore[indexRow][0] = switchId;
-            addCore[indexRow][1] = 10;
-            addCore[indexRow][2] = numOfPorts;
-            addCore[indexRow][3] = j;
-            addCore[indexRow][4] = i;
+            addCore[indexRow][1] = (10 << 24);
+            addCore[indexRow][1] |= (numOfPorts << 16);
+            addCore[indexRow][1] |= (j << 8);
+            addCore[indexRow][1] |= i;
         }
     }
 
