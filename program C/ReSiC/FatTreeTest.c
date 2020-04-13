@@ -146,9 +146,10 @@ void testAddresses(int k, int** addEdge, int** addAgg, int** addCore, int** addS
 
     for(i = 1; i < numCoreSwitches; i++)
     {
-        if(addCore[i][0] < addCore[i-1][0])
+        if(addCore[i][0] <= addCore[i-1][0])
         {
             printf("\nInvalid: Core switch that has small number ID should be located  at small index\n");
+            break;
         }
     }
 }
