@@ -137,6 +137,34 @@ void testAddresses(int k, int** addEdge, int** addAgg, int** addCore, int** addS
         }
     }
 
+    int t;
+    int ip1, ip2, ip3, ip4;
+
+    for(i = 0; i < numEdgeSwitches; i++)
+    {
+        t = addEdge[i][1];
+        ip1 = t >> 24;
+        ip2 = (t << 8) >> 24;
+        ip3 = (t << 16) >> 24;
+        ip4 = (t & 15);
+        if(ip1 != 10 || (ip2 < 0 || ip2 >= numOfPorts) 
+            || (ip3 < 0 || ip3 >= numOfPorts / 2)
+            || ip4 != 1
+                )
+        {
+            printf("The address of edge %d is not in correct format 10.p.s.1 as %d.%d.%d.%d\n"
+                    , i, ip1, ip2, ip3, ip4
+                    );
+            break;
+
+        }
+        //else{
+        //    printf("%d.%d.%d.%d\n"
+        //            , ip1, ip2, ip3, ip4
+        //            );
+        //}
+    }
+
     for(i = 1; i < numAggSwitches; i++)
     {
         if(addAgg[i][0] <= addAgg[i-1][0])
