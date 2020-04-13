@@ -261,10 +261,10 @@ int main(int argc, char** argv)
                 //                serverId - delta, serverId, delta, p, e, h);
                 delta = serverId - delta;
                 addServer[delta][0] = serverId; //new Address(10, p, e, h);
-                addServer[delta][1] = 10;
-                addServer[delta][2] = p;
-                addServer[delta][3] = e;
-                addServer[delta][4] = h;
+                addServer[delta][1] = (10 << 24);
+                addServer[delta][1] |= (p << 16);
+                addServer[delta][1] |= (e << 8);
+                addServer[delta][1] |= h;
             }
         }
     }
