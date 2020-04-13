@@ -245,13 +245,7 @@ int main(int argc, char** argv)
             //addEdge[switchId] = new Address(10, p, s, 1);
         }
     }
-    /*for (j = 1; j <= numOfPorts / 2; j++) {
-        for (i = 1; i <= numOfPorts / 2; i++) {
-            int offset = numPodSwitches + numServers;
-            int switchId = offset + (j - 1) * numOfPorts / 2 + i - 1;
-            address[switchId] = new Address(10, k, j, i);
-        }
-    }*/
+   
 
     int serverId = 0;
     int delta = 0;
