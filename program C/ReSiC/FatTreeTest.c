@@ -133,14 +133,16 @@ void testAddresses(int k, int** addEdge, int** addAgg, int** addCore, int** addS
         if(addEdge[i][0] < addEdge[i-1][0])
         {
             printf("\nInvalid: Edge switch that has small number ID should be located at small index\n");
+            break;
         }
     }
 
     for(i = 1; i < numAggSwitches; i++)
     {
-        if(addAgg[i][0] < addAgg[i-1][0])
+        if(addAgg[i][0] <= addAgg[i-1][0])
         {
             printf("\nInvalid: Agg switch that has small number ID should be located  at small index\n");
+            break;
         }
     }
 
