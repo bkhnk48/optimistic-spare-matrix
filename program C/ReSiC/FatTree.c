@@ -183,11 +183,12 @@ int main(int argc, char** argv)
     addEdge = malloc(sizeof * addEdge * numEdgeSwitches);
     addAgg = malloc(sizeof * addAgg * numAggSwitches);
     addCore = malloc(sizeof * addAgg * numCoreSwitches);
+    int numOfElemt = 2;
 
     for(i = 0; i < numOfHosts; i++)
     {
-        addServer[i] = malloc(sizeof * addServer[i] * 5);
-        for(j = 0; j < 5; j++)
+        addServer[i] = malloc(sizeof * addServer[i] * numOfElemt);
+        for(j = 0; j < numOfElemt; j++)
         {
             addServer[i][j] = 0;
         }
@@ -195,8 +196,8 @@ int main(int argc, char** argv)
 
     for(i = 0; i < numEdgeSwitches; i++)
     {
-        addEdge[i] = malloc(sizeof * addEdge[i] * 5);
-        for(j = 0; j < 5; j++)
+        addEdge[i] = malloc(sizeof * addEdge[i] * numOfElemt);
+        for(j = 0; j < numOfElemt; j++)
         {
             addEdge[i][j] = 0;
         }
@@ -204,8 +205,8 @@ int main(int argc, char** argv)
 
     for(i = 0; i < numAggSwitches; i++)
     {
-        addAgg[i] = malloc(sizeof * addAgg[i] * 5);
-        for(j = 0; j < 5; j++)
+        addAgg[i] = malloc(sizeof * addAgg[i] * numOfElemt);
+        for(j = 0; j < numOfElemt; j++)
         {
             addAgg[i][j] = 0;
         }
@@ -213,8 +214,8 @@ int main(int argc, char** argv)
 
     for(i = 0; i < numCoreSwitches; i++)
     {
-        addCore[i] = malloc(sizeof * addCore[i] * 5);
-        for(j = 0; j < 5; j++)
+        addCore[i] = malloc(sizeof * addCore[i] * numOfElemt);
+        for(j = 0; j < numOfElemt; j++)
         {
             addCore[i][j] = 0;
         }
@@ -286,7 +287,40 @@ int main(int argc, char** argv)
 
 
 
-    testAddresses(numOfPorts, addEdge, addAgg, addCore, addServer);
+    //testAddresses(numOfPorts, addEdge, addAgg, addCore, addServer);
+
+    //==========Build table=========//
+    int** edgeTables = NULL;
+    int** CoreTables = NULL;
+    int** AggTables = NULL;
+    int suffix;
+
+    edgeTables = malloc(sizeof * edgeTables * numEdgeSwitches);
+    for(i = 0; i < numEdgeSwitches; i++)
+    {
+        edgeTables[i] = malloc(sizeof * edgeTables[i] * (numOfPorts/2 + 2));
+        for(j = 0; j < (numOfPorts/2 + 2); j++)
+        {
+            edgeTables[i][j] = 0;
+        }
+    }
+
+    //edge switch
+    for (p = 0; p < numOfPorts; p++) {
+        offset = numEachPod * p;
+        for (e = 0; e < numOfPorts / 2; e++) {
+            //indexEdge = offset + numOfPorts * numOfPorts / 4 + e;
+            indexEdge = p*numOfPorts/2 + e;
+            // create suffix table
+            //HashMap<Integer, Integer> suffixTable = new HashMap<>();
+            for (suffix = 2; suffix <= numOfPorts / 2 + 1; suffix++) {
+                //int agg = offset + k * k / 4 + (e + suffix - 2) % (k / 2) + (k / 2);
+                //suffixTable.put(suffix, agg);
+                edgeTables[indexEdge][suffix] = (numOfPorts/2) + (suffix - 2);
+            }
+            //suffixTables.put(edgeSwitch, suffixTable);
+        }
+    }
 
     return 0;
 }
