@@ -268,11 +268,11 @@ void testAddresses(int k, int** addEdge, int** addAgg, int** addCore, int** addS
             break;
 
         }
-        /*else
+        else
         {
             printf("%d.%d.%d.%d\n"
                     , ip1, ip2, ip3, ip4
                     );
-        }*/
+        }
     }
 }
