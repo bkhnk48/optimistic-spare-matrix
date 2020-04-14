@@ -172,7 +172,7 @@ int main(int argc, char** argv)
         }
     }
 
-    //testAdjEdge(4, adjEdge, adjAgg, adjCore);
+    testAdjEdge(4, adjEdge, adjAgg, adjCore);
 
     int** addServer = NULL;
     int** addEdge = NULL;
