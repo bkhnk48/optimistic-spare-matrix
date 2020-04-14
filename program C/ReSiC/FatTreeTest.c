@@ -66,10 +66,17 @@ void testAdjEdge(int k, int** adjEdge, int** adjAgg, int** adjCore)
             {
                 if(adjEdge[i][j*3] <= adjEdge[i][(j-1)*3])
                 {
-                    printf("\nInvalid: server with small number should locate in front of\n");
+                    printf("\nInvalid: node with small number should locate in front of\n");
+                }
+                else{
+                    printf("k = %d -> %d ", j, adjEdge[i][j*3]);
                 }
             }
+            else{
+                printf("k = %d -> %d ", j, adjEdge[i][j*3]);
+            }
         }
+        printf("\n");
     }
 
 
