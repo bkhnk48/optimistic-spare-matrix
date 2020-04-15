@@ -298,29 +298,21 @@ int main(int argc, char** argv)
     edgeTables = malloc(sizeof * edgeTables * numEdgeSwitches);
     for(i = 0; i < numEdgeSwitches; i++)
     {
-        edgeTables[i] = malloc(sizeof * edgeTables[i] * (numOfPorts/2 + 2));
-        for(j = 0; j < (numOfPorts/2 + 2); j++)
+        edgeTables[i] = malloc(sizeof * edgeTables[i] * 3);
+        for(j = 0; j < 3; j++)
         {
             edgeTables[i][j] = 0;
         }
     }
 
-    //edge switch
-    for (p = 0; p < numOfPorts; p++) {
-        offset = numEachPod * p;
-        for (e = 0; e < numOfPorts / 2; e++) {
-            //indexEdge = offset + numOfPorts * numOfPorts / 4 + e;
-            indexEdge = p*numOfPorts/2 + e;
-            // create suffix table
-            //HashMap<Integer, Integer> suffixTable = new HashMap<>();
-            for (suffix = 2; suffix <= numOfPorts / 2 + 1; suffix++) {
-                //int agg = offset + k * k / 4 + (e + suffix - 2) % (k / 2) + (k / 2);
-                //suffixTable.put(suffix, agg);
-                edgeTables[indexEdge][suffix] = (numOfPorts/2) + (suffix - 2);
-            }
-            //suffixTables.put(edgeSwitch, suffixTable);
-        }
+    //build suffix table for edge switch
+    for (indexEdge = 0; indexEdge < numEdgeSwitches; indexEdge++) {
+        edgeTables[indexEdge][0] = (numOfPorts/2);
+        edgeTables[indexEdge][1] = 2;
+        edgeTables[indexEdge][2] = (numOfPorts/2) + 1;
     }
+
+    
 
     return 0;
 }
