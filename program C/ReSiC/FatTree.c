@@ -298,8 +298,8 @@ int main(int argc, char** argv)
     edgeTables = malloc(sizeof * edgeTables * numEdgeSwitches);
     for(i = 0; i < numEdgeSwitches; i++)
     {
-        edgeTables[i] = malloc(sizeof * edgeTables[i] * 3);
-        for(j = 0; j < 3; j++)
+        edgeTables[i] = malloc(sizeof * edgeTables[i] * (numOfPorts/2 + 2));
+        for(j = 0; j < (numOfPorts/2); j++)
         {
             edgeTables[i][j] = 0;
         }
@@ -307,9 +307,12 @@ int main(int argc, char** argv)
 
     //build suffix table for edge switch
     for (indexEdge = 0; indexEdge < numEdgeSwitches; indexEdge++) {
-        edgeTables[indexEdge][0] = (numOfPorts/2);
-        edgeTables[indexEdge][1] = 2;
-        edgeTables[indexEdge][2] = (numOfPorts/2) + 1;
+        edgeTables[indexEdge][0] = 0;
+        edgeTables[indexEdge][1] = 0;
+        for(suffix = 2; suffix <= (numOfPorts/2) + 1; suffix++)
+        {
+            edgeTables[indexEdge][suffix] = 1;
+        }
     }
 
     
