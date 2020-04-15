@@ -8,7 +8,7 @@
 
 int main(int argc, char** argv) 
 {
-    int numOfPorts = 4;
+    int numOfPorts = 100;
     int numOfSwitches = numOfPorts * numOfPorts * 5 / 4;
     int numPodSwitches = numOfPorts * numOfPorts;
     int numEdgeSwitches = numPodSwitches / 2;
@@ -291,9 +291,10 @@ int main(int argc, char** argv)
 
     //==========Build table=========//
     int** edgeTables = NULL;
-    int** CoreTables = NULL;
-    int** AggTables = NULL;
-    int suffix;
+    int** coreTables = NULL;
+    int** aggSuffixTables = NULL;
+    int** aggPrefixTables = NULL;
+    int suffix, prefix;
 
     edgeTables = malloc(sizeof * edgeTables * numEdgeSwitches);
     for(i = 0; i < numEdgeSwitches; i++)
@@ -302,6 +303,36 @@ int main(int argc, char** argv)
         for(j = 0; j < (numOfPorts/2); j++)
         {
             edgeTables[i][j] = 0;
+        }
+    }
+
+    coreTables = malloc(sizeof * coreTables * numCoreSwitches);
+    for(i = 0; i < numCoreSwitches; i++)
+    {
+        coreTables[i] = malloc(sizeof * coreTables[i] * numOfPorts);
+        for(j = 0; j < numOfPorts; j++)
+        {
+            coreTables[i][j] = 0;
+        }
+    }
+
+    aggSuffixTables = malloc(sizeof * aggSuffixTables * numAggSwitches);
+    for(i = 0; i < numAggSwitches; i++)
+    {
+        aggSuffixTables[i] = malloc(sizeof * aggSuffixTables[i] * (numOfPorts/2 + 2));
+        for(j = 0; j < (numOfPorts/2); j++)
+        {
+            aggSuffixTables[i][j] = 0;
+        }
+    }
+
+    aggPrefixTables = malloc(sizeof * aggPrefixTables * numAggSwitches);
+    for(i = 0; i < numAggSwitches; i++)
+    {
+        aggPrefixTables[i] = malloc(sizeof * aggPrefixTables[i] * (numOfPorts) /2 );
+        for(j = 0; j < numOfPorts/2; j++)
+        {
+            aggPrefixTables[i][j] = 0;
         }
     }
 
@@ -315,7 +346,33 @@ int main(int argc, char** argv)
         }
     }
 
-    
+    //build suffix table for core switch
+    for(i = 0; i < numCoreSwitches; i++)
+    {
+        for(p = 0; p < numOfPorts; p++)
+        {
+            suffix = (10 << 8) | p;
+            coreTables[i][p] = suffix;
+        }
+    }
+
+    //build suffix and prefix table for agg switch 
+    for(i = 0; i < numAggSwitches; i++)
+    {
+        aggSuffixTables[i][0] = 0;
+        aggSuffixTables[i][1] = 0;
+        
+        for(suffix = 2; suffix <= (numOfPorts/2) + 1; suffix++)
+        {
+            aggSuffixTables[i][suffix] = 1;
+        }
+        p = i / (numOfPorts/2);
+        for(e = 0; e < numOfPorts/2; e++)
+        {
+            prefix = (10 << 16) | (p << 8) | e;
+            aggSuffixTables[i][e] = prefix;
+        }
+    }
 
     return 0;
 }
