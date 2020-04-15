@@ -153,7 +153,7 @@ void testAddresses(int k, int** addEdge, int** addAgg, int** addCore, int** addS
         ip1 = t >> 24;
         ip2 = (t << 8) >> 24;
         ip3 = (t << 16) >> 24;
-        ip4 = (t & 15);
+        ip4 = (t & 255);
         if(ip1 != 10 || (ip2 < 0 || ip2 >= numOfPorts) 
             || (ip3 < 0 || ip3 >= numOfPorts / 2)
             || ip4 != 1
@@ -187,7 +187,7 @@ void testAddresses(int k, int** addEdge, int** addAgg, int** addCore, int** addS
         ip1 = t >> 24;
         ip2 = (t << 8) >> 24;
         ip3 = (t << 16) >> 24;
-        ip4 = (t & 15);
+        ip4 = (t & 255);
         if(ip1 != 10 || (ip2 < 0 || ip2 >= numOfPorts) 
             || (ip3 < numOfPorts / 2 || ip3 >= numOfPorts)
             || ip4 != 1
@@ -221,7 +221,7 @@ void testAddresses(int k, int** addEdge, int** addAgg, int** addCore, int** addS
         ip1 = t >> 24;
         ip2 = (t << 8) >> 24;
         ip3 = (t << 16) >> 24;
-        ip4 = (t & 15);
+        ip4 = (t & 255);
         if(ip1 != 10 || (ip2 != numOfPorts) 
             || (ip3 < 1 || ip3 > numOfPorts /2)
             || ip4 < 1 || ip4 > numOfPorts / 2
@@ -256,7 +256,7 @@ void testAddresses(int k, int** addEdge, int** addAgg, int** addCore, int** addS
         ip1 = t >> 24;
         ip2 = (t << 8) >> 24;
         ip3 = (t << 16) >> 24;
-        ip4 = (t & 15);
+        ip4 = (t & 255);
         if(ip1 != 10 || (ip2 < 0 || ip2 >= numOfPorts) 
             || (ip3 < 0 || ip3 >= numOfPorts /2)
             || ip4 < 2 || ip4 > numOfPorts / 2 + 1
