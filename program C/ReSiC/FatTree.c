@@ -376,12 +376,13 @@ int main(int argc, char** argv)
         }
     }
 
+    int numWaysFields = 9;
     int** WayHE = NULL;
     int numOfSources = numOfHosts / trafficPattern;
     WayHE = malloc(sizeof * WayHE * numOfSources);
     for(i = 0; i < numOfSources; i++)
     {
-        WayHE[i] = malloc(sizeof * WayHE[i] * 8);
+        WayHE[i] = malloc(sizeof * WayHE[i] * numWaysFields);
         
         WayHE[i][0] = i; //id cua nut nguon host
         WayHE[i][1] = i  / ( numOfPorts / 2);//id cua nut edge switch tiep theo
@@ -394,6 +395,28 @@ int main(int argc, char** argv)
         WayHE[i][6] = 0; //ip cua nut dich host
         WayHE[i][7] = 0; //So hop count
         WayHE[i][8] = 0;//thoi gian ket thuc cua su kien
+
+    }
+
+    int** WayEH = NULL;
+    int numOfDests = numOfHosts / trafficPattern;
+    delta = (numEdgeSwitches / trafficPattern)*(trafficPattern - 1);
+    WayEH = malloc(sizeof * WayEH * numOfDests);
+    for(i = 0; i < numOfDests; i++)
+    {
+        WayEH[i] = malloc(sizeof * WayEH[i] * numWaysFields);
+        
+        WayEH[i][0] = i / ( numOfPorts / 2) + delta; //id cua nut nguon switch
+        WayEH[i][1] = i + delta;//id cua nut host tiep theo
+        WayEH[i][2] = 0; //trang thai ban dau
+        WayEH[i][3] = i % (numOfPorts / 2);//cong k cua edge switch ke tiep
+            //ngam dinh rang edge switch co cong voi chi so k <= (numOfPorts/2) se 
+            //ket noi voi host. Nguoc lai se ket noi voi agg switch
+        WayEH[i][4] = 0;//id cua packet ben trong
+        WayEH[i][5] = 0;//ip cua nut nguon host cua goi tin
+        WayEH[i][6] = 0; //ip cua nut dich host
+        WayEH[i][7] = 0; //So hop count
+        WayEH[i][8] = 0;//thoi gian ket thuc cua su kien
 
     }
 
