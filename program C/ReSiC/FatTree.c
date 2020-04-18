@@ -8,6 +8,8 @@
 
 int main(int argc, char** argv) 
 {
+    int trafficPattern = 2; //bisection bandwidth
+                         //1; //all-to-all
     int numOfPorts = 100;
     int numOfSwitches = numOfPorts * numOfPorts * 5 / 4;
     int numPodSwitches = numOfPorts * numOfPorts;
@@ -373,6 +375,28 @@ int main(int argc, char** argv)
             aggSuffixTables[i][e] = prefix;
         }
     }
+
+    int** WayHE = NULL;
+    int numOfSources = numOfHosts / trafficPattern;
+    WayHE = malloc(sizeof * WayHE * numOfSources);
+    for(i = 0; i < numOfSources; i++)
+    {
+        WayHE[i] = malloc(sizeof * WayHE[i] * 8);
+        
+        WayHE[i][0] = i; //id cua nut nguon host
+        WayHE[i][1] = i  / ( numOfPorts / 2);//id cua nut edge switch tiep theo
+        WayHE[i][2] = 0; //trang thai ban dau
+        WayHE[i][3] = i % (numOfPorts / 2);//cong k cua edge switch ke tiep
+            //ngam dinh rang edge switch co cong voi chi so k <= (numOfPorts/2) se 
+            //ket noi voi host. Nguoc lai se ket noi voi agg switch
+        WayHE[i][4] = 0;//id cua packet ben trong
+        WayHE[i][5] = addServer[i][1];//ip cua nut nguon host
+        WayHE[i][6] = 0; //ip cua nut dich host
+        WayHE[i][7] = 0; //So hop count
+        WayHE[i][8] = 0;//thoi gian ket thuc cua su kien
+
+    }
+
 
     return 0;
 }
