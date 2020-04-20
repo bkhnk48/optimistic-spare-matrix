@@ -356,6 +356,13 @@ void testWayEH(int k, int trafficPattern, int** WayEH)
             printf("Wrong index of port at switch\n");
         }
 
+        if(i / (k/2) != (i-1)/(k/2) && 
+            WayEH[i][3] >= WayEH[i-1][3]
+            )
+        {
+            printf("Wrong index of port at different switches\n");
+        }
+
         /*if(WayEH[i][0] != WayHE[i-1][0] + 1)
         {
             printf("small index of WayHE is responsible to small index of host\n");
