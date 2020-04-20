@@ -422,6 +422,6 @@ int main(int argc, char** argv)
 
     }
 
-
+    testWayEH(numOfPorts, trafficPattern, WayEH);
     return 0;
 }
