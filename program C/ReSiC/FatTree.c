@@ -408,7 +408,7 @@ int main(int argc, char** argv)
     {
         WayEH[i] = malloc(sizeof * WayEH[i] * numWaysFields);
         
-        WayEH[i][0] = i / ( numOfPorts / 2) + delta; //id cua nut switch
+        WayEH[i][0] = i / ( numOfPorts / 2); // + delta; //id cua nut switch
         WayEH[i][1] = i;//id cua nut host tiep theo
         WayEH[i][2] = 0; //trang thai ban dau
         WayEH[i][3] = i % (numOfPorts / 2);//cong k cua edge switch ke tiep
