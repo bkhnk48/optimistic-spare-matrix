@@ -336,7 +336,27 @@ void testWayEH(int k, int trafficPattern, int** WayEH)
     int i, j;
     for(i = 1; i < numOfDests; i++)
     {
-        /*if(WayHE[i][0] != WayHE[i-1][0] + 1)
+        if(i / (k/2) == (i-1)/(k/2) && 
+            WayEH[i][0] != WayEH[i-1][0]
+            )
+        {
+            printf("Wrong index of switch\n");
+        }
+        if(i / (k/2) != (i-1)/(k/2) && 
+            WayEH[i][0] != WayEH[i-1][0] + 1
+            )
+        {
+            printf("Wrong index of switch\n");
+        }
+
+        if(i / (k/2) == (i-1)/(k/2) && 
+            WayEH[i][3] != WayEH[i-1][3] + 1
+            )
+        {
+            printf("Wrong index of port at switch\n");
+        }
+
+        /*if(WayEH[i][0] != WayHE[i-1][0] + 1)
         {
             printf("small index of WayHE is responsible to small index of host\n");
             return;
