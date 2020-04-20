@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 {
     int trafficPattern = 2; //bisection bandwidth
                          //1; //all-to-all
-    int numOfPorts = 100;
+    int numOfPorts = 4;
     int numOfSwitches = numOfPorts * numOfPorts * 5 / 4;
     int numPodSwitches = numOfPorts * numOfPorts;
     int numEdgeSwitches = numPodSwitches / 2;
@@ -398,6 +398,8 @@ int main(int argc, char** argv)
 
     }
 
+    testWayHE(numOfPorts, trafficPattern, WayHE);
+
     int** WayEH = NULL;
     int numOfDests = numOfHosts / trafficPattern;
     delta = (numEdgeSwitches / trafficPattern)*(trafficPattern - 1);
@@ -406,8 +408,8 @@ int main(int argc, char** argv)
     {
         WayEH[i] = malloc(sizeof * WayEH[i] * numWaysFields);
         
-        WayEH[i][0] = i / ( numOfPorts / 2) + delta; //id cua nut nguon switch
-        WayEH[i][1] = i + delta;//id cua nut host tiep theo
+        WayEH[i][0] = i / ( numOfPorts / 2) + delta; //id cua nut switch
+        WayEH[i][1] = i;//id cua nut host tiep theo
         WayEH[i][2] = 0; //trang thai ban dau
         WayEH[i][3] = i % (numOfPorts / 2);//cong k cua edge switch ke tiep
             //ngam dinh rang edge switch co cong voi chi so k <= (numOfPorts/2) se 
