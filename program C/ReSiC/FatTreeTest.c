@@ -276,3 +276,46 @@ void testAddresses(int k, int** addEdge, int** addAgg, int** addCore, int** addS
         }*/
     }
 }
+
+void testWayHE(int k, int trafficPattern, int** WayHE)
+{
+    int numOfSwitches = k * k * 5 / 4;
+    int numPodSwitches = k * k;
+    int numEdgeSwitches = numPodSwitches / 2;
+    int numAggSwitches = numPodSwitches / 2;
+
+    int numCoreSwitches = k * k / 4;
+
+    int numOfHosts = k * k * k / 4;
+    int numOfSources = numOfHosts / trafficPattern;
+    int i, j;
+    for(i = 1; i < numOfSources; i++)
+    {
+        if(WayHE[i][0] != WayHE[i-1][0] + 1)
+        {
+            printf("small index of WayHE is responsible to small index of host\n");
+            return;
+        }
+        if((WayHE[i][1] < WayHE[i-1][1])
+            || ((WayHE[i][1] == WayHE[i-1][1]) && ((i % (k/2) == 0) || (i % (k/2) < k/2 - 1)))
+            )
+        {
+            printf("at i = %d, small index of WayHE must be responsible to small index of switch\n", i);
+            return;
+        }
+
+        if(WayHE[i][3] > (k / 2))
+        {
+            printf("The connected host-port of switch must have small index\n");
+            return;
+        }
+        if((WayHE[i][3] <= (k/2) - 1) && (WayHE[i][3] > 0))
+        {
+            if(WayHE[i][3] <= WayHE[i-1][3])
+            printf("small index of WayHE is responsible to small index of port in switch\n");
+            return;
+        }
+
+
+    }
+}
