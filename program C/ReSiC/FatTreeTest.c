@@ -371,3 +371,41 @@ void testWayEH(int k, int trafficPattern, int** WayEH)
         
     }
 }
+
+void testWayEA(int k, int** WayEA)
+{
+    int numOfSwitches = k * k * 5 / 4;
+    int numPodSwitches = k * k;
+    int numEdgeSwitches = numPodSwitches / 2;
+    int numAggSwitches = numPodSwitches / 2;
+
+    int numCoreSwitches = k * k / 4;
+
+    int numOfHosts = k * k * k / 4;
+
+    int numWayEA = (numEdgeSwitches * (k/2));
+
+    
+
+    int i, j;
+    for(i = 1; i < numWayEA; i++)
+    {
+        if(WayEA[i][0] == WayEA[i-1][0])//neu hai lien ket deu xuat phat tu mot edge switch
+        {
+            if(WayEA[i][3] != WayEA[i-1][3])
+            {
+                printf("Two ways should connect to the same port of two agg switches\n");
+                return;
+            }
+            if(WayEA[i][1] != WayEA[i-1][1] + 1)
+            {
+                printf("these ways should connect to two adjacent agg switches\n");
+                return;
+            }
+        }
+        else{
+            
+        }
+
+    }
+}
