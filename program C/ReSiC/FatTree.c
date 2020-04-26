@@ -168,7 +168,6 @@ int main(int argc, char** argv)
                 //indexCol = p;
                 adjCore[indexRow][p*2] = aggSwitch;
                 adjCore[indexRow][p*2 + 1] = indexAgg;
-                
             }
             indexAgg++;
         }
@@ -411,7 +410,7 @@ int main(int argc, char** argv)
         WayEH[i][0] = i / ( numOfPorts / 2); // + delta; //id cua nut switch
         WayEH[i][1] = i;//id cua nut host tiep theo
         WayEH[i][2] = 0; //trang thai ban dau
-        WayEH[i][3] = i % (numOfPorts / 2);//cong k cua edge switch ke tiep
+        WayEH[i][3] = 0;//cong k cua host ke tiep
             //ngam dinh rang edge switch co cong voi chi so k <= (numOfPorts/2) se 
             //ket noi voi host. Nguoc lai se ket noi voi agg switch
         WayEH[i][4] = 0;//id cua packet ben trong
@@ -422,6 +421,27 @@ int main(int argc, char** argv)
 
     }
 
-    testWayEH(numOfPorts, trafficPattern, WayEH);
+    int** WayEA = NULL;
+    int numWayEA = (numEdgeSwitches * (numOfPorts/2));
+    WayEA = malloc(sizeof * WayEA * numWayEA);
+    for(i = 0; i < numWayEA; i++)
+    {
+        WayEA[i] = malloc(sizeof * WayEA[i] * numWaysFields);
+
+        WayEA[i][0] = i / (numOfPorts/2);//id cua nut switch
+        WayEA[i][1] = (i / (numOfPorts/2))*(numOfPorts/2) + (i % (numOfPorts/2));//id cua nut agg
+        WayEA[i][2] = 0; //trang thai ban dau
+        WayEA[i][3] = i % (numOfPorts / 2);//cong k cua agg switch ke tiep
+            //ngam dinh rang edge switch co cong voi chi so k <= (numOfPorts/2) se 
+            //ket noi voi host. Nguoc lai se ket noi voi agg switch
+        WayEA[i][4] = 0;//id cua packet ben trong
+        WayEA[i][5] = 0;//ip cua nut nguon host cua goi tin
+        WayEA[i][6] = 0; //ip cua nut dich host
+        WayEA[i][7] = 0; //So hop count
+        WayEA[i][8] = 0;//thoi gian ket thuc cua su kien
+
+    }
+
+    testWayEA(numOfPorts, trafficPattern, WayEA);
     return 0;
 }
