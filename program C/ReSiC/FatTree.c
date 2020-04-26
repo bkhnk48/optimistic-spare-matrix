@@ -431,7 +431,7 @@ int main(int argc, char** argv)
         WayEA[i][0] = i / (numOfPorts/2);//id cua nut switch
         WayEA[i][1] = (i / (numOfPorts/2))*(numOfPorts/2) + (i % (numOfPorts/2));//id cua nut agg
         WayEA[i][2] = 0; //trang thai ban dau
-        WayEA[i][3] = i % (numOfPorts / 2);//cong k cua agg switch ke tiep
+        WayEA[i][3] = (i / (numOfPorts/2)) % (numOfPorts / 2);//cong k cua agg switch ke tiep
             //ngam dinh rang edge switch co cong voi chi so k <= (numOfPorts/2) se 
             //ket noi voi host. Nguoc lai se ket noi voi agg switch
         WayEA[i][4] = 0;//id cua packet ben trong
@@ -442,6 +442,6 @@ int main(int argc, char** argv)
 
     }
 
-    testWayEA(numOfPorts, trafficPattern, WayEA);
+    testWayEA(numOfPorts, WayEA);
     return 0;
 }
