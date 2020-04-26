@@ -385,7 +385,7 @@ void testWayEA(int k, int** WayEA)
 
     int numWayEA = (numEdgeSwitches * (k/2));
 
-    
+    int countPorts = 1;
 
     int i, j;
     for(i = 1; i < numWayEA; i++)
@@ -402,9 +402,16 @@ void testWayEA(int k, int** WayEA)
                 printf("these ways should connect to two adjacent agg switches\n");
                 return;
             }
+            
+            countPorts ++;
         }
         else{
-            
+            if(countPorts != (k/2))
+            {
+                printf("Not connect to enough ports from edge switch to agg ones\n");
+                return;
+            }
+            countPorts = 1;
         }
 
     }
