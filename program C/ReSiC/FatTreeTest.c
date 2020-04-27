@@ -497,3 +497,52 @@ void testWayAE(int k, int** WayAE)
 
     }
 }
+
+void testWayAC(int k, int** WayAC)
+{
+    int numOfSwitches = k * k * 5 / 4;
+    int numPodSwitches = k * k;
+    int numEdgeSwitches = numPodSwitches / 2;
+    int numAggSwitches = numPodSwitches / 2;
+
+    int numCoreSwitches = k * k / 4;
+
+    int numOfHosts = k * k * k / 4;
+
+    int numWayAC = (numEdgeSwitches * (k/2));
+
+    int countPorts = 1;
+    int i, j;
+    for(i = 1; i < numWayAC; i++)
+    {
+        if(WayAC[i][0] == WayAC[i-1][0])//neu hai lien ket deu xuat phat tu mot agg switch
+        {
+            if(WayAC[i][3] != WayAC[i-1][3])
+            {
+                printf("Two ways should connect to the same port of two core switches\n");
+                return;
+            }
+            if(WayAC[i][1] != WayAC[i-1][1] + 1)
+            {
+                printf("these ways should connect to two adjacent core switches\n");
+                return;
+            }
+        }
+        else{
+            //Neu hai lien ket xuat phat tu 2 agg switch canh nhau va cung
+            //pod
+            if(WayAC[i][0] % (k/2) == WayAC[i-1][0] % (k/2))
+            {
+                if(WayAC[i][1] != WayAC[i-1][1] + 1)
+                {
+                    printf("these ways should connect to two adjacent core switches\n");
+                    return;
+                }
+            }
+            else{//neu khac pod
+
+            }
+            
+        }
+    }
+}
