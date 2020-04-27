@@ -429,7 +429,9 @@ int main(int argc, char** argv)
         WayEA[i] = malloc(sizeof * WayEA[i] * numWaysFields);
 
         WayEA[i][0] = i / (numOfPorts/2);//id cua nut switch
-        WayEA[i][1] = (i / (numOfPorts/2))*(numOfPorts/2) + (i % (numOfPorts/2));//id cua nut agg
+        WayEA[i][1] = 
+                    (i / (numOfPorts*numOfPorts/4))//moi k pod, co chua k*k/4 link
+                     + (i % (numOfPorts/2));//id cua nut agg
         WayEA[i][2] = 0; //trang thai ban dau
         WayEA[i][3] = (i / (numOfPorts/2)) % (numOfPorts / 2);//cong k cua agg switch ke tiep
             //ngam dinh rang edge switch co cong voi chi so k <= (numOfPorts/2) se 
