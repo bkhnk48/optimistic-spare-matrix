@@ -386,7 +386,7 @@ void testWayEA(int k, int** WayEA)
     int numWayEA = (numEdgeSwitches * (k/2));
 
     int countPorts = 1;
-
+    
     int i, j;
     for(i = 1; i < numWayEA; i++)
     {
@@ -404,6 +404,7 @@ void testWayEA(int k, int** WayEA)
             }
             
             countPorts ++;
+            
         }
         else{
             if(countPorts != (k/2))
@@ -411,6 +412,8 @@ void testWayEA(int k, int** WayEA)
                 printf("Not connect to enough ports from an edge switch to agg ones\n");
                 return;
             }
+            
+           
             countPorts = 1;
         }
 
@@ -420,6 +423,73 @@ void testWayEA(int k, int** WayEA)
             {
                 printf("these ways should connect to the same agg switch, however: %d vs %d at %d and %d\n"
                         , WayEA[i][1], WayEA[i-(k/2)][1], i, i - (k/2)
+                        );
+                return;
+            }
+        }
+
+    }
+}
+
+void testWayAE(int k, int** WayAE)
+{
+    int numOfSwitches = k * k * 5 / 4;
+    int numPodSwitches = k * k;
+    int numEdgeSwitches = numPodSwitches / 2;
+    int numAggSwitches = numPodSwitches / 2;
+
+    int numCoreSwitches = k * k / 4;
+
+    int numOfHosts = k * k * k / 4;
+
+    int numWayAE = (numEdgeSwitches * (k/2));
+
+    int countPorts = 1;
+    //int sumIndexesOfPorts = //0 + 1 + 2 + ... + ((k/2) - 1)
+    //        ((k/2) - 1) *(k/2)/2 + (k*k/4);
+    int i, j;
+    for(i = 1; i < numWayAE; i++)
+    {
+        if(WayAE[i][0] == WayAE[i-1][0])//neu hai lien ket deu xuat phat tu mot agg switch
+        {
+            if(WayAE[i][3] != WayAE[i-1][3])
+            {
+                printf("Two ways should connect to the same port of two edge switches\n");
+                return;
+            }
+            if(WayAE[i][1] != WayAE[i-1][1] + 1)
+            {
+                printf("these ways should connect to two adjacent edge switches\n");
+                return;
+            }
+            
+            countPorts ++;
+            //sumIndexesOfPorts -= WayAE[i][3];
+            //printf("\tWayEA[i][3] = %d\n", WayAE[i][3]);
+        }
+        else{
+            if(countPorts != (k/2))
+            {
+                printf("Not connect to enough ports from an agg switch to edge ones\n");
+                return;
+            }
+            //if(sumIndexesOfPorts != 0)
+            {
+                //printf("Not enough ports from a agg switch to edge ones as sumIndexesOfPorts = %d\n"
+                //        , sumIndexesOfPorts);
+                //return;
+            }
+            //sumIndexesOfPorts = //0 + 1 + 2 + ... + ((k/2) - 1)
+            //    ((k/2) - 1) *(k/2)/2  + (k*k/4);
+            countPorts = 1;
+        }
+
+        if(i >= k/2 && ((i/(k/2)) % (k/2) != 0))
+        {
+            if(WayAE[i][1] != WayAE[i-(k/2)][1])
+            {
+                printf("these ways should connect to the same edge switch, however: %d vs %d at %d and %d\n"
+                        , WayAE[i][1], WayAE[i-(k/2)][1], i, i - (k/2)
                         );
                 return;
             }
