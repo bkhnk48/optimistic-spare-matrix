@@ -408,10 +408,21 @@ void testWayEA(int k, int** WayEA)
         else{
             if(countPorts != (k/2))
             {
-                printf("Not connect to enough ports from edge switch to agg ones\n");
+                printf("Not connect to enough ports from an edge switch to agg ones\n");
                 return;
             }
             countPorts = 1;
+        }
+
+        if(i >= k/2 && ((i/(k/2)) % (k/2) != 0))
+        {
+            if(WayEA[i][1] != WayEA[i-(k/2)][1])
+            {
+                printf("these ways should connect to the same agg switch, however: %d vs %d at %d and %d\n"
+                        , WayEA[i][1], WayEA[i-(k/2)][1], i, i - (k/2)
+                        );
+                return;
+            }
         }
 
     }
