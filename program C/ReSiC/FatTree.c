@@ -445,5 +445,30 @@ int main(int argc, char** argv)
     }
 
     testWayEA(numOfPorts, WayEA);
+
+    int** WayAE = NULL;
+    int numWayAE = numAggSwitches * (numOfPorts/2);
+    WayAE = malloc(sizeof * WayAE * numWayAE);
+    for(i = 0; i < numWayAE; i++)
+    {
+        WayAE[i] = malloc(sizeof * WayAE[i] * numWaysFields);
+
+        WayAE[i][0] = i / (numOfPorts/2);//id cua nut switch
+        WayAE[i][1] = 
+                    (i / (numOfPorts*numOfPorts/4))//moi k pod, co chua k*k/4 link
+                     + (i % (numOfPorts/2));//id cua nut edge
+        WayAE[i][2] = 0; //trang thai ban dau
+        WayAE[i][3] = //(i / (numOfPorts/2)) % (numOfPorts / 2);
+                ((i / (numOfPorts/2)) % (numOfPorts/2)) + (numOfPorts/2);
+                //cong k cua edge switch ke tiep
+            //ngam dinh rang edge switch co cong voi chi so k < (numOfPorts/2) se 
+            //ket noi voi host. Nguoc lai se ket noi voi agg switch
+        WayAE[i][4] = 0;//id cua packet ben trong
+        WayAE[i][5] = 0;//ip cua nut nguon host cua goi tin
+        WayAE[i][6] = 0; //ip cua nut dich host
+        WayAE[i][7] = 0; //So hop count
+        WayAE[i][8] = 0;//thoi gian ket thuc cua su kien
+    }
+    testWayAE(numOfPorts, WayAE);
     return 0;
 }
