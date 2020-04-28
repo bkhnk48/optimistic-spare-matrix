@@ -514,7 +514,7 @@ int main(int argc, char** argv)
         WayCA[i][1] = 
                     //id cua nut agg
                     //(i / (numOfPorts/2))
-                    (i % numOfPorts)*(numOfPorts/2) + (i / (numOfPorts/2));
+                    (i % numOfPorts)*(numOfPorts/2) + (i / numOfPorts);
                     ;
         WayCA[i][2] = 0; //trang thai ban dau
         WayCA[i][3] = //(i / (numOfPorts/2)) % (numOfPorts / 2);
@@ -530,6 +530,6 @@ int main(int argc, char** argv)
         WayCA[i][8] = 0;//thoi gian ket thuc cua su kien
     }
 
-    //testWayAC(numOfPorts, WayCA);
+    testWayCA(numOfPorts, WayCA);
     return 0;
 }
