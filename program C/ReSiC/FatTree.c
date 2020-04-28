@@ -501,5 +501,35 @@ int main(int argc, char** argv)
     }
 
     testWayAC(numOfPorts, WayAC);
+
+
+    int** WayCA = NULL;
+    int numWayCA = numCoreSwitches * (numOfPorts);
+    WayCA = malloc(sizeof * WayCA * numWayCA);
+    for(i = 0; i < numWayCA; i++)
+    {
+        WayCA[i] = malloc(sizeof * WayCA[i] * numWaysFields);
+
+        WayCA[i][0] = i / (numOfPorts);//id cua nut core switch
+        WayCA[i][1] = 
+                    //id cua nut agg
+                    //(i / (numOfPorts/2))
+                    (i % numOfPorts)*(numOfPorts/2) + (i / (numOfPorts/2));
+                    ;
+        WayCA[i][2] = 0; //trang thai ban dau
+        WayCA[i][3] = //(i / (numOfPorts/2)) % (numOfPorts / 2);
+                (i / (numOfPorts * numOfPorts / 4));
+                //(i % (numOfPorts*numOfPorts/4));
+                //cong k cua core switch ke tiep
+            //ngam dinh rang agg switch co cong voi chi so k < (numOfPorts/2) se 
+            //ket noi voi edge. Nguoc lai se ket noi voi core switch
+        WayCA[i][4] = 0;//id cua packet ben trong
+        WayCA[i][5] = 0;//ip cua nut nguon host cua goi tin
+        WayCA[i][6] = 0; //ip cua nut dich host
+        WayCA[i][7] = 0; //So hop count
+        WayCA[i][8] = 0;//thoi gian ket thuc cua su kien
+    }
+
+    //testWayAC(numOfPorts, WayCA);
     return 0;
 }
