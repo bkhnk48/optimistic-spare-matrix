@@ -516,9 +516,9 @@ int main(int argc, char** argv)
                     (i % numOfPorts)*(numOfPorts/2) + (2*i / (numOfPorts * numOfPorts));
         WayCA[i][2] = 0; //trang thai ban dau
         WayCA[i][3] = //(i / (numOfPorts/2)) % (numOfPorts / 2);
-                (i / (numOfPorts * numOfPorts / 4));
+                ((i / (numOfPorts)) % (numOfPorts / 2)) + (numOfPorts / 2);
                 //(i % (numOfPorts*numOfPorts/4));
-                //cong k cua core switch ke tiep
+                //cong k cua agg switch ket noi
             //ngam dinh rang agg switch co cong voi chi so k < (numOfPorts/2) se 
             //ket noi voi edge. Nguoc lai se ket noi voi core switch
         WayCA[i][4] = 0;//id cua packet ben trong
