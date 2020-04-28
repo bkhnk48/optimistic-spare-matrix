@@ -568,3 +568,68 @@ void testWayAC(int k, int** WayAC)
         }
     }
 }
+
+
+void testWayCA(int k, int** WayCA)
+{
+    int numOfSwitches = k * k * 5 / 4;
+    
+
+    int numCoreSwitches = k * k / 4;
+
+    int numOfHosts = k * k * k / 4;
+
+    int numWayCA = (numCoreSwitches * k);
+
+    int countPorts = 1;
+    int i, j;
+    for(i = 1; i < numWayCA; i++)
+    {
+        if(WayCA[i][0] == WayCA[i-1][0])//neu hai lien ket deu xuat phat tu mot agg switch
+        {
+            if(WayCA[i][1] != WayCA[i-1][1] + (k/2))
+            {
+                printf("at i = %d, Two ways should connect to two agg switches that have difference of index k/2\n"
+                        , i
+                        );
+                return;
+            }
+            /*if(WayAC[i][1] != WayAC[i-1][1] + 1)
+            {
+                printf("these ways should connect to two adjacent core switches\n");
+                return;
+            }*/
+        }
+        /*else{
+            //Neu hai lien ket xuat phat tu 2 agg switch canh nhau va cung
+            //pod
+            if(WayAC[i][0] % (k/2) == WayAC[i-1][0] % (k/2))
+            {
+                if(WayAC[i][1] != WayAC[i-1][1] + 1)
+                {
+                    printf("these ways should connect to two adjacent core switches\n");
+                    return;
+                }
+            }
+            else{//neu khac pod
+                if(i >= k*k/4)
+                {
+                    if(WayAC[i][1] != WayAC[i - (k*k/4)][1])
+                    {
+                        printf("These ways should connect to the same core switch as i = %d\n", i);
+                        printf("however, these core switches are %d and %d\n", 
+                                    WayAC[i][1], WayAC[i - (k*k/4)][1]);
+                        return;
+                    }
+                    if(WayAC[i][3] != WayAC[i - (k*k/4)][3] + 1)
+                    {
+                        printf("These ways should connect to two next ports of a core switch\n");
+                        return;
+                    }
+                }
+            }
+            
+        }*/
+    }
+}
+
