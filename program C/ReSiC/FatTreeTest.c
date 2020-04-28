@@ -612,6 +612,11 @@ void testWayCA(int k, int** WayCA)
                 );
                 return;
             }
+            if(WayCA[i][3] != WayCA[i-k][3] + 1)
+            {
+                printf("These ways should connect to adjacent ports of the same agg switch\n");
+                return;
+            }
         }
 
         /*else{
