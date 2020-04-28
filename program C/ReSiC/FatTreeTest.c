@@ -594,11 +594,11 @@ void testWayCA(int k, int** WayCA)
                         );
                 return;
             }
-            /*if(WayAC[i][1] != WayAC[i-1][1] + 1)
+            if(WayCA[i][3] != WayCA[i-1][3])
             {
-                printf("these ways should connect to two adjacent core switches\n");
+                printf("these ways should connect to the same port of two agg switches\n");
                 return;
-            }*/
+            }
         }
         if(i >= k && (WayCA[i][0] % (k/2) != 0))
         {
