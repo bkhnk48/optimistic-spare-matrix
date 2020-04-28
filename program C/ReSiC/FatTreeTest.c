@@ -515,6 +515,14 @@ void testWayAC(int k, int** WayAC)
     int i, j;
     for(i = 1; i < numWayAC; i++)
     {
+        if(i % (k / 2) != 0)
+        {
+            if(WayAC[i][0] != WayAC[i-1][0])//hai lien ket deu PHAI xuat phat tu mot agg switch
+            {
+                printf("Two ways should rise from the same agg switch\n");
+                return;
+            }
+        }
         if(WayAC[i][0] == WayAC[i-1][0])//neu hai lien ket deu xuat phat tu mot agg switch
         {
             if(WayAC[i][3] != WayAC[i-1][3])
@@ -540,7 +548,21 @@ void testWayAC(int k, int** WayAC)
                 }
             }
             else{//neu khac pod
-
+                if(i >= k*k/4)
+                {
+                    if(WayAC[i][1] != WayAC[i - (k*k/4)][1])
+                    {
+                        printf("These ways should connect to the same core switch as i = %d\n", i);
+                        printf("however, these core switches are %d and %d\n", 
+                                    WayAC[i][1], WayAC[i - (k*k/4)][1]);
+                        return;
+                    }
+                    if(WayAC[i][3] != WayAC[i - (k*k/4)][3] + 1)
+                    {
+                        printf("These ways should connect to two next ports of a core switch\n");
+                        return;
+                    }
+                }
             }
             
         }
