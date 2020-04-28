@@ -481,10 +481,11 @@ int main(int argc, char** argv)
 
         WayAC[i][0] = i / (numOfPorts/2);//id cua nut switch
         WayAC[i][1] = 
-                    (i / (numOfPorts / 2))
+                    //(i / (numOfPorts / 2))
                     //moi k pod, co chua k*k/4 link
                     //moi link nay se ket noi mot core khac nhau
-                     + (i % (numOfPorts/2));//id cua nut core
+                    //+ (i % (numOfPorts/2));//id cua nut core
+                    i % (numOfPorts*numOfPorts/4);
         WayAC[i][2] = 0; //trang thai ban dau
         WayAC[i][3] = //(i / (numOfPorts/2)) % (numOfPorts / 2);
                 (i / (numOfPorts * numOfPorts / 4));
