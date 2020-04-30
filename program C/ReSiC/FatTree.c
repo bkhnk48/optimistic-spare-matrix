@@ -529,5 +529,63 @@ int main(int argc, char** argv)
     }
 
     testWayCA(numOfPorts, WayCA);
+    int** TimeGeneration = NULL;
+    TimeGeneration = malloc(sizeof * TimeGeneration * (numOfHosts / trafficPattern));
+    numOfSources = numOfHosts / trafficPattern;
+
+    int* CounterH = NULL;
+    CounterH = malloc(sizeof * CounterH * numOfSources);
+
+    int* CounterE = NULL;
+    CounterE = malloc(sizeof * CounterE * numEdgeSwitches);
+
+    int* CounterA = NULL;
+    CounterA = malloc(sizeof * CounterA * numAggSwitches);
+
+    int* CounterC = NULL;
+
+    CounterC = malloc(sizeof * CounterC * numCoreSwitches);
+
+    for(i = 0; i < numEdgeSwitches; i++)
+    {
+        CounterE[i] = BUFFER_SIZE;
+    }
+
+    for(i = 0; i < numAggSwitches; i++)
+    {
+        CounterA[i] = BUFFER_SIZE;
+    }
+
+    for(i = 0; i < numCoreSwitches; i++)
+    {
+        CounterC[i] = BUFFER_SIZE;
+    }
+
+    for(i = 0; i < numOfSources; i++)
+    {
+        TimeGeneration[i] = 0;
+        CounterH[i] = BUFFER_SIZE;
+    }
+
+    int** PacketInSQ = NULL;
+    PacketInSQ = malloc(sizeof * PacketInSQ * numOfSources);
+    for(i = 0; i < numOfSources; i++)
+    {
+        PacketInSQ[i] = malloc(sizeof * PacketInSQ[i] * 4);
+        for(j = 0; j < 4; j++)
+        {
+            PacketInSQ[i][j] = 0;
+        }
+    }
+
+    int currentTime = 0; int endTime = 0;
+    while(currentTime <= endTime)
+    {
+        //generate packets
+        for(i = 0; i < numOfSources; i++)
+        {
+
+        }
+    }
     return 0;
 }
