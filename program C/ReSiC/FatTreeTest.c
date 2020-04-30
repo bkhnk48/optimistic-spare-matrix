@@ -619,35 +619,7 @@ void testWayCA(int k, int** WayCA)
             }
         }
 
-        /*else{
-            //Neu hai lien ket xuat phat tu 2 core switch canh nhau
-            if(i >= k)
-            {
-                if(WayCA[i][1] != WayCA[i-k][1])
-                {
-                    printf("these ways should connect to two adjacent core switches\n");
-                    return;
-                }
-            }
-            else{//neu khac pod
-                if(i >= k*k/4)
-                {
-                    if(WayAC[i][1] != WayAC[i - (k*k/4)][1])
-                    {
-                        printf("These ways should connect to the same core switch as i = %d\n", i);
-                        printf("however, these core switches are %d and %d\n", 
-                                    WayAC[i][1], WayAC[i - (k*k/4)][1]);
-                        return;
-                    }
-                    if(WayAC[i][3] != WayAC[i - (k*k/4)][3] + 1)
-                    {
-                        printf("These ways should connect to two next ports of a core switch\n");
-                        return;
-                    }
-                }
-            }
-            
-        }*/
+        
     }
 }
 
