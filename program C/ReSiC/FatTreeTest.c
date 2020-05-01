@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <limits.h>
 
+#include "ShiftBit.c"
 
 void testAdjEdge(int k, int** adjEdge, int** adjAgg, int** adjCore);
 
