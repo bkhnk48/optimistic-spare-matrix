@@ -574,7 +574,11 @@ int main(int argc, char** argv)
         PacketInSQ[i] = malloc(sizeof * PacketInSQ[i] * 4);
         for(j = 0; j < 4; j++)
         {
-            PacketInSQ[i][j] = 0;
+            PacketInSQ[i][j] = -1;
+            //PacketInSQ[i][0] : id cua pkt dau tien trong source queue
+            //PacketInSQ[i][1] : dst cua pkt dau tien trong source queue
+            //PacketInSQ[i][2] : id cua pkt cuoi cung trong source queue
+            //PacketInSQ[i][3] : dst cua pkt cuoi cung trong source queue
         }
     }
 
@@ -584,7 +588,12 @@ int main(int argc, char** argv)
         //generate packets
         for(i = 0; i < numOfSources; i++)
         {
-            
+            int createPacketNow = checkEqual(currentTime, TimeGeneration[i]);
+            //0 means wont generate a packet right now. 
+            //1 means yes.
+            int availableFirstPkt = 1 + (PacketInSQ[i][0] >> 31);
+            int availableSecondPkt = 1 + (PacketInSQ[i][2] >> 31);
+
         }
         currentTime++;
     }
