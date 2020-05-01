@@ -23,6 +23,7 @@ int main(int argc, char** argv)
     double bandwidth = 1; //bo nhan voi 1 ty, vi tu nay bandwith se tinh don vi Gb, 1000*1000*1000;
     int BUFFER_SIZE = 5;
     int PACKET_SIZE = 1e5;
+    int HOST_DELAY = 1e5; //ns
     int serialTime = (int)PACKET_SIZE/bandwidth;
     double length = 1; //1m
     double PROPAGATION_VELOCITY = 0.2;
