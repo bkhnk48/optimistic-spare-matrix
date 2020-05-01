@@ -609,10 +609,19 @@ int main(int argc, char** argv)
         for(i = 0; i < numOfSources; i++)
         {
             int createPacketNow = checkEqual(currentTime, TimeGeneration[i]);
+            int idOfNewPkt = currentTime / HOST_DELAY;
+            int dstOfNewPkt = trafficPairs[i][idOfNewPkt % dstPerSrc];
             //0 means wont generate a packet right now. 
             //1 means yes.
-            int availableFirstPkt = 1 + (PacketInSQ[i][0] >> 31);
-            int availableSecondPkt = 1 + (PacketInSQ[i][2] >> 31);
+            int allowUpdateFirst = -(PacketInSQ[i][0] >> 31);//0 (KHONG cho phep update) hoac 1 (cho phep update)
+            int allowUpdateSecond = (1 - allowUpdateFirst);//0 (KHONG cho phep update) hoac 1 (cho phep update)
+            
+            
+            PacketInSQ[i][0] = (1 - allowUpdateFirst)*PacketInSQ[i][0] + allowUpdateFirst*idOfNewPkt;
+            PacketInSQ[i][1] = (1 - allowUpdateFirst)*PacketInSQ[i][1] + allowUpdateFirst*dstOfNewPkt;
+
+            PacketInSQ[i][2] = (1 - allowUpdateSecond)*PacketInSQ[i][2] + allowUpdateSecond*idOfNewPkt;
+            PacketInSQ[i][3] = (1 - allowUpdateSecond)*PacketInSQ[i][3] + allowUpdateSecond*dstOfNewPkt;
 
         }
         currentTime++;
