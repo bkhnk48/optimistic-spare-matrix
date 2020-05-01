@@ -605,7 +605,7 @@ int main(int argc, char** argv)
     int currentTime = 0; int endTime = 0;
     while(currentTime <= endTime)
     {
-        //generate packets
+        //generate packets and update to source queue
         for(i = 0; i < numOfSources; i++)
         {
             int createPacketNow = checkEqual(currentTime, TimeGeneration[i]);
