@@ -529,7 +529,7 @@ int main(int argc, char** argv)
     }
 
     testWayCA(numOfPorts, WayCA);
-    int** TimeGeneration = NULL;
+    int* TimeGeneration = NULL;
     TimeGeneration = malloc(sizeof * TimeGeneration * (numOfHosts / trafficPattern));
     numOfSources = numOfHosts / trafficPattern;
 
@@ -584,8 +584,9 @@ int main(int argc, char** argv)
         //generate packets
         for(i = 0; i < numOfSources; i++)
         {
-
+            
         }
+        currentTime++;
     }
     return 0;
 }
