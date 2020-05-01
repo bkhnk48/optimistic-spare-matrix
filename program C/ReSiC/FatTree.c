@@ -589,6 +589,9 @@ int main(int argc, char** argv)
 
     int** PacketInSQ = NULL;
     PacketInSQ = malloc(sizeof * PacketInSQ * numOfSources);
+    int** PacketInEXBHost = NULL;
+    PacketInEXBHost = malloc(sizeof * PacketInEXBHost * numOfSources);
+
     for(i = 0; i < numOfSources; i++)
     {
         PacketInSQ[i] = malloc(sizeof * PacketInSQ[i] * 4);
@@ -599,6 +602,16 @@ int main(int argc, char** argv)
             //PacketInSQ[i][1] : dst cua pkt dau tien trong source queue
             //PacketInSQ[i][2] : id cua pkt cuoi cung trong source queue
             //PacketInSQ[i][3] : dst cua pkt cuoi cung trong source queue
+        }
+
+        PacketInEXBHost[i] = malloc(sizeof * PacketInEXBHost[i] * 4);
+        for(j = 0; j < 4; j++)
+        {
+            PacketInEXBHost[i][j] = -1;
+            //PacketInEXBHost[i][0] : id cua pkt dau tien trong EXB cua host
+            //PacketInEXBHost[i][1] : dst cua pkt dau tien trong EXB cua host
+            //PacketInEXBHost[i][2] : id cua pkt cuoi cung trong EXB cua host
+            //PacketInEXBHost[i][3] : dst cua pkt cuoi cung trong EXB cua host
         }
     }
 
@@ -614,15 +627,24 @@ int main(int argc, char** argv)
             //0 means wont generate a packet right now. 
             //1 means yes.
             int allowUpdateFirst = -(PacketInSQ[i][0] >> 31);//0 (KHONG cho phep update) hoac 1 (cho phep update)
-            int allowUpdateSecond = (1 - allowUpdateFirst);//0 (KHONG cho phep update) hoac 1 (cho phep update)
+            int allowUpdateLast = (1 - allowUpdateFirst);//0 (KHONG cho phep update) hoac 1 (cho phep update)
             
             
             PacketInSQ[i][0] = (1 - allowUpdateFirst)*PacketInSQ[i][0] + allowUpdateFirst*idOfNewPkt;
             PacketInSQ[i][1] = (1 - allowUpdateFirst)*PacketInSQ[i][1] + allowUpdateFirst*dstOfNewPkt;
 
-            PacketInSQ[i][2] = (1 - allowUpdateSecond)*PacketInSQ[i][2] + allowUpdateSecond*idOfNewPkt;
-            PacketInSQ[i][3] = (1 - allowUpdateSecond)*PacketInSQ[i][3] + allowUpdateSecond*dstOfNewPkt;
+            PacketInSQ[i][2] = (1 - allowUpdateLast)*PacketInSQ[i][2] + allowUpdateLast*idOfNewPkt;
+            PacketInSQ[i][3] = (1 - allowUpdateLast)*PacketInSQ[i][3] + allowUpdateLast*dstOfNewPkt;
 
+            //prepare for updating EXB of host
+            allowUpdateFirst = -(PacketInEXBHost[i][0] >> 31);//0 (KHONG cho phep update) hoac 1 (cho phep update)
+            PacketInEXBHost[i][0] = (1 - allowUpdateFirst)*PacketInEXBHost[i][0] 
+                                        + allowUpdateFirst*PacketInSQ[i][0];
+            int indexOfUpdate = PacketInEXBHost[i][0] - PacketInEXBHost[i][2];
+            indexOfUpdate = -(indexOfUpdate >> 31); //0 (KHONG co goi tin nao) hoac 1 (da co cac goi tin) 
+            int countPacket = PacketInEXBHost[i][2] - PacketInEXBHost[i][0] + 1;
+            indexOfUpdate = indexOfUpdate;
+            
         }
         currentTime++;
     }
