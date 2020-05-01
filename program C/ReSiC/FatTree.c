@@ -44,6 +44,8 @@ int main(int argc, char** argv)
     int countOfInfoInLink = 13;
     int numOfLinks = numOfSwitches * numOfPorts + numOfHosts;
 
+    
+
     /*
     * Khai bao va khoi tao ma tran lien ke cho cac Edge Switches
     */
@@ -566,6 +568,23 @@ int main(int argc, char** argv)
     {
         TimeGeneration[i] = 0;
         CounterH[i] = BUFFER_SIZE;
+    }
+
+    //Traffic pairs:
+    int** trafficPairs = NULL;
+    trafficPairs = malloc(sizeof * trafficPairs * numOfSources);
+    int numOfDstPerSrc [3] = {0, 
+                                numOfHosts - 1, //1: all-to-all
+                                1 //2: bisection bandwidth
+                                };
+    int dstPerSrc = numOfDstPerSrc[trafficPattern];
+    for(i = 0; i < numOfSources; i++)
+    {
+        trafficPairs[i] = malloc(sizeof * trafficPairs[i] * dstPerSrc);
+        for(j = 0; j < dstPerSrc; j++)
+        {
+            trafficPairs[i][j] = i + numOfSources;//tam lam viec bisection bandwidth hang
+        }
     }
 
     int** PacketInSQ = NULL;
