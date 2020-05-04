@@ -621,6 +621,8 @@ int main(int argc, char** argv)
         //generate packets and update to source queue
         for(i = 0; i < numOfSources; i++)
         {
+
+            ///Check time and then execute event A
             int createPacketNow = checkEqual(currentTime, TimeGeneration[i]);
             int idOfNewPkt = currentTime / HOST_DELAY;
             int dstOfNewPkt = trafficPairs[i][idOfNewPkt % dstPerSrc];
@@ -629,21 +631,31 @@ int main(int argc, char** argv)
             int allowUpdateFirst = -(PacketInSQ[i][0] >> 31);//0 (KHONG cho phep update) hoac 1 (cho phep update)
             int allowUpdateLast = (1 - allowUpdateFirst);//0 (KHONG cho phep update) hoac 1 (cho phep update)
             
-            
+            //ongoing work to change this element of array to temporary variable
             PacketInSQ[i][0] = (1 - allowUpdateFirst)*PacketInSQ[i][0] + allowUpdateFirst*idOfNewPkt;
             PacketInSQ[i][1] = (1 - allowUpdateFirst)*PacketInSQ[i][1] + allowUpdateFirst*dstOfNewPkt;
 
             PacketInSQ[i][2] = (1 - allowUpdateLast)*PacketInSQ[i][2] + allowUpdateLast*idOfNewPkt;
             PacketInSQ[i][3] = (1 - allowUpdateLast)*PacketInSQ[i][3] + allowUpdateLast*dstOfNewPkt;
 
+
+            //check if the EXB has no packet:
+            int isEmptyEXB = -(PacketInEXBHost[i][0] >> 31);//if EXB is empty <=> PacketInEXBHost[i][0] = -1?
+                                                            //0 (Co it nhat 01 goi tin) hoac 1 (KHONG co goi tin nao ca) 
+
             //prepare for updating EXB of host
             allowUpdateFirst = -(PacketInEXBHost[i][0] >> 31);//0 (KHONG cho phep update) hoac 1 (cho phep update)
             PacketInEXBHost[i][0] = (1 - allowUpdateFirst)*PacketInEXBHost[i][0] 
                                         + allowUpdateFirst*PacketInSQ[i][0];
-            int indexOfUpdate = PacketInEXBHost[i][0] - PacketInEXBHost[i][2];
-            indexOfUpdate = -(indexOfUpdate >> 31); //0 (KHONG co goi tin nao) hoac 1 (da co cac goi tin) 
-            int countPacket = PacketInEXBHost[i][2] - PacketInEXBHost[i][0] + 1;
-            indexOfUpdate = indexOfUpdate;
+            int indexOfUpdate = (PacketInEXBHost[i][0] - PacketInEXBHost[i][2] + 1);
+            
+            int isFullEXB = (PacketInEXBHost[i][2] - PacketInEXBHost[i][0] + 1) - BUFFER_SIZE;
+            isFullEXB = 1 + (isFullEXB >> 31); //0 nghia la EXB chua full, 1 nghia la EXB da full.
+            int allowUpdate = 1 - isFullEXB; //0 nghia la khong cho update, 1 nghia la cho update
+            indexOfUpdate = (1 - isEmptyEXB)*indexOfUpdate*allowUpdate;
+            
+            PacketInEXBHost[indexOfUpdate][0] = (1 - allowUpdateFirst)*PacketInEXBHost[indexOfUpdate][0] 
+                                        + allowUpdateFirst*PacketInSQ[i][0];
             
         }
         currentTime++;
