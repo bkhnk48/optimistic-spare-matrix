@@ -645,7 +645,7 @@ int main(int argc, char** argv)
                                                             //0 (Co it nhat 01 goi tin) hoac 1 (KHONG co goi tin nao ca) 
 
             //prepare for updating EXB of host
-            allowUpdateFirst = -(PacketInEXBHost[i][0] >> 31);//0 (KHONG cho phep update) hoac 1 (cho phep update)
+            //allowUpdateFirst = -(PacketInEXBHost[i][0] >> 31);//0 (KHONG cho phep update) hoac 1 (cho phep update)
             
             int indexOfUpdate = (PacketInEXBHost[i][0] - PacketInEXBHost[i][2] + 1);
             
@@ -654,8 +654,8 @@ int main(int argc, char** argv)
             int allowUpdate = 1 - isFullEXB; //0 nghia la khong cho update, 1 nghia la cho update
             indexOfUpdate = (1 - isEmptyEXB)*indexOfUpdate*allowUpdate;
             
-            PacketInEXBHost[i][indexOfUpdate] = (1 - allowUpdateFirst)*PacketInEXBHost[i][indexOfUpdate] 
-                                        + allowUpdateFirst*PacketInSQ[i][0];
+            PacketInEXBHost[i][indexOfUpdate] = (1 - isEmptyEXB)*PacketInEXBHost[i][indexOfUpdate] 
+                                        + isEmptyEXB*PacketInSQ[i][0];
 
             
             
