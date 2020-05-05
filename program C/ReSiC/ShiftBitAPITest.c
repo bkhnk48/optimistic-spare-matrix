@@ -50,7 +50,7 @@ void testUpdateFullEXB()
     {
         printf("Wrong index of Update, should be 0 instead of %d\n", indexOfUpdate);
     }
-    if(isEmptyEXB != 0)
+    if(isEmptyEXB == 0)
     {
         printf("It should be a non empty EXB\n");
     }
@@ -68,7 +68,7 @@ void testUpdateAlreadyOneElement()
         printf("Wrong index of update, should be 1 instead of %d\n", indexOfUpdate);
     }
 
-    if(isEmptyEXB != 0)
+    if(isEmptyEXB == 0)
     {
         printf("It should be a non empty EXB\n");
     }
