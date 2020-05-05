@@ -3,6 +3,7 @@ all: serial
 serial: 
 	gcc -g -c ErrorReport.c
 	gcc -g -c ShiftBitAPI.c
+	gcc ShiftBitAPITest.c -g -o apiTest.out
 	gcc -g -c FatTreeTest.c
 #gcc -g -c DataStructure.h
 #gcc -g -c TrafficPattern.c
@@ -27,3 +28,8 @@ clean:
 clear: 
 	-rm *.o
 	-rm out
+c: 
+	-rm *.o
+	-rm out
+t:
+	./apiTest.out
