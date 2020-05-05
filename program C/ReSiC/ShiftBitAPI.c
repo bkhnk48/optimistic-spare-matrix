@@ -20,8 +20,10 @@ int checkEqual(int a, int b)
 int checkUpdateEXBHost(int topID, int bottomID, int BUFFER_SIZE)
 {
     int isEmptyEXB = -(topID >> 31);//chi nhan gia tri 0 hoac 1.
+
+    int isAlreadyOne = -(topID*bottomID >> 31); //0: khong phai chi chua 1 phan tu. 1: chi chua 1 phan tu
     
-    int indexOfUpdate = (bottomID - topID + 1);
+    int indexOfUpdate = (bottomID - topID + 1)*(1 - isAlreadyOne) + isAlreadyOne;
     
     int isFullEXB = indexOfUpdate - BUFFER_SIZE;
     isFullEXB = 1 + (isFullEXB >> 31); //0 nghia la EXB chua full, 1 nghia la EXB da full.
@@ -31,6 +33,6 @@ int checkUpdateEXBHost(int topID, int bottomID, int BUFFER_SIZE)
     indexOfUpdate = (1 - isEmptyEXB)*indexOfUpdate*allowUpdate;
 
     indexOfUpdate = (indexOfUpdate << 1) + 1;
-    int result = indexOfUpdate & isEmptyEXB;
+    int result = indexOfUpdate | isEmptyEXB;
     return result;
 }
