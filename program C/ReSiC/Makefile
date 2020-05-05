@@ -2,7 +2,7 @@ all: serial
 
 serial: 
 	gcc -g -c ErrorReport.c
-	gcc -g -c ShiftBit.c
+	gcc -g -c ShiftBitAPI.c
 	gcc -g -c FatTreeTest.c
 #gcc -g -c DataStructure.h
 #gcc -g -c TrafficPattern.c
