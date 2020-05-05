@@ -641,18 +641,12 @@ int main(int argc, char** argv)
 
             //II. Generate and execute the event B
             //check if the EXB has no packet:
-            int isEmptyEXB = -(PacketInEXBHost[i][0] >> 31);//if EXB is empty <=> PacketInEXBHost[i][0] = -1?
-                                                            //0 (Co it nhat 01 goi tin) hoac 1 (KHONG co goi tin nao ca) 
-
-            //prepare for updating EXB of host
-            //allowUpdateFirst = -(PacketInEXBHost[i][0] >> 31);//0 (KHONG cho phep update) hoac 1 (cho phep update)
-            
-            int indexOfUpdate = (PacketInEXBHost[i][0] - PacketInEXBHost[i][2] + 1);
-            
-            int isFullEXB = (PacketInEXBHost[i][2] - PacketInEXBHost[i][0] + 1) - BUFFER_SIZE;
-            isFullEXB = 1 + (isFullEXB >> 31); //0 nghia la EXB chua full, 1 nghia la EXB da full.
-            int allowUpdate = 1 - isFullEXB; //0 nghia la khong cho update, 1 nghia la cho update
-            indexOfUpdate = (1 - isEmptyEXB)*indexOfUpdate*allowUpdate;
+            int indexOfUpdate = checkUpdateEXBHost(PacketInEXBHost[i][0]
+                                                    , PacketInEXBHost[i][2]
+                                                    , BUFFER_SIZE
+                                                    );
+            int isEmptyEXB = indexOfUpdate & 1;
+            indexOfUpdate = indexOfUpdate >> 1;
             
             PacketInEXBHost[i][indexOfUpdate] = (1 - isEmptyEXB)*PacketInEXBHost[i][indexOfUpdate] 
                                         + isEmptyEXB*PacketInSQ[i][0];
