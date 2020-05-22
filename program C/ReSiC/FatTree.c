@@ -648,11 +648,11 @@ int main(int argc, char** argv)
                                                     , PacketInEXBHost[i][2]
                                                     , BUFFER_SIZE
                                                     );
-            int isEmptyEXB = indexOfUpdate & 1;
+            int isFullEXB = indexOfUpdate & 1;
             indexOfUpdate = indexOfUpdate >> 1;
             
-            PacketInEXBHost[i][indexOfUpdate] = (1 - isEmptyEXB)*PacketInEXBHost[i][indexOfUpdate] 
-                                        + isEmptyEXB*PacketInSQ[i][0];
+            PacketInEXBHost[i][indexOfUpdate] = (isFullEXB)*PacketInEXBHost[i][indexOfUpdate] 
+                                        + (1 - isFullEXB)*PacketInSQ[i][0];
 
             
             
