@@ -33,6 +33,6 @@ int checkUpdateEXBHost(int topID, int bottomID, int BUFFER_SIZE)
     indexOfUpdate = (1 - isEmptyEXB)*indexOfUpdate*allowUpdate;
 
     indexOfUpdate = (indexOfUpdate << 1) + 1;
-    int result = indexOfUpdate | isEmptyEXB;
+    int result = indexOfUpdate | isFullEXB;
     return result;
 }
