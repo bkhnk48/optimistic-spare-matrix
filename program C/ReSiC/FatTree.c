@@ -624,12 +624,14 @@ int main(int argc, char** argv)
 
             //I. Check time and then execute event A
             int createPacketNow = checkEqual(currentTime, TimeGeneration[i]);
-            int idOfNewPkt = currentTime / HOST_DELAY;
-            int dstOfNewPkt = trafficPairs[i][idOfNewPkt % dstPerSrc];
             //0 means wont generate a packet right now. 
             //1 means yes.
+            int idOfNewPkt = currentTime / HOST_DELAY;
+            int dstOfNewPkt = trafficPairs[i][idOfNewPkt % dstPerSrc];
+            
             int allowUpdateFirst = -(PacketInSQ[i][0] >> 31);//0 (KHONG cho phep update) hoac 1 (cho phep update)
             int allowUpdateLast = (1 - allowUpdateFirst);//0 (KHONG cho phep update) hoac 1 (cho phep update)
+
             
             //ongoing work to change this element of array to temporary variable
             PacketInSQ[i][0] = (1 - allowUpdateFirst)*PacketInSQ[i][0] + allowUpdateFirst*idOfNewPkt;
