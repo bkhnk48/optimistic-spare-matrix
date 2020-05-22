@@ -631,7 +631,8 @@ int main(int argc, char** argv)
             
             int allowUpdateFirst = -(PacketInSQ[i][0] >> 31);//0 (KHONG cho phep update) hoac 1 (cho phep update)
             int allowUpdateLast = (1 - allowUpdateFirst);//0 (KHONG cho phep update) hoac 1 (cho phep update)
-
+            allowUpdateFirst *= createPacketNow;
+            allowUpdateLast  *= createPacketNow;
             
             //ongoing work to change this element of array to temporary variable
             PacketInSQ[i][0] = (1 - allowUpdateFirst)*PacketInSQ[i][0] + allowUpdateFirst*idOfNewPkt;
