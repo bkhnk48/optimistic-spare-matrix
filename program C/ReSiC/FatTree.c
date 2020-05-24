@@ -650,11 +650,36 @@ int main(int argc, char** argv)
                                                     );
             int isFullEXB = indexOfUpdate & 1;
             indexOfUpdate = indexOfUpdate >> 1;
+
+            int oldPktInEXBHost = PacketInEXBHost[i][indexOfUpdate];
             
             PacketInEXBHost[i][indexOfUpdate] = (isFullEXB)*PacketInEXBHost[i][indexOfUpdate] 
                                         + (1 - isFullEXB)*PacketInSQ[i][0];
-
             
+            ///III. Remove the first packet of Source queue
+            //After insert the packet into the empty slot of EXB (in host)
+            //all remaining packets in source queue need to be moved forward
+            
+            int isEmptySQ = - (PacketInSQ[i][0] >> 31);//0 nghia la co goi tin o vi tri dau tien. 1 nghia la SQ dang empty
+            ///If there was only one packet in SQ
+            int isOnePkt = - (PacketInSQ[i][2] >> 31); //0 nghia la co goi tin o vi tri cuoi cung. 1 nghia la chi co 1 goi tin trong SQ
+            int numPktInSQ = (PacketInSQ[i][2] - PacketInSQ[i][0] + 1)*(1 - isEmptySQ)*(1 - isOnePkt)
+                                     + isOnePkt;
+            
+            int isMovedPktFromSQtoEXB = PacketInEXBHost[i][indexOfUpdate] - 
+                                            oldPktInEXBHost;
+            //this variable isMovedPktFromSQtoEXB is always greater than or equal 0.
+            //because the new value of PacketInEXBHost[i][indexOfUpdate]
+            //definitely greater than or equal the old one.
+            isMovedPktFromSQtoEXB--; //decrease so the new value might negative.
+                                     //in case no packet is updated.
+            isMovedPktFromSQtoEXB = (isMovedPktFromSQtoEXB >> 31);
+                                    //0 means a packet is moved from SQ to EXB
+                                    //-1 means nothing is moved.
+            isMovedPktFromSQtoEXB++; //1 means a packet is moved from SQ to EXB
+                                    //0 means nothing is moved.
+            
+             
             
         }
         currentTime++;
