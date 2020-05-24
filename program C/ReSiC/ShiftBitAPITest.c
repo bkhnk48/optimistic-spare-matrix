@@ -66,12 +66,12 @@ void testUpdateAlreadyOneElement()
 
     if(indexOfUpdate != 2)// || indexOfUpdate > BUFFER_SIZE)
     {
-        printf("Wrong index of update, should be 1 instead of %d\n", indexOfUpdate);
+        printf("At testUpdateAlreadyOneElement, wrong index of update, should be 1 instead of %d\n", indexOfUpdate);
     }
 
     if(isEmptyEXB == 0)
     {
-        printf("It should be a non empty EXB\n");
+        printf("At testUpdateAlreadyOneElement, it should be a non empty EXB\n");
     }
 
     //The case bottomID = topID;
