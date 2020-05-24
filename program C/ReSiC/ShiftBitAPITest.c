@@ -48,11 +48,11 @@ void testUpdateFullEXB()
 
     if(indexOfUpdate != 0)//BUFFER_SIZE)
     {
-        printf("Wrong index of Update, should be 0 instead of %d\n", indexOfUpdate);
+        printf("At testUpdateFullEXB, wrong index of Update, should be 0 instead of %d\n", indexOfUpdate);
     }
     if(isEmptyEXB == 0)
     {
-        printf("It should be a non empty EXB\n");
+        printf("At testUpdateFullEXB, it should be a non empty EXB\n");
     }
 }
 
