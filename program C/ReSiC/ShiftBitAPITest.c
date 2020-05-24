@@ -28,7 +28,7 @@ void testUpdateEmptyEXB()
     int isEmptyEXB = result & 1;
     int indexOfUpdate = result >> 1;
 
-    if(indexOfUpdate < 0 || indexOfUpdate >= 1) //> BUFFER_SIZE)
+    if(indexOfUpdate != 0) //> BUFFER_SIZE)
     {
         printf("Wrong index of Update, should be 0 instead of %d\n", indexOfUpdate);
     }
@@ -46,7 +46,7 @@ void testUpdateFullEXB()
     int isEmptyEXB = result & 1;
     int indexOfUpdate = result >> 1;
 
-    if(indexOfUpdate < 0 || indexOfUpdate >= 1)//BUFFER_SIZE)
+    if(indexOfUpdate != 0)//BUFFER_SIZE)
     {
         printf("Wrong index of Update, should be 0 instead of %d\n", indexOfUpdate);
     }
