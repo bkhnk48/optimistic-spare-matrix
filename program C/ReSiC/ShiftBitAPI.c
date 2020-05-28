@@ -27,9 +27,10 @@ int checkUpdateEXBHost(int topEXB, int topSQ, int BUFFER_SIZE)
     int isEmptyEXB = -(topEXB >> 31);//chi nhan gia tri 0 hoac 1.
 
     //int isAlreadyOne = -(topID*bottomID >> 31); //0: khong phai chi chua 1 phan tu. 1: chi chua 1 phan tu
+    int emptySQ = - (topSQ >> 31);
     
     //int indexOfUpdate = (bottomID - topID + 1)*(1 - isAlreadyOne) + isAlreadyOne;
-    int indexOfUpdate = 2*(topSQ - topEXB);
+    int indexOfUpdate = 2*(topSQ - topEXB)*(1 - emptySQ);
     
     int isFullEXB = indexOfUpdate - 2*(BUFFER_SIZE - 1);
     isFullEXB = 1 + (isFullEXB >> 31); //0 nghia la EXB chua full, 1 nghia la EXB da full.
