@@ -604,14 +604,15 @@ int main(int argc, char** argv)
             //PacketInSQ[i][2*(n + 1)] : dst cua pkt thu n trong source queue, n = 0..numPktPerHalfSec
         }
 
-        PacketInEXBHost[i] = malloc(sizeof * PacketInEXBHost[i] * 4);
-        for(j = 0; j < 4; j++)
+        PacketInEXBHost[i] = malloc(sizeof * PacketInEXBHost[i] * (2*BUFFER_SIZE));
+        for(j = 0; j < 2*BUFFER_SIZE; j++)
         {
             PacketInEXBHost[i][j] = -1;
             //PacketInEXBHost[i][0] : id cua pkt dau tien trong EXB cua host
             //PacketInEXBHost[i][1] : dst cua pkt dau tien trong EXB cua host
-            //PacketInEXBHost[i][2] : id cua pkt cuoi cung trong EXB cua host
-            //PacketInEXBHost[i][3] : dst cua pkt cuoi cung trong EXB cua host
+            //....
+            //PacketInEXBHost[i][2*BUFFER_SIZE - 2] : id cua pkt cuoi cung trong EXB cua host
+            //PacketInEXBHost[i][2*BUFFER_SIZE - 1] : dst cua pkt cuoi cung trong EXB cua host
         }
     }
 
