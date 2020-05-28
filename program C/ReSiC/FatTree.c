@@ -591,17 +591,17 @@ int main(int argc, char** argv)
     PacketInSQ = malloc(sizeof * PacketInSQ * numOfSources);
     int** PacketInEXBHost = NULL;
     PacketInEXBHost = malloc(sizeof * PacketInEXBHost * numOfSources);
+    int sizeOfSQ = (2*numPktPerHalfSec + 1);
 
     for(i = 0; i < numOfSources; i++)
     {
-        PacketInSQ[i] = malloc(sizeof * PacketInSQ[i] * 4);
-        for(j = 0; j < 4; j++)
+        PacketInSQ[i] = malloc(sizeof * PacketInSQ[i] * sizeOfSQ);
+        for(j = 0; j < sizeOfSQ; j++)
         {
             PacketInSQ[i][j] = -1;
-            //PacketInSQ[i][0] : id cua pkt dau tien trong source queue
-            //PacketInSQ[i][1] : dst cua pkt dau tien trong source queue
-            //PacketInSQ[i][2] : id cua pkt cuoi cung trong source queue
-            //PacketInSQ[i][3] : dst cua pkt cuoi cung trong source queue
+            //PacketInSQ[i][0] : so luong cac Pkt co trong source queue
+            //PacketInSQ[i][2*n + 1] : id cua pkt thu n trong source queue, n = 0..numPktPerHalfSec
+            //PacketInSQ[i][2*(n + 1)] : dst cua pkt thu n trong source queue, n = 0..numPktPerHalfSec
         }
 
         PacketInEXBHost[i] = malloc(sizeof * PacketInEXBHost[i] * 4);
