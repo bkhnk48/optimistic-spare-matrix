@@ -28,7 +28,7 @@ void testUpdateEmptyEXB()
     int isEmptyEXB = result & 1;
     int indexOfUpdate = result >> 1;
 
-    if(indexOfUpdate != 0 && indexOfUpdate > 2*(BUFFER_SIZE - 1))
+    if(indexOfUpdate != 0 || indexOfUpdate > 2*(BUFFER_SIZE - 1))
     {
         printf("Wrong index of Update, should be 0 instead of %d\n", indexOfUpdate);
     }
@@ -46,7 +46,7 @@ void testUpdateFullEXB()
     int isEmptyEXB = result & 1;
     int indexOfUpdate = result >> 1;
 
-    if(indexOfUpdate != 0 && indexOfUpdate > 2*(BUFFER_SIZE - 1))
+    if(indexOfUpdate != 0 || indexOfUpdate > 2*(BUFFER_SIZE - 1))
     {
         printf("At testUpdateFullEXB, wrong index of Update, should be 0 instead of %d\n", indexOfUpdate);
     }
@@ -75,18 +75,4 @@ void testUpdateWithEmptySQ()
     }
 
     return;
-    //The case bottomID = topID;
-    result = checkUpdateEXBHost(7, 7, BUFFER_SIZE);
-    isEmptyEXB = result & 1;
-    indexOfUpdate = result >> 1;
-
-    if(indexOfUpdate != 1 || indexOfUpdate > BUFFER_SIZE)
-    {
-        printf("Wrong index of update, should be 1 instead of %d\n", indexOfUpdate);
-    }
-
-    if(isEmptyEXB == 0)
-    {
-        printf("It should be a non empty EXB\n");
-    }
 }
