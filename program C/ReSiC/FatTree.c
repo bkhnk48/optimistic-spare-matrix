@@ -596,10 +596,11 @@ int main(int argc, char** argv)
     for(i = 0; i < numOfSources; i++)
     {
         PacketInSQ[i] = malloc(sizeof * PacketInSQ[i] * sizeOfSQ);
-        for(j = 0; j < sizeOfSQ; j++)
+        PacketInSQ[i][0] = 0;
+        //PacketInSQ[i][0] : so luong cac Pkt co trong source queue
+        for(j = 1; j < sizeOfSQ; j++)
         {
             PacketInSQ[i][j] = -1;
-            //PacketInSQ[i][0] : so luong cac Pkt co trong source queue
             //PacketInSQ[i][2*n + 1] : id cua pkt thu n trong source queue, n = 0..numPktPerHalfSec
             //PacketInSQ[i][2*(n + 1)] : dst cua pkt thu n trong source queue, n = 0..numPktPerHalfSec
         }
@@ -630,6 +631,7 @@ int main(int argc, char** argv)
             int idOfNewPkt = currentTime / HOST_DELAY;
             int dstOfNewPkt = trafficPairs[i][idOfNewPkt % dstPerSrc];
             
+            int indexOfUpdateSQ = PacketInSQ[i][0] + 1;
             int allowUpdateFirst = -(PacketInSQ[i][0] >> 31);//0 (KHONG cho phep update) hoac 1 (cho phep update)
             int allowUpdateLast = (1 - allowUpdateFirst);//0 (KHONG cho phep update) hoac 1 (cho phep update)
             allowUpdateFirst *= createPacketNow;
