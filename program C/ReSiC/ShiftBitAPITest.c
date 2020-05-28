@@ -8,7 +8,7 @@ int BUFFER_SIZE = 5;
 
 void testUpdateEmptyEXB();
 void testUpdateFullEXB();
-void testUpdateAlreadyOneElement();
+void testUpdateWithEmptySQ();
 
 int main(int argc, char** argv) 
 {
@@ -17,7 +17,7 @@ int main(int argc, char** argv)
 
     testUpdateFullEXB();
 
-    testUpdateAlreadyOneElement();
+    testUpdateWithEmptySQ();
 }
 
 void testUpdateEmptyEXB()
@@ -28,7 +28,7 @@ void testUpdateEmptyEXB()
     int isEmptyEXB = result & 1;
     int indexOfUpdate = result >> 1;
 
-    if(indexOfUpdate != 0) //> BUFFER_SIZE)
+    if(indexOfUpdate != 0 && indexOfUpdate > 2*(BUFFER_SIZE - 1))
     {
         printf("Wrong index of Update, should be 0 instead of %d\n", indexOfUpdate);
     }
@@ -41,12 +41,12 @@ void testUpdateEmptyEXB()
 void testUpdateFullEXB()
 {
     //PacketInEXBHost[i][0] = 7;
-    //PacketInEXBHost[i][2] = 11;
-    int result = checkUpdateEXBHost(7, 7 + BUFFER_SIZE - 1, BUFFER_SIZE);
+    //PacketInSQ[i][1] = 7 + BUFFER_SIZE;
+    int result = checkUpdateEXBHost(7, 7 + BUFFER_SIZE, BUFFER_SIZE);
     int isEmptyEXB = result & 1;
     int indexOfUpdate = result >> 1;
 
-    if(indexOfUpdate != 0)//BUFFER_SIZE)
+    if(indexOfUpdate != 0 && indexOfUpdate > 2*(BUFFER_SIZE - 1))
     {
         printf("At testUpdateFullEXB, wrong index of Update, should be 0 instead of %d\n", indexOfUpdate);
     }
@@ -57,16 +57,16 @@ void testUpdateFullEXB()
 }
 
 
-void testUpdateAlreadyOneElement()
+void testUpdateWithEmptySQ()
 {
     //The case bottomID = -1;
     int result = checkUpdateEXBHost(7, -1, BUFFER_SIZE);
     int isEmptyEXB = result & 1;
     int indexOfUpdate = result >> 1;
 
-    if(indexOfUpdate != 2)// || indexOfUpdate > BUFFER_SIZE)
+    if(indexOfUpdate != 0)// || indexOfUpdate > BUFFER_SIZE)
     {
-        printf("At testUpdateAlreadyOneElement, wrong index of update, should be 2 instead of %d\n", indexOfUpdate);
+        printf("At testUpdateAlreadyOneElement, wrong index of update, should be 0 instead of %d\n", indexOfUpdate);
     }
 
     if(isEmptyEXB == 0)
@@ -74,6 +74,7 @@ void testUpdateAlreadyOneElement()
         printf("At testUpdateAlreadyOneElement, it should be a non empty EXB\n");
     }
 
+    return;
     //The case bottomID = topID;
     result = checkUpdateEXBHost(7, 7, BUFFER_SIZE);
     isEmptyEXB = result & 1;
