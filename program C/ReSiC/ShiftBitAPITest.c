@@ -66,7 +66,7 @@ void testUpdateAlreadyOneElement()
 
     if(indexOfUpdate != 2)// || indexOfUpdate > BUFFER_SIZE)
     {
-        printf("At testUpdateAlreadyOneElement, wrong index of update, should be 1 instead of %d\n", indexOfUpdate);
+        printf("At testUpdateAlreadyOneElement, wrong index of update, should be 2 instead of %d\n", indexOfUpdate);
     }
 
     if(isEmptyEXB == 0)
