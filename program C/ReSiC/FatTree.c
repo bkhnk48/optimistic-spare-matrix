@@ -28,8 +28,8 @@ int main(int argc, char** argv)
     double length = 1; //1m
     double PROPAGATION_VELOCITY = 0.2;
     int propagationTime = (int)(length/PROPAGATION_VELOCITY);
-
-
+    int numPktPerHalfSec = 1e9 / (2*HOST_DELAY);
+    
     //char *a = argv[1];
     //int stop = atoi(a);
 
