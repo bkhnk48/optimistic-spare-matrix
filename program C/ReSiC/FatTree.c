@@ -601,8 +601,8 @@ int main(int argc, char** argv)
         for(j = 1; j < sizeOfSQ; j++)
         {
             PacketInSQ[i][j] = -1;
-            //PacketInSQ[i][2*n + 1] : id cua pkt thu n trong source queue, n = 0..numPktPerHalfSec
-            //PacketInSQ[i][2*(n + 1)] : dst cua pkt thu n trong source queue, n = 0..numPktPerHalfSec
+            //PacketInSQ[i][2*n - 1] : id cua pkt thu n trong source queue, n = 1..numPktPerHalfSec
+            //PacketInSQ[i][2*n] : dst cua pkt thu n trong source queue, n = 1..numPktPerHalfSec
         }
 
         PacketInEXBHost[i] = malloc(sizeof * PacketInEXBHost[i] * (2*BUFFER_SIZE));
@@ -623,26 +623,24 @@ int main(int argc, char** argv)
         //generate packets and update to source queue
         for(i = 0; i < numOfSources; i++)
         {
-
             //I. Check time and then execute event A
             int createPacketNow = checkEqual(currentTime, TimeGeneration[i]);
             //0 means wont generate a packet right now. 
             //1 means yes.
-            int idOfNewPkt = currentTime / HOST_DELAY;
+
+            int indexOfUpdateSQ = 2*(PacketInSQ[i][0] + 1) - 1;
+            int idOfNewPkt = PacketInSQ[i][0];
             int dstOfNewPkt = trafficPairs[i][idOfNewPkt % dstPerSrc];
+            indexOfUpdateSQ *= createPacketNow;
             
-            int indexOfUpdateSQ = PacketInSQ[i][0] + 1;
-            int allowUpdateFirst = -(PacketInSQ[i][0] >> 31);//0 (KHONG cho phep update) hoac 1 (cho phep update)
-            int allowUpdateLast = (1 - allowUpdateFirst);//0 (KHONG cho phep update) hoac 1 (cho phep update)
-            allowUpdateFirst *= createPacketNow;
-            allowUpdateLast  *= createPacketNow;
             
             //ongoing work to change this element of array to temporary variable
-            PacketInSQ[i][0] = (1 - allowUpdateFirst)*PacketInSQ[i][0] + allowUpdateFirst*idOfNewPkt;
-            PacketInSQ[i][1] = (1 - allowUpdateFirst)*PacketInSQ[i][1] + allowUpdateFirst*dstOfNewPkt;
+            PacketInSQ[i][0] = PacketInSQ[i][0] + createPacketNow;
+            PacketInSQ[i][indexOfUpdateSQ] = (1 - createPacketNow)*PacketInSQ[i][indexOfUpdateSQ] + 
+                                                        createPacketNow*idOfNewPkt;
 
-            PacketInSQ[i][2] = (1 - allowUpdateLast)*PacketInSQ[i][2] + allowUpdateLast*idOfNewPkt;
-            PacketInSQ[i][3] = (1 - allowUpdateLast)*PacketInSQ[i][3] + allowUpdateLast*dstOfNewPkt;
+            PacketInSQ[i][indexOfUpdateSQ + 1] = (1 - createPacketNow)*PacketInSQ[i][indexOfUpdateSQ + 1] + 
+                                                        createPacketNow*dstOfNewPkt;
 
 
             //II. Generate and execute the event B
