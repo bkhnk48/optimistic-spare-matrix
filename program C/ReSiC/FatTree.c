@@ -625,21 +625,23 @@ int main(int argc, char** argv)
             int createPacketNow = checkEqual(currentTime, TimeGeneration[i]);
             //0 means wont generate a packet right now. 
             //1 means yes.
-
-            int indexOfUpdateSQ = 2*(PacketInSQ[i][0] + 1) - 1;
-            int idOfNewPkt = PacketInSQ[i][0];
+            int isEmptySQ = 1 + ((PacketInSQ[i][0] - PacketInSQ[i][1]) >> 31);
+            int indexOfUpdateSQ = 2 + (-PacketInSQ[i][0] + PacketInSQ[i][1] + 1);
+            indexOfUpdateSQ *= isEmptySQ;
+            int idOfNewPkt = currentTime / HOST_DELAY;
             int dstOfNewPkt = trafficPairs[i][idOfNewPkt % dstPerSrc];
             indexOfUpdateSQ *= createPacketNow;
             
             
             //ongoing work to change this element of array to temporary variable
-            PacketInSQ[i][0] = PacketInSQ[i][0] + createPacketNow;
-            PacketInSQ[i][indexOfUpdateSQ] = (1 - createPacketNow)*PacketInSQ[i][indexOfUpdateSQ] + 
-                                                        createPacketNow*idOfNewPkt;
+            PacketInSQ[i][1 - isEmptySQ] = 
+                                PacketInSQ[i][1 - isEmptySQ] * (1 - createPacketNow) 
+                                    + createPacketNow*idOfNewPkt;
+            
 
-            PacketInSQ[i][indexOfUpdateSQ + 1] = (1 - createPacketNow)*PacketInSQ[i][indexOfUpdateSQ + 1] + 
-                                                        createPacketNow*dstOfNewPkt;
-
+            PacketInSQ[i][indexOfUpdateSQ] = 
+                                (1 - createPacketNow)*PacketInSQ[i][indexOfUpdateSQ] + 
+                                      createPacketNow*dstOfNewPkt;
 
             //II. Generate and execute the event B
             //check if the EXB has no packet:
