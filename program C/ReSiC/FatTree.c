@@ -625,7 +625,7 @@ int main(int argc, char** argv)
             int createPacketNow = checkEqual(currentTime, TimeGeneration[i]);
             //0 means wont generate a packet right now. 
             //1 means yes.
-            int isEmptySQ = 1 + ((PacketInSQ[i][0] - PacketInSQ[i][1]) >> 31);
+            int isEmptySQ = -(PacketInSQ[i][0] >> 31);
             int indexOfUpdateSQ = 2 + (-PacketInSQ[i][0] + PacketInSQ[i][1] + 1);
             indexOfUpdateSQ *= isEmptySQ;
             int idOfNewPkt = currentTime / HOST_DELAY;
@@ -646,7 +646,8 @@ int main(int argc, char** argv)
             //II. Generate and execute the event B
             //check if the EXB has no packet:
             int indexOfUpdate = checkUpdateEXBHost(PacketInEXBHost[i][0]
-                                                    , PacketInSQ[i][1]
+                                                    //PacketInEXBHost[i][1]
+                                                    , PacketInSQ[i][0]
                                                     , BUFFER_SIZE
                                                     );
             int isFullEXB = indexOfUpdate & 1;
@@ -661,7 +662,7 @@ int main(int argc, char** argv)
             //After insert the packet into the empty slot of EXB (in host)
             //all remaining packets in source queue need to be moved forward
             
-            int isEmptySQ = - (PacketInSQ[i][0] >> 31);//0 nghia la co goi tin o vi tri dau tien. 1 nghia la SQ dang empty
+            isEmptySQ = - (PacketInSQ[i][0] >> 31);//0 nghia la co goi tin o vi tri dau tien. 1 nghia la SQ dang empty
             ///If there was only one packet in SQ
             int isOnePkt = - (PacketInSQ[i][2] >> 31); //0 nghia la co goi tin o vi tri cuoi cung. 1 nghia la chi co 1 goi tin trong SQ
             int numPktInSQ = (PacketInSQ[i][2] - PacketInSQ[i][0] + 1)*(1 - isEmptySQ)*(1 - isOnePkt)
