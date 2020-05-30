@@ -591,29 +591,27 @@ int main(int argc, char** argv)
     PacketInSQ = malloc(sizeof * PacketInSQ * numOfSources);
     int** PacketInEXBHost = NULL;
     PacketInEXBHost = malloc(sizeof * PacketInEXBHost * numOfSources);
-    int sizeOfSQ = (2*numPktPerHalfSec + 1);
+    int sizeOfSQ = (numPktPerHalfSec + 2);
+    //2 phan tu dau tien cua PacketInSQ luu tru id cua pkt dau tien
+    //va id cua pkt cuoi cung trong danh sach Source Queue
+    //Cac phan tu tiep theo luu tru danh sach cac dst cua tung goi tin
+    //trong Source Queue
 
     for(i = 0; i < numOfSources; i++)
     {
         PacketInSQ[i] = malloc(sizeof * PacketInSQ[i] * sizeOfSQ);
-        PacketInSQ[i][0] = 0;
-        //PacketInSQ[i][0] : so luong cac Pkt co trong source queue
-        for(j = 1; j < sizeOfSQ; j++)
+        for(j = 0; j < sizeOfSQ; j++)
         {
             PacketInSQ[i][j] = -1;
-            //PacketInSQ[i][2*n - 1] : id cua pkt thu n trong source queue, n = 1..numPktPerHalfSec
-            //PacketInSQ[i][2*n] : dst cua pkt thu n trong source queue, n = 1..numPktPerHalfSec
         }
 
-        PacketInEXBHost[i] = malloc(sizeof * PacketInEXBHost[i] * (2*BUFFER_SIZE));
-        for(j = 0; j < 2*BUFFER_SIZE; j++)
+        PacketInEXBHost[i] = malloc(sizeof * PacketInEXBHost[i] * (2 + BUFFER_SIZE));
+        for(j = 0; j < 2 + BUFFER_SIZE; j++)
         {
             PacketInEXBHost[i][j] = -1;
             //PacketInEXBHost[i][0] : id cua pkt dau tien trong EXB cua host
-            //PacketInEXBHost[i][1] : dst cua pkt dau tien trong EXB cua host
-            //....
-            //PacketInEXBHost[i][2*BUFFER_SIZE - 2] : id cua pkt cuoi cung trong EXB cua host
-            //PacketInEXBHost[i][2*BUFFER_SIZE - 1] : dst cua pkt cuoi cung trong EXB cua host
+            //PacketInEXBHost[i][1] : id cua pkt cuoi cung trong EXB cua host
+            //PacketInEXBHost[i][j] : dst cua cac pkt trong EXB cua host
         }
     }
 
