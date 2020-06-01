@@ -112,5 +112,10 @@ void testUpdateWithNormalSQEXB()
         {
             printf("At testUpdateWithNormalSQEXB, it should be a non full EXB\n");
         }
+        
+        if(isFullEXB == 0 && i == BUFFER_SIZE - 1)
+        {
+            printf("At testUpdateWithNormalSQEXB, it should be a full EXB\n");
+        }
     }
 }
