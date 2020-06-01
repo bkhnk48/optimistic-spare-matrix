@@ -28,7 +28,7 @@ void testUpdateEmptyEXB()
     int isEmptyEXB = result & 1;
     int indexOfUpdate = result >> 1;
 
-    if(indexOfUpdate != 0 || indexOfUpdate > 2*(BUFFER_SIZE - 1))
+    if(indexOfUpdate != 0 || indexOfUpdate > BUFFER_SIZE)
     {
         printf("Wrong index of Update, should be 0 instead of %d\n", indexOfUpdate);
     }
@@ -46,7 +46,7 @@ void testUpdateFullEXB()
     int isEmptyEXB = result & 1;
     int indexOfUpdate = result >> 1;
 
-    if(indexOfUpdate != 0 || indexOfUpdate > 2*(BUFFER_SIZE - 1))
+    if(indexOfUpdate != 0 || indexOfUpdate > BUFFER_SIZE)
     {
         printf("At testUpdateFullEXB, wrong index of Update, should be 0 instead of %d\n", indexOfUpdate);
     }
@@ -64,7 +64,7 @@ void testUpdateWithEmptySQ()
     int isEmptyEXB = result & 1;
     int indexOfUpdate = result >> 1;
 
-    if(indexOfUpdate != 0)// || indexOfUpdate > BUFFER_SIZE)
+    if(indexOfUpdate != 0 || indexOfUpdate > BUFFER_SIZE)
     {
         printf("At testUpdateAlreadyOneElement, wrong index of update, should be 0 instead of %d\n", indexOfUpdate);
     }
