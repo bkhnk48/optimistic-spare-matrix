@@ -651,6 +651,8 @@ int main(int argc, char** argv)
                                                     );
             int isFullEXB = indexOfUpdate & 1;
             indexOfUpdate = indexOfUpdate >> 1;
+            //cap nhat lai xem SQ co bi empty khong?
+            isEmptySQ = - (PacketInSQ[i][0] >> 31);//0 nghia la co goi tin o vi tri dau tien. 1 nghia la SQ dang empty
 
             int oldPktInEXBHost = PacketInEXBHost[i][indexOfUpdate];
             
@@ -661,7 +663,7 @@ int main(int argc, char** argv)
             //After insert the packet into the empty slot of EXB (in host)
             //all remaining packets in source queue need to be moved forward
             
-            isEmptySQ = - (PacketInSQ[i][0] >> 31);//0 nghia la co goi tin o vi tri dau tien. 1 nghia la SQ dang empty
+            
             ///If there was only one packet in SQ
             int isOnePkt = - (PacketInSQ[i][2] >> 31); //0 nghia la co goi tin o vi tri cuoi cung. 1 nghia la chi co 1 goi tin trong SQ
             int numPktInSQ = (PacketInSQ[i][2] - PacketInSQ[i][0] + 1)*(1 - isEmptySQ)*(1 - isOnePkt)
