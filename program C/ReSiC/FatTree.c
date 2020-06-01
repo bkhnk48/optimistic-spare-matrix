@@ -645,7 +645,7 @@ int main(int argc, char** argv)
             //II. Generate and execute the event B
             //check if the EXB has no packet:
             int indexOfUpdate = checkUpdateEXBHost(PacketInEXBHost[i][0]
-                                                    //PacketInEXBHost[i][1]
+                                                    , PacketInEXBHost[i][1]
                                                     , PacketInSQ[i][0]
                                                     , BUFFER_SIZE
                                                     );
