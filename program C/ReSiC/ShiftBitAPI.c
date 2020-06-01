@@ -17,7 +17,7 @@ int checkEqual(int a, int b)
 
 //Ham nay dua tren mot gia thuyet rang:
 // kich thuoc cua buffer_size la gioi han
-int checkUpdateEXBHost(int topEXB, int topSQ, int BUFFER_SIZE)
+int checkUpdateEXBHost(int topEXB, int bottomEXB, int topSQ, int BUFFER_SIZE)
 {
     //Neu topEXB co id = 1 va topSQ co id = 3
     //Vay thi trong EXB da co 2 pkt voi id = 1 va 2.
@@ -30,7 +30,7 @@ int checkUpdateEXBHost(int topEXB, int topSQ, int BUFFER_SIZE)
     
     int indexOfUpdate = (topSQ - topEXB)*(1 - emptySQ);
     
-    int isFullEXB = indexOfUpdate - BUFFER_SIZE;
+    int isFullEXB = bottomEXB - topEXB + 1 - BUFFER_SIZE;
     isFullEXB = 1 + (isFullEXB >> 31); //0 nghia la EXB chua full, 1 nghia la EXB da full.
     
     int allowUpdate = 1 - isFullEXB; //0 nghia la khong cho update, 1 nghia la cho update
