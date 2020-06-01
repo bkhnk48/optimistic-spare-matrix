@@ -605,12 +605,11 @@ int main(int argc, char** argv)
             PacketInSQ[i][j] = -1;
         }
 
-        PacketInEXBHost[i] = malloc(sizeof * PacketInEXBHost[i] * (2 + BUFFER_SIZE));
-        for(j = 0; j < 2 + BUFFER_SIZE; j++)
+        PacketInEXBHost[i] = malloc(sizeof * PacketInEXBHost[i] * (1 + BUFFER_SIZE));
+        for(j = 0; j < 1 + BUFFER_SIZE; j++)
         {
             PacketInEXBHost[i][j] = -1;
             //PacketInEXBHost[i][0] : id cua pkt dau tien trong EXB cua host
-            //PacketInEXBHost[i][1] : id cua pkt cuoi cung trong EXB cua host
             //PacketInEXBHost[i][j] : dst cua cac pkt trong EXB cua host
         }
     }
