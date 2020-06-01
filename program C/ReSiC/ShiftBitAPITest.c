@@ -9,6 +9,7 @@ int BUFFER_SIZE = 5;
 void testUpdateEmptyEXB();
 void testUpdateFullEXB();
 void testUpdateWithEmptySQ();
+void testUpdateWithNormalSQEXB();
 
 int main(int argc, char** argv) 
 {
@@ -18,6 +19,8 @@ int main(int argc, char** argv)
     testUpdateFullEXB();
 
     testUpdateWithEmptySQ();
+
+    testUpdateWithNormalSQEXB();
 }
 
 void testUpdateEmptyEXB()
@@ -91,3 +94,23 @@ void testUpdateWithEmptySQ()
     return;
 }
 
+void testUpdateWithNormalSQEXB()
+{
+    int i = 0;
+    for(i = 1; i < BUFFER_SIZE; i++)
+    {
+        int result = checkUpdateEXBHost(7, i + 7, i + 7 + 1, BUFFER_SIZE);
+        int isFullEXB = result & 1;
+        int indexOfUpdate = result >> 1;
+        if(indexOfUpdate != ((i + 1) % BUFFER_SIZE) || indexOfUpdate > BUFFER_SIZE)
+        {
+            printf("At testUpdateWithNormalSQEXB, wrong index of update, should be %d instead of %d\n", 
+                        (i + 1) % BUFFER_SIZE, indexOfUpdate);
+        }
+
+        if(isFullEXB == 1 && i < BUFFER_SIZE - 1)
+        {
+            printf("At testUpdateWithNormalSQEXB, it should be a non full EXB\n");
+        }
+    }
+}
