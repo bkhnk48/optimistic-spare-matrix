@@ -28,9 +28,9 @@ int checkUpdateEXBHost(int topEXB, int topSQ, int BUFFER_SIZE)
 
     int emptySQ = - (topSQ >> 31);
     
-    int indexOfUpdate = 2*(topSQ - topEXB)*(1 - emptySQ);
+    int indexOfUpdate = (topSQ - topEXB)*(1 - emptySQ);
     
-    int isFullEXB = indexOfUpdate - 2*(BUFFER_SIZE - 1);
+    int isFullEXB = indexOfUpdate - BUFFER_SIZE;
     isFullEXB = 1 + (isFullEXB >> 31); //0 nghia la EXB chua full, 1 nghia la EXB da full.
     
     int allowUpdate = 1 - isFullEXB; //0 nghia la khong cho update, 1 nghia la cho update
