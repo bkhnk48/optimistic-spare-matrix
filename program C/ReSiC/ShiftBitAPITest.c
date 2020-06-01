@@ -59,19 +59,19 @@ void testUpdateFullEXB()
 
 void testUpdateWithEmptySQ()
 {
-    //The case bottomID = -1;
+    //The case SQ is empty;
     int result = checkUpdateEXBHost(7, -1, BUFFER_SIZE);
     int isEmptyEXB = result & 1;
     int indexOfUpdate = result >> 1;
 
     if(indexOfUpdate != 0 || indexOfUpdate > BUFFER_SIZE)
     {
-        printf("At testUpdateAlreadyOneElement, wrong index of update, should be 0 instead of %d\n", indexOfUpdate);
+        printf("At testUpdateWithEmptySQ, wrong index of update, should be 0 instead of %d\n", indexOfUpdate);
     }
 
     if(isEmptyEXB == 0)
     {
-        printf("At testUpdateAlreadyOneElement, it should be a non empty EXB\n");
+        printf("At testUpdateWithEmptySQ, it should be a non empty EXB\n");
     }
 
     return;
