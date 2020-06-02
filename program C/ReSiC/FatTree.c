@@ -605,11 +605,12 @@ int main(int argc, char** argv)
             PacketInSQ[i][j] = -1;
         }
 
-        PacketInEXBHost[i] = malloc(sizeof * PacketInEXBHost[i] * (1 + BUFFER_SIZE));
-        for(j = 0; j < 1 + BUFFER_SIZE; j++)
+        PacketInEXBHost[i] = malloc(sizeof * PacketInEXBHost[i] * (2 + BUFFER_SIZE));
+        for(j = 0; j < 2 + BUFFER_SIZE; j++)
         {
             PacketInEXBHost[i][j] = -1;
             //PacketInEXBHost[i][0] : id cua pkt dau tien trong EXB cua host
+            //PacketInEXBHost[i][1] : id cua pkt cuoi cung trong EXB cua host
             //PacketInEXBHost[i][j] : dst cua cac pkt trong EXB cua host
         }
     }
@@ -657,7 +658,7 @@ int main(int argc, char** argv)
             int oldPktInEXBHost = PacketInEXBHost[i][indexOfUpdate];
             
             PacketInEXBHost[i][indexOfUpdate] = (isFullEXB)*PacketInEXBHost[i][indexOfUpdate] 
-                                        + (1 - isFullEXB)*PacketInSQ[i][0];
+                                        + (1 - isFullEXB)*PacketInSQ[i][0]*(1 - isEmptySQ);
             
             ///III. Remove the first packet of Source queue
             //After insert the packet into the empty slot of EXB (in host)
