@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 
     int numOfHosts = numOfPorts * numOfPorts * numOfPorts / 4;
     int numOfInforAboutSwitch = 12;
-    double bandwidth = 1; //bo nhan voi 1 ty, vi tu nay bandwith se tinh don vi Gb, 1000*1000*1000;
+    double bandwidth = 1; //bo nhan voi 1 ty, vi tu nay bandwidth se tinh don vi Gb, 1000*1000*1000;
     int BUFFER_SIZE = 5;
     int PACKET_SIZE = 1e5;
     int HOST_DELAY = 1e5; //ns
