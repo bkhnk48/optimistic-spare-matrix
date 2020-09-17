@@ -383,7 +383,15 @@ int main(int argc, char** argv)
         }
     }
 
-    int numWaysFields = 9;
+    int numWaysFields = 9;//(1) id nut nguon; (2) id cua nut switch tiep theo
+                          /*(3) trang thai ban dau
+                            (4) cong k cua switch ke tiep
+                            (5) id cua packet ben trong
+                            (6) ip cua nut host nguon
+                            (7) ip cua nut dich host
+                            (8) so hop count
+                            (9) thoi gian ket thuc cua su kien goi tin di tren link
+                          */
     int** WayHE = NULL;
     int numOfSources = numOfHosts / trafficPattern;
     WayHE = malloc(sizeof * WayHE * numOfSources);
