@@ -189,6 +189,7 @@ int main(int argc, char** argv)
     addCore = malloc(sizeof * addAgg * numCoreSwitches);
     int numOfElemt = 2;
 
+    //Khoi tao dia chi IP cho cac Server
     for(i = 0; i < numOfHosts; i++)
     {
         addServer[i] = malloc(sizeof * addServer[i] * numOfElemt);
@@ -198,6 +199,7 @@ int main(int argc, char** argv)
         }
     }
 
+    //Khoi tao dia chi IP cho cac Edge
     for(i = 0; i < numEdgeSwitches; i++)
     {
         addEdge[i] = malloc(sizeof * addEdge[i] * numOfElemt);
@@ -207,6 +209,7 @@ int main(int argc, char** argv)
         }
     }
 
+    //Khoi tao dia chi IP cho cac Agg
     for(i = 0; i < numAggSwitches; i++)
     {
         addAgg[i] = malloc(sizeof * addAgg[i] * numOfElemt);
@@ -216,6 +219,7 @@ int main(int argc, char** argv)
         }
     }
 
+    //Khoi tao dia chi IP cho cac Core
     for(i = 0; i < numCoreSwitches; i++)
     {
         addCore[i] = malloc(sizeof * addCore[i] * numOfElemt);
@@ -232,7 +236,7 @@ int main(int argc, char** argv)
         offset = numEachPod * p;
         for (s = 0; s < numOfPorts/2; s++) {
             switchId = offset + numOfPorts * numOfPorts / 4 + s;
-            //printf("switchID of Edge = %d\n", switchId);
+            //Gan dia chi IP cho cac Edge
             indexEdge = p*numOfPorts/2 + s;
             addEdge[indexEdge][0] = switchId;
             addEdge[indexEdge][1] = (10 << 24);
@@ -242,6 +246,7 @@ int main(int argc, char** argv)
             
             switchId += numOfPorts/2;
             
+            //Gan dia chi IP cho cac Agg
             addAgg[indexEdge][0] = switchId;
             addAgg[indexEdge][1] = (10 << 24);
             addAgg[indexEdge][1] |= (p << 16);
