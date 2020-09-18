@@ -4,6 +4,7 @@
 
 #include "ErrorReport.c"
 #include "FatTreeTest.c"
+#include "Splay.c"
 //#include "FatTree.h"
 
 int main(int argc, char** argv) 
@@ -294,9 +295,8 @@ int main(int argc, char** argv)
         }
     }
 
-
-
-    testAddresses(numOfPorts, addEdge, addAgg, addCore, addServer);
+    
+    //testAddresses(numOfPorts, addEdge, addAgg, addCore, addServer);
 
     //==========Build table=========//
     int** edgeTables = NULL;
@@ -413,7 +413,7 @@ int main(int argc, char** argv)
 
     }
 
-    testWayHE(numOfPorts, trafficPattern, WayHE);
+    //testWayHE(numOfPorts, trafficPattern, WayHE);
 
     int** WayEH = NULL;
     int numOfDests = numOfHosts / trafficPattern;
@@ -460,7 +460,7 @@ int main(int argc, char** argv)
 
     }
 
-    testWayEA(numOfPorts, WayEA);
+    //testWayEA(numOfPorts, WayEA);
 
     int** WayAE = NULL;
     int numWayAE = numAggSwitches * (numOfPorts/2);
@@ -486,7 +486,7 @@ int main(int argc, char** argv)
         WayAE[i][8] = 0;//thoi gian ket thuc cua su kien
     }
 
-    testWayAE(numOfPorts, WayAE);
+    //testWayAE(numOfPorts, WayAE);
 
     int** WayAC = NULL;
     int numWayAC = numAggSwitches * (numOfPorts/2);
@@ -516,7 +516,7 @@ int main(int argc, char** argv)
         WayAC[i][8] = 0;//thoi gian ket thuc cua su kien
     }
 
-    testWayAC(numOfPorts, WayAC);
+    //testWayAC(numOfPorts, WayAC);
 
 
     int** WayCA = NULL;
@@ -544,10 +544,12 @@ int main(int argc, char** argv)
         WayCA[i][8] = 0;//thoi gian ket thuc cua su kien
     }
 
-    testWayCA(numOfPorts, WayCA);
+    //testWayCA(numOfPorts, WayCA);
     int* TimeGeneration = NULL;
     TimeGeneration = malloc(sizeof * TimeGeneration * (numOfHosts / trafficPattern));
     numOfSources = numOfHosts / trafficPattern;
+
+    
 
     int* CounterH = NULL;
     CounterH = malloc(sizeof * CounterH * numOfSources);
@@ -559,6 +561,8 @@ int main(int argc, char** argv)
     CounterA = malloc(sizeof * CounterA * numAggSwitches);
 
     int** CounterC = NULL;
+
+    
 
     CounterC = malloc(sizeof * CounterC * numCoreSwitches);
 
