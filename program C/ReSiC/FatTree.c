@@ -30,8 +30,8 @@ int main(int argc, char** argv)
     int propagationTime = (int)(length/PROPAGATION_VELOCITY);
     int numPktPerHalfSec = 1e9 / (2*HOST_DELAY);
     
-    //char *a = argv[1];
-    //int stop = atoi(a);
+    char *nP = argv[1];
+    int numOfParallelProcessors = atoi(nP);
 
     int i, j;
 
@@ -552,29 +552,41 @@ int main(int argc, char** argv)
     int* CounterH = NULL;
     CounterH = malloc(sizeof * CounterH * numOfSources);
 
-    int* CounterE = NULL;
+    int** CounterE = NULL;
     CounterE = malloc(sizeof * CounterE * numEdgeSwitches);
 
-    int* CounterA = NULL;
+    int** CounterA = NULL;
     CounterA = malloc(sizeof * CounterA * numAggSwitches);
 
-    int* CounterC = NULL;
+    int** CounterC = NULL;
 
     CounterC = malloc(sizeof * CounterC * numCoreSwitches);
 
     for(i = 0; i < numEdgeSwitches; i++)
     {
-        CounterE[i] = BUFFER_SIZE;
+        CounterE[i] = malloc(sizeof * CounterE[i] * numOfPorts); 
+        for(j = 0; j < numOfPorts; j++)
+        {
+            CounterE[i][j] = BUFFER_SIZE;
+        }
     }
 
     for(i = 0; i < numAggSwitches; i++)
     {
-        CounterA[i] = BUFFER_SIZE;
+        CounterA[i] = malloc(sizeof * CounterA[i] * numOfPorts); 
+        for(j = 0; j < numOfPorts; j++)
+        {
+            CounterA[i][j] = BUFFER_SIZE;
+        }
     }
 
     for(i = 0; i < numCoreSwitches; i++)
     {
-        CounterC[i] = BUFFER_SIZE;
+        CounterC[i] = malloc(sizeof * CounterC[i] * numOfPorts); 
+        for(j = 0; j < numOfPorts; j++)
+        {
+            CounterC[i][j] = BUFFER_SIZE;
+        }
     }
 
     for(i = 0; i < numOfSources; i++)
@@ -629,7 +641,12 @@ int main(int argc, char** argv)
     }
 
     int currentTime = 0; int endTime = 0;
-    
+
+    //Generate event A
+    for(i = 0; i < numOfSources; i++)
+    {
+
+    }
     /*
     while(currentTime <= endTime)
     {
