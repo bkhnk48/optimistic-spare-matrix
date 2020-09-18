@@ -604,7 +604,7 @@ int main(int argc, char** argv)
     PacketInSQ = malloc(sizeof * PacketInSQ * numOfSources);
     int** PacketInEXBHost = NULL;
     PacketInEXBHost = malloc(sizeof * PacketInEXBHost * numOfSources);
-    int sizeOfSQ = (numPktPerHalfSec + 2);
+    int sizeOfSQ = (dstPerSrc + 2);
     //2 phan tu dau tien cua PacketInSQ luu tru id cua pkt dau tien
     //va id cua pkt cuoi cung trong danh sach Source Queue
     //Cac phan tu tiep theo luu tru danh sach cac dst cua tung goi tin
