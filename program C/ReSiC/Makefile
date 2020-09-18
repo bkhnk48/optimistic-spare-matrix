@@ -6,7 +6,8 @@ serial:
 	gcc ShiftBitAPITest.c -g -o apiTest.out
 	gcc TestUpdateEXBHost.c -g -o updateEXBHost.out
 	gcc -g -c FatTreeTest.c
-	gcc -o splay top-down-splay.c
+	gcc top-down-splay.c -g -o splay  
+	gcc -g -c Splay.c
 #gcc -g -c DataStructure.h
 #gcc -g -c TrafficPattern.c
 #gcc -g -c Graph.c 
@@ -23,7 +24,7 @@ serial:
 #gcc serialNS.c -g -o out
 	gcc FatTree.c -g -o out  
 r:
-	./out
+	./out 1
 s:
 	./splay
 clean: 
