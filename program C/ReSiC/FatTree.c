@@ -650,14 +650,10 @@ int main(int argc, char** argv)
                     
                     
                     //ongoing work to change this element of array to temporary variable
-                    PacketInSQ[i][1 - isEmptySQ] = 
-                                        PacketInSQ[i][1 - isEmptySQ] * (1 - createPacketNow) 
-                                            + createPacketNow*idOfNewPkt;
+                    PacketInSQ[i][1 - isEmptySQ] = idOfNewPkt;
                     
 
-                    PacketInSQ[i][indexOfUpdateSQ] = 
-                                        (1 - createPacketNow)*PacketInSQ[i][indexOfUpdateSQ] + 
-                                            createPacketNow*dstOfNewPkt;
+                    PacketInSQ[i][indexOfUpdateSQ] = dstOfNewPkt;
 
                     //II. Generate and execute the event B
                     //check if the EXB has no packet:
