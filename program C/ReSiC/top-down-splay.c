@@ -134,7 +134,7 @@ Tree * insert(int i, Tree * t) {
 	exit(1);
     }
     new->item = i;
-    printf("Insert item i=%d\n", i);
+    //printf("Insert item i=%d\n", i);
     if (t == NULL) {
 	new->left = new->right = NULL;
 	size = 1;
@@ -187,11 +187,11 @@ void main() {
     int i;
     root = NULL;              /* the empty tree */
     size = 0;
-    for (i = 0; i < 1024; i++) {
-	root = insert((541*i) & (1023), root);
+    for (i = 0; i < 1024*1024; i++) {
+	root = insert((541*i) & (1024*1024 - 1), root);
     }
-    for (i = 0; i < 1024; i++) {
-	root = delete((541*i) & (1023), root);
+    for (i = 0; i < 1024*1024; i++) {
+	root = delete((541*i) & (1024*1024 - 1), root);
     }
     printf("size = %d\n", size);
 }
