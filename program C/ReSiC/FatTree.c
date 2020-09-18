@@ -629,6 +629,8 @@ int main(int argc, char** argv)
     }
 
     int currentTime = 0; int endTime = 0;
+    
+    /*
     while(currentTime <= endTime)
     {
         //generate packets and update to source queue
@@ -701,5 +703,7 @@ int main(int argc, char** argv)
         }
         currentTime++;
     }
+    */
+
     return 0;
 }
