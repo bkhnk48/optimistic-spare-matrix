@@ -43,7 +43,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int size;  /* number of nodes in the tree */
+//int size;  /* number of nodes in the tree */
            /* Not actually needed for any of the operations */
 
 typedef struct tree_node Tree;
@@ -148,7 +148,7 @@ Tree * insert(int i, Tree * t) {
     //printf("Insert item i=%d\n", i);
     if (t == NULL) {
 	newNode->left = newNode->right = NULL;
-	size = 1;
+	//size = 1;
 	return newNode;
     }
     t = splay(i,t);
@@ -156,13 +156,13 @@ Tree * insert(int i, Tree * t) {
 	newNode->left = t->left;
 	newNode->right = t;
 	t->left = NULL;
-	size ++;
+	//size ++;
 	return newNode;
     } else if (i > t->endTime) {
 	newNode->right = t->right;
 	newNode->left = t;
 	t->right = NULL;
-	size++;
+	//size++;
 	return newNode;
     } else { /* We get here if it's already in the tree */
              /* Don't add it again                      */
@@ -184,7 +184,7 @@ Tree * del(int i, Tree * t) {
 	    x = splay(i, t->left);
 	    x->right = t->right;
 	}
-	size--;
+	//size--;
 	free(t);
 	return x;
     }
