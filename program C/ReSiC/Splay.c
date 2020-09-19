@@ -151,9 +151,10 @@ Tree * insert(int id, int type, int packetID, int idLocation,
     
     newNode = (Tree *) malloc (sizeof (Tree));
     if (newNode == NULL) {
-	printf("Ran out of space\n");
-	exit(1);
+	    printf("Ran out of space\n");
+	    exit(1);
     }
+
     newNode->id = id;
     newNode->type = type;
     newNode->packetID = packetID;
@@ -162,27 +163,28 @@ Tree * insert(int id, int type, int packetID, int idLocation,
     newNode->endTime = i;
     //printf("Insert item i=%d\n", i);
     if (t == NULL) {
-	newNode->left = newNode->right = NULL;
-	//size = 1;
-	return newNode;
+	    newNode->left = newNode->right = NULL;
+	    //size = 1;
+	    return newNode;
     }
+
     t = splay(i,t);
     if (i < t->endTime) {
-	newNode->left = t->left;
-	newNode->right = t;
-	t->left = NULL;
-	//size ++;
-	return newNode;
+	    newNode->left = t->left;
+        newNode->right = t;
+        t->left = NULL;
+        //size ++;
+        return newNode;
     } else if (i > t->endTime) {
-	newNode->right = t->right;
-	newNode->left = t;
-	t->right = NULL;
-	//size++;
-	return newNode;
+        newNode->right = t->right;
+        newNode->left = t;
+        t->right = NULL;
+        //size++;
+        return newNode;
     } else { /* We get here if it's already in the tree */
              /* Don't add it again                      */
-	free(newNode);
-	return t;
+        free(newNode);
+        return t;
     }
 }
 
@@ -193,15 +195,15 @@ Tree * del(int i, Tree * t) {
     if (t==NULL) return NULL;
     t = splay(i,t);
     if (i == t->endTime) {               /* found it */
-	if (t->left == NULL) {
-	    x = t->right;
-	} else {
-	    x = splay(i, t->left);
-	    x->right = t->right;
-	}
-	//size--;
-	free(t);
-	return x;
+        if (t->left == NULL) {
+            x = t->right;
+        } else {
+            x = splay(i, t->left);
+            x->right = t->right;
+        }
+        //size--;
+        free(t);
+        return x;
     }
     return t;                         /* It wasn't there */
 }
