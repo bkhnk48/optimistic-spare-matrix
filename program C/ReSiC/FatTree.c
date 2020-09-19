@@ -658,7 +658,12 @@ int main(int argc, char** argv)
         switch(createPacketNow)
         {
             case 1:
-                
+                rootHosts = insert(A, //type A 
+                                    0, //packetID = 0
+                                    i, //location at this host
+                                    0, //startTime = 0 
+                                    0, //endTime = 0
+                                    rootHosts);
                 break;
         }
     }
