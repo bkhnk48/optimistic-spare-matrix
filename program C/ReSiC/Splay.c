@@ -42,6 +42,8 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
+#include "Event.c"
+
 
 //int size;  /* number of nodes in the tree */
            /* Not actually needed for any of the operations */
@@ -49,7 +51,7 @@
 typedef struct tree_node Tree;
 struct tree_node {
     Tree * left, * right;
-    int type; //type of event
+    enum TypesOfEvent type; //type of event
     int packetID; //id of packet
     int idLocation; //id of location where the event finished
     int startTime;
@@ -139,7 +141,7 @@ Tree * sedgewickized_splay (int i, Tree * t) {
     int startTime;
     int endTime; //=> chinh la tham so i cua ham insert
 */
-Tree * insert(int type, int packetID, int idLocation,
+Tree * insert(enum TypesOfEvent type, int packetID, int idLocation,
                 int startTime, 
                 int endTime
                 , Tree * t) {
