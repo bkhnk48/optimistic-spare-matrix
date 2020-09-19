@@ -59,7 +59,7 @@ Tree * splay (int i, Tree * t);
 Tree * sedgewickized_splay (int i, Tree * t);
 Tree * del(int i, Tree * t);
 
-Tree * splay (int i, Tree * t) {
+Tree * splay (int endTime, Tree * t) {
 /* Simple top down splay, not requiring i to be in the tree t.  */
 /* What it does is described above.                             */
     Tree N, *l, *r, *y;
@@ -68,9 +68,9 @@ Tree * splay (int i, Tree * t) {
     l = r = &N;
 
     for (;;) {
-        if (i < t->endTime) {
+        if (endTime < t->endTime) {
             if (t->left == NULL) break;
-            if (i < t->left->endTime) {
+            if (endTime < t->left->endTime) {
                 y = t->left;                           /* rotate right */
                 t->left = y->right;
                 y->right = t;
@@ -80,9 +80,9 @@ Tree * splay (int i, Tree * t) {
             r->left = t;                               /* link right */
             r = t;
             t = t->left;
-        } else if (i > t->endTime) {
+        } else if (endTime > t->endTime) {
             if (t->right == NULL) break;
-            if (i > t->right->endTime) {
+            if (endTime > t->right->endTime) {
                 y = t->right;                          /* rotate left */
                 t->right = y->left;
                 y->left = t;
@@ -141,7 +141,7 @@ Tree * sedgewickized_splay (int i, Tree * t) {
 */
 Tree * insert(int type, int packetID, int idLocation,
                 int startTime, 
-                int i
+                int endTime
                 , Tree * t) {
 /* Insert i into the tree t, unless it's already there.    */
 /* Return a pointer to the resulting tree.                 */
@@ -157,7 +157,7 @@ Tree * insert(int type, int packetID, int idLocation,
     newNode->packetID = packetID;
     newNode->idLocation = idLocation;
     newNode->startTime = startTime;
-    newNode->endTime = i;
+    newNode->endTime = endTime;
     //printf("Insert item i=%d\n", i);
     if (t == NULL) {
 	    newNode->left = newNode->right = NULL;
@@ -165,14 +165,14 @@ Tree * insert(int type, int packetID, int idLocation,
 	    return newNode;
     }
 
-    t = splay(i,t);
-    if (i < t->endTime) {
+    t = splay(endTime,t);
+    if (endTime < t->endTime) {
 	    newNode->left = t->left;
         newNode->right = t;
         t->left = NULL;
         //size ++;
         return newNode;
-    } else if (i > t->endTime) {
+    } else if (endTime > t->endTime) {
         newNode->right = t->right;
         newNode->left = t;
         t->right = NULL;
