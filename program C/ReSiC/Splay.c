@@ -49,7 +49,6 @@
 typedef struct tree_node Tree;
 struct tree_node {
     Tree * left, * right;
-    int id;//id cua event
     int type; //type of event
     int packetID; //id of packet
     int idLocation; //id of location where the event finished
@@ -134,14 +133,13 @@ Tree * sedgewickized_splay (int i, Tree * t) {
     return t;
 }
 
-/*int id;//id cua event
-    int type; //type of event
+/*  int type; //type of event
     int packetID; //id of packet
     int idLocation; //id of location where the event finished
     int startTime;
     int endTime; //=> chinh la tham so i cua ham insert
 */
-Tree * insert(int id, int type, int packetID, int idLocation,
+Tree * insert(int type, int packetID, int idLocation,
                 int startTime, 
                 int i
                 , Tree * t) {
@@ -155,7 +153,6 @@ Tree * insert(int id, int type, int packetID, int idLocation,
 	    exit(1);
     }
 
-    newNode->id = id;
     newNode->type = type;
     newNode->packetID = packetID;
     newNode->idLocation = idLocation;
