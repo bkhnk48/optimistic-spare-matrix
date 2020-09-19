@@ -49,7 +49,12 @@ int size;  /* number of nodes in the tree */
 typedef struct tree_node Tree;
 struct tree_node {
     Tree * left, * right;
-    int item;
+    int id;//id cua event
+    int type; //type of event
+    int packetID; //id of packet
+    int idLocation; //id of location where the event finished
+    int startTime;
+    int endTime;
 };
 Tree * splay (int i, Tree * t);
 Tree * sedgewickized_splay (int i, Tree * t);
@@ -64,9 +69,9 @@ Tree * splay (int i, Tree * t) {
     l = r = &N;
 
     for (;;) {
-        if (i < t->item) {
+        if (i < t->endTime) {
             if (t->left == NULL) break;
-            if (i < t->left->item) {
+            if (i < t->left->endTime) {
                 y = t->left;                           /* rotate right */
                 t->left = y->right;
                 y->right = t;
@@ -76,9 +81,9 @@ Tree * splay (int i, Tree * t) {
             r->left = t;                               /* link right */
             r = t;
             t = t->left;
-        } else if (i > t->item) {
+        } else if (i > t->endTime) {
             if (t->right == NULL) break;
-            if (i > t->right->item) {
+            if (i > t->right->endTime) {
                 y = t->right;                          /* rotate left */
                 t->right = y->left;
                 y->left = t;
@@ -108,14 +113,14 @@ Tree * sedgewickized_splay (int i, Tree * t) {
     l = r = &N;
 
     for (;;) {
-        if (i < t->item) {
-            if (t->left != NULL && i < t->left->item) {
+        if (i < t->endTime) {
+            if (t->left != NULL && i < t->left->endTime) {
                 y = t->left; t->left = y->right; y->right = t; t = y;
             }
             if (t->left == NULL) break;
             r->left = t; r = t; t = t->left;
-        } else if (i > t->item) {
-            if (t->right != NULL && i > t->right->item) {
+        } else if (i > t->endTime) {
+            if (t->right != NULL && i > t->right->endTime) {
                 y = t->right; t->right = y->left; y->left = t; t = y;
             }
             if (t->right == NULL) break;
@@ -139,7 +144,7 @@ Tree * insert(int i, Tree * t) {
 	printf("Ran out of space\n");
 	exit(1);
     }
-    newNode->item = i;
+    newNode->endTime = i;
     //printf("Insert item i=%d\n", i);
     if (t == NULL) {
 	newNode->left = newNode->right = NULL;
@@ -147,13 +152,13 @@ Tree * insert(int i, Tree * t) {
 	return newNode;
     }
     t = splay(i,t);
-    if (i < t->item) {
+    if (i < t->endTime) {
 	newNode->left = t->left;
 	newNode->right = t;
 	t->left = NULL;
 	size ++;
 	return newNode;
-    } else if (i > t->item) {
+    } else if (i > t->endTime) {
 	newNode->right = t->right;
 	newNode->left = t;
 	t->right = NULL;
@@ -172,7 +177,7 @@ Tree * del(int i, Tree * t) {
     Tree * x;
     if (t==NULL) return NULL;
     t = splay(i,t);
-    if (i == t->item) {               /* found it */
+    if (i == t->endTime) {               /* found it */
 	if (t->left == NULL) {
 	    x = t->right;
 	} else {
