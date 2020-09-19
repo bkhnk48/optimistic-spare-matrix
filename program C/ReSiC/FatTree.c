@@ -611,7 +611,8 @@ int main(int argc, char** argv)
         trafficPairs[i] = malloc(sizeof * trafficPairs[i] * dstPerSrc);
         for(j = 0; j < dstPerSrc; j++)
         {
-            trafficPairs[i][j] = i + numOfSources;//tam lam viec bisection bandwidth hang
+            trafficPairs[i][j] = i + numOfSources;
+            //tam lam viec bisection bandwidth hang
         }
     }
 
