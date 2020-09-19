@@ -457,7 +457,6 @@ int main(int argc, char** argv)
         WayEA[i][6] = 0; //ip cua nut dich host
         WayEA[i][7] = 0; //So hop count
         WayEA[i][8] = 0;//thoi gian ket thuc cua su kien
-
     }
 
     //testWayEA(numOfPorts, WayEA);
@@ -646,10 +645,22 @@ int main(int argc, char** argv)
 
     int currentTime = 0; int endTime = 0;
 
+    //Generate Tree for hosts
+    Tree * rootHosts;
+    rootHosts = NULL;              /* the empty tree */
     //Generate event A
     for(i = 0; i < numOfSources; i++)
     {
-
+        //I. Check time and then execute event A
+        int createPacketNow = checkEqual(currentTime, TimeGeneration[i]);
+        //0 means wont generate a packet right now. 
+        //1 means yes.
+        switch(createPacketNow)
+        {
+            case 1:
+                
+                break;
+        }
     }
     /*
     while(currentTime <= endTime)
