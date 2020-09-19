@@ -134,7 +134,17 @@ Tree * sedgewickized_splay (int i, Tree * t) {
     return t;
 }
 
-Tree * insert(int i, Tree * t) {
+/*int id;//id cua event
+    int type; //type of event
+    int packetID; //id of packet
+    int idLocation; //id of location where the event finished
+    int startTime;
+    int endTime; //=> chinh la tham so i cua ham insert
+*/
+Tree * insert(int id, int type, int packetID, int idLocation,
+                int startTime, 
+                int i
+                , Tree * t) {
 /* Insert i into the tree t, unless it's already there.    */
 /* Return a pointer to the resulting tree.                 */
     Tree * newNode;
@@ -144,6 +154,11 @@ Tree * insert(int i, Tree * t) {
 	printf("Ran out of space\n");
 	exit(1);
     }
+    newNode->id = id;
+    newNode->type = type;
+    newNode->packetID = packetID;
+    newNode->idLocation = idLocation;
+    newNode->startTime = startTime;
     newNode->endTime = i;
     //printf("Insert item i=%d\n", i);
     if (t == NULL) {
