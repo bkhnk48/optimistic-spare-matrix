@@ -97,7 +97,36 @@ Tree * splay (int endTime, Tree * t) {
             l->right = t;                              /* link left */
             l = t;
             t = t->right;
-        } else {
+        } else {//if endTime == t->endTime
+            if (t->right == NULL)
+            { 
+                if(r != NULL)
+                {
+                    if(r->left == t)
+                    {
+                        y = t->left;
+                        y->right = r;
+                        t->left = NULL;
+                        t = y;
+                        return t;
+                    }
+                }
+                break;
+            }
+            if(t->left != NULL)//if (endTime <= t->right->endTime) 
+            {
+                  y = t->left;
+                  y->right = t->right;
+                  t->right->left = t;
+                  t->left = NULL;
+                  t->right = NULL;
+                  t = y;                          /* rotate left */
+            //    t->right = y->left;//= t->right->left
+            //    y->left = t;
+            //    t = y;
+            //    if (t->right == NULL) break;
+            }
+           
             break;
         }
     }
@@ -175,17 +204,20 @@ Tree * insert(enum TypesOfEvent type, int packetID, int idLocation,
 	    newNode->left = t->left;
         newNode->right = t;
         t->left = NULL;
-        //size ++;
+        
         return newNode;
     } else if (endTime > t->endTime) {
         newNode->right = t->right;
         newNode->left = t;
         t->right = NULL;
-        //size++;
+        
         return newNode;
     } else { /* We get here if it's already in the tree */
              /* Don't add it again                      */
-        free(newNode);
+        //free(newNode);
+        newNode->right = t->right;
+        t->right = newNode;
+        newNode->left = NULL;
         return t;
     }
 }
@@ -247,18 +279,3 @@ void leaf(Tree * t, enum Side side)
         printf("NULL\n");
     }
 }
-//void main() {
-/* A sample use of these functions. Start with the empty tree,         */
-/* insert some stuff into it, and then delete it                        */
-//    Tree * root;
-//    int i;
-//    root = NULL;              /* the empty tree */
-//    size = 0;
-//    for (i = 0; i < 1024*1024; i++) {
-//	    root = insert((541*i) & (1024*1024 - 1), root);
-//    }
-//    for (i = 0; i < 1024*1024; i++) {
-//	//root = delete((541*i) & (1024*1024 - 1), root);
-//    }
-//    printf("size = %d\n", size);
-//}
