@@ -47,6 +47,7 @@
 
 //int size;  /* number of nodes in the tree */
            /* Not actually needed for any of the operations */
+enum Side{LEFT, RIGHT};
 
 typedef struct tree_node Tree;
 struct tree_node {
@@ -60,6 +61,8 @@ struct tree_node {
 Tree * splay (int i, Tree * t);
 Tree * sedgewickized_splay (int i, Tree * t);
 Tree * del(int i, Tree * t);
+void show(Tree * t);
+void leaf(Tree * t, enum Side side);
 
 Tree * splay (int endTime, Tree * t) {
 /* Simple top down splay, not requiring i to be in the tree t.  */
@@ -207,6 +210,43 @@ Tree * del(int i, Tree * t) {
     return t;                         /* It wasn't there */
 }
 
+void show(Tree * t)
+{
+    if(t != NULL)
+    {
+        printf("\n===========> for event type = %d at end = %d in %d\n", 
+                t->type, t->endTime, t->idLocation);
+        leaf(t->left, LEFT);
+        leaf(t->right, RIGHT);
+        printf("\n");
+    }
+    else{
+        printf("===========> left NULL\n");
+    }
+}
+
+void leaf(Tree * t, enum Side side)
+{
+    printf("===========> ");
+    if(side == LEFT)
+    {
+        printf("left ");
+    }
+    else{
+        printf("right ");
+    }
+    if(t != NULL)
+    {
+        printf("for event type = %d at end = %d in %d\n", 
+                t->type, t->endTime, t->idLocation);
+        leaf(t->left, LEFT);
+        leaf(t->right, RIGHT);
+        printf("\n");
+    }
+    else{
+        printf("NULL\n");
+    }
+}
 //void main() {
 /* A sample use of these functions. Start with the empty tree,         */
 /* insert some stuff into it, and then delete it                        */
