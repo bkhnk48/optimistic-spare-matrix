@@ -9,6 +9,7 @@ serial:
 	gcc -g -c Event.c
 	gcc -g -c Splay.c
 	gcc FatTree.c -g -o out  
+	gcc SplayTest.c -g -o splay
 r:
 	./out 1
 s:
