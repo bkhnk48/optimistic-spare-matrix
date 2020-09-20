@@ -663,14 +663,32 @@ int main(int argc, char** argv)
                                     0, //packetID = 0
                                     i, //location at this host
                                     0, //startTime = 0 
-                                    0, //endTime = 0
+                                    numOfSources - i, //endTime = 0
                                     rootHosts);
                 break;
         }
     }
-    /*
+
     while(currentTime <= endTime)
     {
+
+        if(rootHosts != NULL)
+        {
+            Tree *cursor = rootHosts;
+            while(cursor->left != NULL)
+            {
+                cursor = cursor->left;
+            }
+            printf(
+                "Event first is of type: %d, pktID = %d, location = %d, endTime = %d\n"
+                    , cursor->type, cursor->packetID, 
+                    cursor->idLocation, cursor->endTime
+             );
+        }
+        break;
+    }
+    /*
+    
         //generate packets and update to source queue
         for(i = 0; i < numOfSources; i++)
         {
