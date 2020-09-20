@@ -98,18 +98,15 @@ Tree * splay (int endTime, Tree * t) {
             l = t;
             t = t->right;
         } else {//if endTime == t->endTime
-            if (t->right == NULL)
-            { 
-                if(r != NULL)
+            if (t->right == NULL || r != NULL)
+            {
+                if(r->left == t)
                 {
-                    if(r->left == t)
-                    {
-                        y = t->left;
-                        y->right = r;
-                        t->left = NULL;
-                        t = y;
-                        return t;
-                    }
+                    y = t->left;
+                    y->right = r;
+                    t->left = NULL;
+                    t = y;
+                    return t;
                 }
                 break;
             }
