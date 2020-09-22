@@ -18,11 +18,11 @@ Tree * add(enum TypesOfEvent type, int packetID, int idLocation,
                 int startTime, 
                 int endTime
                 , Tree * t);
+Tree * removeFirstEvent(Tree * t);
 Tree * splay (int i, Tree * t);
 Tree * del(int i, Tree * t);
 void show(Tree * t);
 void leaf(Tree * t, enum Side side);
-
 
 Tree * add(enum TypesOfEvent type, int packetID, int idLocation,
                 int startTime, 
@@ -129,6 +129,45 @@ Tree * add(enum TypesOfEvent type, int packetID, int idLocation,
     newNode->right = temp;
 
     return newNode;
+}
+
+Tree * removeFirstEvent(Tree *t)
+{
+    if(t == NULL)
+        return NULL;
+    Tree * temp = t;
+    while(temp->left != NULL)
+    {
+        temp = temp->left;
+    }
+    Tree * first = (Tree *) malloc (sizeof (Tree));
+    first->type = temp->type;
+    first->packetID = temp->packetID;
+    first->startTime = temp->startTime;
+    first->endTime = temp->endTime;
+    first->idLocation = temp->idLocation;
+    first->left = NULL;
+    first->right = NULL;
+    first->father = NULL;
+    if(temp->father != NULL)
+    {
+        temp->father->left = temp->right;
+    }
+    else{
+        if(temp->right != NULL)
+        {
+            t->type = temp->right->type;
+            t->packetID = temp->right->packetID;
+            t->startTime = temp->right->startTime;
+            t->endTime = temp->right->endTime;
+            t->idLocation = temp->right->idLocation;
+            t->left = temp->right->left;
+            t->right = temp->right->right;
+            t->father = NULL;
+        }
+    }
+    free(temp);
+    return first;
 }
 
 void show(Tree * t)
