@@ -6,11 +6,11 @@
 #include "FatTreeTest.c"
 #include "Splay.c"
 //#include "FatTree.h"
-
+enum TRAFFIC_PATTERN {ALL_TO_ALL, ONE_TO_ONE, BISECTION_BANDWIDTH};
 int main(int argc, char** argv) 
 {
-    int trafficPattern = 2; //bisection bandwidth
-                         //1; //all-to-all
+    int trafficPattern = ONE_TO_ONE;
+                         
     int numOfPorts = 4;
     int numOfSwitches = numOfPorts * numOfPorts * 5 / 4;
     int numPodSwitches = numOfPorts * numOfPorts;
@@ -393,7 +393,25 @@ int main(int argc, char** argv)
                             (9) thoi gian ket thuc cua su kien goi tin di tren link
                           */
     int** WayHE = NULL;
-    int numOfSources = numOfHosts / trafficPattern;
+    int numOfSources = 0;
+    int numOfDests = 0;
+
+    switch(trafficPattern) 
+    {
+        case ALL_TO_ALL: 
+                            numOfSources = numOfHosts; 
+                            numOfDests = numOfSources - 1;
+                            break;
+        case ONE_TO_ONE: 
+                            numOfSources = numOfHosts; 
+                            numOfDests = 1;
+                            break;
+        case BISECTION_BANDWIDTH: 
+                            numOfSources = numOfHosts / 2; 
+                            numOfDests = 1;
+                            break;
+    }
+
     WayHE = malloc(sizeof * WayHE * numOfSources);
     for(i = 0; i < numOfSources; i++)
     {
@@ -416,8 +434,8 @@ int main(int argc, char** argv)
     //testWayHE(numOfPorts, trafficPattern, WayHE);
 
     int** WayEH = NULL;
-    int numOfDests = numOfHosts / trafficPattern;
-    delta = (numEdgeSwitches / trafficPattern)*(trafficPattern - 1);
+    
+
     WayEH = malloc(sizeof * WayEH * numOfDests);
     for(i = 0; i < numOfDests; i++)
     {
@@ -545,8 +563,8 @@ int main(int argc, char** argv)
 
     //testWayCA(numOfPorts, WayCA);
     int* TimeGeneration = NULL;
-    TimeGeneration = malloc(sizeof * TimeGeneration * (numOfHosts / trafficPattern));
-    numOfSources = numOfHosts / trafficPattern;
+    TimeGeneration = malloc(sizeof * TimeGeneration * numOfSources);
+    
 
     
 
@@ -647,8 +665,8 @@ int main(int argc, char** argv)
     int currentTime = 0; int endTime = 0;
 
     //Generate Tree for hosts
-    //Tree * rootHosts;
-    //rootHosts = NULL;              /* the empty tree */
+    Tree * rootHosts;
+    rootHosts = NULL;              /* the empty tree */
     //Generate event A
     for(i = 0; i < numOfSources; i++)
     {
@@ -656,35 +674,40 @@ int main(int argc, char** argv)
         int createPacketNow = checkEqual(currentTime, TimeGeneration[i]);
         //0 means wont generate a packet right now. 
         //1 means yes.
+        printf("i = %d. Create packet now? %d\n", i, createPacketNow);
         switch(createPacketNow)
         {
             case 1:
-                /*rootHosts = insert(A, //type A 
+                rootHosts = add(A, //type A 
                                     0, //packetID = 0
                                     i, //location at this host
                                     0, //startTime = 0 
-                                    numOfSources - i, //endTime = 0
+                                    0, //endTime = 0
                                     rootHosts);
-                                    */
+                                    
                 break;
         }
     }
 
+    show(rootHosts);
+
     while(currentTime <= endTime)
     {
 
+        Tree * ev = removeFirstEvent(rootHosts);
+        if(ev != NULL)
         //if(rootHosts != NULL)
         {
             /*Tree *cursor = rootHosts;
             while(cursor->left != NULL)
             {
                 cursor = cursor->left;
-            }
+            }*/
             printf(
                 "Event first is of type: %d, pktID = %d, location = %d, endTime = %d\n"
-                    , cursor->type, cursor->packetID, 
-                    cursor->idLocation, cursor->endTime
-             );*/
+                    , ev->type, ev->packetID, 
+                    ev->idLocation, ev->endTime
+             );
         }
         break;
     }
