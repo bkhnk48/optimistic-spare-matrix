@@ -694,8 +694,12 @@ int main(int argc, char** argv)
     while(currentTime <= endTime)
     {
 
-        Tree * ev = removeFirstEvent(rootHosts);
-        if(ev != NULL)
+        Tree * ev = (Tree *) malloc (sizeof (Tree));
+        ev->endTime = -1;
+        //rootHosts 
+        rootHosts = removeFirstEvent(ev, 
+                                    rootHosts);
+        if(ev->endTime != -1)
         //if(rootHosts != NULL)
         {
             /*Tree *cursor = rootHosts;
@@ -708,8 +712,11 @@ int main(int argc, char** argv)
                     , ev->type, ev->packetID, 
                     ev->idLocation, ev->endTime
              );
+            show(rootHosts);
         }
-        break;
+        else{
+            break;
+        }
     }
     /*
     
