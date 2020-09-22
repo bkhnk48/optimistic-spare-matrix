@@ -647,8 +647,8 @@ int main(int argc, char** argv)
     int currentTime = 0; int endTime = 0;
 
     //Generate Tree for hosts
-    Tree * rootHosts;
-    rootHosts = NULL;              /* the empty tree */
+    //Tree * rootHosts;
+    //rootHosts = NULL;              /* the empty tree */
     //Generate event A
     for(i = 0; i < numOfSources; i++)
     {
@@ -659,12 +659,13 @@ int main(int argc, char** argv)
         switch(createPacketNow)
         {
             case 1:
-                rootHosts = insert(A, //type A 
+                /*rootHosts = insert(A, //type A 
                                     0, //packetID = 0
                                     i, //location at this host
                                     0, //startTime = 0 
                                     numOfSources - i, //endTime = 0
                                     rootHosts);
+                                    */
                 break;
         }
     }
@@ -672,9 +673,9 @@ int main(int argc, char** argv)
     while(currentTime <= endTime)
     {
 
-        if(rootHosts != NULL)
+        //if(rootHosts != NULL)
         {
-            Tree *cursor = rootHosts;
+            /*Tree *cursor = rootHosts;
             while(cursor->left != NULL)
             {
                 cursor = cursor->left;
@@ -683,7 +684,7 @@ int main(int argc, char** argv)
                 "Event first is of type: %d, pktID = %d, location = %d, endTime = %d\n"
                     , cursor->type, cursor->packetID, 
                     cursor->idLocation, cursor->endTime
-             );
+             );*/
         }
         break;
     }
