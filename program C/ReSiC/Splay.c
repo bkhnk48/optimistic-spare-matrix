@@ -18,8 +18,11 @@ Tree * add(enum TypesOfEvent type, int packetID, int idLocation,
                 int startTime, 
                 int endTime
                 , Tree * t);
-Tree * removeFirstEvent(Tree * t);
-Tree * splay (int i, Tree * t);
+void * splay (Tree * n, Tree * t);
+
+Tree * removeFirstEvent(Tree * first, 
+            Tree * t);
+
 Tree * del(int i, Tree * t);
 void show(Tree * t);
 void leaf(Tree * t, enum Side side);
@@ -131,7 +134,7 @@ Tree * add(enum TypesOfEvent type, int packetID, int idLocation,
     return newNode;
 }
 
-Tree * removeFirstEvent(Tree *t)
+Tree * removeFirstEvent(Tree * first, Tree *t)
 {
     if(t == NULL)
         return NULL;
@@ -140,7 +143,7 @@ Tree * removeFirstEvent(Tree *t)
     {
         temp = temp->left;
     }
-    Tree * first = (Tree *) malloc (sizeof (Tree));
+    //Tree * first = (Tree *) malloc (sizeof (Tree));
     first->type = temp->type;
     first->packetID = temp->packetID;
     first->startTime = temp->startTime;
@@ -149,25 +152,152 @@ Tree * removeFirstEvent(Tree *t)
     first->left = NULL;
     first->right = NULL;
     first->father = NULL;
-    if(temp->father != NULL)
+    splay(temp, t);
+
+    Tree * leftTree = (Tree *) malloc (sizeof (Tree));
+    leftTree = t->left;
+    if(leftTree != NULL)
+        leftTree->father = NULL;
+    Tree * rightTree = (Tree *) malloc (sizeof (Tree));
+    rightTree = t->right;
+    if(rightTree != NULL)
+        rightTree->father = NULL;
+
+    free(temp);
+
+    if(rightTree == NULL)
+        t = leftTree;
+    else if(leftTree == NULL)
     {
-        temp->father->left = temp->right;
+        t = rightTree;
     }
     else{
-        if(temp->right != NULL)
+        Tree * newRoot = rightTree;
+        while(newRoot->left != NULL)
         {
-            t->type = temp->right->type;
-            t->packetID = temp->right->packetID;
-            t->startTime = temp->right->startTime;
-            t->endTime = temp->right->endTime;
-            t->idLocation = temp->right->idLocation;
-            t->left = temp->right->left;
-            t->right = temp->right->right;
-            t->father = NULL;
+            newRoot = rightTree->left;
+        }
+
+        splay(newRoot, t);
+        newRoot->left = leftTree;
+        leftTree->father = newRoot;
+        return newRoot;
+        
+    }
+
+    return t;
+}
+
+void * splay (Tree * e, Tree * t)
+{
+    int left;
+    Tree * f;
+    Tree * gf;
+    Tree * ggf;
+    while(e->father != NULL)
+    {
+        f = e->father;
+        gf = f->father;
+        left = (e == f->left ? 1 : 0);
+        if(left)
+        {
+            // cas du fils gauche
+            if (gf == NULL) {
+               // cas "zig", on fait la rotation de f (la racine) et e
+               f->father = e;
+               f->left = e->right;
+               if(f->left != NULL)
+                  f->left->father = f;
+               e->right = f;
+               e->father = NULL;
+            }
+            else if (gf->right == f) {
+               // cas "zig-zag", simplifie, pareil que le cas "zig"
+               gf->right = e;
+
+               f->father = e;
+               f->left = e->right;
+               if(f->left != NULL)
+                  f->left->father = f;
+               e->right = f;
+               e->father = gf;
+            }
+            else {
+               // cas "zig-zig", on fait la rotation de gf avec
+               // f, suivis de la rotation de e avec f
+               ggf = gf->father;
+
+               gf->left = f->right;
+               if(gf->left != NULL)
+                  gf->left->father = gf;
+               f->right = gf;
+               gf->father = f;
+
+               f->left = e->right;
+               if(f->left != NULL)
+                  f->left->father = f;
+               f->father = e;
+               e->right = f;
+
+               // on rattache e a son nouveau pere
+               e->father = ggf;
+               if(ggf != NULL)
+                  if(ggf->left == gf)
+                     ggf->left = e;
+                  else
+                     ggf->right = e;
+            }
+        }else
+        {
+            //cas du fils droit
+            if(gf == NULL) {
+               // cas "zig", on fait la rotation de f (la racine) et e
+
+               f->father = e;
+               f->right = e->left;
+               if(f->right != NULL)
+                  f->right->father = f;
+               e->left = f;
+               e->father = NULL;
+            }
+            else if(gf->left == f) {
+               // cas "zig-zag", simplifie, pareil que le cas "zig"
+               gf->left = e;
+
+               f->father = e;
+               f->right = e->left;
+               if(f->right != NULL)
+                  f->right->father = f;
+               e->left = f;
+               e->father = gf;
+            }
+            else {
+               // cas "zig-zig", on fait la rotation de gf avec
+               // f, suivis de la rotation de e avec f
+               ggf = gf->father;
+
+               gf->right = f->left;
+               if(gf->right != NULL)
+                  gf->right->father = gf;
+               f->left = gf;
+               gf->father = f;
+
+               f->right = e->left;
+               if(f->right != NULL)
+                  f->right->father = f;
+               f->father = e;
+               e->left = f;
+
+               // on rattache e a son nouveau pere
+               e->father = ggf;
+               if(ggf != NULL)
+                  if(ggf->left == gf)
+                     ggf->left = e;
+                  else
+                     ggf->right = e;
+            }
         }
     }
-    free(temp);
-    return first;
 }
 
 void show(Tree * t)
