@@ -693,24 +693,24 @@ int main(int argc, char** argv)
 
     Tree * ev = (Tree *) malloc (sizeof (Tree));
     ev->endTime = -1;
-
-    while(currentTime <= endTime)
-    {
-
-        rootHosts = removeFirstEvent(ev, 
+    rootHosts = removeFirstEvent(ev, 
                                     rootHosts);
-        if(ev->endTime != -1)//SPlay has no first event
+
+    while(currentTime <= endTime && ev->endTime != -1)
+    {
+        if(ev->endTime == currentTime)
         {
             printf(
                 "Event first is of type: %d, pktID = %d, location = %d, endTime = %d\n"
                     , ev->type, ev->packetID, 
                     ev->idLocation, ev->endTime
              );
-            show(rootHosts);
+            //show(rootHosts);
         }
-        else{
-            break;
-        }
+
+        rootHosts = removeFirstEvent(ev, 
+                                    rootHosts);
+
     }
     /*
     
