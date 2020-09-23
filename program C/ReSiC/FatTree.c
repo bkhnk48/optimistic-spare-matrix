@@ -395,20 +395,24 @@ int main(int argc, char** argv)
     int** WayHE = NULL;
     int numOfSources = 0;
     int numOfDests = 0;
+    int dstPerSrc = 0;
 
     switch(trafficPattern) 
     {
         case ALL_TO_ALL: 
                             numOfSources = numOfHosts; 
-                            numOfDests = numOfSources - 1;
+                            numOfDests = numOfHosts;
+                            dstPerSrc = numOfSources - 1;
                             break;
         case ONE_TO_ONE: 
                             numOfSources = numOfHosts; 
-                            numOfDests = 1;
+                            numOfDests = numOfHosts;
+                            dstPerSrc = 1;
                             break;
         case BISECTION_BANDWIDTH: 
                             numOfSources = numOfHosts / 2; 
-                            numOfDests = 1;
+                            numOfDests = numOfHosts / 2;
+                            dstPerSrc = 1;
                             break;
     }
 
@@ -565,9 +569,6 @@ int main(int argc, char** argv)
     int* TimeGeneration = NULL;
     TimeGeneration = malloc(sizeof * TimeGeneration * numOfSources);
     
-
-    
-
     int* CounterH = NULL;
     CounterH = malloc(sizeof * CounterH * numOfSources);
 
@@ -619,11 +620,11 @@ int main(int argc, char** argv)
     //Traffic pairs:
     int** trafficPairs = NULL;
     trafficPairs = malloc(sizeof * trafficPairs * numOfSources);
-    int numOfDstPerSrc [3] = {0, 
+    /*int numOfDstPerSrc [3] = {0, 
                                 numOfHosts - 1, //1: all-to-all
                                 1 //2: bisection bandwidth
                                 };
-    int dstPerSrc = numOfDstPerSrc[trafficPattern];
+    int dstPerSrc = numOfDstPerSrc[trafficPattern];*/
     for(i = 0; i < numOfSources; i++)
     {
         trafficPairs[i] = malloc(sizeof * trafficPairs[i] * dstPerSrc);
@@ -638,27 +639,28 @@ int main(int argc, char** argv)
     PacketInSQ = malloc(sizeof * PacketInSQ * numOfSources);
     int** PacketInEXBHost = NULL;
     PacketInEXBHost = malloc(sizeof * PacketInEXBHost * numOfSources);
-    int sizeOfSQ = (dstPerSrc + 2);
+    //int sizeOfSQ = (dstPerSrc + 2);
     //2 phan tu dau tien cua PacketInSQ luu tru id cua pkt dau tien
     //va id cua pkt cuoi cung trong danh sach Source Queue
-    //Cac phan tu tiep theo luu tru danh sach cac dst cua tung goi tin
-    //trong Source Queue
+    
 
     for(i = 0; i < numOfSources; i++)
     {
-        PacketInSQ[i] = malloc(sizeof * PacketInSQ[i] * sizeOfSQ);
-        for(j = 0; j < sizeOfSQ; j++)
-        {
-            PacketInSQ[i][j] = -1;
-        }
+        PacketInSQ[i] = malloc(sizeof * PacketInSQ[i] * 2); //sizeOfSQ);
+        //for(j = 0; j < sizeOfSQ; j++)
+        //{
+            PacketInSQ[i][0] = -1;
+            PacketInSQ[i][1] = -1;
+        //}
 
-        PacketInEXBHost[i] = malloc(sizeof * PacketInEXBHost[i] * (2 + BUFFER_SIZE));
-        for(j = 0; j < 2 + BUFFER_SIZE; j++)
+        PacketInEXBHost[i] = malloc(sizeof * PacketInEXBHost[i] * (2 /*+ BUFFER_SIZE*/));
+        //for(j = 0; j < 2 + BUFFER_SIZE; j++)
         {
-            PacketInEXBHost[i][j] = -1;
+            //PacketInEXBHost[i][j] = -1;
+            PacketInEXBHost[i][0] = -1;
+            PacketInEXBHost[i][1] = -1;
             //PacketInEXBHost[i][0] : id cua pkt dau tien trong EXB cua host
             //PacketInEXBHost[i][1] : id cua pkt cuoi cung trong EXB cua host
-            //PacketInEXBHost[i][j] : dst cua cac pkt trong EXB cua host
         }
     }
 
@@ -684,7 +686,6 @@ int main(int argc, char** argv)
                                     0, //startTime = 0 
                                     0, //endTime = 0
                                     rootHosts);
-                                    
                 break;
         }
     }
@@ -700,6 +701,46 @@ int main(int argc, char** argv)
     {
         if(ev->endTime == currentTime)
         {
+            switch(ev->type)
+            {
+                case A:
+                    i = ev->idLocation;//Lay location cua host
+                    int isEmptySQ = -(PacketInSQ[i][0] >> 31);//kiem tra xem SQ co empty ko?
+                    //int indexOfUpdateSQ = 1 + (-PacketInSQ[i][0] + PacketInSQ[i][1] + 1);//cap nhat phan tu nao cua PacketInSQ?
+                    //indexOfUpdateSQ *= isEmptySQ;//cap nhat phan tu nao cua PacketInSQ?
+                    int idOfNewPkt = currentTime / HOST_DELAY;//id cua packet trong host day
+                    int dstOfNewPkt = trafficPairs[i][idOfNewPkt % dstPerSrc];//destination of packet
+                    
+                    //ongoing work to change this element of array to temporary variable
+                    PacketInSQ[i][1 - isEmptySQ] = idOfNewPkt;
+                    //PacketInSQ[i][indexOfUpdateSQ] = dstOfNewPkt;
+
+                    //II. Generate and execute the event B
+                    //check if the EXB has no packet:
+                    int indexOfUpdate = checkUpdateEXBHost(PacketInEXBHost[i][0]
+                                                            , PacketInEXBHost[i][1]
+                                                            , PacketInSQ[i][0]
+                                                            , BUFFER_SIZE
+                                                            );
+                    int isFullEXB = indexOfUpdate & 1;
+                    switch(isFullEXB)
+                    {
+                        case 0://event B co the duoc tao ra
+                            rootHosts = add(B, //type B
+                                    idOfNewPkt, //packetID 
+                                    i, //location at this host
+                                    currentTime, //startTime = currentTime 
+                                    currentTime, //endTime = currentTime (right now)
+                                    rootHosts);
+                            show(rootHosts);
+                            break;
+                    }
+                    break;
+                case B:
+                    
+                    break;
+            }
+
             printf(
                 "Event first is of type: %d, pktID = %d, location = %d, endTime = %d\n"
                     , ev->type, ev->packetID, 
@@ -726,19 +767,11 @@ int main(int argc, char** argv)
             switch(createPacketNow)
             {
                 case 1:
-                    int isEmptySQ = -(PacketInSQ[i][0] >> 31);
-                    int indexOfUpdateSQ = 2 + (-PacketInSQ[i][0] + PacketInSQ[i][1] + 1);
-                    indexOfUpdateSQ *= isEmptySQ;
-                    int idOfNewPkt = currentTime / HOST_DELAY;
-                    int dstOfNewPkt = trafficPairs[i][idOfNewPkt % dstPerSrc];
+                    
                     //indexOfUpdateSQ *= createPacketNow;
                     
                     
-                    //ongoing work to change this element of array to temporary variable
-                    PacketInSQ[i][1 - isEmptySQ] = idOfNewPkt;
                     
-
-                    PacketInSQ[i][indexOfUpdateSQ] = dstOfNewPkt;
 
                     //II. Generate and execute the event B
                     //check if the EXB has no packet:
