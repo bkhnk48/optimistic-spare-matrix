@@ -691,12 +691,12 @@ int main(int argc, char** argv)
 
     show(rootHosts);
 
+    Tree * ev = (Tree *) malloc (sizeof (Tree));
+    ev->endTime = -1;
+
     while(currentTime <= endTime)
     {
 
-        Tree * ev = (Tree *) malloc (sizeof (Tree));
-        ev->endTime = -1;
-        
         rootHosts = removeFirstEvent(ev, 
                                     rootHosts);
         if(ev->endTime != -1)//SPlay has no first event
