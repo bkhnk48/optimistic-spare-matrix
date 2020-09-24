@@ -701,42 +701,64 @@ int main(int argc, char** argv)
             switch(ev->type)
             {
                 case A:
-                    i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
-                    j = ev->idNode;
-                    int isEmptySQ = -(PacketInSQ[i][0] >> 31);//kiem tra xem SQ co empty ko?
-                    //int indexOfUpdateSQ = 1 + (-PacketInSQ[i][0] + PacketInSQ[i][1] + 1);//cap nhat phan tu nao cua PacketInSQ?
-                    //indexOfUpdateSQ *= isEmptySQ;//cap nhat phan tu nao cua PacketInSQ?
-                    int idOfNewPkt = currentTime / HOST_DELAY;//id cua packet trong host day
-                    int dstOfNewPkt = trafficPairs[i][idOfNewPkt % dstPerSrc];//destination of packet
-                    
-                    //ongoing work to change this element of array to temporary variable
-                    PacketInSQ[i][1 - isEmptySQ] = idOfNewPkt;
-                    //PacketInSQ[i][indexOfUpdateSQ] = dstOfNewPkt;
-
-                    //II. Generate and execute the event B
-                    //check if the EXB has no packet:
-                    int indexOfUpdate = checkUpdateEXBHost(PacketInEXBHost[i][0]
-                                                            , PacketInEXBHost[i][1]
-                                                            , PacketInSQ[i][0]
-                                                            , BUFFER_SIZE
-                                                            );
-                    int isFullEXB = indexOfUpdate & 1;
-                    switch(isFullEXB)
                     {
-                        case 0://event B co the duoc tao ra
-                            rootHosts = add(B, //type B
-                                    idOfNewPkt, //packetID 
-                                    j,
-                                    i, //location at this host
-                                    currentTime, //startTime = currentTime 
-                                    currentTime, //endTime = currentTime (right now)
-                                    rootHosts);
-                            show(rootHosts);
-                            break;
+                        i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
+                        j = ev->idNode;
+                        int isEmptySQ = -(PacketInSQ[i][0] >> 31);//kiem tra xem SQ co empty ko?
+                        //int indexOfUpdateSQ = 1 + (-PacketInSQ[i][0] + PacketInSQ[i][1] + 1);//cap nhat phan tu nao cua PacketInSQ?
+                        //indexOfUpdateSQ *= isEmptySQ;//cap nhat phan tu nao cua PacketInSQ?
+                        int idOfNewPkt = currentTime / HOST_DELAY;//id cua packet trong host day
+                        int dstOfNewPkt = trafficPairs[i][idOfNewPkt % dstPerSrc];//destination of packet
+                        
+                        //ongoing work to change this element of array to temporary variable
+                        PacketInSQ[i][1 - isEmptySQ] = idOfNewPkt;
+                        //PacketInSQ[i][indexOfUpdateSQ] = dstOfNewPkt;
+
+                        //II. Generate and execute the event B
+                        //check if the EXB has no empty slot:
+                        int isNotFullEXB = PacketInEXBHost[i][1] - PacketInEXBHost[i][0] + 1 - BUFFER_SIZE;
+                        isNotFullEXB = -(isNotFullEXB >> 31); //1 nghia la EXB chua full, 0 nghia la EXB da full.
+                        switch(isNotFullEXB)
+                        {
+                            case 1://event B co the duoc tao ra
+                                rootHosts = add(B, //type B
+                                        idOfNewPkt, //packetID 
+                                        j,
+                                        i, //location at this host
+                                        currentTime, //startTime = currentTime 
+                                        currentTime, //endTime = currentTime (right now)
+                                        rootHosts);
+                                show(rootHosts);
+                                break;
+                        }
                     }
                     break;
                 case B:
-                    
+                    {
+                        i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
+                        j = ev->idNode;//lay id cua node trong danh sach cac nodes
+                        int isEmptySQ = -(PacketInSQ[i][0] >> 31);//kiem tra xem SQ co empty ko?
+                        
+                        int isNotFullEXB = PacketInEXBHost[i][1] - PacketInEXBHost[i][0] + 1 - BUFFER_SIZE;
+                        isNotFullEXB = -(isNotFullEXB >> 31); //1 nghia la EXB chua full, 0 nghia la EXB da full.
+                        switch((1-isEmptySQ)*isNotFullEXB)
+                        {
+                            case 1: 
+                                {
+                                    int isEmptyEXB = -(PacketInEXBHost[i][0] >> 31);//chi nhan gia tri 0 hoac 1.
+                                    int indexOfUpdate = (1 - isEmptyEXB);
+                                    PacketInEXBHost[i][indexOfUpdate] = PacketInSQ[i][0];
+                                    ///If there was only one packet in SQ
+                                    int isOnePkt = -(PacketInSQ[i][1] >> 31); 
+                                    //0 nghia la co hon 1 goi tin trong SQ. 1 nghia la chi co 1 goi tin trong SQ
+                                    //2 cau lenh duoi day cap nhat lai id cua cac goi tin trong SQ
+                                    PacketInSQ[i][0] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][0] + 1);
+                                    PacketInSQ[i][1] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][1]);
+
+                                }
+                                break;
+                        }
+                    }
                     break;
             }
 
