@@ -773,8 +773,8 @@ int main(int argc, char** argv)
         ev->endTime = -1;
         rootHosts = removeFirstEvent(ev, 
                                     rootHosts);
-        int tmp = (ev->endTime + 1)>>31;//0 hoac 1
-        currentTime = tmp*(ev->endTime) + (1 - tmp)*currentTime;
+        int isPositiveEndTime = (ev->endTime + 1)>>31;//0 hoac 1
+        currentTime = isPositiveEndTime*(ev->endTime) + (1 - isPositiveEndTime)*currentTime;
     }
     /*
     
