@@ -748,6 +748,9 @@ int main(int argc, char** argv)
                                     int isEmptyEXB = -(PacketInEXBHost[i][0] >> 31);//chi nhan gia tri 0 hoac 1.
                                     int indexOfUpdate = (1 - isEmptyEXB);
                                     PacketInEXBHost[i][indexOfUpdate] = PacketInSQ[i][0];
+                                    ///III. Remove the first packet of Source queue
+                                    //After insert the packet into the empty slot of EXB (in host)
+                                    //all remaining packets in source queue need to be moved forward
                                     ///If there was only one packet in SQ
                                     int isOnePkt = -(PacketInSQ[i][1] >> 31); 
                                     //0 nghia la co hon 1 goi tin trong SQ. 1 nghia la chi co 1 goi tin trong SQ
@@ -776,71 +779,6 @@ int main(int argc, char** argv)
         int isPositiveEndTime = (ev->endTime + 1)>>31;//0 hoac 1
         currentTime = isPositiveEndTime*(ev->endTime) + (1 - isPositiveEndTime)*currentTime;
     }
-    /*
-    
-        //generate packets and update to source queue
-        for(i = 0; i < numOfSources; i++)
-        {
-            //I. Check time and then execute event A
-            int createPacketNow = checkEqual(currentTime, TimeGeneration[i]);
-            //0 means wont generate a packet right now. 
-            //1 means yes.
-            switch(createPacketNow)
-            {
-                case 1:
-                    
-                    //indexOfUpdateSQ *= createPacketNow;
-                    
-                    
-                    
-
-                    //II. Generate and execute the event B
-                    //check if the EXB has no packet:
-                    int indexOfUpdate = checkUpdateEXBHost(PacketInEXBHost[i][0]
-                                                            , PacketInEXBHost[i][1]
-                                                            , PacketInSQ[i][0]
-                                                            , BUFFER_SIZE
-                                                            );
-                    int isFullEXB = indexOfUpdate & 1;
-                    indexOfUpdate = indexOfUpdate >> 1;
-                    //cap nhat lai xem SQ co bi empty khong?
-                    isEmptySQ = - (PacketInSQ[i][0] >> 31);//0 nghia la co goi tin o vi tri dau tien. 1 nghia la SQ dang empty
-
-                    int oldPktInEXBHost = PacketInEXBHost[i][indexOfUpdate];
-                    
-                    PacketInEXBHost[i][indexOfUpdate] = (isFullEXB)*PacketInEXBHost[i][indexOfUpdate] 
-                                                + (1 - isFullEXB)*PacketInSQ[i][0]*(1 - isEmptySQ);
-                    
-                    ///III. Remove the first packet of Source queue
-                    //After insert the packet into the empty slot of EXB (in host)
-                    //all remaining packets in source queue need to be moved forward
-                    
-                    
-                    ///If there was only one packet in SQ
-                    int isOnePkt = - (PacketInSQ[i][2] >> 31); //0 nghia la co goi tin o vi tri cuoi cung. 1 nghia la chi co 1 goi tin trong SQ
-                    int numPktInSQ = (PacketInSQ[i][2] - PacketInSQ[i][0] + 1)*(1 - isEmptySQ)*(1 - isOnePkt)
-                                            + isOnePkt;
-                    
-                    int isMovedPktFromSQtoEXB = PacketInEXBHost[i][indexOfUpdate] - 
-                                                    oldPktInEXBHost;
-                    //this variable isMovedPktFromSQtoEXB is always greater than or equal 0.
-                    //because the new value of PacketInEXBHost[i][indexOfUpdate]
-                    //definitely greater than or equal the old one.
-                    isMovedPktFromSQtoEXB--; //decrease so the new value might negative.
-                                            //in case no packet is updated.
-                    isMovedPktFromSQtoEXB = (isMovedPktFromSQtoEXB >> 31);
-                                            //0 means a packet is moved from SQ to EXB
-                                            //-1 means nothing is moved.
-                    isMovedPktFromSQtoEXB++; //1 means a packet is moved from SQ to EXB
-                                            //0 means nothing is moved.
-                    break;
-            }
-
-            
-        }
-        currentTime++;
-    }
-    */
 
     return 0;
 }
