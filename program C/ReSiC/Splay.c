@@ -8,13 +8,15 @@ typedef struct tree_node Tree;
 struct tree_node {
     enum TypesOfEvent type; //type of event
     int packetID; //id of packet
-    int idLocation; //id of location where the event finished
+    int idNode; //id of Node in group of hosts, switches
+    int idElementInGroup;//id of element in group of hosts or switches
     int startTime;
     int endTime;
     Tree * left, * right, * father;
 };
 
-Tree * add(enum TypesOfEvent type, int packetID, int idLocation,
+Tree * add(enum TypesOfEvent type, int packetID, int idNode,
+                int idElementInGroup,
                 int startTime, 
                 int endTime
                 , Tree * t);
@@ -27,7 +29,8 @@ Tree * del(int i, Tree * t);
 void show(Tree * t);
 void leaf(Tree * t, enum Side side);
 
-Tree * add(enum TypesOfEvent type, int packetID, int idLocation,
+Tree * add(enum TypesOfEvent type, int packetID, int idNode,
+                int idElementInGroup,
                 int startTime, 
                 int endTime,
                 Tree * t)
@@ -42,7 +45,7 @@ Tree * add(enum TypesOfEvent type, int packetID, int idLocation,
 
     newNode->type = type;
     newNode->packetID = packetID;
-    newNode->idLocation = idLocation;
+    newNode->idNode = idNode;
     newNode->startTime = startTime;
     newNode->endTime = endTime;
     newNode->father = NULL;
@@ -148,7 +151,8 @@ Tree * removeFirstEvent(Tree * first, Tree *t)
     first->packetID = temp->packetID;
     first->startTime = temp->startTime;
     first->endTime = temp->endTime;
-    first->idLocation = temp->idLocation;
+    first->idNode = temp->idNode;
+    first->idElementInGroup = temp->idElementInGroup;
     first->left = NULL;
     first->right = NULL;
     first->father = NULL;
@@ -305,7 +309,7 @@ void show(Tree * t)
     if(t != NULL)
     {
         printf("\n===========> for event type = %d at end = %d in %d\n", 
-                t->type, t->endTime, t->idLocation);
+                t->type, t->endTime, t->idNode);
         leaf(t->left, LEFT);
         leaf(t->right, RIGHT);
         printf("\n");
@@ -328,7 +332,7 @@ void leaf(Tree * t, enum Side side)
     if(t != NULL)
     {
         printf("for event type = %d at end = %d in %d\n", 
-                t->type, t->endTime, t->idLocation);
+                t->type, t->endTime, t->idNode);
         leaf(t->left, LEFT);
         leaf(t->right, RIGHT);
         printf("\n");
