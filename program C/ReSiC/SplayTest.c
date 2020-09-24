@@ -24,23 +24,23 @@ void main(int argc, char** argv) {
     
     if(testID == 1)
     {
-        root = add(A, 0, 0, 0, 10, root);
-        root = add(A, 1, 1, 0, 20, root);
+        root = add(A, 0, 0, 0, 0, 10, root);
+        root = add(A, 1, 1, 0, 0, 20, root);
     }
 
     if(testID == 2)
     {
-        root = add(A, 0, 0, 0, 10, root);
-        root = add(A, 1, 0, 0, 20, root);
-        root = add(A, 0, 0, 0, 30, root);
-        root = add(A, 1, 0, 0, 40, root);
-        root = add(A, 0, 0, 0, 50, root);
-        root = add(A, 1, 0, 0, 60, root);
-        root = add(A, 0, 0, 0, 70, root);
-        root = add(A, 1, 1, 0, 50, root);
-        root = add(A, 1, 1, 1, 70, root);
-        root = add(A, 1, 1, 2, 50, root);
-        root = add(A, 1, 1, 1, 60, root);
+        root = add(A, 0, 0, 0, 0, 10, root);
+        root = add(A, 1, 0, 0, 0, 20, root);
+        root = add(A, 0, 0, 0, 0, 30, root);
+        root = add(A, 1, 0, 0, 0, 40, root);
+        root = add(A, 0, 0, 0, 0, 50, root);
+        root = add(A, 1, 0, 0, 0, 60, root);
+        root = add(A, 0, 0, 0, 0, 70, root);
+        root = add(A, 1, 1, 0, 0, 50, root);
+        root = add(A, 1, 1, 0, 1, 70, root);
+        root = add(A, 1, 1, 0, 2, 50, root);
+        root = add(A, 1, 1, 0, 1, 60, root);
         
     }
 
