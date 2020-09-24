@@ -45,7 +45,6 @@ int main(int argc, char** argv)
     int countOfInfoInLink = 13;
     int numOfLinks = numOfSwitches * numOfPorts + numOfHosts;
 
-    
 
     /*
     * Khai bao va khoi tao ma tran lien ke cho cac Edge Switches
@@ -107,8 +106,6 @@ int main(int argc, char** argv)
         }
     }
 
-    
-
     // each pod has numOfPorts^2/4 servers and numOfPorts switches
     int numEachPod = numOfPorts * numOfPorts / 4 + numOfPorts;
     int p, e, offset;
@@ -119,7 +116,6 @@ int main(int argc, char** argv)
         offset = numEachPod * p;
         int a;
         
-
         // between server and edge
         for (e = 0; e < numOfPorts / 2; e++) {
             int edgeSwitch = offset + numOfPorts * numOfPorts / 4 + e;
@@ -682,7 +678,7 @@ int main(int argc, char** argv)
             case 1:
                 rootHosts = add(A, //type A 
                                     0, //packetID = 0
-                                    i, //location at this host
+                                    addServer[i][0], //location at this host
                                     0, //startTime = 0 
                                     0, //endTime = 0
                                     rootHosts);
