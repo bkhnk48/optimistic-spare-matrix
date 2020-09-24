@@ -28,14 +28,15 @@ int checkUpdateEXBHost(int topEXB, int bottomEXB, int topSQ, int BUFFER_SIZE)
 
     int emptySQ = - (topSQ >> 31);
     
-    int indexOfUpdate = (topSQ - topEXB)*(1 - emptySQ);
+    //int indexOfUpdate = (topSQ - topEXB)*(1 - emptySQ);//code nay se danh cho EXB cua switch
+    //int indexOfUpdate = (1 - isEmptyEXB)*(1 - emptySQ);
     
     int isFullEXB = bottomEXB - topEXB + 1 - BUFFER_SIZE;
     isFullEXB = 1 + (isFullEXB >> 31); //0 nghia la EXB chua full, 1 nghia la EXB da full.
     
     int allowUpdate = 1 - isFullEXB; //0 nghia la khong cho update, 1 nghia la cho update
     
-    indexOfUpdate = (1 - isEmptyEXB)*indexOfUpdate*allowUpdate;
+    int indexOfUpdate = (1 - isEmptyEXB)*(1 - emptySQ)*allowUpdate;
 
     int result = (indexOfUpdate << 1) + (1 & isFullEXB);
     //int result = indexOfUpdate ; //| isFullEXB;
