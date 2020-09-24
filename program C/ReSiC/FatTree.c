@@ -678,7 +678,8 @@ int main(int argc, char** argv)
             case 1:
                 rootHosts = add(A, //type A 
                                     0, //packetID = 0
-                                    addServer[i][0], //location at this host
+                                    addServer[i][0], //location at this host in group of Nodes
+                                    i,//location in group of hosts
                                     0, //startTime = 0 
                                     0, //endTime = 0
                                     rootHosts);
@@ -700,7 +701,8 @@ int main(int argc, char** argv)
             switch(ev->type)
             {
                 case A:
-                    i = ev->idLocation;//Lay location cua host
+                    i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
+                    j = ev->idNode;
                     int isEmptySQ = -(PacketInSQ[i][0] >> 31);//kiem tra xem SQ co empty ko?
                     //int indexOfUpdateSQ = 1 + (-PacketInSQ[i][0] + PacketInSQ[i][1] + 1);//cap nhat phan tu nao cua PacketInSQ?
                     //indexOfUpdateSQ *= isEmptySQ;//cap nhat phan tu nao cua PacketInSQ?
@@ -724,6 +726,7 @@ int main(int argc, char** argv)
                         case 0://event B co the duoc tao ra
                             rootHosts = add(B, //type B
                                     idOfNewPkt, //packetID 
+                                    j,
                                     i, //location at this host
                                     currentTime, //startTime = currentTime 
                                     currentTime, //endTime = currentTime (right now)
@@ -740,7 +743,7 @@ int main(int argc, char** argv)
             printf(
                 "Event first is of type: %d, pktID = %d, location = %d, endTime = %d\n"
                     , ev->type, ev->packetID, 
-                    ev->idLocation, ev->endTime
+                    ev->idNode, ev->endTime
              );
             //show(rootHosts);
         }
