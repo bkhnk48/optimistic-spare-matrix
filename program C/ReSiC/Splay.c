@@ -46,6 +46,7 @@ Tree * add(enum TypesOfEvent type, int packetID, int idNode,
     newNode->type = type;
     newNode->packetID = packetID;
     newNode->idNode = idNode;
+    newNode->idElementInGroup = idElementInGroup;
     newNode->startTime = startTime;
     newNode->endTime = endTime;
     newNode->father = NULL;
