@@ -672,7 +672,7 @@ int main(int argc, char** argv)
         int createPacketNow = checkEqual(currentTime, TimeGeneration[i]);
         //0 means wont generate a packet right now. 
         //1 means yes.
-        printf("i = %d. Create packet now? %d\n", i, createPacketNow);
+     
         switch(createPacketNow)
         {
             case 1:
@@ -757,7 +757,6 @@ int main(int argc, char** argv)
                                     //2 cau lenh duoi day cap nhat lai id cua cac goi tin trong SQ
                                     PacketInSQ[i][0] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][0] + 1);
                                     PacketInSQ[i][1] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][1]);
-
                                 }
                                 break;
                         }
