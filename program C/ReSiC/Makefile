@@ -5,6 +5,7 @@ serial:
 	gcc -g -c ShiftBitAPI.c
 	gcc ShiftBitAPITest.c -g -o apiTest.out
 	gcc TestUpdateEXBHost.c -g -o updateEXBHost.out
+	gcc -g -c State.c
 	gcc -g -c FatTreeTest.c
 	gcc -g -c Event.c
 	gcc -g -c Splay.c
