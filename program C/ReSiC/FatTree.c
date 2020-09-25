@@ -5,6 +5,7 @@
 #include "ErrorReport.c"
 #include "FatTreeTest.c"
 #include "Splay.c"
+#include "State.c"
 //#include "FatTree.h"
 enum TRAFFIC_PATTERN {ALL_TO_ALL, ONE_TO_ONE, BISECTION_BANDWIDTH};
 int main(int argc, char** argv) 
@@ -419,7 +420,7 @@ int main(int argc, char** argv)
         
         WayHE[i][0] = i; //id cua nut nguon host
         WayHE[i][1] = i  / ( numOfPorts / 2);//id cua nut edge switch tiep theo
-        WayHE[i][2] = 0; //trang thai ban dau
+        WayHE[i][2] = NO_PACKET_TRANSFERABLE; //trang thai ban dau
         WayHE[i][3] = i % (numOfPorts / 2);//cong k cua edge switch ke tiep
             //ngam dinh rang edge switch co cong voi chi so k <= (numOfPorts/2) se 
             //ket noi voi host. Nguoc lai se ket noi voi agg switch
@@ -757,6 +758,10 @@ int main(int argc, char** argv)
                                     //2 cau lenh duoi day cap nhat lai id cua cac goi tin trong SQ
                                     PacketInSQ[i][0] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][0] + 1);
                                     PacketInSQ[i][1] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][1]);
+
+                                    ///Kiem tra xem co tao event C duoc hay khong?
+                                    //Cach kiem tra: CounterH > 0 va WayHE[i][2] != 1.
+                                    
                                 }
                                 break;
                         }
