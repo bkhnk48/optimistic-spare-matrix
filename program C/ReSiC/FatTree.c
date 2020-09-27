@@ -781,6 +781,13 @@ int main(int argc, char** argv)
                         }
                     }
                     break;
+                case C:
+                    {
+                        i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
+                        j = ev->idNode;//lay id cua node trong danh sach cac nodes
+                        
+                    }
+                    break;
             }
 
             printf(
