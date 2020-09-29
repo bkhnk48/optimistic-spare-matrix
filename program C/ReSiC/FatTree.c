@@ -179,54 +179,66 @@ int main(int argc, char** argv)
 
     //testAdjEdge(4, adjEdge, adjAgg, adjCore);
 
-    int** addServer = NULL;
-    int** addEdge = NULL;
-    int** addAgg = NULL;
-    int** addCore = NULL;
+    //int** addServer = NULL;
+    int addServer[numOfHosts][2];
+    //int** addEdge = NULL;
+    int addEdge[numEdgeSwitches][2];
+    //int** addAgg = NULL;
+    int addAgg[numAggSwitches][2];
+    //int** addCore = NULL;
+    int addCore[numCoreSwitches][2];
 
-    addServer = malloc(sizeof * addServer * numOfHosts);
-    addEdge = malloc(sizeof * addEdge * numEdgeSwitches);
-    addAgg = malloc(sizeof * addAgg * numAggSwitches);
-    addCore = malloc(sizeof * addAgg * numCoreSwitches);
+    //addServer = malloc(sizeof * addServer * numOfHosts);
+    //addEdge = malloc(sizeof * addEdge * numEdgeSwitches);
+    //addAgg = malloc(sizeof * addAgg * numAggSwitches);
+    //addCore = malloc(sizeof * addAgg * numCoreSwitches);
     int numOfElemt = 2;
 
     //Khoi tao dia chi IP cho cac Server
     for(i = 0; i < numOfHosts; i++)
     {
-        addServer[i] = malloc(sizeof * addServer[i] * numOfElemt);
-        for(j = 0; j < numOfElemt; j++)
+        //addServer[i] = malloc(sizeof * addServer[i] * numOfElemt);
+        //for(j = 0; j < numOfElemt; j++)
         {
-            addServer[i][j] = 0;
+            //addServer[i][j] = 0;
+            addServer[i][0] = 0;
+            addServer[i][1] = 0;
         }
     }
 
     //Khoi tao dia chi IP cho cac Edge
     for(i = 0; i < numEdgeSwitches; i++)
     {
-        addEdge[i] = malloc(sizeof * addEdge[i] * numOfElemt);
-        for(j = 0; j < numOfElemt; j++)
+        //addEdge[i] = malloc(sizeof * addEdge[i] * numOfElemt);
+        //for(j = 0; j < numOfElemt; j++)
         {
-            addEdge[i][j] = 0;
+            //addEdge[i][j] = 0;
+            addEdge[i][0] = 0;
+            addEdge[i][1] = 0;
         }
     }
 
     //Khoi tao dia chi IP cho cac Agg
     for(i = 0; i < numAggSwitches; i++)
     {
-        addAgg[i] = malloc(sizeof * addAgg[i] * numOfElemt);
-        for(j = 0; j < numOfElemt; j++)
+        //addAgg[i] = malloc(sizeof * addAgg[i] * numOfElemt);
+        //for(j = 0; j < numOfElemt; j++)
         {
-            addAgg[i][j] = 0;
+            //addAgg[i][j] = 0;
+            addAgg[i][0] = 0;
+            addAgg[i][1] = 0;
         }
     }
 
     //Khoi tao dia chi IP cho cac Core
     for(i = 0; i < numCoreSwitches; i++)
     {
-        addCore[i] = malloc(sizeof * addCore[i] * numOfElemt);
-        for(j = 0; j < numOfElemt; j++)
+        //addCore[i] = malloc(sizeof * addCore[i] * numOfElemt);
+        //for(j = 0; j < numOfElemt; j++)
         {
-            addCore[i][j] = 0;
+            //addCore[i][j] = 0;
+            addCore[i][0] = 0;
+            addCore[i][1] = 0;
         }
     }
 
