@@ -50,12 +50,13 @@ int main(int argc, char** argv)
     /*
     * Khai bao va khoi tao ma tran lien ke cho cac Edge Switches
     */
-    int** adjEdge = NULL;
-    adjEdge = malloc(sizeof * adjEdge * numEdgeSwitches);
+    //int** adjEdge = NULL;
+    //adjEdge = malloc(sizeof * adjEdge * numEdgeSwitches);
+    int adjEdge[numEdgeSwitches][3*numOfPorts];
 
     for(i = 0; i < numEdgeSwitches; i++)
     {
-        adjEdge[i] = malloc(sizeof * adjEdge[i] * (3*numOfPorts));
+        //adjEdge[i] = malloc(sizeof * adjEdge[i] * (3*numOfPorts));
         for(j = 0; j < numOfPorts; j++)
         {
             //adjEdge[i][j] ung voi Edge Switch thu i, o cong thu j 
