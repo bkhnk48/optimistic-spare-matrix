@@ -72,12 +72,13 @@ int main(int argc, char** argv)
     /*
     * Khai bao va khoi tao ma tran lien ke cho cac Aggregasive Switches
     */
-    int** adjAgg = NULL;
-    adjAgg = malloc(sizeof * adjAgg * numAggSwitches);
+    //int** adjAgg = NULL;
+    //adjAgg = malloc(sizeof * adjAgg * numAggSwitches);
+    int adjAgg[numAggSwitches][3*numOfPorts];
 
     for(i = 0; i < numAggSwitches; i++)
     {
-        adjAgg[i] = malloc(sizeof * adjAgg[i] * (3*numOfPorts));
+        //adjAgg[i] = malloc(sizeof * adjAgg[i] * (3*numOfPorts));
         for(j = 0; j < numOfPorts; j++)
         {
             //adjAgg[i][j] ung voi Agg Switch thu i, o cong thu j 
@@ -93,12 +94,13 @@ int main(int argc, char** argv)
     /*
     * Khai bao va khoi tao ma tran lien ke cho cac Core Switches
     */
-    int** adjCore = NULL;
-    adjCore = malloc(sizeof * adjCore * numCoreSwitches);
+    //int** adjCore = NULL;
+    //adjCore = malloc(sizeof * adjCore * numCoreSwitches);
+    int adjCore[numCoreSwitches][2*numOfPorts];
 
     for(i = 0; i < numCoreSwitches; i++)
     {
-        adjCore[i] = malloc(sizeof * adjCore[i] * (2*numOfPorts));
+        //adjCore[i] = malloc(sizeof * adjCore[i] * (2*numOfPorts));
         for(j = 0; j < numOfPorts; j++)
         {
             //adjCore[i][j] ung voi Core Switch thu i, o cong thu j 
