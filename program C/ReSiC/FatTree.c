@@ -689,17 +689,16 @@ int main(int argc, char** argv)
         //0 means wont generate a packet right now. 
         //1 means yes.
      
-        switch(createPacketNow)
+        if(createPacketNow == 1)
         {
-            case 1:
-                rootHosts = add(A, //type A 
-                                    0, //packetID = 0
-                                    addServer[i][0], //location at this host in group of Nodes
-                                    i,//location in group of hosts
-                                    0, //startTime = 0 
-                                    0, //endTime = 0
-                                    rootHosts);
-                break;
+            rootHosts = add(A, //type A 
+                                0, //packetID = 0
+                                addServer[i][0], //location at this host in group of Nodes
+                                i,//location in group of hosts
+                                0, //startTime = 0 
+                                0, //endTime = 0
+                                rootHosts);
+            
         }
     }
 
