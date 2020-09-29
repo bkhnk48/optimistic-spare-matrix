@@ -120,6 +120,10 @@ void passStruct(Value v, Node *t)
 void main(int argc, char** argv) {
     int att = atoi(argv[1]);
 
+    int numOfInitialization = 320;
+    int i = 0;
+    double wc1 = 0, wc2 = 0, cpuT = 0;
+
     if(att == 1)
     {
         int k = 4;
@@ -162,11 +166,6 @@ void main(int argc, char** argv) {
 
     if(att == 4)
     {
-        int numOfInitialization = 320;
-        int i = 0;
-        double wc1 = 0, wc2 = 0, cpuT = 0;
-
-
         timing(&wc1, &cpuT);
         Node *t = NULL;
         t = (Node *)malloc(sizeof(Node));
@@ -203,6 +202,69 @@ void main(int argc, char** argv) {
         printf("================================\n");
         
         printf("Performance %lf MB/s\n", loadedBytes/(wc2 - wc1));
+        return;
+    }
+
+    if(att == 5)
+    {
+        numOfInitialization *= numOfInitialization/10;
+        //numOfInitialization *= numOfInitialization;
+        printf("test performance of IF, SWITCH and SHIFT statements as #loops = %d\n", numOfInitialization);
+        timing(&wc1, &cpuT);
+        i = 0; int j = 15;
+        //while(i < numOfInitialization)
+        for(i = 0; i < numOfInitialization; i++)
+        {
+            if(j % 2 == 0)
+            {
+                j++;
+            }else{
+                j += 2;
+            }
+            j += 2;
+            if(j < 0){ j--; }
+        }
+        timing(&wc2, &cpuT);
+        printf("Time IF: %f ms\n", (wc2 - wc1)*1000);
+        printf("================================\n");
+        
+        timing(&wc1, &cpuT);
+        i = 0; j = 15;
+        
+        for(i = 0; i < numOfInitialization; i++)
+        {
+            switch(j % 2)
+            {
+                case 0:
+                    j++;
+                    break;
+                case 1:
+                    j += 2;
+                    break;
+            }
+            j += 2;
+            
+            if(j < 0){ j--; }
+        }
+        timing(&wc2, &cpuT);
+        printf("Time SWITCH: %f ms\n", (wc2 - wc1)*1000);
+        printf("================================\n");
+        
+        timing(&wc1, &cpuT);
+        i = 0; j = 15;
+        //while(i < numOfInitialization)
+        for(i = 0; i < numOfInitialization; i++)
+        {
+            j += 1 + (j & 1);
+            j += 2;
+            if(j < 0){ j--; }
+        }
+        timing(&wc2, &cpuT);
+        printf("Time SHIFT: %f ms\n", (wc2 - wc1)*1000);
+        printf("================================\n");
+        
+        printf("Conclusion: IF and SWITCH have the same performance\n");
+        printf("If the shift increases the number of LOAD operations it will slow performance down T.T\n");
         return;
     }
 }   
