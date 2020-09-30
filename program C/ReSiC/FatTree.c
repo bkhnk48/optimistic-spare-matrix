@@ -753,7 +753,7 @@ int main(int argc, char** argv)
                         
                         int isNotFullEXB = PacketInEXBHost[i][1] - PacketInEXBHost[i][0] + 1 - BUFFER_SIZE;
                         isNotFullEXB = -(isNotFullEXB >> 31); //1 nghia la EXB chua full, 0 nghia la EXB da full.
-                        if((1-isEmptySQ)*isNotFullEXB == 1)
+                        if((1-isEmptySQ) == 1 && isNotFullEXB == 1)
                         {
                                 
                             int isEmptyEXB = -(PacketInEXBHost[i][0] >> 31);//chi nhan gia tri 0 hoac 1.
