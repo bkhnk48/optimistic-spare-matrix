@@ -721,7 +721,7 @@ int main(int argc, char** argv)
                 int isEmptySQ = -(PacketInSQ[i][0] >> 31);//kiem tra xem SQ co empty ko?
                 //int indexOfUpdateSQ = 1 + (-PacketInSQ[i][0] + PacketInSQ[i][1] + 1);//cap nhat phan tu nao cua PacketInSQ?
                 //indexOfUpdateSQ *= isEmptySQ;//cap nhat phan tu nao cua PacketInSQ?
-                int idOfNewPkt = currentTime / HOST_DELAY;//id cua packet trong host day
+                int idOfNewPkt = ev->packetID;//id cua packet trong host day
                 int dstOfNewPkt = trafficPairs[i][idOfNewPkt % dstPerSrc];//destination of packet
                 
                 //ongoing work to change this element of array to temporary variable
@@ -743,6 +743,14 @@ int main(int argc, char** argv)
                             rootHosts);
                     show(rootHosts);
                 }
+                rootHosts = add(A, //type B
+                            idOfNewPkt + 1, //packetID 
+                            j,
+                            i, //location at this host
+                            currentTime + HOST_DELAY, //startTime = currentTime 
+                            currentTime + HOST_DELAY, //endTime = currentTime (right now)
+                            rootHosts);
+                
             }else if(ev->type == B)
             {
                 int isEmptyEXB = -(PacketInEXBHost[i][0] >> 31);//chi nhan gia tri 0 hoac 1.
