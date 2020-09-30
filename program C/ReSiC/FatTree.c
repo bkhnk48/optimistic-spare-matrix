@@ -761,10 +761,10 @@ int main(int argc, char** argv)
                 }
                 else{
                     PacketInSQ[i][0] = PacketInSQ[i][1];
-                    
+
                 }
-                PacketInSQ[i][0] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][0] + 1);
-                PacketInSQ[i][1] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][1]);
+                //PacketInSQ[i][0] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][0] + 1);
+                //PacketInSQ[i][1] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][1]);
 
                 ///Kiem tra xem co tao event C duoc hay khong?
                 //Cach kiem tra: CounterH > 0 va WayHE[i][2] != 1.
