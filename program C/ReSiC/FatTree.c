@@ -768,12 +768,10 @@ int main(int argc, char** argv)
 
                 ///Kiem tra xem co tao event C duoc hay khong?
                 //Cach kiem tra: CounterH > 0 va WayHE[i][2] != 1.
-                int checkWayHE = (WayHE[i][2] - 1);
-                checkWayHE *= checkWayHE;
-                int leaveEXB = -((-CounterH[i]) >> 31)*checkWayHE;
-                switch (leaveEXB)
+                if(CounterH[i] > 0)
                 {
-                    case 1:
+                    if(WayHE[i][2] != 1)
+                    {
                         rootHosts = add(C, //type B
                                     PacketInEXBHost[i][0], //packetID 
                                     j,
@@ -781,8 +779,9 @@ int main(int argc, char** argv)
                                     currentTime, //startTime = currentTime 
                                     currentTime, //endTime = currentTime (right now)
                                     rootHosts);
-                        break;
+                    }
                 }
+                
                 
             }else if(ev->type == C)
             {
