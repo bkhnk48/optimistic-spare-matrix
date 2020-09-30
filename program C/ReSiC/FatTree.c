@@ -745,44 +745,37 @@ int main(int argc, char** argv)
                 }
             }else if(ev->type == B)
             {
-                int isEmptySQ = -(PacketInSQ[i][0] >> 31);//kiem tra xem SQ co empty ko?
-                
-                int isNotFullEXB = PacketInEXBHost[i][1] - PacketInEXBHost[i][0] + 1 - BUFFER_SIZE;
-                isNotFullEXB = -(isNotFullEXB >> 31); //1 nghia la EXB chua full, 0 nghia la EXB da full.
-                if((1-isEmptySQ) == 1 && isNotFullEXB == 1)
-                {
-                        
-                    int isEmptyEXB = -(PacketInEXBHost[i][0] >> 31);//chi nhan gia tri 0 hoac 1.
-                    int indexOfUpdate = (1 - isEmptyEXB);
-                    PacketInEXBHost[i][indexOfUpdate] = PacketInSQ[i][0];
-                    ///III. Remove the first packet of Source queue
-                    //After insert the packet into the empty slot of EXB (in host)
-                    //all remaining packets in source queue need to be moved forward
-                    ///If there was only one packet in SQ
-                    int isOnePkt = -(PacketInSQ[i][1] >> 31); 
-                    //0 nghia la co hon 1 goi tin trong SQ. 1 nghia la chi co 1 goi tin trong SQ
-                    //2 cau lenh duoi day cap nhat lai id cua cac goi tin trong SQ
-                    PacketInSQ[i][0] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][0] + 1);
-                    PacketInSQ[i][1] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][1]);
+                int isEmptyEXB = -(PacketInEXBHost[i][0] >> 31);//chi nhan gia tri 0 hoac 1.
+                int indexOfUpdate = (1 - isEmptyEXB);
+                PacketInEXBHost[i][indexOfUpdate] = PacketInSQ[i][0];
+                ///III. Remove the first packet of Source queue
+                //After insert the packet into the empty slot of EXB (in host)
+                //all remaining packets in source queue need to be moved forward
+                ///If there was only one packet in SQ
+                int isOnePkt = -(PacketInSQ[i][1] >> 31); 
+                //0 nghia la co hon 1 goi tin trong SQ. 1 nghia la chi co 1 goi tin trong SQ
+                //2 cau lenh duoi day cap nhat lai id cua cac goi tin trong SQ
+                PacketInSQ[i][0] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][0] + 1);
+                PacketInSQ[i][1] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][1]);
 
-                    ///Kiem tra xem co tao event C duoc hay khong?
-                    //Cach kiem tra: CounterH > 0 va WayHE[i][2] != 1.
-                    int checkWayHE = (WayHE[i][2] - 1);
-                    checkWayHE *= checkWayHE;
-                    int leaveEXB = -((-CounterH[i]) >> 31)*checkWayHE;
-                    switch (leaveEXB)
-                    {
-                        case 1:
-                            rootHosts = add(C, //type B
-                                        PacketInEXBHost[i][0], //packetID 
-                                        j,
-                                        i, //location of this host
-                                        currentTime, //startTime = currentTime 
-                                        currentTime, //endTime = currentTime (right now)
-                                        rootHosts);
-                            break;
-                    }
+                ///Kiem tra xem co tao event C duoc hay khong?
+                //Cach kiem tra: CounterH > 0 va WayHE[i][2] != 1.
+                int checkWayHE = (WayHE[i][2] - 1);
+                checkWayHE *= checkWayHE;
+                int leaveEXB = -((-CounterH[i]) >> 31)*checkWayHE;
+                switch (leaveEXB)
+                {
+                    case 1:
+                        rootHosts = add(C, //type B
+                                    PacketInEXBHost[i][0], //packetID 
+                                    j,
+                                    i, //location of this host
+                                    currentTime, //startTime = currentTime 
+                                    currentTime, //endTime = currentTime (right now)
+                                    rootHosts);
+                        break;
                 }
+                
             }else if(ev->type == C)
             {
                 
