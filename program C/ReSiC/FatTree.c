@@ -755,6 +755,14 @@ int main(int argc, char** argv)
                 int isOnePkt = -(PacketInSQ[i][1] >> 31); 
                 //0 nghia la co hon 1 goi tin trong SQ. 1 nghia la chi co 1 goi tin trong SQ
                 //2 cau lenh duoi day cap nhat lai id cua cac goi tin trong SQ
+                if(isOnePkt)
+                {
+                    PacketInSQ[i][0] = -1;    
+                }
+                else{
+                    PacketInSQ[i][0] = PacketInSQ[i][1];
+                    
+                }
                 PacketInSQ[i][0] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][0] + 1);
                 PacketInSQ[i][1] = -isOnePkt + (1-isOnePkt)*(PacketInSQ[i][1]);
 
