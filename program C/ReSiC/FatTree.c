@@ -682,7 +682,10 @@ int main(int argc, char** argv)
     Tree * rootHosts;
     rootHosts = NULL;              /* the empty tree */
     //Generate event A
-    for(i = 0; i < numOfSources; i++)
+    for(i = 0; i < 
+                    //numOfSources
+                    1
+                        ; i++)
     {
         //I. Check time and then execute event A
         int createPacketNow = checkEqual(currentTime, TimeGeneration[i]);
@@ -702,7 +705,7 @@ int main(int argc, char** argv)
         }
     }
 
-    show(rootHosts);
+    //show(rootHosts);
 
     Tree * ev = (Tree *) malloc (sizeof (Tree));
     ev->endTime = -1;
@@ -805,10 +808,14 @@ int main(int argc, char** argv)
         }
 
         ev->endTime = -1;
+        show(rootHosts);
+        printf("\n prepare remove 1st event for next loop\n");
         rootHosts = removeFirstEvent(ev, 
                                     rootHosts);
         int isPositiveEndTime = (ev->endTime + 1)>>31;//0 hoac 1
-        currentTime = isPositiveEndTime*(ev->endTime) + (1 - isPositiveEndTime)*currentTime;
+        currentTime = isPositiveEndTime*(ev->endTime) + 
+                (1 - isPositiveEndTime)*currentTime;
+        show(rootHosts);
     }
 
     return 0;
