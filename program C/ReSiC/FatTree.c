@@ -676,7 +676,7 @@ int main(int argc, char** argv)
         }
     }
 
-    int currentTime = 0; int endTime = 0;
+    int currentTime = 0; int endTime = 300*1000;
 
     //Generate Tree for hosts
     Tree * rootHosts;
@@ -711,6 +711,7 @@ int main(int argc, char** argv)
     ev->endTime = -1;
     rootHosts = removeFirstEvent(ev, 
                                     rootHosts);
+    show(rootHosts);
 
     while(currentTime <= endTime && ev->endTime != -1)
     {
@@ -718,7 +719,13 @@ int main(int argc, char** argv)
         {
             i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
             j = ev->idNode;//lay id cua node trong danh sach cac nodes
-                        
+
+            printf(
+                "Event first is of type: %d, pktID = %d, location = %d, endTime = %d\n"
+                    , ev->type, ev->packetID, 
+                    ev->idNode, ev->endTime
+             );
+
             if(ev->type == A)
             {
                 int isEmptySQ = -(PacketInSQ[i][0] >> 31);//kiem tra xem SQ co empty ko?
@@ -731,10 +738,20 @@ int main(int argc, char** argv)
                 PacketInSQ[i][1 - isEmptySQ] = idOfNewPkt;
                 //PacketInSQ[i][indexOfUpdateSQ] = dstOfNewPkt;
 
+                rootHosts = add(A, //type B
+                            idOfNewPkt + 1, //packetID 
+                            j,
+                            i, //location at this host
+                            currentTime + HOST_DELAY, //startTime = currentTime 
+                            currentTime + HOST_DELAY, //endTime = currentTime (right now)
+                            rootHosts);
+                //show(rootHosts);
+
                 //II. Generate and execute the event B
                 //check if the EXB has no empty slot:
                 int isNotFullEXB = PacketInEXBHost[i][1] - PacketInEXBHost[i][0] + 1 - BUFFER_SIZE;
                 isNotFullEXB = -(isNotFullEXB >> 31); //1 nghia la EXB chua full, 0 nghia la EXB da full.
+                
                 if(isNotFullEXB == 1)//event B co the duoc tao ra
                 {
                     rootHosts = add(B, //type B
@@ -744,16 +761,11 @@ int main(int argc, char** argv)
                             currentTime, //startTime = currentTime 
                             currentTime, //endTime = currentTime (right now)
                             rootHosts);
-                    show(rootHosts);
+                    //show(rootHosts);
                 }
-                rootHosts = add(A, //type B
-                            idOfNewPkt + 1, //packetID 
-                            j,
-                            i, //location at this host
-                            currentTime + HOST_DELAY, //startTime = currentTime 
-                            currentTime + HOST_DELAY, //endTime = currentTime (right now)
-                            rootHosts);
                 
+                
+
             }else if(ev->type == B)
             {
                 int isEmptyEXB = -(PacketInEXBHost[i][0] >> 31);//chi nhan gia tri 0 hoac 1.
@@ -799,23 +811,21 @@ int main(int argc, char** argv)
                 
             }
 
-            printf(
-                "Event first is of type: %d, pktID = %d, location = %d, endTime = %d\n"
-                    , ev->type, ev->packetID, 
-                    ev->idNode, ev->endTime
-             );
+            
             //show(rootHosts);
         }
 
         ev->endTime = -1;
-        show(rootHosts);
-        printf("\n prepare remove 1st event for next loop\n");
+        //show(rootHosts);
+        //printf("\n prepare remove 1st event for next loop\n");
         rootHosts = removeFirstEvent(ev, 
                                     rootHosts);
-        int isPositiveEndTime = (ev->endTime + 1)>>31;//0 hoac 1
-        currentTime = isPositiveEndTime*(ev->endTime) + 
-                (1 - isPositiveEndTime)*currentTime;
-        show(rootHosts);
+        int isNegativeEndTime = -(ev->endTime>>31);//0 hoac 1
+        printf("Next event type %d is executed at time = %d", ev->type, ev->endTime);
+        currentTime = (1 - isNegativeEndTime)*(ev->endTime) + 
+                isNegativeEndTime*currentTime;
+        printf("  the current time is %d\n", currentTime);
+        //show(rootHosts);
     }
 
     return 0;
