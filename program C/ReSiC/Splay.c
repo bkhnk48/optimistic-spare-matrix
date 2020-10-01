@@ -167,16 +167,25 @@ Tree * removeFirstEvent(Tree * first, Tree *t)
     rightTree = t->right;
     if(rightTree != NULL)
         rightTree->father = NULL;
+    int removedFather = 0;
+    if(temp == t->father)
+    {
+        removedFather = 1;
+    }
 
     free(temp);
 
+    if(rightTree == NULL && leftTree == NULL && removedFather == 1
+            )
+        return t;
     if(rightTree == NULL)
         t = leftTree;
     else if(leftTree == NULL)
     {
         t = rightTree;
     }
-    else{
+    else 
+    {
         Tree * newRoot = rightTree;
         while(newRoot->left != NULL)
         {
