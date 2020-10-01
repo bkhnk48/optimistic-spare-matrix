@@ -682,10 +682,7 @@ int main(int argc, char** argv)
     Tree * rootHosts;
     rootHosts = NULL;              /* the empty tree */
     //Generate event A
-    for(i = 0; i < 
-                    //numOfSources
-                    1
-                        ; i++)
+    for(i = 0; i < numOfSources/*1*/; i++)
     {
         //I. Check time and then execute event A
         int createPacketNow = checkEqual(currentTime, TimeGeneration[i]);
@@ -763,9 +760,6 @@ int main(int argc, char** argv)
                             rootHosts);
                     //show(rootHosts);
                 }
-                
-                
-
             }else if(ev->type == B)
             {
                 int isEmptyEXB = -(PacketInEXBHost[i][0] >> 31);//chi nhan gia tri 0 hoac 1.
