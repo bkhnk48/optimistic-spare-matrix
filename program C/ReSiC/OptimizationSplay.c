@@ -4,32 +4,40 @@
 
 enum Side{LEFT, RIGHT};
 
-void add(int type, int packetID, int idNode,
+void add(int type, int portID, 
                 int idElementInGroup,
-                int startTime, 
                 int endTime,
-                int * root,
-                int index,
-                int arr[320][9]
+                int root,
+                int arr[320][7]
                 );
-void show(int arr[320][9], int root);
-void leaf(int arr[320][9], int root, enum Side side);
+/* From now on, an event has 7 fields about:
+   + it's type
+   + idElementInGroup is the index of element in each group Hosts, Ways, Switches Edge, Agg, Core
+   + the portID where the event happens (= -1 in case event - A, B, C, G, H occurs on host)
+   + endTime: the time of event to be finished.
+   + index of father.
+   + index of left
+   + index of right
+*/
 
-void show(int arr[320][9], int root)
+void show(int arr[320][7], int root);
+void leaf(int arr[320][7], int root, enum Side side);
+
+void show(int arr[320][7], int root)
 {
    if(arr[root][0] != -1)
    {
       printf("\n===========> for event type = %d at end = %d in %d\n", 
-               arr[root][0], arr[root][1], arr[root][2]);
-      leaf(arr, arr[root][7], LEFT);
-      leaf(arr, arr[root][8], RIGHT);
+               arr[root][0], arr[root][3], arr[root][1]);
+      leaf(arr, arr[root][5], LEFT);
+      leaf(arr, arr[root][6], RIGHT);
    }
    else{
       printf("===========> left NULL\n");
    }
 }
 
-void leaf(int arr[320][9], int root, enum Side side)
+void leaf(int arr[320][7], int root, enum Side side)
 {
    printf("===========> ");
    if(side == LEFT)
@@ -42,9 +50,9 @@ void leaf(int arr[320][9], int root, enum Side side)
    if(arr[root][0] != -1)
    {
       printf("for event type = %d at end = %d in %d\n", 
-               arr[root][0], arr[root][1], arr[root][2]);
-      leaf(arr, arr[root][7], LEFT);
-      leaf(arr, arr[root][8], RIGHT);
+               arr[root][0], arr[root][3], arr[root][1]);
+      leaf(arr, arr[root][5], LEFT);
+      leaf(arr, arr[root][6], RIGHT);
    }
    else{
       printf("NULL\n");
