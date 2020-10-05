@@ -787,7 +787,7 @@ int main(int argc, char** argv)
                 //Cach kiem tra: CounterH > 0 va WayHE[i][2] != 1.
                 if(CounterH[i] > 0)
                 {
-                    if(WayHE[i][2] != 1)
+                    if(WayHE[i][2] == NO_PACKET_TRANSFERABLE)
                     {
                         rootHosts = add(C, //type B
                                     PacketInEXBHost[i][0], //packetID 
@@ -796,13 +796,15 @@ int main(int argc, char** argv)
                                     currentTime, //startTime = currentTime 
                                     currentTime, //endTime = currentTime (right now)
                                     rootHosts);
+                        
                     }
                 }
                 
                 
             }else if(ev->type == C)
             {
-                
+                CounterH[i]--;
+                WayHE[i][2] = HAS_PACKET;
             }
 
             
