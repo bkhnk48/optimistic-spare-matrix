@@ -335,22 +335,8 @@ void main(int argc, char** argv) {
         printf("Time SWITCH: %f ms\n", (wc2 - wc1)*1000);
         printf("================================\n");
         
-        /*timing(&wc1, &cpuT);
-        i = 0; j = 15;
-        
-        for(i = 0; i < numOfInitialization; i++)
-        {
-            j += 1 + (j & 1);
-            j += 2;
-            if(j < 0){ j--; }
-        }
-        timing(&wc2, &cpuT);
-        printf("Time SHIFT: %f ms\n", (wc2 - wc1)*1000);
-        printf("================================\n");
-        
-        printf("Conclusion: IF and SWITCH have the same performance\n");
-        printf("If the shift increases the number of LOAD operations it will slow performance down T.T\n");
-        */
         return;
     }
+
+    
 }   
