@@ -7,7 +7,7 @@ enum Side{LEFT, RIGHT};
 void add(int type, int portID, 
                 int idElementInGroup,
                 int endTime,
-                int root,
+                int *root,
                 int arr[320][7]
                 );
 /* From now on, an event has 7 fields about:
