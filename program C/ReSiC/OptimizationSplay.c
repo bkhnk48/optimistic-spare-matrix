@@ -4,8 +4,8 @@
 
 enum Side{LEFT, RIGHT};
 
-void add(int type, int portID, 
-                int idElementInGroup,
+void add(int type, int idElementInGroup,
+                int portID, 
                 int endTime,
                 int *root,
                 int arr[320][7]
@@ -19,7 +19,19 @@ void add(int type, int portID,
    + index of left
    + index of right
 */
-
+void add(int type, int idElementInGroup,
+                int portID, 
+                int endTime,
+                int *root,
+                int arr[320][7]
+                )
+{
+   if(*root == -1)
+   {
+      arr[0][0] = type;
+      arr[0][1] = idElementInGroup;
+   }
+}
 void show(int arr[320][7], int root);
 void leaf(int arr[320][7], int root, enum Side side);
 
