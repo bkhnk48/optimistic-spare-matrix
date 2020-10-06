@@ -23,19 +23,63 @@ void add(int type, int idElementInGroup,
                 int portID, 
                 int endTime,
                 int *root,
-                int arr[320][7]
+                int arr[384][7]
                 )
 {
+   /* Quy ước các event từ A đến G (tức type = 0..4) sẽ là 
+      các event xảy ra trên hosts
+      Các biến type < 0 sẽ là event xảy ra trên các edge switch
+      Các biến type có bit cuối cùng là 1 sẽ là các event xảy ra trên Core switch
+      Các biến type có bit cuối cùng là 0 sẽ là các event xảy ra trên Agg switch
+   */
+   int idNewNode = 0;
+   if(type == A || type == B || type == C || type == H_HOST || type == G)
+   {
+      idNewNode = idElementInGroup*3 + type;
+   }
+   else if(type < 0)//Is event of edge switch
+   {
+      type *= -1;
+      idNewNode = 16*3 + idElementInGroup*((4/2)*4 + 3*(4/2)) + type;
+   }
+   else{
+      int isCoreSwitch = type & 1;
+      type = type >> 1;
+      idNewNode = 16*3 + (4*4/2)*((4/2)*4 + 3*(4/2)) + idElementInGroup*4 + type;
+   }
+   
+   
    if(*root == -1)
    {
       arr[0][0] = type;
       arr[0][1] = idElementInGroup;
+      arr[0][2] = portID;
+      arr[0][3] = endTime;
+      *root = 0;
+      return;
    }
-}
-void show(int arr[320][7], int root);
-void leaf(int arr[320][7], int root, enum Side side);
+   int left = -1, right = -1, temp = -1;
+   int end_splay = 0;
+   while (end_splay == 0) {
+      if(endTime > arr[*root][3])
+      {
+         temp = arr[*root][6];
+         if(temp == -1)
+         {
+              //cas "zig"
+              left->right = t;
+              t->father = left;
+              right->left = NULL;
+              end_splay = 1;
+         }
+      }
+   }
 
-void show(int arr[320][7], int root)
+}
+void show(int arr[384][7], int root);
+void leaf(int arr[384][7], int root, enum Side side);
+
+void show(int arr[384][7], int root)
 {
    if(arr[root][0] != -1)
    {
@@ -49,7 +93,7 @@ void show(int arr[320][7], int root)
    }
 }
 
-void leaf(int arr[320][7], int root, enum Side side)
+void leaf(int arr[384][7], int root, enum Side side)
 {
    printf("===========> ");
    if(side == LEFT)
