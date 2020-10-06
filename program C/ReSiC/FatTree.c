@@ -715,12 +715,16 @@ int main(int argc, char** argv)
         if(ev->endTime == currentTime)
         {
             i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
-            j = ev->idNode;//lay id cua node trong danh sach cac nodes
+            j = ev->//idNode;//lay id cua node trong danh sach cac nodes
+                    idElementInGroup;
 
             printf(
                 "Event first is of type: %d, pktID = %d, location = %d, endTime = %d\n"
-                    , ev->type, ev->packetID, 
-                    ev->idNode, ev->endTime
+                    , ev->type, ev->//packetID,
+                                   type , 
+                    ev->//idNode, 
+                        idElementInGroup,
+                    ev->endTime
              );
 
             if(ev->type == A)
@@ -728,7 +732,8 @@ int main(int argc, char** argv)
                 int isEmptySQ = -(PacketInSQ[i][0] >> 31);//kiem tra xem SQ co empty ko?
                 //int indexOfUpdateSQ = 1 + (-PacketInSQ[i][0] + PacketInSQ[i][1] + 1);//cap nhat phan tu nao cua PacketInSQ?
                 //indexOfUpdateSQ *= isEmptySQ;//cap nhat phan tu nao cua PacketInSQ?
-                int idOfNewPkt = ev->packetID;//id cua packet trong host day
+                int idOfNewPkt = ev->type;
+                                //packetID;//id cua packet trong host day
                 int dstOfNewPkt = trafficPairs[i][idOfNewPkt % dstPerSrc];//destination of packet
                 
                 //ongoing work to change this element of array to temporary variable
