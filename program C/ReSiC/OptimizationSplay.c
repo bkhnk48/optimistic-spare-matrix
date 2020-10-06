@@ -71,19 +71,82 @@ void add(int type, int idElementInGroup,
    int left = idNewNode, right = idNewNode, temp = -1;
    int end_splay = 0;
    while (end_splay == 0) {
-      if(endTime > arr[*root][3])
+      if(endTime > arr[*root][3])//if(endTime > t->endTime)
       {
-         temp = arr[*root][6];
-         if(temp == -1)
+         temp = arr[*root][6];//temp = t->right;
+         if(temp == -1)//if(temp == NULL)
          {
-              //cas "zig"
-              left->right = t;
-              t->father = left;
-              right->left = NULL;
-              end_splay = 1;
+            //cas "zig"
+            arr[left][6] = *root; //left->right = t;
+            arr[*root][4] = left; //t->father = left;
+            arr[right][5] = -1;//right->left = NULL;
+            end_splay = 1;
+         }
+         else if(endTime < arr[temp][3])//if(endTime < temp->endTime)
+         {
+            //cas "zig-zag" simplifie
+            arr[left][6] = *root;//left->right = t;
+            arr[*root][4] = left;//t->father = left;
+            left = *root;//left = t;
+            *root = temp;//t = temp;
+         }
+         else {
+            //cas "zig-zig"
+            arr[*root][6] = arr[temp][5]; //t->right = temp->left;
+            if(arr[temp][5] == -1)//if (temp->left != NULL)
+               arr[  arr[temp][5]  ][  4  ] = *root; //temp->left->father = t;
+            arr[left][6] = temp;//left->right = temp;
+            arr[temp][4] = left;//temp->father = left;
+            arr[temp][5] = *root;//temp->left = t;
+            arr[*root][4] = temp;//t->father = temp;
+            left = temp;
+            *root = arr[temp][6];//t = temp->right;
+            if(*root == -1){//if (t == NULL) {
+               arr[right][5] = -1;//right->left = NULL;
+               end_splay = 1;
+            }
+         }
+      }else {
+         temp = arr[*root][5]; //temp = t->left;
+         if(temp == -1){//if (temp == NULL) {
+            //cas "zig"
+            arr[right][5] = *root; //right->left = t;
+            arr[*root][4] = right; //t->father = right;
+            arr[left][6] = -1;     //left->right = NULL;
+            end_splay = 1;
+         }
+         else if (endTime > arr[temp][3]) {//if (endTime > temp->endTime) {
+            //cas "zig-zag" simplifie
+            arr[right][5] = *root; //right->left = t;
+            arr[*root][4] = right; //t->father = right;
+            right = *root;//right = t;
+            *root = temp;//t = temp;
+         }
+         else {
+            //cas "zig-zig"
+            arr[*root][5] = arr[temp][6]; //t->left = temp->right;
+            if (arr[temp][6] != -1)//if (temp->right != NULL)
+               arr[  arr[temp][6]  ][4] = *root; //temp->right->father = t;
+            arr[right][5] = temp; //right->left = temp;
+            arr[temp][4] = right; //temp->father = right;
+            arr[temp][6] = *root; //temp->right = t;
+            arr[*root][4] = temp; //t->father = temp;
+            right = temp;         //right = temp;
+            *root = arr[temp][5]; //t = temp->left;
+            if(*root == -1) {//if (t == NULL) {
+               arr[left][6] = -1; //left->right = NULL;
+               end_splay = 1;
+            }
          }
       }
    }
+
+   temp = arr[idNewNode][5]; //temp = newNode->left;
+   arr[idNewNode][5] = arr[idNewNode][6]; //newNode->left = newNode->right;
+   arr[idNewNode][6] = temp; //newNode->right = temp;
+
+   //return newNode;
+   *root = idNewNode;
 
 }
 void show(int arr[384][7], int root);
