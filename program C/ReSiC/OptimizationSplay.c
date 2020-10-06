@@ -19,6 +19,12 @@ void add(int type, int idElementInGroup,
    + index of left
    + index of right
 */
+
+void splay(int e, int *root, int arr[384][7]);
+
+void show(int arr[384][7], int root);
+void leaf(int arr[384][7], int root, enum Side side);
+
 void add(int type, int idElementInGroup,
                 int portID, 
                 int endTime,
@@ -47,7 +53,7 @@ void add(int type, int idElementInGroup,
       type = type >> 1;
       idNewNode = 16*3 + (4*4/2)*((4/2)*4 + 3*(4/2)) + idElementInGroup*4 + type;
    }
-   
+
    arr[idNewNode][0] = type;
    arr[idNewNode][1] = idElementInGroup;
    arr[idNewNode][2] = portID;
@@ -151,8 +157,7 @@ void add(int type, int idElementInGroup,
    *root = idNewNode;
 
 }
-void show(int arr[384][7], int root);
-void leaf(int arr[384][7], int root, enum Side side);
+
 
 void show(int arr[384][7], int root)
 {
