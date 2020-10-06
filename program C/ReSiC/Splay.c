@@ -7,8 +7,8 @@ enum Side{LEFT, RIGHT};
 typedef struct tree_node Tree;
 struct tree_node {
     enum TypesOfEvent type; //type of event
-    int packetID; //id of packet
-    int idNode; //id of Node in group of hosts, switches
+    //int packetID; //id of packet
+    //int idNode; //id of Node in group of hosts, switches
     int idElementInGroup;//id of element in group of hosts or switches
     int startTime;
     int endTime;
@@ -44,8 +44,8 @@ Tree * add(enum TypesOfEvent type, int packetID, int idNode,
     }
 
     newNode->type = type;
-    newNode->packetID = packetID;
-    newNode->idNode = idNode;
+    //newNode->packetID = packetID;
+    //newNode->idNode = idNode;
     newNode->idElementInGroup = idElementInGroup;
     newNode->startTime = startTime;
     newNode->endTime = endTime;
@@ -149,10 +149,10 @@ Tree * removeFirstEvent(Tree * first, Tree *t)
     }
     //Tree * first = (Tree *) malloc (sizeof (Tree));
     first->type = temp->type;
-    first->packetID = temp->packetID;
+    //first->packetID = temp->packetID;
     first->startTime = temp->startTime;
     first->endTime = temp->endTime;
-    first->idNode = temp->idNode;
+    //first->idNode = temp->idNode;
     first->idElementInGroup = temp->idElementInGroup;
     first->left = NULL;
     first->right = NULL;
@@ -319,7 +319,10 @@ void show(Tree * t)
     if(t != NULL)
     {
         printf("\n===========> for event type = %d at end = %d in %d\n", 
-                t->type, t->endTime, t->idNode);
+                t->type, t->endTime, t->
+                                        //idNode
+                                        idElementInGroup
+                                    );
         leaf(t->left, LEFT);
         leaf(t->right, RIGHT);
         printf("\n");
@@ -342,7 +345,10 @@ void leaf(Tree * t, enum Side side)
     if(t != NULL)
     {
         printf("for event type = %d at end = %d in %d\n", 
-                t->type, t->endTime, t->idNode);
+                t->type, t->endTime, t->
+                            //idNode
+                            idElementInGroup
+                    );
         leaf(t->left, LEFT);
         leaf(t->right, RIGHT);
         printf("\n");
