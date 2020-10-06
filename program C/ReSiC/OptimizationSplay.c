@@ -47,18 +47,28 @@ void add(int type, int idElementInGroup,
       type = type >> 1;
       idNewNode = 16*3 + (4*4/2)*((4/2)*4 + 3*(4/2)) + idElementInGroup*4 + type;
    }
-   
-   
+   arr[idNewNode][0] = type;
+   arr[idNewNode][1] = idElementInGroup;
+   arr[idNewNode][2] = portID;
+   arr[idNewNode][3] = endTime;
+   arr[idNewNode][4] = -1;
+   arr[idNewNode][5] = -1;
+   arr[idNewNode][6] = -1;
+
    if(*root == -1)
    {
       arr[0][0] = type;
       arr[0][1] = idElementInGroup;
       arr[0][2] = portID;
       arr[0][3] = endTime;
+      arr[0][4] = -1;
+      arr[0][5] = -1;
+      arr[0][6] = -1;
+
       *root = 0;
       return;
    }
-   int left = -1, right = -1, temp = -1;
+   int left = idNewNode, right = idNewNode, temp = -1;
    int end_splay = 0;
    while (end_splay == 0) {
       if(endTime > arr[*root][3])
