@@ -47,6 +47,7 @@ void add(int type, int idElementInGroup,
       type = type >> 1;
       idNewNode = 16*3 + (4*4/2)*((4/2)*4 + 3*(4/2)) + idElementInGroup*4 + type;
    }
+   
    arr[idNewNode][0] = type;
    arr[idNewNode][1] = idElementInGroup;
    arr[idNewNode][2] = portID;
@@ -155,7 +156,7 @@ void leaf(int arr[384][7], int root, enum Side side);
 
 void show(int arr[384][7], int root)
 {
-   if(arr[root][0] != -1)
+   if(root != -1)
    {
       printf("\n===========> for event type = %d at end = %d in %d\n", 
                arr[root][0], arr[root][3], arr[root][1]);
@@ -177,7 +178,7 @@ void leaf(int arr[384][7], int root, enum Side side)
    else{
        printf("right ");
    }
-   if(arr[root][0] != -1)
+   if(root != -1)
    {
       printf("for event type = %d at end = %d in %d\n", 
                arr[root][0], arr[root][3], arr[root][1]);
