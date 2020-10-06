@@ -13,6 +13,7 @@ serial:
 	gcc TestPerformance.c -g -o per.o
 	gcc FatTree.c -g -o out  
 	gcc SplayTest.c -g -o splay
+	gcc OptimizationSplayTest.c -g -o optest
 r:
 	./out 1
 s:
