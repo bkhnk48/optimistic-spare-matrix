@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Splay.c"
+#include "timing.c"
 
 
 void main(int argc, char** argv) {
@@ -21,6 +22,7 @@ void main(int argc, char** argv) {
 
     
     root = NULL;              /* the empty tree */
+    double wc1 = 0, wc2 = 0, cpuT = 0;
     
     if(testID == 1)
     {
@@ -52,7 +54,24 @@ void main(int argc, char** argv) {
     if(testID == 4)
     {
         
+        int N = 0, i;
+        timing(&wc1, &cpuT);
+        for(N = 0; N < 1000; N++)
+        {
+            root = NULL;
+            for(i = 0; i < 16; i++)
+            {
+                root = add(A, 0, 0, 0, 0, (i % 2), root);
+            }
+            if(i < 0){
+                root += i + N;
+            }
+            free(root);
+        }
+        timing(&wc2, &cpuT);
+        printf("Time: %f ms\n", (wc2 - wc1)*1000);
+        printf("================================\n");
     }
     
-    show(root);
+    //show(root);
 }
