@@ -12,8 +12,8 @@ serial:
 	gcc -g -c timing.c
 	gcc TestPerformance.c -g -o per.o
 	gcc FatTree.c -g -o out  
-	gcc SplayTest.c -g -o splay
-	gcc OptimizationSplayTest.c -g -o optest
+	gcc SplayTest.c -g -o splay.o
+	gcc OptimizationSplayTest.c -g -o optest.o
 r:
 	./out 1
 s:
