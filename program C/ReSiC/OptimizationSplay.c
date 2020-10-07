@@ -22,6 +22,8 @@ void add(int type, int idElementInGroup,
 
 void splay(int e, int arr[384][7]);
 
+void removeFirst(int * first, int * root, int arr[384][7]);
+
 void show(int arr[384][7], int root);
 void leaf(int arr[384][7], int root, enum Side side);
 
@@ -271,6 +273,73 @@ void splay(int e, int arr[384][7])
    }
 }
 
+void removeFirst(int * first, int * root, int arr[384][7])
+{
+   int t = *root;
+   if(t == -1)
+   {  
+      *first = -1; 
+      return;//return NULL;
+   }
+   int temp = t;
+   while(arr[temp][5] != -1)//while(temp->left != NULL)
+   {
+      temp = arr[temp][5]; //temp = temp->left;
+   }
+   *first = temp;
+   splay(*first, arr);
+
+   int leftTree, rightTree;
+   leftTree = arr[t][5];//leftTree = t->left;
+   if(leftTree != -1)//if(leftTree != NULL)
+   {
+      arr[leftTree][4] = -1;//leftTree->father = NULL;
+   }
+   rightTree = arr[t][5]; //rightTree = t->right;
+   if(rightTree != -1) //if(rightTree != NULL)
+      arr[rightTree][4] = -1; //rightTree->father = NULL;
+   int removedFather = 0;
+   if(temp == arr[t][4])//if(temp == t->father)
+   {
+        removedFather = 1;
+   }
+   if(rightTree == -1 && 
+            leftTree == -1 && 
+               removedFather == 1
+               //if(rightTree == NULL && leftTree == NULL && removedFather == 1
+            )
+   {  
+      *first = t; return; //return t;
+   }
+   if(rightTree == -1)//if(rightTree == NULL)
+   {     
+      t = leftTree; //t = leftTree;
+   }
+   else if(leftTree == -1) //if(leftTree == NULL)
+   {
+      t = rightTree; //t = rightTree;
+   }
+   else 
+   {
+      int newRoot = rightTree; //Tree * newRoot = rightTree;
+      while(arr[newRoot][5] != -1) //while(newRoot->left != NULL)
+      {
+         newRoot = arr[rightTree][6]; //newRoot = rightTree->left;
+      }
+
+      splay(newRoot, arr);//splay(newRoot);
+      arr[newRoot][5] = leftTree; //newRoot->left = leftTree;
+      arr[leftTree][4] = newRoot; //leftTree->father = newRoot;
+      //return newRoot;
+      *first = newRoot;
+      return;
+   }
+
+   *root = t; 
+   *first = t; //return t;
+   return;
+   
+}
 void show(int arr[384][7], int root)
 {
    if(root != -1)
