@@ -340,6 +340,7 @@ void removeFirst(int * first, int * root, int arr[384][7])
    return;
    
 }
+
 void show(int arr[384][7], int root)
 {
    if(root != -1)
