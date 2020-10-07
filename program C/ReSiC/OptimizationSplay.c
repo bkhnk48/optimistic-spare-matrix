@@ -158,6 +158,118 @@ void add(int type, int idElementInGroup,
 
 }
 
+void splay(int e, int *root, int arr[384][7])
+{
+   int left;
+   int f;   // Tree * f;
+   int gf;  // Tree * gf;
+   int ggf; // Tree * ggf;
+   while(arr[e][4] != -1)//while(e->father != NULL)
+   {
+      f = arr[e][4];  //  f = e->father;
+      gf = arr[f][4]; //  gf = f->father;
+      left = (e == arr[f][5] ? 1 : 0);  //left = (e == f->left ? 1 : 0);
+      if(left)
+      {
+         // cas du fils gauche
+         if (gf == -1) {//if (gf == NULL) {
+            // cas "zig", on fait la rotation de f (la racine) et e
+            arr[f][4] = e; //f->father = e;
+            arr[f][5] = arr[e][6]; //f->left = e->right;
+            if(arr[f][5] != -1) //if(f->left != NULL)
+               arr[arr[f][5]][4] = f; //f->left->father = f;
+            arr[e][6] = f; //e->right = f;
+            arr[e][4] = -1; //e->father = NULL;
+         }
+         else if(arr[gf][6] == f) { //if (gf->right == f) {
+            // cas "zig-zag", simplifie, pareil que le cas "zig"
+            arr[gf][6] = e; //gf->right = e;
+
+            arr[f][4] = e;  //f->father = e;
+            arr[f][5] = arr[e][6]; //f->left = e->right;
+            if(arr[f][5] != -1) //if(f->left != NULL)
+               arr[arr[f][4]][4] = f; //f->left->father = f;
+            arr[e][6] = f; //e->right = f;
+            arr[e][4] = gf; //e->father = gf;
+         }
+         else {
+            // cas "zig-zig", on fait la rotation de gf avec
+            // f, suivis de la rotation de e avec f
+            ggf = arr[gf][4]; //ggf = gf->father;
+
+            arr[gf][5] = arr[f][6]; //gf->left = f->right;
+            if(arr[gf][5] != -1)//if(gf->left != NULL)
+               arr[arr[gf][5]][4] = gf; //gf->left->father = gf;
+            arr[f][6] = gf; //f->right = gf;
+            arr[gf][4] = f; //gf->father = f;
+
+            arr[f][5] = arr[e][6]; //f->left = e->right;
+            if(arr[f][5] != -1) //if(f->left != NULL)
+               arr[ arr[f][5] ][4] = f; //f->left->father = f;
+            arr[f][4] = e; //f->father = e;
+            arr[e][6] = f; //e->right = f;
+
+            // on rattache e a son nouveau pere
+            arr[e][4] = ggf; //e->father = ggf;
+            if(ggf != -1) //if(ggf != NULL)
+               if(arr[ggf][5] == gf) //if(ggf->left == gf)
+                  arr[ggf][5] = e; //ggf->left = e;
+               else
+                  arr[ggf][6] = e; //ggf->right = e;
+         }
+      }
+      else
+      {
+         //cas du fils droit
+         if(gf == -1){ //if(gf == NULL) {
+            // cas "zig", on fait la rotation de f (la racine) et e
+
+            arr[f][4] = e; //f->father = e;
+            arr[f][6] = arr[e][5]; //f->right = e->left;
+            if(arr[f][6] != -1) //if(f->right != NULL)
+               arr[arr[f][6]][4] = f; //f->right->father = f;
+            arr[e][5] = f; //e->left = f;
+            arr[e][4] = -1; //e->father = NULL;
+         }
+         else if( arr[gf][4] == f) {//if(gf->left == f) {
+            // cas "zig-zag", simplifie, pareil que le cas "zig"
+            arr[gf][5] = e; //gf->left = e;
+
+            arr[f][4] = e; //f->father = e;
+            arr[f][6] = arr[e][4]; //f->right = e->left;
+            if(arr[f][6] != -1)//if(f->right != NULL)
+               arr[arr[f][6]][4] = f;//f->right->father = f;
+            arr[e][5] = f; //e->left = f;
+            arr[e][4] = gf; //e->father = gf;
+         }
+         else {
+            // cas "zig-zig", on fait la rotation de gf avec
+            // f, suivis de la rotation de e avec f
+            ggf = arr[gf][4]; //ggf = gf->father;
+
+            arr[gf][6] = arr[f][5]; //gf->right = f->left;
+            if( arr[gf][6] != -1 ) //if(gf->right != NULL)
+               arr[arr[gf][6]][4] = gf; //gf->right->father = gf;
+            arr[f][5] = gf; //f->left = gf;
+            arr[gf][4] = f; //gf->father = f;
+
+            arr[f][6] = arr[e][4]; //f->right = e->left;
+            if( arr[f][6] != -1 )//if(f->right != NULL)
+               arr[ arr[f][6] ][4] = f; //f->right->father = f;
+            arr[f][4] = e; //f->father = e;
+            arr[e][5] = f; //e->left = f;
+
+            // on rattache e a son nouveau pere
+            arr[e][4] = ggf; //e->father = ggf;
+            if( ggf != -1 )//if(ggf != NULL)
+               if(arr[ggf][5] == gf) //if(ggf->left == gf)
+                  arr[ggf][5] = e; //ggf->left = e;
+               else
+                  arr[ggf][6] = e; //ggf->right = e;
+         }
+      }
+   }
+}
 
 void show(int arr[384][7], int root)
 {
