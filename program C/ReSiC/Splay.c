@@ -20,7 +20,7 @@ Tree * add(enum TypesOfEvent type, int packetID, int idNode,
                 int startTime, 
                 int endTime
                 , Tree * t);
-void * splay (Tree * n, Tree * t);
+void * splay (Tree * e);
 
 Tree * removeFirstEvent(Tree * first, 
             Tree * t);
@@ -157,7 +157,7 @@ Tree * removeFirstEvent(Tree * first, Tree *t)
     first->left = NULL;
     first->right = NULL;
     first->father = NULL;
-    splay(temp, t);
+    splay(temp);
 
     Tree * leftTree = (Tree *) malloc (sizeof (Tree));
     leftTree = t->left;
@@ -192,7 +192,7 @@ Tree * removeFirstEvent(Tree * first, Tree *t)
             newRoot = rightTree->left;
         }
 
-        splay(newRoot, t);
+        splay(newRoot);
         newRoot->left = leftTree;
         leftTree->father = newRoot;
         return newRoot;
@@ -202,7 +202,7 @@ Tree * removeFirstEvent(Tree * first, Tree *t)
     return t;
 }
 
-void * splay (Tree * e, Tree * t)
+void * splay (Tree * e)
 {
     int left;
     Tree * f;
