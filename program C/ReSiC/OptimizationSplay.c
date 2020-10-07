@@ -20,7 +20,7 @@ void add(int type, int idElementInGroup,
    + index of right
 */
 
-void splay(int e, int *root, int arr[384][7]);
+void splay(int e, int arr[384][7]);
 
 void show(int arr[384][7], int root);
 void leaf(int arr[384][7], int root, enum Side side);
@@ -158,7 +158,7 @@ void add(int type, int idElementInGroup,
 
 }
 
-void splay(int e, int *root, int arr[384][7])
+void splay(int e, int arr[384][7])
 {
    int left;
    int f;   // Tree * f;
