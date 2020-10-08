@@ -3,10 +3,14 @@
 #include "OptimizationSplay.c"
 #include "timing.c"
 
+void testGeneratingEventA();
+
 int main(int argc, char** argv) 
 {
    double wc1 = 0, wc2 = 0, cpuT = 0;
-
+   int first = -1;
+   int currentTime = 0;
+   int endTime = 1000*1000*1000;
 
    int arr[384][7];
    int i, j, N, root = -1;
@@ -22,11 +26,39 @@ int main(int argc, char** argv)
 
    root = -1;
 
+
    for(i = 0; i < 16; i++)
    {
       add(0, i, 0, 0, &root, arr);
    }
-   
+   removeFirst(&first, &root, arr);
+      
+   int ongoingTime = arr[first][3];
+   while(currentTime <= endTime && ongoingTime != -1)
+   {
+      if(ongoingTime == currentTime)
+      {
+         int type = arr[first][0];
+         i = arr[first][1];
+         arr[first][3] = -1;
+         if(type == A)
+         {
+            add(A, i, 0, currentTime + 10000, &root, arr);
+            add(B, i, 0, currentTime        , &root, arr);
+         }
+         else if(type == B){
+            add(C, i, 0, currentTime        , &root, arr);
+         }
+         
+         printf("\t first = %d\n", first);
+      }
+      ongoingTime = -1;
+      removeFirst(&first, &root, arr);
+      currentTime = arr[first][3];
+      ongoingTime = arr[first][3];
+      printf("Current time = %d as first event %d\n", currentTime, first);
+      printf("while event 42 has endTime = %d\n", arr[42][3]);
+   }
    /*if(i < 0){
       arr[21][7] += i + N;
    }*/
