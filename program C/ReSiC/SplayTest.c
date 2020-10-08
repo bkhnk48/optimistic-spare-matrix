@@ -127,8 +127,61 @@ void main(int argc, char** argv) {
                             i,
                             i, //location at this host
                             currentTime, //startTime = currentTime 
-                            currentTime + 300, //endTime = currentTime + 300
+                            currentTime + 3000, //endTime = currentTime + 3000
                             root);
+                }
+                else if(ev->type == D)
+                {
+                    root = add(E, //type E
+                            0, //packetID 
+                            i,
+                            i, //location at this host
+                            currentTime, //startTime = currentTime 
+                            currentTime + 100, //endTime = currentTime + 100
+                            root);
+                    root = add(H_HOST, //type H_HOST
+                            0, //packetID 
+                            i,
+                            i, //location at this host
+                            currentTime, //startTime = currentTime 
+                            currentTime + 101, //endTime = currentTime + 101
+                            root);
+                }
+                else if(ev->type == E)
+                {
+                    root = add(F, //type F
+                            0, //packetID 
+                            i,
+                            i, //location at this host
+                            currentTime, //startTime = currentTime 
+                            currentTime + 100, //endTime = currentTime + 100
+                            root);
+                }
+                else if(ev->type == F)
+                {
+                    if(i % 2 == 0)
+                    {
+                        root = add(G, //type G
+                            0, //packetID 
+                            i,
+                            i, //location at this host
+                            currentTime, //startTime = currentTime 
+                            currentTime + 3000, //endTime = currentTime + 3000
+                            root);
+                    }
+                    else{
+                        root = add(D, //type D
+                            0, //packetID 
+                            i,
+                            i, //location at this host
+                            currentTime, //startTime = currentTime 
+                            currentTime + 100, //endTime = currentTime + 100
+                            root);
+                    }
+                }
+                else if(ev->type == H_HOST)
+                {
+
                 }
             }
             ev->endTime = -1;
