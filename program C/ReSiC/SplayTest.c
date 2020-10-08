@@ -120,6 +120,16 @@ void main(int argc, char** argv) {
                             currentTime, //endTime = currentTime (right now)
                             root);
                 }
+                else if(ev->type == C)
+                {
+                    root = add(D, //type D
+                            0, //packetID 
+                            i,
+                            i, //location at this host
+                            currentTime, //startTime = currentTime 
+                            currentTime + 300, //endTime = currentTime + 300
+                            root);
+                }
             }
             ev->endTime = -1;
             root = removeFirstEvent(ev, 
