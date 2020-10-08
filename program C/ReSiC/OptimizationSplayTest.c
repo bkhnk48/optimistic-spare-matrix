@@ -49,7 +49,9 @@ int main(int argc, char** argv)
          else if(type == B){
             add(C, i, 0, currentTime        , &root, arr);
          }
-         
+         else if(type == C){
+            add(-D, i / 2, i % 2, currentTime + 300,        &root, arr);
+         }
          
       }
       ongoingTime = -1;
