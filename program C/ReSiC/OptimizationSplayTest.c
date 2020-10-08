@@ -50,14 +50,14 @@ int main(int argc, char** argv)
             add(C, i, 0, currentTime        , &root, arr);
          }
          
-         printf("\t first = %d\n", first);
+         
       }
       ongoingTime = -1;
       removeFirst(&first, &root, arr);
       currentTime = arr[first][3];
       ongoingTime = arr[first][3];
-      printf("Current time = %d as first event %d\n", currentTime, first);
-      printf("while event 42 has endTime = %d\n", arr[42][3]);
+      //printf("Current time = %d as first event %d\n", currentTime, first);
+      //printf("while event 42 has endTime = %d\n", arr[42][3]);
    }
    /*if(i < 0){
       arr[21][7] += i + N;
