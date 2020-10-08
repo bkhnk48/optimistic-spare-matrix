@@ -295,7 +295,7 @@ void removeFirst(int * first, int * root, int arr[384][7])
    {
       arr[leftTree][4] = -1;//leftTree->father = NULL;
    }
-   rightTree = arr[t][5]; //rightTree = t->right;
+   rightTree = arr[t][6]; //rightTree = t->right;
    if(rightTree != -1) //if(rightTree != NULL)
       arr[rightTree][4] = -1; //rightTree->father = NULL;
    int removedFather = 0;
@@ -335,15 +335,14 @@ void removeFirst(int * first, int * root, int arr[384][7])
       return;
    }
 
-   *root = t; 
-   *first = t; //return t;
+   *root = t; //return t;
    return;
    
 }
 
 void show(int arr[384][7], int root)
 {
-   if(root != -1)
+   if(root != -1 && arr[root][3] != -1)
    {
       printf("\n===========> for event type = %d at end = %d in %d\n", 
                arr[root][0], arr[root][3], arr[root][1]);
@@ -365,7 +364,7 @@ void leaf(int arr[384][7], int root, enum Side side)
    else{
        printf("right ");
    }
-   if(root != -1)
+   if(root != -1 && arr[root][3] != -1)
    {
       printf("for event type = %d at end = %d in %d\n", 
                arr[root][0], arr[root][3], arr[root][1]);
