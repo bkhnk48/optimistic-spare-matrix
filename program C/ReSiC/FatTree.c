@@ -740,12 +740,12 @@ int main(int argc, char** argv)
                 PacketInSQ[i][1 - isEmptySQ] = idOfNewPkt;
                 //PacketInSQ[i][indexOfUpdateSQ] = dstOfNewPkt;
 
-                rootHosts = add(A, //type B
+                rootHosts = add(A, //type A
                             idOfNewPkt + 1, //packetID 
                             j,
                             i, //location at this host
-                            currentTime + HOST_DELAY, //startTime = currentTime 
-                            currentTime + HOST_DELAY, //endTime = currentTime (right now)
+                            currentTime + HOST_DELAY, //startTime = currentTime + HOST_DELAY
+                            currentTime + HOST_DELAY, //endTime = currentTime + HOST_DELAY 
                             rootHosts);
                 //show(rootHosts);
 
