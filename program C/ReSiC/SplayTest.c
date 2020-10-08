@@ -63,15 +63,75 @@ void main(int argc, char** argv) {
             {
                 root = add(A, 0, 0, 0, 0, (i % 2), root);
             }
+            free(root);
             if(i < 0){
                 root += i + N;
             }
-            free(root);
+        }
+        timing(&wc2, &cpuT);
+        printf("Time: %f ms\n", (wc2 - wc1)*1000);
+        printf("================================\n");
+        return;
+    }
+
+    if(testID == 5)
+    {
+        int i = 0;
+        timing(&wc1, &cpuT);
+        int currentTime = 0;
+        int endTime = 1000*1000*1000;
+        root = NULL;
+        for(i = 0; i < 16; i++)
+        {
+            root = add(A, 0, 0, 0, i, 0, root);
+        }
+        Tree * ev = (Tree *) malloc (sizeof (Tree));
+        ev->endTime = -1;
+        root = removeFirstEvent(ev, root);
+        while(currentTime <= endTime && ev->endTime != -1)
+        {
+            if(ev->endTime == currentTime)
+            {
+                i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
+                if(ev->type == A)
+                {
+                    root = add(A, //type A
+                            0, //packetID 
+                            i,
+                            i, //location at this host
+                            currentTime + 10000, //startTime = currentTime + HOST_DELAY
+                            currentTime + 10000, //endTime = currentTime + HOST_DELAY
+                            root);
+                    root = add(B, //type B
+                            0, //packetID 
+                            i,
+                            i, //location at this host
+                            currentTime, //startTime = currentTime 
+                            currentTime, //endTime = currentTime (right now)
+                            root);
+                }
+                else if(ev->type == B)
+                {
+                    root = add(C, //type C
+                            0, //packetID 
+                            i,
+                            i, //location at this host
+                            currentTime, //startTime = currentTime 
+                            currentTime, //endTime = currentTime (right now)
+                            root);
+                }
+            }
+            ev->endTime = -1;
+            root = removeFirstEvent(ev, 
+                                        root);
+            currentTime = ev->endTime;
+            //int isNegativeEndTime = -(ev->endTime>>31);//0 hoac 1
+            //currentTime = (1 - isNegativeEndTime)*(ev->endTime) + 
+            //        isNegativeEndTime*currentTime;
         }
         timing(&wc2, &cpuT);
         printf("Time: %f ms\n", (wc2 - wc1)*1000);
         printf("================================\n");
     }
-    
     //show(root);
 }
