@@ -117,6 +117,7 @@ void passStruct(Value v, Node *t)
     t->father = NULL;
 }
 
+
 void main(int argc, char** argv) {
     int att = atoi(argv[1]);
 
@@ -338,5 +339,8 @@ void main(int argc, char** argv) {
         return;
     }
 
-    
+    if(att == 7)
+    {
+
+    }
 }   
