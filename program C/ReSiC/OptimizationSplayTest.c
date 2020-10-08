@@ -50,9 +50,34 @@ int main(int argc, char** argv)
             add(C, i, 0, currentTime        , &root, arr);
          }
          else if(type == C){
-            add(-D, i / 2, i % 2, currentTime + 300,        &root, arr);
+            add(-D, i / 2, i % 2, currentTime + 3000,        &root, arr);
          }
-         
+         else if(type == -D)
+         {
+            int port = arr[first][2];
+            add(-E, i, ((port + 1) % 4), currentTime + 100, &root, arr);
+            add(H_HOST, i*2 + port, 0,   currentTime + 101, &root, arr);
+         }
+         else if(type == -E)
+         {
+            int port = arr[first][2];
+            add(-F, i, port,             currentTime + 100, &root, arr);
+         }
+         else if(type == -F)
+         {
+            int port = arr[first][2];
+            if(port < 2)
+            {
+               add(G, i*2 + port, port,             currentTime + 3000, &root, arr);
+            }
+            else{
+               add(D, i, port % 2,                  currentTime + 100, &root, arr);
+            }
+         }
+         else if(type == H_HOST)
+         {
+            
+         }
       }
       ongoingTime = -1;
       removeFirst(&first, &root, arr);
