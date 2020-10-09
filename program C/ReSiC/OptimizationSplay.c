@@ -8,7 +8,7 @@ void add(int type, int idElementInGroup,
                 int portID, 
                 int endTime,
                 int *root,
-                int arr[320][7]
+                int arr[384][7]
                 );
 /* From now on, an event has 7 fields about:
    + it's type
