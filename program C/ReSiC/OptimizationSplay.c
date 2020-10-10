@@ -103,8 +103,8 @@ void add(int type, int idElementInGroup,
          else {
             //cas "zig-zig"
             arr[t][6] = arr[temp][5]; //t->right = temp->left;
-            if(arr[temp][5] == -1)//if (temp->left != NULL)
-               arr[  arr[temp][5]  ][  4  ] = *root; //temp->left->father = t;
+            if(arr[temp][5] != -1)//if (temp->left != NULL)
+               arr[  arr[temp][5]  ][  4  ] = t; //temp->left->father = t;
             arr[left][6] = temp;//left->right = temp;
             arr[temp][4] = left;//temp->father = left;
             arr[temp][5] = t;//temp->left = t;
@@ -366,8 +366,8 @@ void leaf(int arr[384][7], int root, enum Side side)
    }
    if(root != -1 && arr[root][3] != -1)
    {
-      printf("for event type = %d at end = %d in %d\n", 
-               arr[root][0], arr[root][3], arr[root][1]);
+      printf("for event type = %d at end = %d in %d. It's index = %d\n", 
+               arr[root][0], arr[root][3], arr[root][1], root);
       leaf(arr, arr[root][5], LEFT);
       leaf(arr, arr[root][6], RIGHT);
    }
@@ -376,3 +376,33 @@ void leaf(int arr[384][7], int root, enum Side side)
    }
 }
 
+void validate(int arr[384][7], int index)
+{
+   //return;
+   /*if(arr[33][4] == 45 && arr[45][5] == 33){
+   //   printf("\tarr[33][4] = %d and arr[45][5, 6] = %d, %d\n", arr[33][4], arr[45][5], arr[45][6]);
+   //   printf("The type is %d, endTime is %d\n", arr[33][0], arr[33][3]);
+   }*/
+   if(arr[index][5] == -1 && arr[index][6] == -1)
+   {
+      return;
+   }
+   int father = arr[index][4];
+   if(father != -1)
+   {
+      if(arr[father][5] != index && arr[father][6] != index)
+      {
+         printf("Wrong content as arr[%d][5] = %d and arr[%d][6] = %d while it's child has index = %d\n"
+                  , father, arr[father][5], father, arr[father][6], index);
+         exit(1);
+      }
+   }
+   if(arr[index][5] != -1)
+   {
+      validate(arr, arr[index][5]);
+   }
+   if(arr[index][6] != -1)
+   {
+      validate(arr, arr[index][6]);
+   }
+}
