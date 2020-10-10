@@ -10,7 +10,7 @@ int main(int argc, char** argv)
    double wc1 = 0, wc2 = 0, cpuT = 0;
    int first = -1;
    int currentTime = 0;
-   int endTime = 1000*1000*1000;
+   int endTime = 20*1000;
 
    int arr[384][7];
    int i, j, N, root = -1;
@@ -22,6 +22,7 @@ int main(int argc, char** argv)
       }
    }
 
+   int count = 0;
    timing(&wc1, &cpuT);
 
    root = -1;
@@ -30,38 +31,71 @@ int main(int argc, char** argv)
    for(i = 0; i < 16; i++)
    {
       add(0, i, 0, 0, &root, arr);
+      validate(arr, root);
    }
+   //show(arr, root);
    removeFirst(&first, &root, arr);
+   validate(arr, root);
+   //show(arr, root);
       
    int ongoingTime = arr[first][3];
    while(currentTime <= endTime && ongoingTime != -1)
    {
       if(ongoingTime == currentTime)
       {
+         count++;
+         
          int type = arr[first][0];
          i = arr[first][1];
+         printf("%d)Event type = %d at %d with endTime = %d. The index is %d\n"
+               , count, type, i, arr[first][3], first
+               );
          arr[first][3] = -1;
+         arr[first][4] = -1;
+         arr[first][5] = -1;
+         arr[first][6] = -1;
+         
+
          if(type == A)
          {
             add(A, i, 0, currentTime + 10000, &root, arr);
+            validate(arr, root);
             add(B, i, 0, currentTime        , &root, arr);
+            validate(arr, root);
+            //show(arr, root);
          }
          else if(type == B){
             add(C, i, 0, currentTime        , &root, arr);
+            validate(arr, root);
+            //show(arr, root);
          }
          else if(type == C){
+            if(count == 3)
+            {
+               printf("before Adding D. The first is %d\n", first);
+               validate(arr, root);
+            }
             add(-D, i / 2, i % 2, currentTime + 3000,        &root, arr);
+            //if(count == 3)
+            //   show(arr, root);
+            validate(arr, root);
+            //show(arr, root);
          }
          else if(type == -D)
          {
             int port = arr[first][2];
             add(-E, i, ((port + 1) % 4), currentTime + 100, &root, arr);
+            validate(arr, root);
             add(H_HOST, i*2 + port, 0,   currentTime + 101, &root, arr);
+            validate(arr, root);
+            //show(arr, root);
          }
          else if(type == -E)
          {
             int port = arr[first][2];
             add(-F, i, port,             currentTime + 100, &root, arr);
+            validate(arr, root);
+            //show(arr, root);
          }
          else if(type == -F)
          {
@@ -69,9 +103,13 @@ int main(int argc, char** argv)
             if(port < 2)
             {
                add(G, i*2 + port, port,             currentTime + 3000, &root, arr);
+               validate(arr, root);
+               //show(arr, root);
             }
             else{
                add(D, i, port % 2,                  currentTime + 100, &root, arr);
+               validate(arr, root);
+               //show(arr, root);
             }
          }
          else if(type == H_HOST)
@@ -80,7 +118,14 @@ int main(int argc, char** argv)
          }
       }
       ongoingTime = -1;
+      if(count == 2)
+      {
+         printf("before removing. The first is %d\n", first);
+         validate(arr, root);
+      }
       removeFirst(&first, &root, arr);
+      validate(arr, root);
+      
       currentTime = arr[first][3];
       ongoingTime = arr[first][3];
       //printf("Current time = %d as first event %d\n", currentTime, first);
@@ -92,7 +137,7 @@ int main(int argc, char** argv)
    
 
    timing(&wc2, &cpuT);
-   printf("Time: %f ms\n", (wc2 - wc1)*1000);
+   printf("Time: %f ms with count = %d\n", (wc2 - wc1)*1000, count);
    printf("================================\n");
    //show(arr, root); 
    return 0;
