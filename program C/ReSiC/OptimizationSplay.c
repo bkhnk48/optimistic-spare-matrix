@@ -190,7 +190,7 @@ void splay(int e, int arr[384][7])
             arr[f][4] = e;  //f->father = e;
             arr[f][5] = arr[e][6]; //f->left = e->right;
             if(arr[f][5] != -1) //if(f->left != NULL)
-               arr[arr[f][4]][4] = f; //f->left->father = f;
+               arr[arr[f][5]][4] = f; //f->left->father = f;
             arr[e][6] = f; //e->right = f;
             arr[e][4] = gf; //e->father = gf;
          }
@@ -233,12 +233,12 @@ void splay(int e, int arr[384][7])
             arr[e][5] = f; //e->left = f;
             arr[e][4] = -1; //e->father = NULL;
          }
-         else if( arr[gf][4] == f) {//if(gf->left == f) {
+         else if( arr[gf][5] == f) {//if(gf->left == f) {
             // cas "zig-zag", simplifie, pareil que le cas "zig"
             arr[gf][5] = e; //gf->left = e;
 
             arr[f][4] = e; //f->father = e;
-            arr[f][6] = arr[e][4]; //f->right = e->left;
+            arr[f][6] = arr[e][5]; //f->right = e->left;
             if(arr[f][6] != -1)//if(f->right != NULL)
                arr[arr[f][6]][4] = f;//f->right->father = f;
             arr[e][5] = f; //e->left = f;
@@ -255,7 +255,7 @@ void splay(int e, int arr[384][7])
             arr[f][5] = gf; //f->left = gf;
             arr[gf][4] = f; //gf->father = f;
 
-            arr[f][6] = arr[e][4]; //f->right = e->left;
+            arr[f][6] = arr[e][5]; //f->right = e->left;
             if( arr[f][6] != -1 )//if(f->right != NULL)
                arr[ arr[f][6] ][4] = f; //f->right->father = f;
             arr[f][4] = e; //f->father = e;
