@@ -379,10 +379,10 @@ void leaf(int arr[384][7], int root, enum Side side)
 void validate(int arr[384][7], int index)
 {
    //return;
-   /*if(arr[33][4] == 45 && arr[45][5] == 33){
+   //if(arr[33][4] == 45 && arr[45][5] == 33){
    //   printf("\tarr[33][4] = %d and arr[45][5, 6] = %d, %d\n", arr[33][4], arr[45][5], arr[45][6]);
    //   printf("The type is %d, endTime is %d\n", arr[33][0], arr[33][3]);
-   }*/
+   //}
    if(arr[index][5] == -1 && arr[index][6] == -1)
    {
       return;
@@ -392,8 +392,8 @@ void validate(int arr[384][7], int index)
    {
       if(arr[father][5] != index && arr[father][6] != index)
       {
-         printf("Wrong content as arr[%d][5] = %d and arr[%d][6] = %d while it's child has index = %d\n"
-                  , father, arr[father][5], father, arr[father][6], index);
+         printf("Wrong content as arr[%d][5] = %d and arr[%d][6] = %d while it's child(index = %d) has father: %d\n"
+                  , father, arr[father][5], father, arr[father][6], index, arr[index][4]);
          exit(1);
       }
    }
