@@ -77,13 +77,14 @@ void main(int argc, char** argv) {
     if(testID == 5)
     {
         int i = 0;
+        int count = 0;
         timing(&wc1, &cpuT);
         int currentTime = 0;
-        int endTime = 1000*1000*1000;
+        int endTime = 20*1000;
         root = NULL;
         for(i = 0; i < 16; i++)
         {
-            root = add(A, 0, 0, 0, i, 0, root);
+            root = add(A, 0, 0, i, 0, 0, root);
         }
         Tree * ev = (Tree *) malloc (sizeof (Tree));
         ev->endTime = -1;
@@ -92,6 +93,10 @@ void main(int argc, char** argv) {
         {
             if(ev->endTime == currentTime)
             {
+                count++;
+                printf("%d)Event type = %d at %d with endTime = %d\n"
+                        , count, ev->type, ev->idElementInGroup, ev->endTime
+                        );
                 i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
                 if(ev->type == A)
                 {
@@ -109,6 +114,7 @@ void main(int argc, char** argv) {
                             currentTime, //startTime = currentTime 
                             currentTime, //endTime = currentTime (right now)
                             root);
+                    //show(root);
                 }
                 else if(ev->type == B)
                 {
@@ -119,6 +125,7 @@ void main(int argc, char** argv) {
                             currentTime, //startTime = currentTime 
                             currentTime, //endTime = currentTime (right now)
                             root);
+                    //show(root);
                 }
                 else if(ev->type == C)
                 {
@@ -129,6 +136,7 @@ void main(int argc, char** argv) {
                             currentTime, //startTime = currentTime 
                             currentTime + 3000, //endTime = currentTime + 3000
                             root);
+                    //show(root);
                 }
                 else if(ev->type == D)
                 {
@@ -146,6 +154,7 @@ void main(int argc, char** argv) {
                             currentTime, //startTime = currentTime 
                             currentTime + 101, //endTime = currentTime + 101
                             root);
+                    //show(root);
                 }
                 else if(ev->type == E)
                 {
@@ -156,6 +165,7 @@ void main(int argc, char** argv) {
                             currentTime, //startTime = currentTime 
                             currentTime + 100, //endTime = currentTime + 100
                             root);
+                    //show(root);
                 }
                 else if(ev->type == F)
                 {
@@ -178,15 +188,20 @@ void main(int argc, char** argv) {
                             currentTime + 100, //endTime = currentTime + 100
                             root);
                     }
+                    //show(root);
                 }
                 else if(ev->type == H_HOST)
                 {
 
                 }
             }
+
+            if(count == 6)
+                show(root);
             ev->endTime = -1;
             root = removeFirstEvent(ev, 
                                         root);
+            
             currentTime = ev->endTime;
             //int isNegativeEndTime = -(ev->endTime>>31);//0 hoac 1
             //currentTime = (1 - isNegativeEndTime)*(ev->endTime) + 
