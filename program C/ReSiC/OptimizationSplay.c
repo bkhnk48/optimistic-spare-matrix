@@ -43,17 +43,25 @@ void add(int type, int idElementInGroup,
    int idNewNode = 0;
    if(type == A || type == B || type == C || type == H_HOST || type == G)
    {
-      idNewNode = idElementInGroup*3 + type;
+      idNewNode = idElementInGroup*5 + type;
    }
    else if(type < 0)//Is event of edge switch
    {
       type *= -1;
-      idNewNode = 16*3 + idElementInGroup*((4/2)*4 + 3*(4/2)) + type;
+      idNewNode = 16*5 + idElementInGroup*((4/2)*4 + 3*(4/2));
+      if(portID < 4/2)
+      {
+         idNewNode += portID * 3 + (type - D);
+      } // + type;
+      else{
+         idNewNode += (4/2) * 3 + (portID - 4/2) * 4 + (type - D);
+      }
    }  
    else{
       int isCoreSwitch = type & 1;
       type = type >> 1;
-      idNewNode = 16*3 + (4*4/2)*((4/2)*4 + 3*(4/2)) + idElementInGroup*4 + type;
+      idNewNode = 16*5 + (4*4/2)*((4/2)*4 + 3*(4/2)) 
+                     + idElementInGroup*4*4 + portID*4 + (type - D);
    }
 
    arr[idNewNode][0] = type;
