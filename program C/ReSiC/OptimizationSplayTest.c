@@ -65,6 +65,7 @@ int main(int argc, char** argv)
             //show(arr, root);
          }
          else if(type == B){
+            
             add(C, i, 0, currentTime        , &root, arr);
             validate(arr, root);
             //show(arr, root);
@@ -76,8 +77,11 @@ int main(int argc, char** argv)
                validate(arr, root);
             }
             add(-D, i / 2, i % 2, currentTime + 3000,        &root, arr);
-            //if(count == 3)
-            //   show(arr, root);
+            if(count == 3)
+            {
+               printf("after Adding D. The root is %d\n", root);
+               //   show(arr, root);
+            }
             validate(arr, root);
             //show(arr, root);
          }
