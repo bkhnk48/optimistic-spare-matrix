@@ -49,7 +49,7 @@ void add(int type, int idElementInGroup,
    {
       type *= -1;
       idNewNode = 16*3 + idElementInGroup*((4/2)*4 + 3*(4/2)) + type;
-   }
+   }  
    else{
       int isCoreSwitch = type & 1;
       type = type >> 1;
@@ -66,15 +66,7 @@ void add(int type, int idElementInGroup,
 
    if(*root == -1)
    {
-      arr[0][0] = type;
-      arr[0][1] = idElementInGroup;
-      arr[0][2] = portID;
-      arr[0][3] = endTime;
-      arr[0][4] = -1;
-      arr[0][5] = -1;
-      arr[0][6] = -1;
-
-      *root = 0;
+      *root = idNewNode;
       return;
    }
    int left = idNewNode, right = idNewNode, temp = -1;
@@ -108,7 +100,7 @@ void add(int type, int idElementInGroup,
             arr[left][6] = temp;//left->right = temp;
             arr[temp][4] = left;//temp->father = left;
             arr[temp][5] = t;//temp->left = t;
-            arr[*root][4] = temp;//t->father = temp;
+            arr[t][4] = temp;//t->father = temp;
             left = temp;
             t = arr[temp][6];//t = temp->right;
             if(t == -1){//if (t == NULL) {
@@ -288,6 +280,10 @@ void removeFirst(int * first, int * root, int arr[384][7])
    }
    *first = temp;
    splay(*first, arr);
+   while(arr[t][4] != -1)
+   {
+      t = arr[t][4];
+   }
 
    int leftTree, rightTree;
    leftTree = arr[t][5];//leftTree = t->left;
@@ -302,7 +298,7 @@ void removeFirst(int * first, int * root, int arr[384][7])
    if(temp == arr[t][4])//if(temp == t->father)
    {
         removedFather = 1;
-   }
+   }  
    if(rightTree == -1 && 
             leftTree == -1 && 
                removedFather == 1
@@ -321,13 +317,19 @@ void removeFirst(int * first, int * root, int arr[384][7])
    }
    else 
    {
+      printf("Herer\n");
       int newRoot = rightTree; //Tree * newRoot = rightTree;
       while(arr[newRoot][5] != -1) //while(newRoot->left != NULL)
       {
-         newRoot = arr[rightTree][6]; //newRoot = rightTree->left;
+         newRoot = arr[rightTree][5]; //newRoot = rightTree->left;
       }
 
       splay(newRoot, arr);//splay(newRoot);
+      while(arr[newRoot][4] != -1)
+      {
+         newRoot = arr[newRoot][4];
+      }
+
       arr[newRoot][5] = leftTree; //newRoot->left = leftTree;
       arr[leftTree][4] = newRoot; //leftTree->father = newRoot;
       //return newRoot;
