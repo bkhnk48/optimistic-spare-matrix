@@ -94,9 +94,9 @@ void main(int argc, char** argv) {
             if(ev->endTime == currentTime)
             {
                 count++;
-                printf("%d)Event type = %d at %d with endTime = %d\n"
-                        , count, ev->type, ev->idElementInGroup, ev->endTime
-                        );
+                //printf("%d)Event type = %d at %d with endTime = %d\n"
+                //        , count, ev->type, ev->idElementInGroup, ev->endTime
+                //        );
                 i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
                 if(ev->type == A)
                 {
@@ -196,8 +196,8 @@ void main(int argc, char** argv) {
                 }
             }
 
-            if(count == 6)
-                show(root);
+            //if(count == 6)
+            //    show(root);
             ev->endTime = -1;
             root = removeFirstEvent(ev, 
                                         root);
@@ -208,7 +208,7 @@ void main(int argc, char** argv) {
             //        isNegativeEndTime*currentTime;
         }
         timing(&wc2, &cpuT);
-        printf("Time: %f ms\n", (wc2 - wc1)*1000);
+        printf("Time: %f ms with count = %d\n", (wc2 - wc1)*1000, count);
         printf("================================\n");
     }
     //show(root);
