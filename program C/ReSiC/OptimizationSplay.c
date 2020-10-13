@@ -47,14 +47,15 @@ void add(int type, int idElementInGroup,
    }
    else if(type < 0)//Is event of edge switch
    {
-      type *= -1;
+      int positiveType = -type;
+      //type *= -1;
       idNewNode = 16*5 + idElementInGroup*((4/2)*4 + 3*(4/2));
       if(portID < 4/2)
       {
-         idNewNode += portID * 3 + (type - D);
+         idNewNode += portID * 3 + (positiveType - D);
       } // + type;
       else{
-         idNewNode += (4/2) * 3 + (portID - 4/2) * 4 + (type - D);
+         idNewNode += (4/2) * 3 + (portID - 4/2) * 4 + (positiveType - D);
       }
    }  
    else{
