@@ -69,6 +69,18 @@ void add(int type, int idElementInGroup,
    arr[idNewNode][1] = idElementInGroup;
    arr[idNewNode][2] = portID;
    arr[idNewNode][3] = endTime;
+   int formerFather = arr[idNewNode][4];
+   if(formerFather != -1)
+   { 
+      if(arr[formerFather][5] == idNewNode)
+      {
+         arr[formerFather][5] = -1;
+      }
+      else if(arr[formerFather][6] == idNewNode)
+      {
+         arr[formerFather][6] = -1;
+      }
+   }
    arr[idNewNode][4] = -1;
    arr[idNewNode][5] = -1;
    arr[idNewNode][6] = -1;
@@ -288,6 +300,7 @@ void removeFirst(int * first, int * root, int arr[384][7])
       temp = arr[temp][5]; //temp = temp->left;
    }
    *first = temp;
+   
    splay(*first, arr);
    while(arr[t][4] != -1)
    {
@@ -326,7 +339,6 @@ void removeFirst(int * first, int * root, int arr[384][7])
    }
    else 
    {
-      printf("Herer\n");
       int newRoot = rightTree; //Tree * newRoot = rightTree;
       while(arr[newRoot][5] != -1) //while(newRoot->left != NULL)
       {
