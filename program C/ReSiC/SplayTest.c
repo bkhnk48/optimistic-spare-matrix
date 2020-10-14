@@ -94,9 +94,9 @@ void main(int argc, char** argv) {
             if(ev->endTime == currentTime)
             {
                 count++;
-                //printf("%d)Event type = %d at %d with endTime = %d\n"
-                //        , count, ev->type, ev->idElementInGroup, ev->endTime
-                //        );
+                /*printf("%d)Event type = %d at %d with endTime = %d\n"
+                    , count, ev->type, ev->idElementInGroup, ev->endTime
+                        );*/
                 i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
                 if(ev->type == A)
                 {
@@ -129,13 +129,13 @@ void main(int argc, char** argv) {
                 }
                 else if(ev->type == C)
                 {
-                    root = add(D, //type D
+                    /*root = add(D, //type D
                             0, //packetID 
                             i,
                             i, //location at this host
                             currentTime, //startTime = currentTime 
                             currentTime + 3000, //endTime = currentTime + 3000
-                            root);
+                            root);*/
                     //show(root);
                 }
                 else if(ev->type == D)
