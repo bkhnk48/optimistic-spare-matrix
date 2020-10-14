@@ -158,6 +158,10 @@ Tree * removeFirstEvent(Tree * first, Tree *t)
     first->right = NULL;
     first->father = NULL;
     splay(temp);
+    while(t->father != NULL)
+    {
+        t = t->father;
+    }
 
     Tree * leftTree = (Tree *) malloc (sizeof (Tree));
     leftTree = t->left;
@@ -193,6 +197,10 @@ Tree * removeFirstEvent(Tree * first, Tree *t)
         }
 
         splay(newRoot);
+        while(newRoot->father != NULL)
+        {
+            newRoot = newRoot->father;
+        }
         newRoot->left = leftTree;
         leftTree->father = newRoot;
         return newRoot;
