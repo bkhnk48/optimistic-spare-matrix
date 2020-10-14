@@ -85,6 +85,8 @@ void add(int type, int idElementInGroup,
    arr[idNewNode][5] = -1;
    arr[idNewNode][6] = -1;
 
+   
+
    if(*root == -1)
    {
       *root = idNewNode;
