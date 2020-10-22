@@ -74,6 +74,8 @@ int main(int argc, char** argv)
    timing(&wc2, &cpuT);
    printf("Time: %f ms with count = %ld\n", (wc2 - wc1)*1000, count);
    printf("================================\n");
+
+
    return 0;
 }
 
