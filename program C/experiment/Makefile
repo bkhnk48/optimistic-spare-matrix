@@ -7,6 +7,8 @@ serial:
 	gcc OptimizationSplayTest.c -g -o optest.o
 	gcc -g -c VoidSplay.c 
 	gcc VoidSplayTest.c -g -o vstest.o
+	gcc DeleteSplayTest.c -g -o delS.o
+	gcc NormalSplay.c -g -o no.o
 n:
 	gcc -c Event.c
 	gcc -c timing.c
@@ -14,6 +16,7 @@ n:
 	gcc OptimizationSplayTest.c -o optest.o
 	gcc -c VoidSplay.c 
 	gcc VoidSplayTest.c -o vstest.o
+	gcc DeleteSplayTest.c -o delS.o
 	gcc test.c -o test.o
 clean: 
 	-rm *.o
