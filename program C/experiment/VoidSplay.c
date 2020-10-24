@@ -108,24 +108,167 @@ void splay(splay_tree *t, node *n) {
       node *p = n->parent;
       node *g = p->parent; //grandparent
 
-      if(n->parent->left == n && p->parent->left == p) { //both are left children
-        right_rotate(t, g);
-        right_rotate(t, p);
+      if(g == NULL)
+      {
+        if(n->parent->left == n)
+        {
+          p->parent = n;
+          p->left = n->right;
+          if(p->left != NULL)
+          {
+            p->left->parent = p;
+          }
+          n->right = p;
+          n->parent = NULL;
+          t->root->right = NULL;
+          n->left = t->root;
+        }
+        else{
+          if(n->parent->right == n)
+          {
+            p->parent = n;
+            p->right = n->left;
+            if(p->right != NULL)
+            {
+              p->right->parent = p;
+            }
+            n->left = p;
+            n->parent = NULL;
+            t->root->left = NULL;
+            n->right = t->root;
+          }
+        }
+        t->root = n;
       }
-      else if(n->parent->right == n && p->parent->right == p) { //both are right children
-        left_rotate(t, g);
-        left_rotate(t, p);
-      }
-      else if(n->parent->right == n && p->parent->left == p) {
-        left_rotate(t, p);
-        right_rotate(t, g);
-      }
-      else if(n->parent->left == n && p->parent->right == p) {
-        right_rotate(t, p);
-        left_rotate(t, g);
+      else{
+        if(n->parent->left == n && p->parent->left == p) { //both are left children
+          right_rotate(t, g);
+          right_rotate(t, p);
+        }
+        else if(n->parent->right == n && p->parent->right == p) { //both are right children
+          left_rotate(t, g);
+          left_rotate(t, p);
+        }
+        else if(n->parent->right == n && p->parent->left == p) {
+          left_rotate(t, p);
+          right_rotate(t, g);
+        }
+        else if(n->parent->left == n && p->parent->right == p) {
+          right_rotate(t, p);
+          left_rotate(t, g);
+        }
       }
     }
   }
+  /*int left;
+    node * f;
+    node * gf;
+    node * ggf;
+    while(n->parent != NULL)
+    {
+        f = n->parent;
+        gf = f->parent;
+        left = (n == f->left ? 1 : 0);
+        if(left)
+        {
+            // cas du fils gauche
+            if (gf == NULL) {
+               // cas "zig", on fait la rotation de f (la racine) et e
+               f->parent = n;
+               f->left = n->right;
+               if(f->left != NULL)
+                  f->left->parent = f;
+               n->right = f;
+               n->parent = NULL;
+            }
+            else if (gf->right == f) {
+               // cas "zig-zag", simplifie, pareil que le cas "zig"
+               gf->right = n;
+
+               f->parent = n;
+               f->left = n->right;
+               if(f->left != NULL)
+                  f->left->parent = f;
+               n->right = f;
+               n->parent = gf;
+            }
+            else {
+               // cas "zig-zig", on fait la rotation de gf avec
+               // f, suivis de la rotation de e avec f
+               ggf = gf->parent;
+
+               gf->left = f->right;
+               if(gf->left != NULL)
+                  gf->left->parent = gf;
+               f->right = gf;
+               gf->parent = f;
+
+               f->left = n->right;
+               if(f->left != NULL)
+                  f->left->parent = f;
+               f->parent = n;
+               n->right = f;
+
+               // on rattache e a son nouveau pere
+               n->parent = ggf;
+               if(ggf != NULL)
+                  if(ggf->left == gf)
+                     ggf->left = n;
+                  else
+                     ggf->right = n;
+            }
+        }else
+        {
+            //cas du fils droit
+            if(gf == NULL) {
+               // cas "zig", on fait la rotation de f (la racine) et e
+
+               f->parent = n;
+               f->right = n->left;
+               if(f->right != NULL)
+                  f->right->parent = f;
+               n->left = f;
+               n->parent = NULL;
+            }
+            else if(gf->left == f) {
+               // cas "zig-zag", simplifie, pareil que le cas "zig"
+               gf->left = n;
+
+               f->parent = n;
+               f->right = n->left;
+               if(f->right != NULL)
+                  f->right->parent = f;
+               n->left = f;
+               n->parent = gf;
+            }
+            else {
+               // cas "zig-zig", on fait la rotation de gf avec
+               // f, suivis de la rotation de e avec f
+               ggf = gf->parent;
+
+               gf->right = f->left;
+               if(gf->right != NULL)
+                  gf->right->parent = gf;
+               f->left = gf;
+               gf->parent = f;
+
+               f->right = n->left;
+               if(f->right != NULL)
+                  f->right->parent = f;
+               f->parent = n;
+               n->left = f;
+
+               // on rattache e a son nouveau pere
+               n->parent = ggf;
+               if(ggf != NULL)
+                  if(ggf->left == gf)
+                     ggf->left = n;
+                  else
+                     ggf->right = n;
+            }
+        }
+    }*/
+
 }
 
 void insert(splay_tree *t, node *n) {
@@ -156,6 +299,21 @@ node* maximum(splay_tree *t, node *x) {
   return x;
 }
 
+node* find(node *t, int key)
+{
+  if(t == NULL) return NULL;
+  if(t->endTime < key)
+  {
+    return find(t->right, key);
+  }
+  if(t->endTime > key)
+  {
+    return find(t->left, key);
+  }
+  if(t->endTime == key)
+    return t;
+}
+
 
 void delete(splay_tree *t, node *n) {
   splay(t, n);
@@ -181,6 +339,14 @@ void delete(splay_tree *t, node *n) {
   else {
     t->root = right_subtree->root;
   }
+}
+
+void delete_key(splay_tree *t, int key)
+{
+  node *temp = find(t->root, key);
+  if(temp == NULL)
+    return;
+  delete(t, temp);
 }
 
 node* removeFirst(splay_tree *t)
