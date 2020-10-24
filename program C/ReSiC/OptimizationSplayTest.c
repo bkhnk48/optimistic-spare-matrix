@@ -10,11 +10,11 @@ int main(int argc, char** argv)
    double wc1 = 0, wc2 = 0, cpuT = 0;
    int first = -1;
    int currentTime = 0;
-   int endTime = 20*1000;
+   int endTime = 1000*1000;
 
-   int arr[384][7];
+   int arr[20250][7];
    int i, j, N, root = -1;
-   for(i = 0; i < 384; i++)
+   for(i = 0; i < 20250; i++)
    {
       for(j = 0; j < 7; j++)
       {
@@ -28,7 +28,7 @@ int main(int argc, char** argv)
    root = -1;
 
 
-   for(i = 0; i < 16; i++)
+   for(i = 0; i < 6750; i++)
    {
       add(0, i, 0, 0, &root, arr);
    }
