@@ -120,7 +120,10 @@ void splay(splay_tree *t, node *n) {
           }
           n->right = p;
           n->parent = NULL;
-          t->root->right = NULL;
+          if(t->root->right == n)
+          {
+            t->root->right = NULL;
+          } 
           n->left = t->root;
         }
         else{
@@ -128,14 +131,18 @@ void splay(splay_tree *t, node *n) {
           {
             p->parent = n;
             p->right = n->left;
+            
             if(p->right != NULL)
             {
               p->right->parent = p;
             }
             n->left = p;
             n->parent = NULL;
-            t->root->left = NULL;
-            n->right = t->root;
+            if(t->root->left == n)
+            {
+              t->root->left = NULL;
+            } 
+            n->right = t->root; 
           }
         }
         t->root = n;
@@ -334,6 +341,7 @@ void delete(splay_tree *t, node *n) {
     node *m = maximum(left_subtree, left_subtree->root);
     splay(left_subtree, m);
     left_subtree->root->right = right_subtree->root;
+    left_subtree->root->right->parent = left_subtree->root;
     t->root = left_subtree->root;
   }
   else {
