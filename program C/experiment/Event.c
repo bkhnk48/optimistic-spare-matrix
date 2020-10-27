@@ -11,3 +11,5 @@ enum TypesOfEvent
     H = 8 //NotificationEvent
     
 };
+
+enum Side{LEFT, RIGHT};
