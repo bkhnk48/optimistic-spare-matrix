@@ -13,7 +13,6 @@ typedef struct node {
     struct node *parent;
 }node;
 
-enum Side{LEFT, RIGHT};
 
 typedef struct splay_tree {
   struct node *root;
@@ -167,114 +166,7 @@ void splay(splay_tree *t, node *n) {
       }
     }
   }
-  /*int left;
-    node * f;
-    node * gf;
-    node * ggf;
-    while(n->parent != NULL)
-    {
-        f = n->parent;
-        gf = f->parent;
-        left = (n == f->left ? 1 : 0);
-        if(left)
-        {
-            // cas du fils gauche
-            if (gf == NULL) {
-               // cas "zig", on fait la rotation de f (la racine) et e
-               f->parent = n;
-               f->left = n->right;
-               if(f->left != NULL)
-                  f->left->parent = f;
-               n->right = f;
-               n->parent = NULL;
-            }
-            else if (gf->right == f) {
-               // cas "zig-zag", simplifie, pareil que le cas "zig"
-               gf->right = n;
-
-               f->parent = n;
-               f->left = n->right;
-               if(f->left != NULL)
-                  f->left->parent = f;
-               n->right = f;
-               n->parent = gf;
-            }
-            else {
-               // cas "zig-zig", on fait la rotation de gf avec
-               // f, suivis de la rotation de e avec f
-               ggf = gf->parent;
-
-               gf->left = f->right;
-               if(gf->left != NULL)
-                  gf->left->parent = gf;
-               f->right = gf;
-               gf->parent = f;
-
-               f->left = n->right;
-               if(f->left != NULL)
-                  f->left->parent = f;
-               f->parent = n;
-               n->right = f;
-
-               // on rattache e a son nouveau pere
-               n->parent = ggf;
-               if(ggf != NULL)
-                  if(ggf->left == gf)
-                     ggf->left = n;
-                  else
-                     ggf->right = n;
-            }
-        }else
-        {
-            //cas du fils droit
-            if(gf == NULL) {
-               // cas "zig", on fait la rotation de f (la racine) et e
-
-               f->parent = n;
-               f->right = n->left;
-               if(f->right != NULL)
-                  f->right->parent = f;
-               n->left = f;
-               n->parent = NULL;
-            }
-            else if(gf->left == f) {
-               // cas "zig-zag", simplifie, pareil que le cas "zig"
-               gf->left = n;
-
-               f->parent = n;
-               f->right = n->left;
-               if(f->right != NULL)
-                  f->right->parent = f;
-               n->left = f;
-               n->parent = gf;
-            }
-            else {
-               // cas "zig-zig", on fait la rotation de gf avec
-               // f, suivis de la rotation de e avec f
-               ggf = gf->parent;
-
-               gf->right = f->left;
-               if(gf->right != NULL)
-                  gf->right->parent = gf;
-               f->left = gf;
-               gf->parent = f;
-
-               f->right = n->left;
-               if(f->right != NULL)
-                  f->right->parent = f;
-               f->parent = n;
-               n->left = f;
-
-               // on rattache e a son nouveau pere
-               n->parent = ggf;
-               if(ggf != NULL)
-                  if(ggf->left == gf)
-                     ggf->left = n;
-                  else
-                     ggf->right = n;
-            }
-        }
-    }*/
+  
 
 }
 
@@ -341,7 +233,8 @@ void delete(splay_tree *t, node *n) {
     node *m = maximum(left_subtree, left_subtree->root);
     splay(left_subtree, m);
     left_subtree->root->right = right_subtree->root;
-    left_subtree->root->right->parent = left_subtree->root;
+    if(left_subtree->root->right != NULL)
+      left_subtree->root->right->parent = left_subtree->root;
     t->root = left_subtree->root;
   }
   else {
