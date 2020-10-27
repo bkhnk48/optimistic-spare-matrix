@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "Event.c"
 
-enum Side{LEFT, RIGHT};
 
 void add(int type, int idElementInGroup,
                 int portID, 
@@ -84,8 +83,6 @@ void add(int type, int idElementInGroup,
    arr[idNewNode][4] = -1;
    arr[idNewNode][5] = -1;
    arr[idNewNode][6] = -1;
-
-   
 
    if(*root == -1)
    {
