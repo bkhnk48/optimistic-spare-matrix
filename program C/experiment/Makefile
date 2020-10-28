@@ -10,6 +10,7 @@ serial:
 	gcc DeleteSplayTest.c -g -o delS.o
 	gcc NormalSplay.c -g -o no.o
 	gcc -g -c MultiOpSplay.c
+	gcc MultiOpSplayTest.c -g -o mtest.o
 n:
 	gcc -c Event.c
 	gcc -c timing.c
@@ -21,6 +22,7 @@ n:
 	gcc test.c -o test.o
 	gcc NormalSplay.c -o no.o
 	gcc -c MultiOpSplay.c
+	gcc MultiOpSplayTest.c -o mtest.o
 clean: 
 	-rm *.o
 	-rm out
