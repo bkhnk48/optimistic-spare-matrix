@@ -12,7 +12,7 @@ int main(int argc, char** argv)
    unsigned long currentTime = 0;
    unsigned long endTime = 1*((unsigned long)(1000*1000));
 
-   unsigned long arr[20250][7];
+   unsigned long arr[20250][7];//20250 = 3*(k*k*k/4) as k = 30
    int i, j, N, root = -1;
    for(i = 0; i < 20250; i++)
    {
