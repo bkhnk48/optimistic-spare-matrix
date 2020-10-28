@@ -6,7 +6,7 @@
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
-                int *root, int *min,
+                int *root, 
                 unsigned long arr[48][7]
                 );
 /* From now on, an event has 7 fields about:
@@ -21,7 +21,7 @@ void add(int type, int idElementInGroup,
 
 void splay(int e, unsigned long arr[48][7]);
 
-void removeFirst(int * first, int * root, int *min, unsigned long arr[48][7]);
+void removeFirst(int * first, int * root, unsigned long arr[48][7]);
 
 void show(unsigned long arr[48][7], int root);
 void leaf(unsigned long arr[48][7], int root, enum Side side);
@@ -29,7 +29,7 @@ void leaf(unsigned long arr[48][7], int root, enum Side side);
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
-                int *root, int *min,
+                int *root,
                 unsigned long arr[48][7]
                 )
 {
@@ -87,7 +87,6 @@ void add(int type, int idElementInGroup,
    if(*root == -1)
    {
       *root = idNewNode;
-      *min = idNewNode;
       return;
    }
    int left = idNewNode, right = idNewNode, temp = -1;
@@ -170,8 +169,7 @@ void add(int type, int idElementInGroup,
 
    //return newNode;
    *root = idNewNode;
-   if(arr[*min][3] < endTime)
-      *min = idNewNode;
+   
 }
 
 void splay(int e, unsigned long arr[48][7])
@@ -287,7 +285,7 @@ void splay(int e, unsigned long arr[48][7])
    }
 }
 
-void removeFirst(int * first, int * root, int *min, unsigned long arr[48][7])
+void removeFirst(int * first, int * root, unsigned long arr[48][7])
 {
    int t = *root;
    if(t == -1)
@@ -296,19 +294,13 @@ void removeFirst(int * first, int * root, int *min, unsigned long arr[48][7])
       return;//return NULL;
    }
    int temp = t;
-   if(*min < 0)
+   
+   while(arr[temp][5] != -1)//while(temp->left != NULL)
    {
-      while(arr[temp][5] != -1)//while(temp->left != NULL)
-      {
-         temp = arr[temp][5]; //temp = temp->left;
-      }
-      *first = temp;
-      *min = temp;
+      temp = arr[temp][5]; //temp = temp->left;
    }
-   else{
-      *first = *min;
-      *min = arr[*min][4];
-   }
+   *first = temp;
+   
    
    
    splay(*first, arr);
