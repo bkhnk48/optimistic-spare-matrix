@@ -6,8 +6,8 @@
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
-                int *root, 
-                unsigned long arr[48][7]
+                int *root, int *min,
+                unsigned long arr[20250][7]
                 );
 /* From now on, an event has 7 fields about:
    + it's type
@@ -19,18 +19,20 @@ void add(int type, int idElementInGroup,
    + index of right
 */
 
-void splay(int e, unsigned long arr[48][7]);
+void splay(int e, unsigned long arr[20250][7]);
 
-void removeFirst(int * first, int * root, unsigned long arr[48][7]);
+void removeFirst(int * first, int * root, int * min, unsigned long arr[20250][7]);
 
-void show(unsigned long arr[48][7], int root);
-void leaf(unsigned long arr[48][7], int root, enum Side side);
+void show(unsigned long arr[20250][7], int root);
+void leaf(unsigned long arr[20250][7], int root, enum Side side);
+
+
 
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
-                int *root,
-                unsigned long arr[48][7]
+                int *root, int *min,
+                unsigned long arr[20250][7]
                 )
 {
    /* Quy ước các event từ A đến G (tức type = 0..4) sẽ là 
@@ -40,8 +42,13 @@ void add(int type, int idElementInGroup,
       Các biến type có bit cuối cùng là 0 sẽ là các event xảy ra trên Agg switch
    */
    int idNewNode = 0;
+   int isEmpty = 1;
    if(type == A || type == B || type == C || type == H_HOST || type == G)
    {
+      //if(type == H_HOST || type == G)
+      //{
+      //   isEmpty = 0;
+      //}
       idNewNode = idElementInGroup*3 + type;
    }
    else if(type < 0)//Is event of edge switch
@@ -87,6 +94,7 @@ void add(int type, int idElementInGroup,
    if(*root == -1)
    {
       *root = idNewNode;
+      *min = idNewNode;
       return;
    }
    int left = idNewNode, right = idNewNode, temp = -1;
@@ -169,10 +177,19 @@ void add(int type, int idElementInGroup,
 
    //return newNode;
    *root = idNewNode;
-   
+   if(*min >= 0)
+   {
+      if(arr[*min][3] >= endTime)
+      {
+         *min = idNewNode;
+      }
+   }
+   else{
+      *min = idNewNode;
+   }
 }
 
-void splay(int e, unsigned long arr[48][7])
+void splay(int e, unsigned long arr[20250][7])
 {
    int left;
    int f;   // Tree * f;
@@ -285,7 +302,7 @@ void splay(int e, unsigned long arr[48][7])
    }
 }
 
-void removeFirst(int * first, int * root, unsigned long arr[48][7])
+void removeFirst(int * first, int * root, int * min, unsigned long arr[20250][7])
 {
    int t = *root;
    if(t == -1)
@@ -295,13 +312,17 @@ void removeFirst(int * first, int * root, unsigned long arr[48][7])
    }
    int temp = t;
    
-   while(arr[temp][5] != -1)//while(temp->left != NULL)
+   if(*min < 0)
    {
-      temp = arr[temp][5]; //temp = temp->left;
+      while(arr[temp][5] != -1)//while(temp->left != NULL)
+      {
+         temp = arr[temp][5]; //temp = temp->left;
+      }
+      *first = temp;
    }
-   *first = temp;
-   
-   
+   else{
+      *first = *min;
+   }
    
    splay(*first, arr);
    while(arr[t][4] != -1)
@@ -329,7 +350,9 @@ void removeFirst(int * first, int * root, unsigned long arr[48][7])
                //if(rightTree == NULL && leftTree == NULL && removedFather == 1
             )
    {  
-      *first = t; return; //return t;
+      *first = t; 
+      *min = -1;
+      return; //return t;
    }
    if(rightTree == -1)//if(rightTree == NULL)
    {     
@@ -357,15 +380,27 @@ void removeFirst(int * first, int * root, unsigned long arr[48][7])
       arr[leftTree][4] = newRoot; //leftTree->father = newRoot;
       //return newRoot;
       *first = newRoot;
+      temp = newRoot;
+      while(arr[temp][5] != -1)//while(temp->left != NULL)
+      {
+         temp = arr[temp][5]; //temp = temp->left;
+      }
+      *min = temp;
       return;
    }
 
    *root = t; //return t;
+   temp = t;
+   while(arr[temp][5] != -1)//while(temp->left != NULL)
+   {
+      temp = arr[temp][5]; //temp = temp->left;
+   }
+   *min = temp;
    return;
    
 }
 
-void show(unsigned long arr[48][7], int root)
+void show(unsigned long arr[20250][7], int root)
 {
    if(root != -1 && arr[root][3] != -1)
    {
@@ -379,7 +414,7 @@ void show(unsigned long arr[48][7], int root)
    }
 }
 
-void leaf(unsigned long arr[48][7], int root, enum Side side)
+void leaf(unsigned long arr[20250][7], int root, enum Side side)
 {
    printf("===========> ");
    if(side == LEFT)
