@@ -1,3 +1,5 @@
+#ifndef _TYPES_OF_EVENT_
+#define _TYPES_OF_EVENT_
 enum TypesOfEvent
 {
     A = 0, //GenerationEvent
@@ -13,3 +15,4 @@ enum TypesOfEvent
 };
 
 enum Side{LEFT, RIGHT};
+#endif
