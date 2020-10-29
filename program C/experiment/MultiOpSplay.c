@@ -37,7 +37,7 @@ int insertTree(unsigned long endTime, unsigned long oldEndTime,
       return JUST_INSERT_ARRAY;
    }
    
-   return 1;
+   return JUST_INSERT_TREE;
 }
 
 void addArray(int type, int idElementInGroup,
