@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "Event.c"
 
-enum InsertOption {JUST_INSERT_ARRAY = 0, JUST_INSERT_TREE = 1, REPLACE = 1};
+enum InsertOption {JUST_INSERT_ARRAY = 0, JUST_INSERT_TREE = 1, REPLACE = 2};
 
 void addArray(int type, int idElementInGroup,
                 int portID, 
@@ -36,7 +36,12 @@ int insertTree(unsigned long endTime, unsigned long oldEndTime,
    {
       return JUST_INSERT_ARRAY;
    }
-   
+   else{
+      if(endTime > oldEndTime)
+      {
+         return REPLACE;
+      }
+   }
    return JUST_INSERT_TREE;
 }
 
@@ -54,14 +59,20 @@ void addArray(int type, int idElementInGroup,
       Các biến type có bit cuối cùng là 0 sẽ là các event xảy ra trên Agg switch
    */
    int idNewNode = 0;
-   int isEmpty = 1;
+   enum InsertOption insert_option = 0;
    if(type == A || type == B || type == C || type == H_HOST 
          || type == G
          || type == X
          ){
       if(type == X){
          idNewNode = idElementInGroup*4 + (C + 1);
-
+         insert_option = insertTree(endTime, arr[idNewNode][3], 
+                        arr[idNewNode][4], arr[idNewNode][5], arr[idNewNode][6]);
+         switch(insert_option)
+         {
+            case JUST_INSERT_TREE: break;
+            case REPLACE: break;
+         }
       }
       else{
          idNewNode = idElementInGroup*4 + type;
