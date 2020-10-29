@@ -42,7 +42,7 @@ void add(int type, int idElementInGroup,
    int idNewNode = 0;
    if(type == A || type == B || type == C || type == H_HOST || type == G)
    {
-      idNewNode = idElementInGroup*3 + type;
+      idNewNode = idElementInGroup*3 + type;//Nhan 3 vi hien tai moi chi co 3 loai su kien A, B, C
    }
    else if(type < 0)//Is event of edge switch
    {
