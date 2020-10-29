@@ -10,8 +10,8 @@ enum TypesOfEvent
     E = 6, //MovingInSwitchEvent
     F = 7, //LeavingSwitchEvent
     G = 4, //ReachingDestinationEvent
-    H = 8 //NotificationEvent
-    
+    H = 8, //NotificationEvent
+    X = 9  //RandomEvent
 };
 
 enum Side{LEFT, RIGHT};
