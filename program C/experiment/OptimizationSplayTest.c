@@ -60,8 +60,6 @@ int main(int argc, char** argv)
          else if(type == B){
             add(C, i, 0, currentTime        , &root, arr);
          }
-         
-         
       }
       ongoingTime = -1;
       removeFirst(&first, &root, arr);
