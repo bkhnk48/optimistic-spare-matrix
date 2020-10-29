@@ -11,6 +11,8 @@ serial:
 	gcc NormalSplay.c -g -o no.o
 	gcc -g -c MultiOpSplay.c
 	gcc MultiOpSplayTest.c -g -o mtest.o
+	gcc -g -c ListSplay.c
+	gcc ListSplayTest.c -g -o ltest.o
 n:
 	gcc -c Event.c
 	gcc -c timing.c
@@ -23,6 +25,8 @@ n:
 	gcc NormalSplay.c -o no.o
 	gcc -c MultiOpSplay.c
 	gcc MultiOpSplayTest.c -o mtest.o
+	gcc -c ListSplay.c
+	gcc ListSplayTest.c -o ltest.o
 clean: 
 	-rm *.o
 	-rm out
