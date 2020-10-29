@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Event.c"
-#include <limits.h>
 
 
 void addArray(int type, int idElementInGroup,
