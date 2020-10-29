@@ -32,7 +32,7 @@ int insertTree(unsigned long endTime, unsigned long oldEndTime,
 
 int insertTree(unsigned long endTime, unsigned long oldEndTime,
                    unsigned long parent, unsigned long left, unsigned long right){
-   if(parent == ULONG_MAX && left == ULONG_MAX && right == ULONG_MAX)
+   if(parent == -1 && left == -1 && right == -1)
    {
       return 0;
    }
