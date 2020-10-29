@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "Event.c"
 
+enum InsertOption {JUST_INSERT_ARRAY = 0, JUST_INSERT_TREE = 1, REPLACE = 1};
 
 void addArray(int type, int idElementInGroup,
                 int portID, 
@@ -33,8 +34,9 @@ int insertTree(unsigned long endTime, unsigned long oldEndTime,
                    unsigned long parent, unsigned long left, unsigned long right){
    if(parent == -1 && left == -1 && right == -1)
    {
-      return 0;
+      return JUST_INSERT_ARRAY;
    }
+   
    return 1;
 }
 
