@@ -70,8 +70,12 @@ void addArray(int type, int idElementInGroup,
                         arr[idNewNode][4], arr[idNewNode][5], arr[idNewNode][6]);
          switch(insert_option)
          {
+            case JUST_INSERT_ARRAY: 
+                     break;
             case JUST_INSERT_TREE: break;
-            case REPLACE: break;
+            case REPLACE: 
+                     
+                     break;
          }
       }
       else{
