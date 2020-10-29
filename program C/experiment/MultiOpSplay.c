@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Event.c"
+#include <limits.h>
 
 
-void add(int type, int idElementInGroup,
+void addArray(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
                 int *root, int *min,
-                unsigned long arr[20250][7]
+                unsigned long arr[64][7]
                 );
 /* From now on, an event has 7 fields about:
    + it's type
@@ -19,20 +20,30 @@ void add(int type, int idElementInGroup,
    + index of right
 */
 
-void splay(int e, unsigned long arr[20250][7]);
+void splayArray(int e, unsigned long arr[64][7]);
 
-void removeFirst(int * first, int * root, int * min, unsigned long arr[20250][7]);
+void removeFirstOfArray(int * first, int * root, int * min, unsigned long arr[64][7]);
 
-void show(unsigned long arr[20250][7], int root);
-void leaf(unsigned long arr[20250][7], int root, enum Side side);
+void showArray(unsigned long arr[64][7], int root);
+void leafArray(unsigned long arr[64][7], int root, enum Side side);
 
+int insertTree(unsigned long endTime, unsigned long oldEndTime,
+                   unsigned long parent, unsigned long left, unsigned long right);
 
+int insertTree(unsigned long endTime, unsigned long oldEndTime,
+                   unsigned long parent, unsigned long left, unsigned long right){
+   if(parent == ULONG_MAX && left == ULONG_MAX && right == ULONG_MAX)
+   {
+      return 0;
+   }
+   return 1;
+}
 
-void add(int type, int idElementInGroup,
+void addArray(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
                 int *root, int *min,
-                unsigned long arr[20250][7]
+                unsigned long arr[64][7]
                 )
 {
    /* Quy ước các event từ A đến G (tức type = 0..4) sẽ là 
@@ -43,13 +54,17 @@ void add(int type, int idElementInGroup,
    */
    int idNewNode = 0;
    int isEmpty = 1;
-   if(type == A || type == B || type == C || type == H_HOST || type == G)
-   {
-      //if(type == H_HOST || type == G)
-      //{
-      //   isEmpty = 0;
-      //}
-      idNewNode = idElementInGroup*3 + type;
+   if(type == A || type == B || type == C || type == H_HOST 
+         || type == G
+         || type == X
+         ){
+      if(type == X){
+         idNewNode = idElementInGroup*4 + (C + 1);
+
+      }
+      else{
+         idNewNode = idElementInGroup*4 + type;
+      }
    }
    else if(type < 0)//Is event of edge switch
    {
@@ -189,7 +204,7 @@ void add(int type, int idElementInGroup,
    }
 }
 
-void splay(int e, unsigned long arr[20250][7])
+void splayArray(int e, unsigned long arr[64][7])
 {
    int left;
    int f;   // Tree * f;
@@ -302,7 +317,7 @@ void splay(int e, unsigned long arr[20250][7])
    }
 }
 
-void removeFirst(int * first, int * root, int * min, unsigned long arr[20250][7])
+void removeFirstOfArray(int * first, int * root, int * min, unsigned long arr[64][7])
 {
    int t = *root;
    if(t == -1)
@@ -324,7 +339,7 @@ void removeFirst(int * first, int * root, int * min, unsigned long arr[20250][7]
       *first = *min;
    }
    
-   splay(*first, arr);
+   splayArray(*first, arr);
    while(arr[t][4] != -1)
    {
       t = arr[t][4];
@@ -370,7 +385,7 @@ void removeFirst(int * first, int * root, int * min, unsigned long arr[20250][7]
          newRoot = arr[rightTree][5]; //newRoot = rightTree->left;
       }
 
-      splay(newRoot, arr);//splay(newRoot);
+      splayArray(newRoot, arr);//splay(newRoot);
       while(arr[newRoot][4] != -1)
       {
          newRoot = arr[newRoot][4];
@@ -400,21 +415,21 @@ void removeFirst(int * first, int * root, int * min, unsigned long arr[20250][7]
    
 }
 
-void show(unsigned long arr[20250][7], int root)
+void showArray(unsigned long arr[64][7], int root)
 {
    if(root != -1 && arr[root][3] != -1)
    {
       printf("\n===========> for event type = %ld at end = %ld in %ld\n", 
                arr[root][0], arr[root][3], arr[root][1]);
-      leaf(arr, arr[root][5], LEFT);
-      leaf(arr, arr[root][6], RIGHT);
+      leafArray(arr, arr[root][5], LEFT);
+      leafArray(arr, arr[root][6], RIGHT);
    }
    else{
       printf("===========> left NULL\n");
    }
 }
 
-void leaf(unsigned long arr[20250][7], int root, enum Side side)
+void leafArray(unsigned long arr[64][7], int root, enum Side side)
 {
    printf("===========> ");
    if(side == LEFT)
@@ -428,8 +443,8 @@ void leaf(unsigned long arr[20250][7], int root, enum Side side)
    {
       printf("for event type = %ld at end = %ld in %ld. It's index = %d\n", 
                arr[root][0], arr[root][3], arr[root][1], root);
-      leaf(arr, arr[root][5], LEFT);
-      leaf(arr, arr[root][6], RIGHT);
+      leafArray(arr, arr[root][5], LEFT);
+      leafArray(arr, arr[root][6], RIGHT);
    }
    else{
       printf("NULL\n");
