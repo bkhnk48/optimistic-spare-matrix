@@ -116,5 +116,14 @@ void add(int type, int idElementInGroup,
                 ){
     ResultOfFinding finding = getSplayTree(arraySplay);
     SplayTree *temp = finding.tree;
-    int index = finding.indexOfEmpty;
+    int idNewNode = finding.indexOfEmpty;
+
+    temp->arr[idNewNode][0] = type;
+    temp->arr[idNewNode][1] = idElementInGroup;
+    temp->arr[idNewNode][2] = portID;
+    temp->arr[idNewNode][3] = endTime;
+    int formerFather = temp->arr[idNewNode][4];
+    if(formerFather != -1){
+
+    }
 }
