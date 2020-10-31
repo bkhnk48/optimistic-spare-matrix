@@ -14,6 +14,7 @@ serial:
 	gcc -g -c ListSplay.c
 	gcc ListSplayTest.c -g -o ltest.o
 	gcc -g -c ArraySplay.c
+	gcc ArraySplayTest.c -g -o atest.o
 n:
 	gcc -c Event.c
 	gcc -c timing.c
@@ -29,6 +30,7 @@ n:
 	gcc -c ListSplay.c
 	gcc ListSplayTest.c -DDO_PREFETCH -o ltest.o
 	gcc -c ArraySplay.c
+	gcc ArraySplayTest.c -o atest.o
 clean: 
 	-rm *.o
 	-rm out
