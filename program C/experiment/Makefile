@@ -13,20 +13,22 @@ serial:
 	gcc MultiOpSplayTest.c -g -o mtest.o
 	gcc -g -c ListSplay.c
 	gcc ListSplayTest.c -g -o ltest.o
+	gcc -g -c ArraySplay.c
 n:
 	gcc -c Event.c
 	gcc -c timing.c
 	gcc -c OptimizationSplay.c
 	gcc OptimizationSplayTest.c -o optest.o
 	gcc -c VoidSplay.c 
-	gcc VoidSplayTest.c -o vstest.o
+	gcc VoidSplayTest.c -o vstest.o -O3
 	gcc DeleteSplayTest.c -o delS.o
 	gcc test.c -o test.o
 	gcc NormalSplay.c -o no.o
 	gcc -c MultiOpSplay.c
 	gcc MultiOpSplayTest.c -o mtest.o
 	gcc -c ListSplay.c
-	gcc ListSplayTest.c -o ltest.o
+	gcc ListSplayTest.c -DDO_PREFETCH -o ltest.o
+	gcc -c ArraySplay.c
 clean: 
 	-rm *.o
 	-rm out
