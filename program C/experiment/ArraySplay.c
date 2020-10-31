@@ -4,7 +4,8 @@
 #include <limits.h>
 
 typedef struct array_splay {
-    unsigned long arr[1024][7];
+    int size;
+    unsigned long arr[3*1024][7];
     struct array_splay *next;
 }SplayTree;
 
@@ -43,33 +44,26 @@ SplayTree* new_splay_tree();
 #pragma endregion
 
 int indexOfNewNode(SplayTree *arraySplay){
-    /*int index[33] = {   arraySplay->arr[0][4] >> 32, arraySplay->arr[0][5] >> 32, arraySplay->arr[0][6] >> 32,
-                        arraySplay->arr[1][4] >> 32, arraySplay->arr[1][5] >> 32, arraySplay->arr[1][6] >> 32,
-                        arraySplay->arr[2][4] >> 32, arraySplay->arr[2][5] >> 32, arraySplay->arr[2][6] >> 32,
-                        arraySplay->arr[3][4] >> 32, arraySplay->arr[3][5] >> 32, arraySplay->arr[3][6] >> 32,
-                        arraySplay->arr[4][4] >> 32, arraySplay->arr[4][5] >> 32, arraySplay->arr[4][6] >> 32,
-                        arraySplay->arr[5][4] >> 32, arraySplay->arr[5][5] >> 32, arraySplay->arr[5][6] >> 32,
-                        arraySplay->arr[6][4] >> 32, arraySplay->arr[6][5] >> 32, arraySplay->arr[6][6] >> 32,
-                        arraySplay->arr[7][4] >> 32, arraySplay->arr[7][5] >> 32, arraySplay->arr[7][6] >> 32,
-                        arraySplay->arr[8][4] >> 32, arraySplay->arr[8][5] >> 32, arraySplay->arr[5][6] >> 32,
-                        arraySplay->arr[9][4] >> 32, arraySplay->arr[9][5] >> 32, arraySplay->arr[6][6] >> 32,
-                        arraySplay->arr[10][4] >> 32, arraySplay->arr[10][5] >> 32, arraySplay->arr[10][6] >> 32,
-                    };*/
     
-    int i = 0;
-    int result = 0;
-    for(i = 0; i < 33; i++)
+    if(arraySplay->size < 3*1024)
     {
-        int u = i / 3;
-        int v = i % 3;
-        result = (arraySplay->arr[u][4 + v] >> 32);
-        if(result != UINT_MAX)
-            break;
+        int i = 0;
+        int result = 0;
+        for(i = 0; i < 32*3; i++)
+        {
+            int u = i / 3;
+            int v = i % 3;
+            result = (arraySplay->arr[u][4 + v] >> 32);
+            if(result != UINT_MAX)
+                break;
+        }
+        if(i >= 33)
+            return -1;
+        return result;
     }
-    if(i >= 33)
-        return -1;
-    return result;
+    return -1;
 }
+
 
 SplayTree* new_splay_tree(){
   SplayTree *t = malloc(sizeof(SplayTree));
