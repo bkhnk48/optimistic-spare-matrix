@@ -5,6 +5,8 @@
 
 typedef struct array_splay {
     int size;
+    int root;
+    int min;
     unsigned long arr[3*1024][7];
     struct array_splay *next;
 }SplayTree;
@@ -20,7 +22,7 @@ int indexOfNewNode(SplayTree *arraySplay);
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
-                int *root,
+                //int *root,
                 SplayTree *arraySplay
                 );
 /* From now on, an event has 7 fields about:
@@ -57,9 +59,11 @@ int indexOfNewNode(SplayTree *arraySplay){
             if(result != UINT_MAX)
                 break;
         }
-        if(i >= 33)
+        if(i >= 32*3)
             return -1;
-        return result;
+        result = ~result;//dao het cac bit ben trong
+        int ctz = __builtin_ctz(result) + i*32; 
+        return ctz;
     }
     return -1;
 }
@@ -74,10 +78,13 @@ SplayTree* new_splay_tree(){
       t->arr[i][1] = -1;
       t->arr[i][2] = -1;
       t->arr[i][3] = -1;
-      t->arr[i][4] = -1;
-      t->arr[i][5] = -1;
-      t->arr[i][6] = -1;
+      t->arr[i][4] = UINT_MAX;
+      t->arr[i][5] = UINT_MAX;
+      t->arr[i][6] = UINT_MAX;
   }
+  t->size = 0;
+  t->root = -1;
+  t->size = -1;
   t->next = NULL;
   return t;
 }
@@ -108,20 +115,28 @@ ResultOfFinding getSplayTree(SplayTree *root){
     return result;
 }
 
+
+
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
-                int *root,
-                SplayTree *arraySplay
+               
+                 SplayTree *arraySplay
                 ){
     ResultOfFinding finding = getSplayTree(arraySplay);
     SplayTree *temp = finding.tree;
     int idNewNode = finding.indexOfEmpty;
 
+    arraySplay->size++;
     temp->arr[idNewNode][0] = type;
     temp->arr[idNewNode][1] = idElementInGroup;
     temp->arr[idNewNode][2] = portID;
     temp->arr[idNewNode][3] = endTime;
+    int i = idNewNode / 32;
+    int alias = idNewNode % 32;
+    temp->arr[i/3][4 + (i % 3)] |= (1L << alias) << 32;
+
+    printf("idNewNode = %d and size = %d\n", idNewNode, arraySplay->size);
     int formerFather = temp->arr[idNewNode][4];
     if(formerFather != -1){
 
