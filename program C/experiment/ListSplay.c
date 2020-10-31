@@ -282,15 +282,11 @@ void delete_key(splay_tree *t, int key)
 node* removeFirst(splay_tree *t)
 {
     node *x = minimum(t);
-    node *temp = new_node(A, 0, 0, 0);
-    
-    temp->type = x->type;
-    temp->idElementInGroup = x->idElementInGroup;
-    temp->portID = x->portID;
-    temp->endTime = x->endTime;
-    
     delete(t, x);
-    return temp;
+    #ifdef DO_PREFETCH
+      __builtin_prefetch(x);
+    #endif
+    return x;
 }
 
 void inorder(splay_tree *t, node *n) {

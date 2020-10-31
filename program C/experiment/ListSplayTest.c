@@ -37,7 +37,7 @@ int main()
             {
                 insert(t, C, i, 0, currentTime);
             }
-            free(ev);
+            //free(ev);
             ev = removeFirst(t);
             
             currentTime = ev->endTime;
