@@ -84,7 +84,7 @@ SplayTree* new_splay_tree(){
   }
   t->size = 0;
   t->root = -1;
-  t->size = -1;
+  t->min = -1;
   t->next = NULL;
   return t;
 }
@@ -115,13 +115,10 @@ ResultOfFinding getSplayTree(SplayTree *root){
     return result;
 }
 
-
-
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
-               
-                 SplayTree *arraySplay
+                SplayTree *arraySplay
                 ){
     ResultOfFinding finding = getSplayTree(arraySplay);
     SplayTree *temp = finding.tree;
