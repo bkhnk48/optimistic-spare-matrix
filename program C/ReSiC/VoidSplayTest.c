@@ -42,7 +42,7 @@ int main()
     
     timing(&wc2, &cpuT);
 	
-    printf("Time: %f ms with count = %d\n", (wc2 - wc1)*1000, count);
+    printf("Time: %f ms with count = %ld\n", (wc2 - wc1)*1000, count);
     printf("================================\n");
 
     return 0;
