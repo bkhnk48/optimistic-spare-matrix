@@ -6,7 +6,7 @@ int main()
     CalendarQueue *q = initqueue();
     double wc1 = 0, wc2 = 0, cpuT = 0;
     int i = 0;
-    int count = 0;
+    long count = 0;
     timing(&wc1, &cpuT);
     int currentTime = 0;
     int endTime = 20*1000;
