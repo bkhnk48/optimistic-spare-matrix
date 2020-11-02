@@ -5,10 +5,16 @@
 
 typedef struct array_splay {
     int size;
-    int root;
-    int min;
     unsigned long arr[3*1024][7];
     struct array_splay *next;
+    struct array_splay *prev;
+}ArrayTree;
+
+typedef struct splay_tree{
+    int size;
+    int root;
+    int min;
+    struct array_splay *tree;
 }SplayTree;
 
 typedef struct _result {
@@ -45,11 +51,14 @@ void leaf(SplayTree *arraySplay, int root, enum Side side);
 SplayTree* new_splay_tree();
 #pragma endregion
 
-int indexOfNewNode(SplayTree *arraySplay){
-    
-    if(arraySplay->size < 3*1024)
+int indexOfNewNode(SplayTree *splayTree){
+    if(splayTree->size == 0)
+        return 0;
+    if(splayTree->size % (3*1024) != 0)
     {
+        int step = splayTree->size / (3*1024);
         int i = 0;
+        
         int result = 0;
         for(i = 0; i < 32*3; i++)
         {
@@ -71,21 +80,24 @@ int indexOfNewNode(SplayTree *arraySplay){
 
 SplayTree* new_splay_tree(){
   SplayTree *t = malloc(sizeof(SplayTree));
+  t->tree = malloc(sizeof(ArrayTree));
+  t->tree->prev = NULL;
+  t->tree->next = NULL;
   int i = 0;
   for(i = 0; i < 1024; i++)
   {
-      t->arr[i][0] = -1;
-      t->arr[i][1] = -1;
-      t->arr[i][2] = -1;
-      t->arr[i][3] = -1;
-      t->arr[i][4] = UINT_MAX;
-      t->arr[i][5] = UINT_MAX;
-      t->arr[i][6] = UINT_MAX;
+      t->tree->arr[i][0] = -1;
+      t->tree->arr[i][1] = -1;
+      t->tree->arr[i][2] = -1;
+      t->tree->arr[i][3] = -1;
+      t->tree->arr[i][4] = UINT_MAX;
+      t->tree->arr[i][5] = UINT_MAX;
+      t->tree->arr[i][6] = UINT_MAX;
   }
   t->size = 0;
   t->root = -1;
   t->min = -1;
-  t->next = NULL;
+  
   return t;
 }
 
@@ -118,9 +130,9 @@ ResultOfFinding getSplayTree(SplayTree *root){
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
-                SplayTree *arraySplay
+                SplayTree *splayTree
                 ){
-    ResultOfFinding finding = getSplayTree(arraySplay);
+    ResultOfFinding finding = getSplayTree(splayTree);
     SplayTree *temp = finding.tree;
     int idNewNode = finding.indexOfEmpty;
 
