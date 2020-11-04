@@ -11,15 +11,9 @@ int main()
     long count = 0;
     timing(&wc1, &cpuT);
     int currentTime = 0;
-<<<<<<< HEAD
     int endTime = 1000*1000;
     
     for(i = 0; i < 6750; i++)
-=======
-    int endTime = 20*1000;
-    
-    for(i = 0; i < 16; i++)
->>>>>>> 9cf267c1f2f5a4717098c8415b480f5a54ebd8fa
     {
         insert(t, new_node(A, i, 0, 0));
     }
