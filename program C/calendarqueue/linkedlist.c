@@ -101,8 +101,4 @@ void destroy(List * list){
     current = next;
   }
   free(list);
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 9cf267c1f2f5a4717098c8415b480f5a54ebd8fa
