@@ -13,10 +13,6 @@ typedef struct node {
     struct node *parent;
 }node;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 9cf267c1f2f5a4717098c8415b480f5a54ebd8fa
 typedef struct splay_tree {
   struct node *root;
 }splay_tree;
@@ -110,7 +106,6 @@ void splay(splay_tree *t, node *n) {
       node *p = n->parent;
       node *g = p->parent; //grandparent
 
-<<<<<<< HEAD
       if(g == NULL)
       {
         if(n->parent->left == n)
@@ -172,26 +167,6 @@ void splay(splay_tree *t, node *n) {
   }
   
 
-=======
-      if(n->parent->left == n && p->parent->left == p) { //both are left children
-        right_rotate(t, g);
-        right_rotate(t, p);
-      }
-      else if(n->parent->right == n && p->parent->right == p) { //both are right children
-        left_rotate(t, g);
-        left_rotate(t, p);
-      }
-      else if(n->parent->right == n && p->parent->left == p) {
-        left_rotate(t, p);
-        right_rotate(t, g);
-      }
-      else if(n->parent->left == n && p->parent->right == p) {
-        right_rotate(t, p);
-        left_rotate(t, g);
-      }
-    }
-  }
->>>>>>> 9cf267c1f2f5a4717098c8415b480f5a54ebd8fa
 }
 
 void insert(splay_tree *t, node *n) {
@@ -222,7 +197,6 @@ node* maximum(splay_tree *t, node *x) {
   return x;
 }
 
-<<<<<<< HEAD
 node* find(node *t, int key)
 {
   if(t == NULL) return NULL;
@@ -238,8 +212,6 @@ node* find(node *t, int key)
     return t;
 }
 
-=======
->>>>>>> 9cf267c1f2f5a4717098c8415b480f5a54ebd8fa
 
 void delete(splay_tree *t, node *n) {
   splay(t, n);
@@ -260,11 +232,8 @@ void delete(splay_tree *t, node *n) {
     node *m = maximum(left_subtree, left_subtree->root);
     splay(left_subtree, m);
     left_subtree->root->right = right_subtree->root;
-<<<<<<< HEAD
     if(left_subtree->root->right != NULL)
       left_subtree->root->right->parent = left_subtree->root;
-=======
->>>>>>> 9cf267c1f2f5a4717098c8415b480f5a54ebd8fa
     t->root = left_subtree->root;
   }
   else {
@@ -272,7 +241,6 @@ void delete(splay_tree *t, node *n) {
   }
 }
 
-<<<<<<< HEAD
 void delete_key(splay_tree *t, int key)
 {
   node *temp = find(t->root, key);
@@ -281,8 +249,6 @@ void delete_key(splay_tree *t, int key)
   delete(t, temp);
 }
 
-=======
->>>>>>> 9cf267c1f2f5a4717098c8415b480f5a54ebd8fa
 node* removeFirst(splay_tree *t)
 {
     node *x = minimum(t);
@@ -303,7 +269,6 @@ void inorder(splay_tree *t, node *n) {
     //printf("%d\n", n->data);
     inorder(t, n->right);
   }
-<<<<<<< HEAD
 }
 
 void leaf(node *t, enum Side side)
@@ -350,6 +315,3 @@ void show(splay_tree * t)
     }
 }
 
-=======
-}
->>>>>>> 9cf267c1f2f5a4717098c8415b480f5a54ebd8fa
