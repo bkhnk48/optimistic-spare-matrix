@@ -13,8 +13,8 @@ serial:
 	gcc MultiOpSplayTest.c -g -o mtest.o
 	gcc -g -c ListSplay.c
 	gcc ListSplayTest.c -g -o ltest.o
-#gcc -g -c ArraySplay.c
-#gcc ArraySplayTest.c -g -o atest.o
+	gcc -g -c CASplay.c
+	gcc CASplayTest.c -g -o catest.o
 n:
 	gcc -c Event.c
 	gcc -c timing.c
@@ -29,8 +29,8 @@ n:
 	gcc MultiOpSplayTest.c -o mtest.o
 	gcc -c ListSplay.c
 	gcc ListSplayTest.c -DDO_PREFETCH -o ltest.o
-#gcc -c ArraySplay.c
-#gcc ArraySplayTest.c -o atest.o
+	gcc -c CASplay.c
+	gcc CASplayTest.c -o catest.o
 clean: 
 	-rm *.o
 	-rm out
