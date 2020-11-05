@@ -8,8 +8,8 @@ int main()
     int i = 0;
     long count = 0;
     timing(&wc1, &cpuT);
-    int currentTime = 0;
-    int endTime = 1000*1000;
+    unsigned long currentTime = 0;
+    unsigned long endTime = 60*((unsigned long)(1000*1000));
 
     for(i = 0; i < 6750; i++)
     {
