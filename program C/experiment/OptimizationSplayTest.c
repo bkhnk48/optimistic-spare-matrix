@@ -10,7 +10,7 @@ int main(int argc, char** argv)
    double wc1 = 0, wc2 = 0, cpuT = 0;
    int first = -1;
    unsigned long currentTime = 0;
-   unsigned long endTime = 1*((unsigned long)(1000*1000));
+   unsigned long endTime = 60*((unsigned long)(1000*1000));
 
    unsigned long arr[20250][7];//20250 = 3*(k*k*k/4) as k = 30
    int i, j, N, root = -1;
