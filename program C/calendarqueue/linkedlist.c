@@ -24,7 +24,7 @@ void display(List * list, int length) {
     return;
   int i = 1;
   for(; current != NULL; current = current->next) {
-    printf("%d", current->endTime);
+    printf("%ld", current->endTime);
     if(i >= length) {
       printf("\n->");
       i = 1;
