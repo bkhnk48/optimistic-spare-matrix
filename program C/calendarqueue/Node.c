@@ -8,13 +8,13 @@ typedef struct node {
     
     int idElementInGroup;//id of element in group of hosts or switches
     int portID;
-    int endTime;
+    unsigned long endTime;
     struct node * next;
 } node;
 
 node* new_node(int type, int idElementInGroup,
                 int portID, 
-                int endTime) {
+                unsigned long endTime) {
   node *n = (node *)malloc(sizeof(node));
   if (!n) {
     return NULL;
