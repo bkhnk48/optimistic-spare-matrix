@@ -3,6 +3,9 @@
 #include <stddef.h>
 #include "Event.c"
 
+#ifndef _TYPES_OF_NODE_
+#define _TYPES_OF_NODE_
+
 typedef struct node {
     enum TypesOfEvent type; //type of event
     
@@ -27,3 +30,4 @@ Node* new_node(int type, int idElementInGroup,
 
   return n;
 }
+#endif
