@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "Node.c"
+#include "LinkedList.c"
 
 void insert(Node* entry);
 Node* removeSoonestEvent();
