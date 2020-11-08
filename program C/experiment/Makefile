@@ -15,6 +15,7 @@ serial:
 	gcc ListSplayTest.c -g -o ltest.o
 	gcc -g -c CalendarQueue.c
 	gcc CalendarQueueTest.c -g -o cqtest.o
+	gcc -g -c CAQueue.c
 	gcc -g -c CASplay.c
 	gcc CASplayTest.c -g -o catest.o
 	gcc randomFile.c -g -o ran.o
@@ -34,6 +35,7 @@ n:
 	gcc ListSplayTest.c -DDO_PREFETCH -o ltest.o
 	gcc -c CalendarQueue.c
 	gcc CalendarQueueTest.c -o cqtest.o
+	gcc -c CAQueue.c
 	gcc -c CASplay.c
 	gcc CASplayTest.c -o catest.o
 	gcc randomFile.c -o ran.o
