@@ -7,6 +7,7 @@ void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
                 int *root, 
+                CalendarQueue *q,
                 unsigned long arr[20250][7]
                 );
 /* From now on, an event has 7 fields about:
@@ -30,6 +31,7 @@ void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
                 int *root,
+                CalendarQueue *q,
                 unsigned long arr[20250][7]
                 )
 {
@@ -66,15 +68,22 @@ void add(int type, int idElementInGroup,
    }
    #pragma endregion
 
-   int leftBound = 3 * (idNewNode / 3);
-   if(arr[leftBound][4] != -1)
+   int leftBound = (arr[idElementInGroup][4] 
+                     * arr[idElementInGroup][5]
+                     * arr[idElementInGroup][6] == -1 ? 1 : 0);
+   
+   int middle = (arr[idElementInGroup + 1][4] 
+                     * arr[idElementInGroup + 1][5]
+                     * arr[idElementInGroup + 1][6] == -1 ? 2 : 0);
+                     
+   int rightBound = (arr[idElementInGroup + 2][4] 
+                     * arr[idElementInGroup + 2][5]
+                     * arr[idElementInGroup + 2][6] == -1 ? 3 : 0);
+                     
+   if(leftBound + middle + rightBound != 6)//ca ba nut lan can deu trong
    {
-      ///neu trong mang ko co cho trong. Thi phai kiem tra phan tu moi co
-      ///be hon phan tu nao ko? Neu ko thi cap nhat calendar
-      ///Neu co thi phan tu lon nhat se bi remove, gui vao calendar con
-      ///phan tu moi se chen vao cay?
-
-
+      
+      return;
    }
 
    arr[idNewNode][0] = type;
