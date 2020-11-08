@@ -6,23 +6,7 @@ int my_random(int minN, int maxN){
     return minN + rand() % (maxN + 1 - minN);
 }
 
-void loadArray(int a[1000]){
-   int num;
-   FILE *fptr;
 
-   if ((fptr = fopen("random1000.txt","r")) == NULL){
-       printf("Error! opening file");
-       return;
-   }
-   int i = 0;
-   while(!feof(fptr)){
-    fscanf(fptr,"%d", &num);
-    a[i] = num;
-    i++;
-   }
-
-   fclose(fptr);
-}
 
 int main(){
     srand((int)time(0));
