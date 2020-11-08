@@ -11,9 +11,10 @@ int main()
     double wc1 = 0, wc2 = 0, cpuT = 0;
     int i = 0;
     long count = 0;
+    int index = 0;
     timing(&wc1, &cpuT);
-    double currentTime = 0;
-    double endTime = 90*1000*1000;
+    unsigned long currentTime = 0;
+    unsigned long endTime = 5*((unsigned long)(1000*1000));
 
     for(i = 0; i < 6750; i++)
     {
@@ -40,6 +41,13 @@ int main()
             {
                 enqueue(new_node(C, i, 0, currentTime));
             }
+            int temp = arbitrary[index % 1000];
+            if(temp != -1)
+            {
+                enqueue(new_node(C, i, 0, currentTime + temp));
+                //printf("%ld ", currentTime + temp);
+            }
+            index++;
             ev->endTime = -1;
             ev = dequeue();
 
