@@ -66,8 +66,8 @@ void add(int type, int idElementInGroup,
    }
    #pragma endregion
 
-   //int leftBound = 3 * (idNewNode / 3);
-   //if(arr[leftBound][4] != -1)
+   int leftBound = 3 * (idNewNode / 3);
+   if(arr[leftBound][4] != -1)
    {
       ///neu trong mang ko co cho trong. Thi phai kiem tra phan tu moi co
       ///be hon phan tu nao ko? Neu ko thi cap nhat calendar
