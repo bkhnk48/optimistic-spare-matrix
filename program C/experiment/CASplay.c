@@ -68,23 +68,55 @@ void add(int type, int idElementInGroup,
    }
    #pragma endregion
 
-   int leftBound = (arr[idElementInGroup][4] 
-                     * arr[idElementInGroup][5]
-                     * arr[idElementInGroup][6] == -1 ? 1 : 0);
+   int leftBound = (arr[idElementInGroup*3][4] 
+                     * arr[idElementInGroup*3][5]
+                     * arr[idElementInGroup*3][6] == -1 ? 1 : 0);
    
-   int middle = (arr[idElementInGroup + 1][4] 
-                     * arr[idElementInGroup + 1][5]
-                     * arr[idElementInGroup + 1][6] == -1 ? 2 : 0);
+   int middle = (arr[idElementInGroup*3 + 1][4] 
+                     * arr[idElementInGroup*3 + 1][5]
+                     * arr[idElementInGroup*3 + 1][6] == -1 ? 3 : 0);
                      
-   int rightBound = (arr[idElementInGroup + 2][4] 
-                     * arr[idElementInGroup + 2][5]
-                     * arr[idElementInGroup + 2][6] == -1 ? 3 : 0);
-                     
-   if(leftBound + middle + rightBound != 6)//ca ba nut lan can deu trong
+   int rightBound = (arr[idElementInGroup*3 + 2][4] 
+                     * arr[idElementInGroup*3 + 2][5]
+                     * arr[idElementInGroup*3 + 2][6] == -1 ? 5 : 0);
+   int x = 0;        
+   switch(leftBound + rightBound + middle)
    {
-      
-      return;
+      case 9://Ca ba o A, B, C deu trong
+         x = swap(&type, idElementInGroup, &portID, &endTime,
+                  9, &idNewNode, q
+               );
+         break;
+      case 1://duy nhất ô của sự kiện A trống
+      case 4://cả 2 ô của sự kiện A, B trống
+      case 6://cả 2 ô của sự kiện A, C trống
+         idNewNode = idElementInGroup*3 + A;
+         x = swap(&type, idElementInGroup, &portID, &endTime,
+                  leftBound + middle + rightBound, &idNewNode, q
+               );
+         break;
+      case 3://duy nhất ô của sự kiện B trống
+      case 8://cả 2 ô của sự kiện B, C trống
+         idNewNode = idElementInGroup*3 + B;
+         x = swap(&type, idElementInGroup, &portID, &endTime,
+                  leftBound + middle + rightBound, &idNewNode, q
+               );
+         break;
+      case 5://duy nhất ô của sự kiện C trống
+         idNewNode = idElementInGroup*3 + C;
+         x = swap(&type, idElementInGroup, &portID, &endTime,
+                  5, &idNewNode, q
+               );
+         break;
+      case 0://Không có ô nào trống cả
+         x = swap(&type, idElementInGroup, &portID, &endTime,
+                  0, &idNewNode, q
+               );
+         break;
    }
+   
+   if(x == 0)
+      return;
 
    arr[idNewNode][0] = type;
    arr[idNewNode][1] = idElementInGroup;
