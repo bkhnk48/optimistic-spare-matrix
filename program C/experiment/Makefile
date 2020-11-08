@@ -36,7 +36,7 @@ n:
 	gcc CalendarQueueTest.c -o cqtest.o
 	gcc -c CASplay.c
 	gcc CASplayTest.c -o catest.o
-	gcc randomFile.c -g -o ran.o
+	gcc randomFile.c -o ran.o
 clean: 
 	-rm *.o
 	-rm out
