@@ -3,7 +3,7 @@
 typedef struct node* List;
 
 List * makelist();
-void put(struct node* entry, List * list);
+void attach(struct node* entry, List * list);
 struct node* delete(struct node* entry, List * list);
 void display(List * list, int num);//num is the number of nodes on one line
 void reverse(List * list);
@@ -40,7 +40,7 @@ int compare_nodes(Node *n1, Node *n2) {
 	return (n1->endTime > n2->endTime);
 }
 
-void put(Node* entry, List * list) {
+void attach(Node* entry, List * list) {
   Node *previous = NULL;
   Node *current = NULL;
   if (entry->next != NULL) entry->next = NULL;
