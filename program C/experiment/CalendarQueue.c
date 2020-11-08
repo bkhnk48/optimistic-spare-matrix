@@ -28,6 +28,22 @@ double buckettop;
 int bot_threshold;
 int top_threshold;
 
+struct calendar_queue{
+    int firstSub;
+    List *bucket;
+    int bucket_top;
+    int width;
+    int nbuckets;
+    int qsize;
+    int last_bucket;
+    int last_prio;
+    int top_threshold;
+    int bot_threshold;
+    int resize_enabled;
+};
+
+typedef struct calendar_queue CalendarQueue;
+
 void insert(Node* entry){
     double priority = entry->endTime;
 
