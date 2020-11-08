@@ -6,7 +6,7 @@
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
-                int *root,
+                int *root, 
                 unsigned long arr[20250][7]
                 );
 /* From now on, an event has 7 fields about:
@@ -65,6 +65,17 @@ void add(int type, int idElementInGroup,
                      + idElementInGroup*4*4 + portID*4 + (type - D);
    }
    #pragma endregion
+
+   int leftBound = 3 * (idNewNode / 3);
+   if(arr[leftBound][4] != -1)
+   {
+      ///neu trong mang ko co cho trong. Thi phai kiem tra phan tu moi co
+      ///be hon phan tu nao ko? Neu ko thi cap nhat calendar
+      ///Neu co thi phan tu lon nhat se bi remove, gui vao calendar con
+      ///phan tu moi se chen vao cay?
+
+
+   }
 
    arr[idNewNode][0] = type;
    arr[idNewNode][1] = idElementInGroup;
