@@ -17,6 +17,7 @@ serial:
 	gcc CalendarQueueTest.c -g -o cqtest.o
 	gcc -g -c CASplay.c
 	gcc CASplayTest.c -g -o catest.o
+	gcc randomFile.c -g -o ran.o
 n:
 	gcc -c Event.c
 	gcc -c timing.c
@@ -35,6 +36,7 @@ n:
 	gcc CalendarQueueTest.c -o cqtest.o
 	gcc -c CASplay.c
 	gcc CASplayTest.c -o catest.o
+	gcc randomFile.c -g -o ran.o
 clean: 
 	-rm *.o
 	-rm out
