@@ -41,12 +41,15 @@ clean:
 	-rm *.o
 	-rm out
 	-rm *.out
+	-rm *.txt
 clear: 
 	-rm *.o
 	-rm out
 	-rm *.out
+	-rm *.txt
 c: 
 	-rm *.o
 	-rm out
 	-rm *.out
+	-rm *.txt
 
