@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Event.c"
-
+#include "CAQueue.c"
 
 void add(int type, int idElementInGroup,
                 int portID, 
