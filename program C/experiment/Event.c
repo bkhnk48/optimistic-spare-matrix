@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #ifndef _TYPES_OF_EVENT_
 #define _TYPES_OF_EVENT_
@@ -24,7 +25,8 @@ void loadArray(int a[1000]){
    FILE *fptr;
 
    if ((fptr = fopen("random1000.txt","r")) == NULL){
-       printf("Error! opening file");
+       printf("\nError! opening file\n");
+       exit(1);
        return;
    }
    int i = 0;
