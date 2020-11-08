@@ -10,8 +10,8 @@ int main()
     loadArray(arbitrary);
     double wc1 = 0, wc2 = 0, cpuT = 0;
     int i = 0;
-    long count = 0;
-    int index = 0;
+    unsigned long count = 0;
+    unsigned long index = 0;
     timing(&wc1, &cpuT);
     unsigned long currentTime = 0;
     unsigned long endTime = 10*((unsigned long)(1000*1000));
