@@ -20,6 +20,7 @@ enum Side{LEFT, RIGHT};
 
 void loadArray(int a[1000]){
    int num;
+   int tmp;
    FILE *fptr;
 
    if ((fptr = fopen("random1000.txt","r")) == NULL){
@@ -28,7 +29,7 @@ void loadArray(int a[1000]){
    }
    int i = 0;
    while(!feof(fptr)){
-    fscanf(fptr,"%d", &num);
+    tmp = fscanf(fptr,"%d", &num);
     a[i] = num;
     i++;
    }
