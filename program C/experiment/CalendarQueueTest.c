@@ -14,7 +14,7 @@ int main()
     int index = 0;
     timing(&wc1, &cpuT);
     unsigned long currentTime = 0;
-    unsigned long endTime = 5*((unsigned long)(1000*1000));
+    unsigned long endTime = 10*((unsigned long)(1000*1000));
 
     for(i = 0; i < 6750; i++)
     {
