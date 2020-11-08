@@ -31,11 +31,15 @@ int main(int argc, char** argv)
    timing(&wc1, &cpuT);
 
    root = -1;
-
+   CalendarQueue* qArray[6750];
+   for(i = 0; i < 6750; i++)
+   {
+      qArray[i] = initqueue();
+   } 
 
    for(i = 0; i < 6750; i++)
    {
-      add(0, i, 0, 0, &root, arr);
+      add(0, i, 0, 0, &root, qArray[i], arr);
    }
    removeFirst(&first, &root, arr);
       
@@ -59,11 +63,11 @@ int main(int argc, char** argv)
 
          if(type == A)
          {
-            add(A, i, 0, currentTime + 10000, &root, arr);
-            add(B, i, 0, currentTime        , &root, arr);
+            add(A, i, 0, currentTime + 10000, &root, qArray[i], arr);
+            add(B, i, 0, currentTime        , &root, qArray[i], arr);
          }
          else if(type == B){
-            add(C, i, 0, currentTime        , &root, arr);
+            add(C, i, 0, currentTime        , &root, qArray[i], arr);
          }
       }
       ongoingTime = -1;
