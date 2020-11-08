@@ -28,6 +28,8 @@ int main(int argc, char** argv)
    //CalendarQueue *q = initqueue(POOL);
 
    unsigned long count = 0;
+   unsigned long index = 0;
+   
    timing(&wc1, &cpuT);
 
    root = -1;
@@ -69,12 +71,21 @@ int main(int argc, char** argv)
          else if(type == B){
             add(C, i, 0, currentTime        , &root, qArray[i], arr);
          }
-      }
-      ongoingTime = -1;
-      removeFirst(&first, &root, arr);
+         int temp = arbitrary[index % 1000];
+         if(temp != -1)
+         {
+               //enqueue(new_node(C, i, 0, currentTime + temp), qArray[i]);
+            add(C, i, 0, currentTime + temp , &root, qArray[i], arr);
+               //printf("%ld ", currentTime + temp);
+         }
+         index++;
       
-      currentTime = arr[first][3];
-      ongoingTime = arr[first][3];
+         ongoingTime = -1;
+         removeFirst(&first, &root, arr);
+         
+         currentTime = arr[first][3];
+         ongoingTime = arr[first][3];
+      }
    }
    
 
