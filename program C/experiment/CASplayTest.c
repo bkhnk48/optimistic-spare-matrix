@@ -6,7 +6,7 @@
 
 void testGeneratingEventA();
 
-int main(int argc, char** argv) 
+int main(int argc, char** argv)
 {
    double wc1 = 0, wc2 = 0, cpuT = 0;
    int first = -1;
@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 
    unsigned long count = 0;
    unsigned long index = 0;
-   
+
    timing(&wc1, &cpuT);
 
    root = -1;
@@ -37,21 +37,21 @@ int main(int argc, char** argv)
    for(i = 0; i < 6750; i++)
    {
       qArray[i] = initqueue();
-   } 
+   }
 
    for(i = 0; i < 6750; i++)
    {
       add(0, i, 0, 0, &root, qArray[i], arr);
    }
    removeFirst(&first, &root, arr);
-      
+
    unsigned long ongoingTime = arr[first][3];
    while(currentTime <= endTime && ongoingTime != -1)
    {
       if(ongoingTime == currentTime)
       {
          count++;
-         
+
          int type = arr[first][0];
          i = arr[first][1];
          /*printf("%d)Event type = %d at %d with endTime = %d. The index is %d\n"
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
          arr[first][4] = -1;
          arr[first][5] = -1;
          arr[first][6] = -1;
-         
+
 
          if(type == A)
          {
@@ -71,23 +71,25 @@ int main(int argc, char** argv)
          else if(type == B){
             add(C, i, 0, currentTime        , &root, qArray[i], arr);
          }
-         int temp = arbitrary[index % 1000];
+         int temp = arbitrary[index];
          if(temp != -1)
          {
                //enqueue(new_node(C, i, 0, currentTime + temp), qArray[i]);
             add(C, i, 0, currentTime + temp , &root, qArray[i], arr);
                //printf("%ld ", currentTime + temp);
          }
-         index++;
-      
+         index = (index + 1) % 1000;
+
+         push(qArray[i], arr, i, &root);
+
          ongoingTime = -1;
          removeFirst(&first, &root, arr);
-         
+
          currentTime = arr[first][3];
          ongoingTime = arr[first][3];
       }
    }
-   
+
 
    timing(&wc2, &cpuT);
    printf("\nTime: %f ms with count = %ld\n", (wc2 - wc1)*1000, count);
