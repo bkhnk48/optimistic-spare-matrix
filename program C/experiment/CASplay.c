@@ -4,9 +4,9 @@
 #include "CAQueue.c"
 
 void add(int type, int idElementInGroup,
-                int portID, 
+                int portID,
                 unsigned long endTime,
-                int *root, 
+                int *root,
                 CalendarQueue *q,
                 unsigned long arr[20250][7]
                 );
@@ -20,6 +20,13 @@ void add(int type, int idElementInGroup,
    + index of right
 */
 
+void raw_add(unsigned long type, unsigned long idElementInGroup,
+                unsigned long portID,
+                unsigned long endTime,
+                unsigned long idNewNode,
+                int *root,
+                unsigned long arr[20250][7]);
+
 void splay(int e, unsigned long arr[20250][7]);
 
 void removeFirst(int * first, int * root, unsigned long arr[20250][7]);
@@ -28,19 +35,14 @@ void show(unsigned long arr[20250][7], int root);
 void leaf(unsigned long arr[20250][7], int root, enum Side side);
 
 void add(int type, int idElementInGroup,
-                int portID, 
+                int portID,
                 unsigned long endTime,
                 int *root,
                 CalendarQueue *q,
                 unsigned long arr[20250][7]
                 )
 {
-   /* Quy ước các event từ A đến G (tức type = 0..4) sẽ là 
-      các event xảy ra trên hosts
-      Các biến type < 0 sẽ là event xảy ra trên các edge switch
-      Các biến type có bit cuối cùng là 1 sẽ là các event xảy ra trên Core switch
-      Các biến type có bit cuối cùng là 0 sẽ là các event xảy ra trên Agg switch
-   */
+
    int idNewNode = 0;
    if(type == A || type == B || type == C || type == H_HOST || type == G)
    {
@@ -59,27 +61,27 @@ void add(int type, int idElementInGroup,
       else{
          idNewNode += (4/2) * 3 + (portID - 4/2) * 4 + (positiveType - D);
       }
-   }  
+   }
    else{
       int isCoreSwitch = type & 1;
       type = type >> 1;
-      idNewNode = 16*5 + (4*4/2)*((4/2)*4 + 3*(4/2)) 
+      idNewNode = 16*5 + (4*4/2)*((4/2)*4 + 3*(4/2))
                      + idElementInGroup*4*4 + portID*4 + (type - D);
    }
    #pragma endregion
 
-   int leftBound = (arr[idElementInGroup*3][4] 
+   int leftBound = (arr[idElementInGroup*3][4]
                      * arr[idElementInGroup*3][5]
                      * arr[idElementInGroup*3][6] == -1 ? 1 : 0);
-   
-   int middle = (arr[idElementInGroup*3 + 1][4] 
+
+   int middle = (arr[idElementInGroup*3 + 1][4]
                      * arr[idElementInGroup*3 + 1][5]
                      * arr[idElementInGroup*3 + 1][6] == -1 ? 3 : 0);
-                     
-   int rightBound = (arr[idElementInGroup*3 + 2][4] 
+
+   int rightBound = (arr[idElementInGroup*3 + 2][4]
                      * arr[idElementInGroup*3 + 2][5]
                      * arr[idElementInGroup*3 + 2][6] == -1 ? 5 : 0);
-   int x = 0;        
+   int x = 0;
    switch(leftBound + rightBound + middle)
    {
       case 9://Ca ba o A, B, C deu trong
@@ -87,44 +89,54 @@ void add(int type, int idElementInGroup,
                   9, &idNewNode, q
                );
          break;
-      case 1://duy nhất ô của sự kiện A trống
-      case 4://cả 2 ô của sự kiện A, B trống
-      case 6://cả 2 ô của sự kiện A, C trống
+      case 1://A
+      case 4://A, B
+      case 6://A, C
          idNewNode = idElementInGroup*3 + A;
          x = swap(&type, idElementInGroup, &portID, &endTime,
                   leftBound + middle + rightBound, &idNewNode, q
                );
          break;
-      case 3://duy nhất ô của sự kiện B trống
-      case 8://cả 2 ô của sự kiện B, C trống
+      case 3://B
+      case 8://B, C
          idNewNode = idElementInGroup*3 + B;
          x = swap(&type, idElementInGroup, &portID, &endTime,
                   leftBound + middle + rightBound, &idNewNode, q
                );
          break;
-      case 5://duy nhất ô của sự kiện C trống
+      case 5://C
          idNewNode = idElementInGroup*3 + C;
          x = swap(&type, idElementInGroup, &portID, &endTime,
                   5, &idNewNode, q
                );
          break;
-      case 0://Không có ô nào trống cả
+      case 0://Khong co o nao trong ca
          x = swap(&type, idElementInGroup, &portID, &endTime,
                   0, &idNewNode, q
                );
          break;
    }
-   
+
    if(x == 0)
       return;
 
+   raw_add(type, idElementInGroup, portID, endTime, idNewNode, root, arr);
+
+}
+
+void raw_add(unsigned long type, unsigned long idElementInGroup,
+                unsigned long portID,
+                unsigned long endTime,
+                unsigned long idNewNode,
+                int *root,
+                unsigned long arr[20250][7]){
    arr[idNewNode][0] = type;
    arr[idNewNode][1] = idElementInGroup;
    arr[idNewNode][2] = portID;
    arr[idNewNode][3] = endTime;
    int formerFather = arr[idNewNode][4];
    if(formerFather != -1)
-   { 
+   {
       if(arr[formerFather][5] == idNewNode)
       {
          arr[formerFather][5] = -1;
@@ -223,7 +235,6 @@ void add(int type, int idElementInGroup,
 
    //return newNode;
    *root = idNewNode;
-
 }
 
 void splay(int e, unsigned long arr[20250][7])
@@ -343,8 +354,8 @@ void removeFirst(int * first, int * root, unsigned long arr[20250][7])
 {
    int t = *root;
    if(t == -1)
-   {  
-      *first = -1; 
+   {
+      *first = -1;
       return;//return NULL;
    }
    int temp = t;
@@ -353,7 +364,7 @@ void removeFirst(int * first, int * root, unsigned long arr[20250][7])
       temp = arr[temp][5]; //temp = temp->left;
    }
    *first = temp;
-   
+
    splay(*first, arr);
    while(arr[t][4] != -1)
    {
@@ -373,24 +384,24 @@ void removeFirst(int * first, int * root, unsigned long arr[20250][7])
    if(temp == arr[t][4])//if(temp == t->father)
    {
         removedFather = 1;
-   }  
-   if(rightTree == -1 && 
-            leftTree == -1 && 
+   }
+   if(rightTree == -1 &&
+            leftTree == -1 &&
                removedFather == 1
                //if(rightTree == NULL && leftTree == NULL && removedFather == 1
             )
-   {  
+   {
       *first = t; return; //return t;
    }
    if(rightTree == -1)//if(rightTree == NULL)
-   {     
+   {
       t = leftTree; //t = leftTree;
    }
    else if(leftTree == -1) //if(leftTree == NULL)
    {
       t = rightTree; //t = rightTree;
    }
-   else 
+   else
    {
       int newRoot = rightTree; //Tree * newRoot = rightTree;
       while(arr[newRoot][5] != -1) //while(newRoot->left != NULL)
@@ -413,14 +424,14 @@ void removeFirst(int * first, int * root, unsigned long arr[20250][7])
 
    *root = t; //return t;
    return;
-   
+
 }
 
 void show(unsigned long arr[20250][7], int root)
 {
    if(root != -1 && arr[root][3] != -1)
    {
-      printf("\n===========> for event type = %ld at end = %ld in %ld\n", 
+      printf("\n===========> for event type = %ld at end = %ld in %ld\n",
                arr[root][0], arr[root][3], arr[root][1]);
       leaf(arr, arr[root][5], LEFT);
       leaf(arr, arr[root][6], RIGHT);
@@ -442,7 +453,7 @@ void leaf(unsigned long arr[20250][7], int root, enum Side side)
    }
    if(root != -1 && arr[root][3] != -1)
    {
-      printf("for event type = %ld at end = %ld in %ld. It's index = %d\n", 
+      printf("for event type = %ld at end = %ld in %ld. It's index = %d\n",
                arr[root][0], arr[root][3], arr[root][1], root);
       leaf(arr, arr[root][5], LEFT);
       leaf(arr, arr[root][6], RIGHT);
