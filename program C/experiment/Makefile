@@ -13,6 +13,8 @@ serial:
 	gcc MultiOpSplayTest.c -g -o mtest.o
 	gcc -g -c ListSplay.c
 	gcc ListSplayTest.c -g -o ltest.o
+	gcc -g -c Node.c
+	gcc -g -c LinkedList.c
 	gcc -g -c CalendarQueue.c
 	gcc CalendarQueueTest.c -g -o cqtest.o
 	gcc -g -c CAQueue.c
@@ -33,6 +35,8 @@ n:
 	gcc MultiOpSplayTest.c -o mtest.o
 	gcc -c ListSplay.c
 	gcc ListSplayTest.c -DDO_PREFETCH -o ltest.o
+	gcc -c Node.c
+	gcc -c LinkedList.c
 	gcc -c CalendarQueue.c
 	gcc CalendarQueueTest.c -o cqtest.o
 	gcc -c CAQueue.c
