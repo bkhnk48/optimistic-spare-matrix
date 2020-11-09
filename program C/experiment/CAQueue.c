@@ -5,6 +5,8 @@
 #include "LinkedList.c"
 #include <limits.h>
 
+#ifndef _TYPES_OF_CAQUEUE_
+#define _TYPES_OF_CAQUEUE_
 enum BOOLEAN{FALSE, TRUE};
 
 
@@ -305,6 +307,174 @@ int swap(int *type, int idElementInGroup,
     return 1;
 }
 
-void push(CalendarQueue* q, unsigned long arr[20250][7], unsigned long idElementInGroup ){
 
+void raw_add(unsigned long type, unsigned long idElementInGroup,
+                unsigned long portID,
+                unsigned long endTime,
+                unsigned long idNewNode,
+                int *root,
+                unsigned long arr[20250][7]){
+   arr[idNewNode][0] = type;
+   arr[idNewNode][1] = idElementInGroup;
+   arr[idNewNode][2] = portID;
+   arr[idNewNode][3] = endTime;
+   int formerFather = arr[idNewNode][4];
+   if(formerFather != -1)
+   {
+      if(arr[formerFather][5] == idNewNode)
+      {
+         arr[formerFather][5] = -1;
+      }
+      else if(arr[formerFather][6] == idNewNode)
+      {
+         arr[formerFather][6] = -1;
+      }
+   }
+   arr[idNewNode][4] = -1;
+   arr[idNewNode][5] = -1;
+   arr[idNewNode][6] = -1;
+
+   if(*root == -1)
+   {
+      *root = idNewNode;
+      return;
+   }
+   int left = idNewNode, right = idNewNode, temp = -1;
+   int end_splay = 0;
+   int t = *root;
+   while (end_splay == 0) {
+      if(endTime > arr[t][3])//if(endTime > t->endTime)
+      {
+         temp = arr[t][6];//temp = t->right;
+         if(temp == -1)//if(temp == NULL)
+         {
+            //cas "zig"
+            arr[left][6] = t; //left->right = t;
+            arr[t][4] = left; //t->father = left;
+            arr[right][5] = -1;//right->left = NULL;
+            end_splay = 1;
+         }
+         else if(endTime < arr[temp][3])//if(endTime < temp->endTime)
+         {
+            //cas "zig-zag" simplifie
+            arr[left][6] = t;//left->right = t;
+            arr[t][4] = left;//t->father = left;
+            left = t;//left = t;
+            t = temp;//t = temp;
+         }
+         else {
+            //cas "zig-zig"
+            arr[t][6] = arr[temp][5]; //t->right = temp->left;
+            if(arr[temp][5] != -1)//if (temp->left != NULL)
+               arr[  arr[temp][5]  ][  4  ] = t; //temp->left->father = t;
+            arr[left][6] = temp;//left->right = temp;
+            arr[temp][4] = left;//temp->father = left;
+            arr[temp][5] = t;//temp->left = t;
+            arr[t][4] = temp;//t->father = temp;
+            left = temp;
+            t = arr[temp][6];//t = temp->right;
+            if(t == -1){//if (t == NULL) {
+               arr[right][5] = -1;//right->left = NULL;
+               end_splay = 1;
+            }
+         }
+      }else {
+         temp = arr[t][5]; //temp = t->left;
+         if(temp == -1){//if (temp == NULL) {
+            //cas "zig"
+            arr[right][5] = t; //right->left = t;
+            arr[t][4] = right; //t->father = right;
+            arr[left][6] = -1;     //left->right = NULL;
+            end_splay = 1;
+         }
+         else if (endTime > arr[temp][3]) {//if (endTime > temp->endTime) {
+            //cas "zig-zag" simplifie
+            arr[right][5] = t; //right->left = t;
+            arr[t][4] = right; //t->father = right;
+            right = t;//right = t;
+            t = temp;//t = temp;
+         }
+         else {
+            //cas "zig-zig"
+            arr[t][5] = arr[temp][6]; //t->left = temp->right;
+            if (arr[temp][6] != -1)//if (temp->right != NULL)
+               arr[  arr[temp][6]  ][4] = t; //temp->right->father = t;
+            arr[right][5] = temp; //right->left = temp;
+            arr[temp][4] = right; //temp->father = right;
+            arr[temp][6] = t; //temp->right = t;
+            arr[t][4] = temp; //t->father = temp;
+            right = temp;         //right = temp;
+            t = arr[temp][5]; //t = temp->left;
+            if(t == -1) {//if (t == NULL) {
+               arr[left][6] = -1; //left->right = NULL;
+               end_splay = 1;
+            }
+         }
+      }
+   }
+
+   temp = arr[idNewNode][5]; //temp = newNode->left;
+   arr[idNewNode][5] = arr[idNewNode][6]; //newNode->left = newNode->right;
+   arr[idNewNode][6] = temp; //newNode->right = temp;
+
+   //return newNode;
+   *root = idNewNode;
 }
+
+
+void push(CalendarQueue* q, unsigned long arr[20250][7], unsigned long idElementInGroup, int *root){
+    int leftBound = (arr[idElementInGroup*3][4]
+                     * arr[idElementInGroup*3][5]
+                     * arr[idElementInGroup*3][6] == -1 ? 1 : 0);
+
+   int middle = (arr[idElementInGroup*3 + 1][4]
+                     * arr[idElementInGroup*3 + 1][5]
+                     * arr[idElementInGroup*3 + 1][6] == -1 ? 3 : 0);
+
+   int rightBound = (arr[idElementInGroup*3 + 2][4]
+                     * arr[idElementInGroup*3 + 2][5]
+                     * arr[idElementInGroup*3 + 2][6] == -1 ? 5 : 0);
+   int x = leftBound + rightBound + middle;
+   Node* temp;
+   unsigned long type, portID, endTime, idNewNode;
+   switch(x)
+   {
+      case 9://Ca ba o A, B, C deu trong
+      case 1://A
+      case 4://A, B
+      case 6://A, C
+         idNewNode = idElementInGroup*3 + A;
+         temp = dequeue(q);
+         type = temp->type;
+         portID = temp->portID;
+         endTime = temp->endTime;
+         free(temp);
+         break;
+      case 3://B
+      case 8://B, C
+         idNewNode = idElementInGroup*3 + B;
+         temp = dequeue(q);
+         type = temp->type;
+         portID = temp->portID;
+         endTime = temp->endTime;
+         free(temp);
+         break;
+      case 5://C
+         idNewNode = idElementInGroup*3 + C;
+         temp = dequeue(q);
+         type = temp->type;
+         portID = temp->portID;
+         endTime = temp->endTime;
+         free(temp);
+         break;
+      case 0://Khong co o nao trong ca
+
+         break;
+   }
+
+   if(x != 0)
+        raw_add(type, idElementInGroup, portID, endTime, idNewNode, root, arr);
+   return;
+}
+
+#endif
