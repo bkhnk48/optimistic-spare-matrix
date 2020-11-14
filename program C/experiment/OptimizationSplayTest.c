@@ -32,9 +32,11 @@ int main(int argc, char** argv)
 
    for(i = 0; i < 6750L; i++)
    {
-      add(0, i, 0, 0L, &root, arr);
+      add(0, i, 0, 0L, &root//, arr
+                              );
    }
-   removeFirst(&first, &root, arr);
+   removeFirst(&first, &root//, arr
+                              );
       
    unsigned long ongoingTime = arr[first][3];
    while(currentTime <= endTime && ongoingTime != -1)
@@ -56,15 +58,19 @@ int main(int argc, char** argv)
 
          if(type == A)
          {
-            add(A, i, 0, currentTime + 10000L, &root, arr);
-            add(B, i, 0, currentTime +  3333L, &root, arr);
+            add(A, i, 0, currentTime + 10000L, &root//, arr
+                        );
+            add(B, i, 0, currentTime +  3333L, &root//, arr
+                        );
          }
          else if(type == B){
-            add(C, i, 0, currentTime +  3333L, &root, arr);
+            add(C, i, 0, currentTime +  3333L, &root//, arr
+                        );
          }
       }
       ongoingTime = -1;
-      removeFirst(&first, &root, arr);
+      removeFirst(&first, &root//, arr
+               );
       
       currentTime = arr[first][3];
       ongoingTime = arr[first][3];
