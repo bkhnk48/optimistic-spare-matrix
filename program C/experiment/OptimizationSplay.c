@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "Event.c"
 
-
+unsigned long arr[20250][7];
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
