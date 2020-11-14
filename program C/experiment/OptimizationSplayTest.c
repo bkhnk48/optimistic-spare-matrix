@@ -13,14 +13,16 @@ int main(int argc, char** argv)
    unsigned long endTime = 60*((unsigned long)(1000*1000));
 
    unsigned long arr[20250][7];//20250 = 3*(k*k*k/4) as k = 30
-   int i, j, N, root = -1;
-   for(i = 0; i < 20250; i++)
+   unsigned long i;
+   int j, N, root = -1;
+   for(i = 0; i < 20250L; i++)
    {
       for(j = 0; j < 7; j++)
       {
-         arr[i][j] = -1;
+         arr[i][j] = -1L;
       }
    }
+   printf("Simulation time is %ld (s)\n", endTime / (1000*1000));
 
    unsigned long count = 0;
    timing(&wc1, &cpuT);
@@ -28,9 +30,9 @@ int main(int argc, char** argv)
    root = -1;
 
 
-   for(i = 0; i < 6750; i++)
+   for(i = 0; i < 6750L; i++)
    {
-      add(0, i, 0, 0, &root, arr);
+      add(0, i, 0, 0L, &root, arr);
    }
    removeFirst(&first, &root, arr);
       
@@ -46,19 +48,19 @@ int main(int argc, char** argv)
          /*printf("%d)Event type = %d at %d with endTime = %d. The index is %d\n"
                , count, type, i, arr[first][3], first
                );*/
-         arr[first][3] = -1;
-         arr[first][4] = -1;
-         arr[first][5] = -1;
-         arr[first][6] = -1;
+         arr[first][3] = -1L;
+         arr[first][4] = -1L;
+         arr[first][5] = -1L;
+         arr[first][6] = -1L;
          
 
          if(type == A)
          {
-            add(A, i, 0, currentTime + 10000, &root, arr);
-            add(B, i, 0, currentTime        , &root, arr);
+            add(A, i, 0, currentTime + 10000L, &root, arr);
+            add(B, i, 0, currentTime +  3333L, &root, arr);
          }
          else if(type == B){
-            add(C, i, 0, currentTime        , &root, arr);
+            add(C, i, 0, currentTime +  3333L, &root, arr);
          }
       }
       ongoingTime = -1;
