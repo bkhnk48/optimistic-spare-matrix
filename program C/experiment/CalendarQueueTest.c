@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "CalendarQueue.c"
 #include "timing.c"
+#include <locale.h>
 
 
 int main()
@@ -59,7 +60,8 @@ int main()
     }
 
     timing(&wc2, &cpuT);
-    printf("Time: %f ms with count = %ld\n", (wc2 - wc1)*1000, count);
+    setlocale(LC_NUMERIC, "");
+    printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
     printf("================================\n");
 
     return 0;
