@@ -3,25 +3,28 @@
 #include "CalendarQueue.c"
 #include "timing.c"
 
+
 int main()
 {
     initqueue();
-    int arbitrary[1000];
-    loadArray(arbitrary);
+    //int arbitrary[1000];
+    //loadArray(arbitrary);
     double wc1 = 0, wc2 = 0, cpuT = 0;
-    int i = 0;
+    unsigned long i = 0;
     unsigned long count = 0;
     unsigned long index = 0;
-    timing(&wc1, &cpuT);
+    
     unsigned long currentTime = 0;
-    unsigned long endTime = 10*((unsigned long)(1000*1000));
+    unsigned long endTime = 60*((unsigned long)(1000*1000));
+    printf("Simulation time is %ld (s)\n", endTime / (1000*1000));
 
-    for(i = 0; i < 6750; i++)
+    timing(&wc1, &cpuT);
+    for(i = 0; i < 6750L; i++)
     {
-        enqueue(new_node(A, i, 0, 0));
+        enqueue(new_node(A, i, 0L, 0L));
     }
 
-
+    
     Node * ev = dequeue();
     while(currentTime <= endTime && ev->endTime != -1)
     {   //printf("hello world");
@@ -34,20 +37,20 @@ int main()
             i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
             if(ev->type == A)
             {
-                enqueue(new_node(A, i, 0, currentTime + 10000));
-                enqueue(new_node(B, i, 0, currentTime));
+                enqueue(new_node(A, i, 0L, currentTime + 10000L));
+                enqueue(new_node(B, i, 0L, currentTime +  3333L));
             }
             else if(ev->type == B)
             {
-                enqueue(new_node(C, i, 0, currentTime));
+                enqueue(new_node(C, i, 0L, currentTime + 3333L));
             }
-            int temp = arbitrary[index % 1000];
-            if(temp != -1)
+            //int temp = arbitrary[index % 1000];
+            //if(temp != -1)
             {
-                enqueue(new_node(C, i, 0, currentTime + temp));
+                //enqueue(new_node(C, i, 0, currentTime + temp));
                 //printf("%ld ", currentTime + temp);
             }
-            index++;
+            //index++;
             ev->endTime = -1;
             ev = dequeue();
 
@@ -56,7 +59,7 @@ int main()
     }
 
     timing(&wc2, &cpuT);
-    printf("\nTime: %f ms with count = %ld\n", (wc2 - wc1)*1000, count);
+    printf("Time: %f ms with count = %ld\n", (wc2 - wc1)*1000, count);
     printf("================================\n");
 
     return 0;
