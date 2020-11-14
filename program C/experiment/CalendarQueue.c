@@ -6,9 +6,9 @@
 
 void insert(Node* entry);
 Node* removeSoonestEvent();
-double newwidth();
-void resize(int newsize);
-void localInit(int nbuck, double bwidth, double startprio);
+unsigned long newwidth();
+void resize(unsigned long newsize);
+void localInit(unsigned long nbuck, unsigned long bwidth, unsigned long startprio);
 void initqueue();
 void enqueue(Node* entry);
 Node* dequeue();
@@ -17,35 +17,34 @@ void printBuckets();
 
 //node** a;
 Node** buckets;
-double width;
-int nbuckets;
-int firstsub;
+int width;
+unsigned long nbuckets;
+//int firstsub;
 int resizeenable;
-int qsize;
-double lastprio;
-int lastbucket;
-double buckettop;
-int bot_threshold;
-int top_threshold;
+unsigned long qsize;
+unsigned long lastprio;
+unsigned long lastbucket;
+unsigned long buckettop;
+unsigned long bot_threshold;
+unsigned long top_threshold;
 
 struct calendar_queue{
-    int firstSub;
     List *bucket;
-    int bucket_top;
+    unsigned long bucket_top;
     int width;
-    int nbuckets;
-    int qsize;
-    int last_bucket;
-    int last_prio;
-    int top_threshold;
-    int bot_threshold;
+    unsigned long nbuckets;
+    unsigned long qsize;
+    unsigned long last_bucket;
+    unsigned long last_prio;
+    unsigned long top_threshold;
+    unsigned long bot_threshold;
     int resize_enabled;
 };
 
 typedef struct calendar_queue CalendarQueue;
 
 void insert(Node* entry){
-    double priority = entry->endTime;
+    unsigned long priority = entry->endTime;
 
     // i la vi tri bucket ma entry chen vao
     int i;
@@ -80,7 +79,7 @@ void insert(Node* entry){
 }
 
 Node* removeSoonestEvent(){
-    int i;
+    unsigned long i;
     if(qsize == 0) return NULL;
 
     i = lastbucket;
@@ -103,11 +102,11 @@ Node* removeSoonestEvent(){
 
     // neu khong tim thay gia tri nho nhat trong nam
     // quay lai tim gia tri nho nhat trong tat ca cac gia tri dau cua buckets
-    int minbucket;
-    double minpri;
+    unsigned long minbucket;
+    unsigned long minpri;
 
     // start : vi tri dau tien buckets[i] != NULL
-    int start;
+    unsigned long start;
     for(start=0; start<nbuckets; start++)
         if(buckets[start] != NULL){
             lastbucket = start;
@@ -117,8 +116,9 @@ Node* removeSoonestEvent(){
             break;
         }
 
+    
     // tim vi tri buckets[i] != NULL ma nho nhat
-    for(int i = start+1; i<nbuckets; i++)
+    for(i = start+1; i<nbuckets; i++)
         if(buckets[i] != NULL){
             if(buckets[i]->endTime < minpri){
                 lastbucket = i;
@@ -131,17 +131,17 @@ Node* removeSoonestEvent(){
     Node* foo = buckets[minbucket];
     buckets[minbucket] = foo->next;
 
-    int n = lastprio / width;
+    unsigned long n = lastprio / width;
     buckettop = (n+1) * width + 0.5*width;
     qsize--;
 
     return foo;
 }
 
-double newwidth(){
-    int nsamples;
+unsigned long newwidth(){
+    unsigned long nsamples;
 
-    if(qsize < 2) return 1.0;
+    if(qsize < 2) return 1;
     if(qsize <= 5)
         nsamples = qsize;
     else
@@ -149,23 +149,24 @@ double newwidth(){
 
     if(nsamples > 25) nsamples = 25;
 
-    double oldlastprio = lastprio;
-    int oldlastbucket = lastbucket;
-    double oldbuckkettop = buckettop;
+    unsigned long oldlastprio = lastprio;
+    unsigned long oldlastbucket = lastbucket;
+    unsigned long oldbuckkettop = buckettop;
 
 
     // lay ra nsamples gia tri mau
     // luc lay ra mau ngan chan viec resize, resizeenable = false
     resizeenable = 0;
     Node* save = (Node*) calloc(nsamples,sizeof(Node));
-    for(int i=0; i<nsamples; i++){
+    unsigned long i;
+    for(i=0; i<nsamples; i++){
         Node* tmp = removeSoonestEvent();
         save[i] = *tmp;
     }
     resizeenable = 1;
 
     //  tra lai cac gia tri da lay ra trong hang doi
-    for(int i=0; i<nsamples; i++){
+    for(i=0; i<nsamples; i++){
         insert(&save[i]);
     }
     lastprio = oldlastprio;
@@ -201,13 +202,13 @@ double newwidth(){
     totalSeparation *= 3;
     totalSeparation = totalSeparation < 1.0 ? 1.0 : totalSeparation;
 
-    return totalSeparation;
+    return (unsigned long)totalSeparation;
 }
 
-void resize(int newsize){
-    double bwidth;
-    int i;
-    int oldnbuckets;
+void resize(unsigned long newsize){
+    unsigned long bwidth;
+    
+    unsigned long oldnbuckets;
     Node** oldbuckets;
 
     if(!resizeenable) return;
@@ -218,8 +219,9 @@ void resize(int newsize){
 
     localInit(newsize,bwidth,lastprio);
 
+    unsigned long i;
     // them lai cac phan tu vao calendar moi
-    for(int i=0; i<oldnbuckets; i++){
+    for(i=0; i<oldnbuckets; i++){
         Node* foo = oldbuckets[i];
         while(foo!=NULL){ // tranh viec lap vo han
             Node* tmp = new_node(foo->type,foo->idElementInGroup,
@@ -232,9 +234,9 @@ void resize(int newsize){
     return;
 }
 
-void localInit(int nbuck, double bwidth, double startprio){
-    int i;
-    long int n;
+void localInit(unsigned long nbuck, unsigned long bwidth, unsigned long startprio){
+    unsigned long i;
+    unsigned long n;
 
     // khoi tao cac tham so
     buckets = (Node**) calloc(nbuck,sizeof(Node));
@@ -243,7 +245,7 @@ void localInit(int nbuck, double bwidth, double startprio){
 
     // khoi tao cac bucket
     qsize = 0;
-    for(int i=0; i<nbuckets; i++){
+    for(i=0; i<nbuckets; i++){
         buckets[i] = NULL;
     }
 
@@ -288,18 +290,19 @@ void printBucket(Node* n){
     return;
 }
 void printBuckets(){
-    for(int i=0; i<nbuckets; i++){
-        printf("Day %d : ",i);
+    unsigned long i;
+    for(i=0; i<nbuckets; i++){
+        printf("Day %ld : ",i);
         Node* tmp = buckets[i];
         printBucket(tmp);
         printf("\n");
     }
-    printf("\nCount of event : %d\n",qsize);
-    printf("so luong bucket : %d\n",nbuckets);
-    printf("buckettop : %.1f\n",buckettop);
-    printf("lastbuckket : %d\n",lastbucket);
-    printf("lastprio : %.1f\n",lastprio);
-    printf("width : %.1f\n",width);
-    printf("bot : %.1d\n",bot_threshold);
-    printf("top : %.1d",top_threshold);
+    printf("\nCount of event : %ld\n",qsize);
+    printf("so luong bucket : %ld\n",nbuckets);
+    printf("buckettop : %ld\n",buckettop);
+    printf("lastbuckket : %ld\n",lastbucket);
+    printf("lastprio : %ld\n",lastprio);
+    printf("width : %d\n",width);
+    printf("bot : %ld\n",bot_threshold);
+    printf("top : %ld",top_threshold);
 }
