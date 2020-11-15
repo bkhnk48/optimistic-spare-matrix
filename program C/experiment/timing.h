@@ -6,4 +6,4 @@
 
 
 
-void timing(double* wcTime, double* cpuTime);
+void timing(double* wcTime, double* cpuTime, long *majorPft);
