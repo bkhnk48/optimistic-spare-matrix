@@ -2,17 +2,26 @@
 #include <stdlib.h>
 #include "VoidSplay.c"
 #include "timing.c"
+#include <locale.h>
 
-int main()
+int main(int argc, char** argv) 
 {
     splay_tree *t = new_splay_tree();              /* the empty tree */
     double wc1 = 0, wc2 = 0, cpuT = 0;
     int i = 0;
     long count = 0;
+    int defaultSec = 70;
+
+    if(argc >= 2)
+    {
+      defaultSec = atoi(argv[1]);
+    }
+    unsigned long currentTime = 0;
+    unsigned long endTime = defaultSec*((unsigned long)(1000*1000));
+    printf("Simulation time is %ld (s)\n", endTime / (1000*1000));
+
     timing(&wc1, &cpuT);
-    int currentTime = 0;
-    int endTime = 1000*1000;
-    
+
     for(i = 0; i < 6750; i++)
     {
         insert(t, new_node(A, i, 0, 0));
@@ -31,11 +40,11 @@ int main()
             if(ev->type == A)
             {
                 insert(t, new_node(A, i, 0, currentTime + 10000));
-                insert(t, new_node(B, i, 0, currentTime));
+                insert(t, new_node(B, i, 0, currentTime +  3333));
             }
             else if(ev->type == B)
             {
-                insert(t, new_node(C, i, 0, currentTime));
+                insert(t, new_node(C, i, 0, currentTime +  3333));
             }
             free(ev);
             ev = removeFirst(t);
@@ -46,7 +55,8 @@ int main()
 
     
     timing(&wc2, &cpuT);
-    printf("Time: %f ms with count = %ld\n", (wc2 - wc1)*1000, count);
+    setlocale(LC_NUMERIC, "");
+    printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
     printf("================================\n");
 
     return 0;
