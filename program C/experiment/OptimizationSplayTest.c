@@ -4,12 +4,10 @@
 #include "timing.c"
 #include <locale.h>
 
-void testGeneratingEventA();
 
 int main(int argc, char** argv) 
 {
    double wc1 = 0, wc2 = 0, cpuT = 0;
-   long majorPft1 = 0, majorPft2 = 0;
    int first = -1;
    int defaultSec = 70;
 
@@ -38,7 +36,8 @@ int main(int argc, char** argv)
 
    printf("Start Simulating ......\n");
    unsigned long count = 0;
-   timing(&wc1, &cpuT, &majorPft1);
+   //char* p = malloc(1 * 1024 * 1024 * 1024);
+   timing(&wc1, &cpuT);
 
    root = -1;
 
@@ -54,6 +53,10 @@ int main(int argc, char** argv)
    unsigned long ongoingTime = arr[first][3];
    while(currentTime <= endTime && ongoingTime != -1)
    {
+      
+      //for (int i = 0; i < 1024; ++i) {
+      //   p[i * 1024 * 1024] = currentTime;    
+      //}
       if(ongoingTime == currentTime)
       {
          count++;
@@ -89,10 +92,9 @@ int main(int argc, char** argv)
       ongoingTime = arr[first][3];
    }
    
-
-   timing(&wc2, &cpuT, &majorPft2);
-   printf("Time: %'f ms with count = %'ld as well as page fault = %ld\n", 
-                    (wc2 - wc1)*1000, count, majorPft2 - majorPft1);
+   printf("Stop Simulating...\n");
+   timing(&wc2, &cpuT);
+   printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
    printf("================================\n");
 
 
