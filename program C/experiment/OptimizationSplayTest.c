@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "OptimizationSplay.c"
 #include "timing.c"
+#include <locale.h>
 
 void testGeneratingEventA();
 
@@ -9,10 +10,16 @@ int main(int argc, char** argv)
 {
    double wc1 = 0, wc2 = 0, cpuT = 0;
    int first = -1;
-   unsigned long currentTime = 0;
-   unsigned long endTime = 60*((unsigned long)(1000*1000));
+   int defaultSec = 70;
 
-   //unsigned long arr[20250][7];//20250 = 3*(k*k*k/4) as k = 30
+   if(argc >= 2)
+   {
+      defaultSec = atoi(argv[1]);
+   }
+   unsigned long currentTime = 0;
+   unsigned long endTime = defaultSec*((unsigned long)(1000*1000));
+
+   unsigned long arr[20250][7];//20250 = 3*(k*k*k/4) as k = 30
    unsigned long i;
    int j, N, root = -1;
    for(i = 0; i < 20250L; i++)
@@ -32,10 +39,10 @@ int main(int argc, char** argv)
 
    for(i = 0; i < 6750L; i++)
    {
-      add(0, i, 0, 0L, &root//, arr
+      add(0, i, 0, 0L, &root, arr
                               );
    }
-   removeFirst(&first, &root//, arr
+   removeFirst(&first, &root, arr
                               );
       
    unsigned long ongoingTime = arr[first][3];
@@ -58,18 +65,18 @@ int main(int argc, char** argv)
 
          if(type == A)
          {
-            add(A, i, 0, currentTime + 10000L, &root//, arr
+            add(A, i, 0, currentTime + 10000L, &root, arr
                         );
-            add(B, i, 0, currentTime +  3333L, &root//, arr
+            add(B, i, 0, currentTime +  3333L, &root, arr
                         );
          }
          else if(type == B){
-            add(C, i, 0, currentTime +  3333L, &root//, arr
+            add(C, i, 0, currentTime +  3333L, &root, arr
                         );
          }
       }
       ongoingTime = -1;
-      removeFirst(&first, &root//, arr
+      removeFirst(&first, &root, arr
                );
       
       currentTime = arr[first][3];
@@ -78,7 +85,8 @@ int main(int argc, char** argv)
    
 
    timing(&wc2, &cpuT);
-   printf("Time: %f ms with count = %ld\n", (wc2 - wc1)*1000, count);
+   setlocale(LC_NUMERIC, "");
+   printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
    printf("================================\n");
 
 
