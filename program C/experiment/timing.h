@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/resource.h>
+#include <locale.h>
 
 
-
-void timing(double* wcTime, double* cpuTime, long *majorPft);
+void timing(double* wcTime, double* cpuTime);
