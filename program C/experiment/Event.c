@@ -19,7 +19,8 @@ enum TypesOfEvent
 
 enum Side{LEFT, RIGHT};
 
-void loadArray(int a[1000]){
+/*void loadArray(int a[1000]){
+    printf("fsdfsdf");
    int num;
    int tmp;
    FILE *fptr;
@@ -37,5 +38,5 @@ void loadArray(int a[1000]){
    }
 
    fclose(fptr);
-}
+}*/
 #endif
