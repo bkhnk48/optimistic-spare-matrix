@@ -11,7 +11,7 @@ int main()
     long count = 0;
     
     
-    timing(&wc1, &cpuT);
+    //timing(&wc1, &cpuT);
     int currentTime = 0;
     int endTime = 1000*1000;
     
@@ -44,7 +44,7 @@ int main()
         }
     }
     
-    timing(&wc2, &cpuT);
+    //timing(&wc2, &cpuT);
     printf("Time: %f ms with count = %ld\n", (wc2 - wc1)*1000, count);
     printf("================================\n");
 
