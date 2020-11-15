@@ -2,13 +2,11 @@
 #include <stdlib.h>
 #include "VoidSplay.c"
 #include "timing.c"
-#include <locale.h>
 
 int main(int argc, char** argv) 
 {
     splay_tree *t = new_splay_tree();              /* the empty tree */
     double wc1 = 0, wc2 = 0, cpuT = 0;
-    long majorPft1 = 0, majorPft2 = 0;
     int i = 0;
     long count = 0;
     int defaultSec = 70;
@@ -19,14 +17,14 @@ int main(int argc, char** argv)
     }
     unsigned long currentTime = 0;
     unsigned long endTime = defaultSec*((unsigned long)(1000*1000));
-    setlocale(LC_NUMERIC, "");
     
     printf("Simulation time is %ld (s)\n", endTime / (1000*1000));
     unsigned long mem = mem_avail();
     printf("Free memory Available = %'ld\n", mem / (1024*1024));
 
     printf("Start Simulating ......\n");
-    timing(&wc1, &cpuT, &majorPft1);
+    //char* p = malloc(1 * 1024 * 1024 * 1024);
+    timing(&wc1, &cpuT);
 
     for(i = 0; i < 6750; i++)
     {
@@ -36,6 +34,10 @@ int main(int argc, char** argv)
     node * ev = removeFirst(t);
     while(currentTime <= endTime && ev->endTime != -1)
     {
+        
+        //for (int i = 0; i < 1024; ++i) {
+        //    p[i * 1024 * 1024] = currentTime;    
+        //}
         if(ev->endTime == currentTime)
         {
             count++;
@@ -59,10 +61,9 @@ int main(int argc, char** argv)
         }
     }
 
-    
-    timing(&wc2, &cpuT, &majorPft2);
-    printf("Time: %'f ms with count = %'ld as well as page fault = %ld\n", 
-                    (wc2 - wc1)*1000, count, majorPft2 - majorPft1);
+    printf("Stop Simulating...\n");
+    timing(&wc2, &cpuT);
+    printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
     printf("================================\n");
 
     return 0;
