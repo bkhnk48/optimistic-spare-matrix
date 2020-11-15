@@ -9,6 +9,7 @@ void testGeneratingEventA();
 int main(int argc, char** argv) 
 {
    double wc1 = 0, wc2 = 0, cpuT = 0;
+   long majorPft1 = 0, majorPft2 = 0;
    int first = -1;
    int defaultSec = 70;
 
@@ -37,7 +38,7 @@ int main(int argc, char** argv)
 
    printf("Start Simulating ......\n");
    unsigned long count = 0;
-   timing(&wc1, &cpuT);
+   timing(&wc1, &cpuT, &majorPft1);
 
    root = -1;
 
@@ -89,8 +90,9 @@ int main(int argc, char** argv)
    }
    
 
-   timing(&wc2, &cpuT);
-   printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
+   timing(&wc2, &cpuT, &majorPft2);
+   printf("Time: %'f ms with count = %'ld as well as page fault = %ld\n", 
+                    (wc2 - wc1)*1000, count, majorPft2 - majorPft1);
    printf("================================\n");
 
 
