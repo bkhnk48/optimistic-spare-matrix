@@ -8,10 +8,9 @@ int main()
 {
     splay_tree *t = new_splay_tree();              /* the empty tree */
     double wc1 = 0, wc2 = 0, cpuT = 0;
-    long majorPft1 = 0, majorPft2 = 0;
     int i = 0;
     long count = 0;
-    timing(&wc1, &cpuT, &majorPft1);
+    timing(&wc1, &cpuT);
     int currentTime = 0;
     int endTime = 1000*1000;
     
@@ -84,7 +83,7 @@ int main()
     }
 
     
-    timing(&wc2, &cpuT, &majorPft2);
+    timing(&wc2, &cpuT);
     printf("Time: %f ms with count = %ld\n", (wc2 - wc1)*1000, count);
     printf("================================\n");
 
