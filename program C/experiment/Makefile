@@ -1,26 +1,26 @@
 all: serial
 
 serial: 
-	gcc -g -c Event.c
-	gcc -g -c timing.c
-	gcc -g -c OptimizationSplay.c
-	gcc OptimizationSplayTest.c -g -o optest.o
-	gcc -g -c VoidSplay.c 
-	gcc VoidSplayTest.c -g -o vstest.o
-	gcc DeleteSplayTest.c -g -o delS.o
+	gcc -pg -c Event.c
+	gcc -pg -c timing.c
+	gcc -pg -c OptimizationSplay.c
+	gcc OptimizationSplayTest.c -pg -o optest.o
+	gcc -pg -c VoidSplay.c 
+	gcc VoidSplayTest.c -pg -o vstest.o
+	gcc DeleteSplayTest.c -pg -o delS.o
 #gcc NormalSplay.c -g -o no.o
 #gcc -g -c MultiOpSplay.c
 #gcc MultiOpSplayTest.c -g -o mtest.o
-	gcc -g -c ListSplay.c
-	gcc ListSplayTest.c -g -o ltest.o
-	gcc -g -c Node.c
-	gcc -g -c LinkedList.c
-	gcc -g -c CalendarQueue.c
-	gcc CalendarQueueTest.c -g -o cqtest.o
-	gcc -g -c CAQueue.c
-	gcc -g -c CASplay.c
-	gcc CASplayTest.c -g -o catest.o
-	gcc randomFile.c -g -o ran.o
+	gcc -pg -c ListSplay.c
+	gcc ListSplayTest.c -pg -o ltest.o
+	gcc -pg -c Node.c
+	gcc -pg -c LinkedList.c
+	gcc -pg -c CalendarQueue.c
+	gcc CalendarQueueTest.c -pg -o cqtest.o
+	gcc -pg -c CAQueue.c
+	gcc -pg -c CASplay.c
+	gcc CASplayTest.c -pg -o catest.o
+	gcc randomFile.c -pg -o ran.o
 n:
 	gcc -c Event.c
 	gcc -c timing.c
