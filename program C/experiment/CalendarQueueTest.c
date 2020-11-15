@@ -22,7 +22,13 @@ int main(int argc, char** argv)
     }
     unsigned long currentTime = 0;
     unsigned long endTime = defaultSec*((unsigned long)(1000*1000));
+    setlocale(LC_NUMERIC, "");
+    
     printf("Simulation time is %ld (s)\n", endTime / (1000*1000));
+    unsigned long mem = mem_avail();
+    printf("Free memory Available = %'ld\n", mem / (1024*1024));
+
+    printf("Start Simulating ......\n");
 
     timing(&wc1, &cpuT);
     for(i = 0; i < 6750L; i++)
@@ -65,7 +71,6 @@ int main(int argc, char** argv)
     }
 
     timing(&wc2, &cpuT);
-    setlocale(LC_NUMERIC, "");
     printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
     printf("================================\n");
 
