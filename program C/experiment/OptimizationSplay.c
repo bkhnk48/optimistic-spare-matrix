@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include "Event.c"
 
-unsigned long arr[20250][7];
+//unsigned long arr[20250][7];
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
-                int *root//,
-                //unsigned long arr[20250][7]
+                int *root,
+                unsigned long arr[20250][7]
                 );
 /* From now on, an event has 7 fields about:
    + it's type
@@ -19,22 +19,22 @@ void add(int type, int idElementInGroup,
    + index of right
 */
 
-void splay(int e//, unsigned long arr[20250][7]
+void splay(int e, unsigned long arr[20250][7]
                   );
 
-void removeFirst(int * first, int * root//, unsigned long arr[20250][7]
+void removeFirst(int * first, int * root, unsigned long arr[20250][7]
                   );
 
-void show(//unsigned long arr[20250][7], 
+void show(unsigned long arr[20250][7], 
                int root);
-void leaf(//unsigned long arr[20250][7], 
+void leaf(unsigned long arr[20250][7], 
                int root, enum Side side);
 
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
-                int *root//,
-                //unsigned long arr[20250][7]
+                int *root,
+                unsigned long arr[20250][7]
                 )
 {
    /* Quy ước các event từ A đến G (tức type = 0..4) sẽ là 
@@ -176,7 +176,7 @@ void add(int type, int idElementInGroup,
 
 }
 
-void splay(int e//, unsigned long arr[20250][7]
+void splay(int e, unsigned long arr[20250][7]
                )
 {
    int left;
@@ -290,7 +290,7 @@ void splay(int e//, unsigned long arr[20250][7]
    }
 }
 
-void removeFirst(int * first, int * root//, unsigned long arr[20250][7]
+void removeFirst(int * first, int * root, unsigned long arr[20250][7]
                   )
 {
    int t = *root;
@@ -306,7 +306,7 @@ void removeFirst(int * first, int * root//, unsigned long arr[20250][7]
    }
    *first = temp;
    
-   splay(*first//, arr
+   splay(*first, arr
                   );
    while(arr[t][4] != -1)
    {
@@ -351,8 +351,8 @@ void removeFirst(int * first, int * root//, unsigned long arr[20250][7]
          newRoot = arr[rightTree][5]; //newRoot = rightTree->left;
       }
 
-      //splay(newRoot, arr);
-      splay(newRoot);
+      splay(newRoot, arr);
+      //splay(newRoot);
       while(arr[newRoot][4] != -1)
       {
          newRoot = arr[newRoot][4];
@@ -370,16 +370,16 @@ void removeFirst(int * first, int * root//, unsigned long arr[20250][7]
    
 }
 
-void show(//unsigned long arr[20250][7], 
+void show(unsigned long arr[20250][7], 
             int root)
 {
    if(root != -1 && arr[root][3] != -1)
    {
       printf("\n===========> for event type = %ld at end = %ld in %ld\n", 
                arr[root][0], arr[root][3], arr[root][1]);
-      leaf(//arr, 
+      leaf(arr, 
                arr[root][5], LEFT);
-      leaf(//arr, 
+      leaf(arr, 
                arr[root][6], RIGHT);
    }
    else{
@@ -387,7 +387,7 @@ void show(//unsigned long arr[20250][7],
    }
 }
 
-void leaf(//unsigned long arr[20250][7], 
+void leaf(unsigned long arr[20250][7], 
             int root, enum Side side)
 {
    printf("===========> ");
@@ -402,9 +402,9 @@ void leaf(//unsigned long arr[20250][7],
    {
       printf("for event type = %ld at end = %ld in %ld. It's index = %d\n", 
                arr[root][0], arr[root][3], arr[root][1], root);
-      leaf(//arr, 
+      leaf(arr, 
             arr[root][5], LEFT);
-      leaf(//arr, 
+      leaf(arr, 
             arr[root][6], RIGHT);
    }
    else{
@@ -412,7 +412,7 @@ void leaf(//unsigned long arr[20250][7],
    }
 }
 
-void validate(//unsigned long arr[20250][7], 
+void validate(unsigned long arr[20250][7], 
                int index)
 {
    //return;
@@ -436,12 +436,12 @@ void validate(//unsigned long arr[20250][7],
    }
    if(arr[index][5] != -1)
    {
-      validate(//arr, 
+      validate(arr, 
                   arr[index][5]);
    }
    if(arr[index][6] != -1)
    {
-      validate(//arr, 
+      validate(arr, 
                   arr[index][6]);
    }
 }
