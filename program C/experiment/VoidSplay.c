@@ -7,7 +7,7 @@ typedef struct node {
     
     int idElementInGroup;//id of element in group of hosts or switches
     int portID;
-    int endTime;
+    unsigned long endTime;
     struct node *left;
     struct node *right;
     struct node *parent;
@@ -20,7 +20,7 @@ typedef struct splay_tree {
 
 node* new_node(int type, int idElementInGroup,
                 int portID, 
-                int endTime) {
+                unsigned long endTime) {
   node *n = malloc(sizeof(node));
   n->type = type;
   n->idElementInGroup = idElementInGroup;
@@ -284,7 +284,7 @@ void leaf(node *t, enum Side side)
     }
     if(t != NULL)
     {
-        printf("for event type = %d at end = %d in %d\n", 
+        printf("for event type = %d at end = %ld in %d\n", 
                 t->type, t->endTime, t->
                             //idNode
                             idElementInGroup
@@ -302,7 +302,7 @@ void show(splay_tree * t)
 {
     if(t != NULL)
     {
-        printf("\n===========> for event type = %d at end = %d in %d\n", 
+        printf("\n===========> for event type = %d at end = %ld in %d\n", 
                 t->root->type, t->root->endTime, t->root->
                                         //idNode
                                         idElementInGroup
