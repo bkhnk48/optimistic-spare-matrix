@@ -23,6 +23,7 @@ serial:
 	gcc randomFile.c -pg -o ran.o
 n:
 	gcc -c Event.c
+	gcc -c memory.c
 	gcc -c timing.c
 	gcc -c OptimizationSplay.c
 	gcc OptimizationSplayTest.c -o optest.o
