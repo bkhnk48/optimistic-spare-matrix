@@ -13,7 +13,7 @@ int main(int argc, char** argv)
    unsigned long currentTime = 0;
    unsigned long endTime = 90*((unsigned long)(1000*1000));
    int arbitrary[1000];
-   loadArray(arbitrary);
+   //loadArray(arbitrary);
 
    unsigned long arr[20250][7];//20250 = 3*(k*k*k/4) as k = 30
    int i, j, N, root = -1;
