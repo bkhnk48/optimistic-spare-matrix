@@ -10,6 +10,7 @@ int main(int argc, char** argv)
     //int arbitrary[1000];
     //loadArray(arbitrary);
     double wc1 = 0, wc2 = 0, cpuT = 0;
+    long majorPft1 = 0, majorPft2 = 0;
     unsigned long i = 0;
     unsigned long count = 0;
     unsigned long index = 0;
@@ -30,7 +31,7 @@ int main(int argc, char** argv)
 
     printf("Start Simulating ......\n");
 
-    timing(&wc1, &cpuT);
+    timing(&wc1, &cpuT, &majorPft1);
     for(i = 0; i < 6750L; i++)
     {
         enqueue(new_node(A, i, 0L, 0L));
@@ -70,8 +71,9 @@ int main(int argc, char** argv)
         }
     }
 
-    timing(&wc2, &cpuT);
-    printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
+    timing(&wc2, &cpuT, &majorPft2);
+    printf("Time: %'f ms with count = %'ld as well as page fault = %ld\n", 
+                    (wc2 - wc1)*1000, count, majorPft2 - majorPft1);
     printf("================================\n");
 
     return 0;
