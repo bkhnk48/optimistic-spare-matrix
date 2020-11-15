@@ -30,7 +30,7 @@ int main(int argc, char** argv)
    unsigned long count = 0;
    unsigned long index = 0;
 
-   timing(&wc1, &cpuT);
+   //timing(&wc1, &cpuT);
 
    root = -1;
    CalendarQueue* qArray[6750];
@@ -91,7 +91,7 @@ int main(int argc, char** argv)
    }
 
 
-   timing(&wc2, &cpuT);
+   //timing(&wc2, &cpuT);
    printf("\nTime: %f ms with count = %ld\n", (wc2 - wc1)*1000, count);
    printf("================================\n");
 
