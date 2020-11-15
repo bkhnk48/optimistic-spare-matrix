@@ -1,7 +1,7 @@
 #include "timing.h"
 #include "memory.c"
 
-void timing(double* wcTime, double* cpuTime)
+void timing(double* wcTime, double* cpuTime, long* majorPft)
 {
    struct timeval tp;
    struct rusage ruse;
@@ -11,5 +11,7 @@ void timing(double* wcTime, double* cpuTime)
   
    getrusage(RUSAGE_SELF, &ruse);
    *cpuTime=(double)(ruse.ru_utime.tv_sec+ruse.ru_utime.tv_usec / 1000000.0);
+
+   *majorPft = ruse.ru_majflt;
 }
 
