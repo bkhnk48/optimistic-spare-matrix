@@ -4,8 +4,7 @@
 #include "timing.c"
 #include <locale.h>
 
-
-int main()
+int main(int argc, char** argv) 
 {
     initqueue();
     //int arbitrary[1000];
@@ -15,8 +14,14 @@ int main()
     unsigned long count = 0;
     unsigned long index = 0;
     
+    int defaultSec = 70;
+
+    if(argc >= 2)
+    {
+      defaultSec = atoi(argv[1]);
+    }
     unsigned long currentTime = 0;
-    unsigned long endTime = 60*((unsigned long)(1000*1000));
+    unsigned long endTime = defaultSec*((unsigned long)(1000*1000));
     printf("Simulation time is %ld (s)\n", endTime / (1000*1000));
 
     timing(&wc1, &cpuT);
