@@ -8,6 +8,7 @@ int main(int argc, char** argv)
 {
     splay_tree *t = new_splay_tree();              /* the empty tree */
     double wc1 = 0, wc2 = 0, cpuT = 0;
+    long majorPft1 = 0, majorPft2 = 0;
     int i = 0;
     long count = 0;
     int defaultSec = 70;
@@ -25,7 +26,7 @@ int main(int argc, char** argv)
     printf("Free memory Available = %'ld\n", mem / (1024*1024));
 
     printf("Start Simulating ......\n");
-    timing(&wc1, &cpuT);
+    timing(&wc1, &cpuT, &majorPft1);
 
     for(i = 0; i < 6750; i++)
     {
@@ -59,8 +60,9 @@ int main(int argc, char** argv)
     }
 
     
-    timing(&wc2, &cpuT);
-    printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
+    timing(&wc2, &cpuT, &majorPft2);
+    printf("Time: %'f ms with count = %'ld as well as page fault = %ld\n", 
+                    (wc2 - wc1)*1000, count, majorPft2 - majorPft1);
     printf("================================\n");
 
     return 0;
