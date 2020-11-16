@@ -10,10 +10,13 @@ int main(int argc, char** argv)
    double wc1 = 0, wc2 = 0, cpuT = 0;
    int first = -1;
    int defaultSec = 70;
+   int defaultBias = 1;
 
    if(argc >= 2)
    {
       defaultSec = atoi(argv[1]);
+      if(argc >= 3)
+        defaultBias = atoi(argv[2]);
    }
    unsigned long currentTime = 0;
    unsigned long endTime = defaultSec*((unsigned long)(1000*1000));
@@ -44,7 +47,7 @@ int main(int argc, char** argv)
 
    for(i = 0; i < 6750L; i++)
    {
-      add(0, i, 0, 0L, &root, arr
+      add(0, i, 0, 0, &root, arr
                               );
    }
    removeFirst(&first, &root, arr
@@ -74,13 +77,15 @@ int main(int argc, char** argv)
 
          if(type == A)
          {
-            add(A, i, 0, currentTime + 10000L, &root, arr
+            add(A, i, 0, currentTime + 10000, &root, arr
                         );
-            add(B, i, 0, currentTime +  3333L, &root, arr
+            add(B, i, 0, currentTime +  defaultBias*1333
+                              , &root, arr
                         );
          }
          else if(type == B){
-            add(C, i, 0, currentTime +  3333L, &root, arr
+            add(C, i, 0, currentTime +  defaultBias*3333
+                              , &root, arr
                         );
          }
       }
@@ -92,7 +97,7 @@ int main(int argc, char** argv)
       ongoingTime = arr[first][3];
    }
    
-   printf("Stop Simulating...\n");
+   //printf("Stop Simulating...\n");
    timing(&wc2, &cpuT);
    printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
    printf("================================\n");
