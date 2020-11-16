@@ -16,6 +16,7 @@ void timing(double* wcTime, double* cpuTime)
    //*majorPft = ruse.ru_majflt;
    long major = ruse.ru_majflt;
    long minor = ruse.ru_minflt;
+   printf("************************************************************\n");
    printf("# Total page fault = %'ld; (major/minor) = (%'ld/%'ld)\n", 
             major + minor, major, minor);
 }
