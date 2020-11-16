@@ -54,12 +54,14 @@ int main(int argc, char** argv)
             i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
             if(ev->type == A)
             {
-                enqueue(new_node(A, i, 0L, currentTime + 10000L));
-                enqueue(new_node(B, i, 0L, currentTime +  3333L));
+                enqueue(new_node(A, i, 0L, currentTime + 10000));
+                enqueue(new_node(B, i, 0L, currentTime +  1333
+                                        ));
             }
             else if(ev->type == B)
             {
-                enqueue(new_node(C, i, 0L, currentTime + 3333L));
+                enqueue(new_node(C, i, 0L, currentTime + 3333
+                                        ));
             }
             //int temp = arbitrary[index % 1000];
             //if(temp != -1)
@@ -75,7 +77,7 @@ int main(int argc, char** argv)
         }
     }
 
-    printf("Stop Simulating...\n");
+    //printf("Stop Simulating...\n");
     timing(&wc2, &cpuT);
     printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
     printf("================================\n");
