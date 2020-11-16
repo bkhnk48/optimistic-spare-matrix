@@ -10,10 +10,13 @@ int main(int argc, char** argv)
     int i = 0;
     long count = 0;
     int defaultSec = 70;
+    int defaultBias = 1;
 
     if(argc >= 2)
     {
       defaultSec = atoi(argv[1]);
+      if(argc >= 3)
+        defaultBias = atoi(argv[2]);
     }
     unsigned long currentTime = 0;
     unsigned long endTime = defaultSec*((unsigned long)(1000*1000));
@@ -48,11 +51,13 @@ int main(int argc, char** argv)
             if(ev->type == A)
             {
                 insert(t, new_node(A, i, 0, currentTime + 10000));
-                insert(t, new_node(B, i, 0, currentTime +  3333));
+                insert(t, new_node(B, i, 0, currentTime +  defaultBias*1333
+                                    ));
             }
             else if(ev->type == B)
             {
-                insert(t, new_node(C, i, 0, currentTime +  3333));
+                insert(t, new_node(C, i, 0, currentTime +  defaultBias*3333
+                                    ));
             }
             free(ev);
             ev = removeFirst(t);
@@ -61,7 +66,7 @@ int main(int argc, char** argv)
         }
     }
 
-    printf("Stop Simulating...\n");
+    //printf("Stop Simulating...\n");
     timing(&wc2, &cpuT);
     printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
     printf("================================\n");
