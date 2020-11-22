@@ -7,7 +7,7 @@ int main(int argc, char** argv)
 {
     splay_tree *t = new_splay_tree();              /* the empty tree */
     double wc1 = 0, wc2 = 0, cpuT = 0;
-    int i = 0;
+    unsigned long i = 0;
     long count = 0;
     int defaultSec = 70;
     int defaultBias = 1;
@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 
     for(i = 0; i < 6750; i++)
     {
-        insert(t, new_node(A, i, 0, 0));
+        insert(t, new_node(A, i, 0, i));
     }
 
     node * ev = removeFirst(t);
@@ -51,12 +51,12 @@ int main(int argc, char** argv)
             if(ev->type == A)
             {
                 insert(t, new_node(A, i, 0, currentTime + 10000));
-                insert(t, new_node(B, i, 0, currentTime +  defaultBias*1333
+                insert(t, new_node(B, i, 0, currentTime +  defaultBias*13
                                     ));
             }
             else if(ev->type == B)
             {
-                insert(t, new_node(C, i, 0, currentTime +  defaultBias*3333
+                insert(t, new_node(C, i, 0, currentTime +  defaultBias*33
                                     ));
             }
             free(ev);
