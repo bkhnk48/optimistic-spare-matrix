@@ -35,7 +35,7 @@ int main(int argc, char** argv)
     timing(&wc1, &cpuT);
     for(i = 0; i < 6750L; i++)
     {
-        enqueue(new_node(A, i, 0L, 0L));
+        enqueue(new_node(A, i, 0L, i));
     }
 
     
@@ -55,12 +55,12 @@ int main(int argc, char** argv)
             if(ev->type == A)
             {
                 enqueue(new_node(A, i, 0L, currentTime + 10000));
-                enqueue(new_node(B, i, 0L, currentTime +  1333
+                enqueue(new_node(B, i, 0L, currentTime +  13
                                         ));
             }
             else if(ev->type == B)
             {
-                enqueue(new_node(C, i, 0L, currentTime + 3333
+                enqueue(new_node(C, i, 0L, currentTime + 33
                                         ));
             }
             //int temp = arbitrary[index % 1000];
