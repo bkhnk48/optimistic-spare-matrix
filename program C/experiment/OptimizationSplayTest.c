@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 
    for(i = 0; i < 6750L; i++)
    {
-      add(0, i, 0, 0, &root, arr
+      add(0, i, 0, i, &root, arr
                               );
    }
    removeFirst(&first, &root, arr
@@ -79,12 +79,12 @@ int main(int argc, char** argv)
          {
             add(A, i, 0, currentTime + 10000, &root, arr
                         );
-            add(B, i, 0, currentTime +  defaultBias*1333
+            add(B, i, 0, currentTime +  defaultBias*13
                               , &root, arr
                         );
          }
          else if(type == B){
-            add(C, i, 0, currentTime +  defaultBias*3333
+            add(C, i, 0, currentTime +  defaultBias*33
                               , &root, arr
                         );
          }
