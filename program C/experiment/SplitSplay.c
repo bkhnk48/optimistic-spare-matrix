@@ -160,29 +160,49 @@ void add(int type, int idElementInGroup,
             }
          }
       }else {
-         temp = arr[t][5]; //temp = t->left;
-         if(temp == -1){//if (temp == NULL) {
+         temp = arr[t][2] >> 32; //temp = t->left;
+         if(temp == __INT32_MAX__){//if (temp == NULL) {
             //cas "zig"
-            arr[right][5] = t; //right->left = t;
-            arr[t][4] = right; //t->father = right;
-            arr[left][6] = -1;     //left->right = NULL;
+            arr[right][2] &= 0x7fffffff;
+            arr[right][2] |= ((unsigned long)t << 32); 
+            //right->left = t;
+            arr[t][1] &= ((unsigned long)0x7fffffff << 32);
+            arr[t][1] |= right; 
+            //t->father = right;
+            arr[left][2] |= 0x7fffffff;     
+            //left->right = NULL;
             end_splay = 1;
          }
-         else if (endTime > arr[temp][3]) {//if (endTime > temp->endTime) {
+         else if (endTime > arr[temp][0]) {//if (endTime > temp->endTime) {
             //cas "zig-zag" simplifie
-            arr[right][5] = t; //right->left = t;
-            arr[t][4] = right; //t->father = right;
+            arr[right][2] &= 0x7fffffff;
+            arr[right][2] |= ((unsigned long)t << 32); 
+            //right->left = t;
+            arr[t][1] &= ((unsigned long)0x7fffffff << 32);
+            arr[t][1] |= right;
+            //t->father = right;
             right = t;//right = t;
             t = temp;//t = temp;
          }
          else {
             //cas "zig-zig"
-            arr[t][5] = arr[temp][6]; //t->left = temp->right;
-            if (arr[temp][6] != -1)//if (temp->right != NULL)
-               arr[  arr[temp][6]  ][4] = t; //temp->right->father = t;
-            arr[right][5] = temp; //right->left = temp;
-            arr[temp][4] = right; //temp->father = right;
-            arr[temp][6] = t; //temp->right = t;
+            arr[t][2] &= 0x7fffffff;
+            arr[t][2] |= ((unsigned long)arr[temp][2] << 32); 
+            //t->left = temp->right;
+            if (((int)arr[temp][2]) != __INT32_MAX__){
+            //if (temp->right != NULL)
+               int x = (int)arr[temp][2];//x = temp->right
+               arr[x][1] &= ((unsigned long)0x7fffffff << 32);
+               arr[x][1] |= t; 
+               //temp->right->father = t;
+            }
+            arr[right][2] &= 0x7fffffff;
+            arr[right][2] |= ((unsigned long)temp << 32); 
+            //right->left = temp;
+            arr[temp][1] &= ((unsigned long)0x7fffffff << 32);
+            arr[temp][1] |= right; 
+            //temp->father = right;
+            arr[temp][2] = t; //temp->right = t;
             arr[t][4] = temp; //t->father = temp;
             right = temp;         //right = temp;
             t = arr[temp][5]; //t = temp->left;
