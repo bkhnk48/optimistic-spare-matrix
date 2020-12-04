@@ -135,21 +135,20 @@ void add(int type, int idElementInGroup,
             //if (temp->left != NULL)
             {
                int x = arr[temp][2] >> 32; //x = temp->left
-               arr[x][1] &= ((unsigned long)0x7fffffff << 32);
-               arr[x][1] |= t; 
+               //arr[x][1] &= ((unsigned long)0x7fffffff << 32);
+               arr[x][1] = t; 
                //x->father = t;
             }
             arr[left][2] &= ((unsigned long)0x7fffffff << 32);
             arr[left][2] |= temp;
             //left->right = temp;
-            arr[temp][1] &= ((unsigned long)0x7fffffff << 32);
-            arr[temp][1] |= left;
+            //arr[temp][1] &= ((unsigned long)0x7fffffff << 32);
+            arr[temp][1] = left;
             //temp->father = left;
             arr[temp][2] &= 0x7fffffff;
             arr[temp][2] |= (unsigned long)t << 32;
             //temp->left = t;
-            arr[t][1] &= ((unsigned long)0x7fffffff << 32);
-            arr[t][1] |= temp;
+            arr[t][1] = temp;
             //t->father = temp;
             left = temp;
             t = (int)arr[temp][2];//t = temp->right;
@@ -166,9 +165,7 @@ void add(int type, int idElementInGroup,
             arr[right][2] &= 0x7fffffff;
             arr[right][2] |= ((unsigned long)t << 32); 
             //right->left = t;
-            arr[t][1] &= ((unsigned long)0x7fffffff << 32);
-            arr[t][1] |= right; 
-            //t->father = right;
+            arr[t][1] = right; //t->father = right;
             arr[left][2] |= 0x7fffffff;     
             //left->right = NULL;
             end_splay = 1;
@@ -178,9 +175,7 @@ void add(int type, int idElementInGroup,
             arr[right][2] &= 0x7fffffff;
             arr[right][2] |= ((unsigned long)t << 32); 
             //right->left = t;
-            arr[t][1] &= ((unsigned long)0x7fffffff << 32);
-            arr[t][1] |= right;
-            //t->father = right;
+            arr[t][1] = right; //t->father = right;
             right = t;//right = t;
             t = temp;//t = temp;
          }
@@ -192,35 +187,36 @@ void add(int type, int idElementInGroup,
             if (((int)arr[temp][2]) != __INT32_MAX__){
             //if (temp->right != NULL)
                int x = (int)arr[temp][2];//x = temp->right
-               arr[x][1] &= ((unsigned long)0x7fffffff << 32);
-               arr[x][1] |= t; 
-               //temp->right->father = t;
+               arr[x][1] |= t; //temp->right->father = t;
             }
             arr[right][2] &= 0x7fffffff;
             arr[right][2] |= ((unsigned long)temp << 32); 
             //right->left = temp;
-            arr[temp][1] &= ((unsigned long)0x7fffffff << 32);
-            arr[temp][1] |= right; 
+            arr[temp][1] = right; 
             //temp->father = right;
             arr[temp][2] &= ((unsigned long)0x7fffffff << 32);
             arr[temp][2] |= t; 
             //temp->right = t;
-            arr[t][1] &= ((unsigned long)0x7fffffff << 32);
-            arr[t][1] |= temp; 
+            arr[t][1] = temp; 
             //t->father = temp;
             right = temp;         //right = temp;
             t = (int)(arr[temp][2] >> 32); //t = temp->left;
             if(t == __INT32_MAX__) {//if (t == NULL) {
-               arr[left][6] = -1; //left->right = NULL;
+               arr[left][2] |= 0x7fffffff; 
+               //left->right = NULL;
                end_splay = 1;
             }
          }
       }
    }
 
-   temp = arr[idNewNode][5]; //temp = newNode->left;
-   arr[idNewNode][5] = arr[idNewNode][6]; //newNode->left = newNode->right;
-   arr[idNewNode][6] = temp; //newNode->right = temp;
+   temp = (int)(arr[idNewNode][2] >> 32); //temp = newNode->left;
+   arr[idNewNode][2] &= 0x7fffffff;
+   arr[idNewNode][2] |= (arr[idNewNode][2] << 32); 
+   //newNode->left = newNode->right;
+   arr[idNewNode][2] &= ((unsigned long)0x7fffffff << 32);
+   arr[idNewNode][2] |= temp; 
+   //newNode->right = temp;
 
    //return newNode;
    *root = idNewNode;
