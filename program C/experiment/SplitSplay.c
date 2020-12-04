@@ -74,7 +74,7 @@ void add(int type, int idElementInGroup,
    data[idNewNode][1] = idElementInGroup;
    data[idNewNode][2] = portID;
    arr[idNewNode][0] = endTime;
-   int formerFather = arr[idNewNode][1] & 0x7fffffff;
+   int formerFather = (int)arr[idNewNode][1]; // & 0x7fffffff;
    if(formerFather != -1)
    { 
       if(arr[formerFather][2] >> 32 == idNewNode)
@@ -86,7 +86,7 @@ void add(int type, int idElementInGroup,
          arr[formerFather][2] |= 0x7fffffff;
       }
    }
-   arr[idNewNode][1] |= 0x7fffffff;
+   arr[idNewNode][1] = 0x7fffffff;
    arr[idNewNode][2] = ((unsigned long)0x7fffffff << 32) | 0x7fffffff;
 
    if(*root == -1)
@@ -107,8 +107,8 @@ void add(int type, int idElementInGroup,
             arr[left][2] &= ((unsigned long)0x7fffffff << 32); 
             arr[left][2] |= t; 
             //left->right = t;
-            arr[t][1] &= ((unsigned long)0x7fffffff << 32);
-            arr[t][1] |= left;
+            //arr[t][1] &= ((unsigned long)0x7fffffff << 32);
+            arr[t][1] = left;
             //t->father = left;
             arr[right][2] |= ((unsigned long)0x7fffffff << 32);
             //right->left = NULL;
@@ -120,8 +120,8 @@ void add(int type, int idElementInGroup,
             arr[left][2] &= ((unsigned long)0x7fffffff << 32);
             arr[left][2] |= t;
             //left->right = t;
-            arr[t][1] &= ((unsigned long)0x7fffffff << 32);
-            arr[t][1] |= left;
+            //arr[t][1] &= ((unsigned long)0x7fffffff << 32);
+            arr[t][1] = left;
             //t->father = left;
             left = t;//left = t;
             t = temp;//t = temp;
@@ -202,11 +202,15 @@ void add(int type, int idElementInGroup,
             arr[temp][1] &= ((unsigned long)0x7fffffff << 32);
             arr[temp][1] |= right; 
             //temp->father = right;
-            arr[temp][2] = t; //temp->right = t;
-            arr[t][4] = temp; //t->father = temp;
+            arr[temp][2] &= ((unsigned long)0x7fffffff << 32);
+            arr[temp][2] |= t; 
+            //temp->right = t;
+            arr[t][1] &= ((unsigned long)0x7fffffff << 32);
+            arr[t][1] |= temp; 
+            //t->father = temp;
             right = temp;         //right = temp;
-            t = arr[temp][5]; //t = temp->left;
-            if(t == -1) {//if (t == NULL) {
+            t = (int)(arr[temp][2] >> 32); //t = temp->left;
+            if(t == __INT32_MAX__) {//if (t == NULL) {
                arr[left][6] = -1; //left->right = NULL;
                end_splay = 1;
             }
