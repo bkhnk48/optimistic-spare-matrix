@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include "Event.c"
 
+//int sizeTree = 0;
+//int maxSize = 0;
+
 typedef struct node {
     enum TypesOfEvent type; //type of event
     
@@ -21,7 +24,9 @@ typedef struct splay_tree {
 node* new_node(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime) {
-  node *n = malloc(sizeof(node));
+  node *n = (node *)malloc(sizeof(node));
+  //int sizeOfNode = sizeof(node);
+  //printf("-------------sizeofNode = %d----------\n", sizeOfNode);
   n->type = type;
   n->idElementInGroup = idElementInGroup;
   n->portID = portID;
@@ -45,13 +50,11 @@ node* minimum(splay_tree *t) {
 
 
 splay_tree* new_splay_tree() {
-  splay_tree *t = malloc(sizeof(splay_tree));
+  splay_tree *t = (splay_tree*)malloc(sizeof(splay_tree));
   t->root = NULL;
 
   return t;
 }
-
-
 
 void left_rotate(splay_tree *t, node *x) {
   node *y = x->right;
@@ -171,6 +174,9 @@ void splay(splay_tree *t, node *n) {
 }
 
 void insert(splay_tree *t, node *n) {
+  //sizeTree++;
+  //if(maxSize < sizeTree) maxSize = sizeTree;
+
   node *y = NULL;
   node *temp = t->root;
   while(temp != NULL) {
@@ -252,6 +258,7 @@ void delete_key(splay_tree *t, int key)
 
 node* removeFirst(splay_tree *t)
 {
+    //sizeTree--;
     node *x = minimum(t);
     node *temp = new_node(A, 0, 0, 0);
     
