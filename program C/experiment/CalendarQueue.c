@@ -24,13 +24,13 @@ int resizeenable;
 unsigned long qsize;
 unsigned long lastprio;
 unsigned long lastbucket;
-unsigned long buckettop;
+double buckettop;
 unsigned long bot_threshold;
 unsigned long top_threshold;
 
 struct calendar_queue{
     List *bucket;
-    unsigned long bucket_top;
+    double buckettop;
     int width;
     unsigned long nbuckets;
     unsigned long qsize;
@@ -68,7 +68,7 @@ void insert(Node* entry){
     }
 
     if(priority < lastprio){
-        int n = priority / width;
+        double n = priority / width;
         buckettop = (n+1)*width + 0.5*width;
     }
 
@@ -131,7 +131,7 @@ Node* removeSoonestEvent(){
     Node* foo = buckets[minbucket];
     buckets[minbucket] = foo->next;
 
-    unsigned long n = lastprio / width;
+    double n = lastprio / width;
     buckettop = (n+1) * width + 0.5*width;
     qsize--;
 
@@ -151,7 +151,7 @@ unsigned long newwidth(){
 
     unsigned long oldlastprio = lastprio;
     unsigned long oldlastbucket = lastbucket;
-    unsigned long oldbuckkettop = buckettop;
+    double oldbuckkettop = buckettop;
 
 
     // lay ra nsamples gia tri mau
@@ -236,7 +236,7 @@ void resize(unsigned long newsize){
 
 void localInit(unsigned long nbuck, unsigned long bwidth, unsigned long startprio){
     unsigned long i;
-    unsigned long n;
+    double n;
 
     // khoi tao cac tham so
     buckets = (Node**) calloc(nbuck,sizeof(Node));
@@ -252,7 +252,7 @@ void localInit(unsigned long nbuck, unsigned long bwidth, unsigned long startpri
     // khoi tao cac chi so ban dau cua bucket dau tien
     lastprio = startprio;
     n = startprio / width;
-    lastbucket = n % nbuckets;
+    lastbucket = ((unsigned long)n) % nbuckets;
     buckettop = (n+1)*width + 0.5*width;
 
     // khoi tao 2 linh canh dau vao cuoi
@@ -299,7 +299,7 @@ void printBuckets(){
     }
     printf("\nCount of event : %ld\n",qsize);
     printf("so luong bucket : %ld\n",nbuckets);
-    printf("buckettop : %ld\n",buckettop);
+    printf("buckettop : %f\n",buckettop);
     printf("lastbuckket : %ld\n",lastbucket);
     printf("lastprio : %ld\n",lastprio);
     printf("width : %d\n",width);
