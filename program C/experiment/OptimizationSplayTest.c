@@ -3,6 +3,7 @@
 #include "OptimizationSplay.c"
 #include "timing.c"
 #include <locale.h>
+#include <math.h>
 
 
 int main(int argc, char** argv) 
@@ -11,6 +12,8 @@ int main(int argc, char** argv)
    int first = -1;
    int defaultSec = 70;
    int defaultBias = 1;
+   ProcStatm proc_statm;
+   long page_size = sysconf(_SC_PAGESIZE);
 
    if(argc >= 2)
    {
@@ -98,10 +101,21 @@ int main(int argc, char** argv)
    }
    
    //printf("Stop Simulating...\n");
+   //printf("Max elements of Tree = %d\n", maxSize);
+    
    timing(&wc2, &cpuT);
    printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
    printf("================================\n");
-
+   /*ProcStat_init(&proc_statm);
+   double total_vm = ((double)proc_statm.size * page_size) / (1024 * 1024);
+   printf("/proc/self/statm size resident %f MiB\n",
+                total_vm
+            );
+   double minutes = (wc2 - wc1) / 60;
+   double _badness = total_vm / (sqrt((wc2 - wc1)*1000) * pow(minutes, 1.0/4));
+   printf("Badness bd = %f\n", _badness);
+   printf("Other badness\n");*/
+   badness(wc2 - wc1, page_size, proc_statm);
 
    return 0;
 }
