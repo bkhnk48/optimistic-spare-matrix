@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include "Event.c"
 
+//int sizeOfTree = 0;
+//int maxSize = 0;
+
 //unsigned long arr[20250][7];
 void add(int type, int idElementInGroup,
                 int portID, 
@@ -37,6 +40,8 @@ void add(int type, int idElementInGroup,
                 unsigned long arr[20250][7]
                 )
 {
+   //sizeOfTree++;
+   //if(maxSize < sizeOfTree) maxSize = sizeOfTree;
    /* Quy ước các event từ A đến G (tức type = 0..4) sẽ là 
       các event xảy ra trên hosts
       Các biến type < 0 sẽ là event xảy ra trên các edge switch
@@ -293,6 +298,7 @@ void splay(int e, unsigned long arr[20250][7]
 void removeFirst(int * first, int * root, unsigned long arr[20250][7]
                   )
 {
+   //sizeOfTree--;
    int t = *root;
    if(t == -1)
    {  
