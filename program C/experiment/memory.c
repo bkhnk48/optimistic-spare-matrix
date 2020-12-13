@@ -11,6 +11,8 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 
+#ifndef _LIB_OF_MEMORY_
+#define _LIB_OF_MEMORY_
 
 typedef struct {
     unsigned long size,resident,share,text,lib,data,dt;
@@ -112,3 +114,5 @@ unsigned long mem_avail()
     
   return info.freeram;
 }
+
+#endif
