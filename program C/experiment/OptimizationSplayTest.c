@@ -106,15 +106,6 @@ int main(int argc, char** argv)
    timing(&wc2, &cpuT);
    printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
    printf("================================\n");
-   /*ProcStat_init(&proc_statm);
-   double total_vm = ((double)proc_statm.size * page_size) / (1024 * 1024);
-   printf("/proc/self/statm size resident %f MiB\n",
-                total_vm
-            );
-   double minutes = (wc2 - wc1) / 60;
-   double _badness = total_vm / (sqrt((wc2 - wc1)*1000) * pow(minutes, 1.0/4));
-   printf("Badness bd = %f\n", _badness);
-   printf("Other badness\n");*/
    badness(wc2 - wc1, page_size, proc_statm);
 
    return 0;
