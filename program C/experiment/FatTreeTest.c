@@ -4,7 +4,7 @@
 #include "FatTreeGraph.c"
 
 int main(){
-  int k = 4;
+  int k = 30;
   int serverId = 0;
   int delta = 0;
   int p, e, h;
@@ -32,8 +32,9 @@ int main(){
 
   for(p = 0; p < k*k*k/4; p++){
     printf("address of server %d = %d, its IPv4 = %d\n", 
-              p, addServer[p], getIPv4(p, k));
-    assert(addServer[p] == getIPv4(p, k));
+              p, addServer[p], getIPv4OfHost(p, k));
+    assert(addServer[p] == getIPv4OfHost(p, k));
+    assert(p == getIndexOfHost(addServer[p], k));
   }
   return 0;
 }
