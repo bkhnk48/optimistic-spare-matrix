@@ -4,14 +4,12 @@ serial:
 	gcc -pg -c Event.c
 	gcc -pg -c memory.c -lm
 	gcc -pg -c timing.c
+	gcc -c FatTreeGraph.c
 	gcc -pg -c OptimizationSplay.c
 	gcc OptimizationSplayTest.c -pg -o optest.o -lm
 	gcc -pg -c VoidSplay.c 
 	gcc VoidSplayTest.c -pg -o vstest.o -lm
 	gcc DeleteSplayTest.c -pg -o delS.o -lm
-#gcc NormalSplay.c -g -o no.o
-#gcc -g -c MultiOpSplay.c
-#gcc MultiOpSplayTest.c -g -o mtest.o
 	gcc -pg -c ListSplay.c
 	gcc ListSplayTest.c -pg -o ltest.o -lm
 	gcc -pg -c Node.c
@@ -23,10 +21,12 @@ serial:
 	gcc CASplayTest.c -pg -o catest.o -lm
 	gcc randomFile.c -pg -o ran.o
 	gcc -ggdb3 -O0 -std=c99 -Wall -Wextra -pedantic -o main.out main.c
+	gcc FatTreeTest.c -g -o ftg.o
 n:
 	gcc -c Event.c
 	gcc -c memory.c -lm
 	gcc -c timing.c
+	gcc -c FatTreeGraph.c
 	gcc -c OptimizationSplay.c
 	gcc OptimizationSplayTest.c -o optest.o -lm
 	gcc -c VoidSplay.c -lm
@@ -47,6 +47,7 @@ n:
 	gcc CASplayTest.c -o catest.o -lm
 	gcc randomFile.c -o ran.o
 	gcc -ggdb3 -O0 -std=c99 -Wall -Wextra -pedantic -o main.out main.c
+	gcc FatTreeTest.c -o ftg.o
 clean: 
 	-rm *.o
 	-rm out
