@@ -25,5 +25,23 @@ int getIndexOfHost(int ipv4, int k){
   int index = p*(k*k/4) + x;
   return index;
 }
+
+int getIPv4OfSwitch(int index, int k){
+  //each pod has numOfPorts^2/4 servers and numOfPorts switches
+  int numOfPodSwitches = k*k;
+  int ipv4 = 0;
+  if(index > numOfPodSwitches){
+    int i = index % (k/2) + 1;
+    int j = i / (k/2) + 1;
+    //ip of core switch
+    ipv4 = (10 << 24) | (k << 16) | (j << 8) | i;
+  }
+  else{
+    int p = index / (k*k/4 + k);//pod of switch
+    int s = index - p*(k*k/4 + k) - (k*k/4);
+  }
+  
+  return ipv4;
+}
 #endif
 
