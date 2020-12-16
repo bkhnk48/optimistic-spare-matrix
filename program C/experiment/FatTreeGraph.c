@@ -38,6 +38,7 @@ int getIPv4OfSwitch(int index, int k){
     ipv4 = (10 << 24) | (k << 16) | (j << 8) | i;
   }
   else{
+    //ip of pod switches
     int p = index / (k);//pod of switch
     int s = index % k;
     ipv4 = (10 << 24) | (p << 16) | (s << 8) | 1;
