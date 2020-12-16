@@ -40,7 +40,7 @@ int main(){
       int offset = numEachPod * p;
       for (int s = 0; s < k; s++) {
           int switchId = offset + k * k / 4 + s;
-          addNodes[switchId] = (10 | 24) | (p << 16) | (s << 8) | 1;
+          addNodes[switchId] = (10 << 24) | (p << 16) | (s << 8) | 1;
       }
   }
   // address for core switches
@@ -69,7 +69,12 @@ int main(){
     if(node < k*k*k/4 + k*k)
     {
       int pod = node / (k*k/4 + k);
-      index = node - pod*(k*k/4);
+      if(node >= pod*(k*k/4 + k) + (k*k/4)){
+        index = node - pod*(k*k/4) - (k*k/4);
+        printf("address of POD switch %d = %d, its IPv4 (index = %d) = %d\n", 
+                node, addNodes[node], index, getIPv4OfSwitch(index, k));
+        assert(addNodes[node] == getIPv4OfSwitch(index, k));
+      }
     }
     else{
       index = node - k*k*k/4;
