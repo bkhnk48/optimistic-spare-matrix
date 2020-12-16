@@ -4,12 +4,15 @@
 #include "FatTreeGraph.c"
 
 int main(){
-  int k = 30;
+  int k = 4;
   int serverId = 0;
   int delta = 0;
   int p, e, h;
   int numEachPod = k*k/4 + k;
-  int *addServer = malloc((k*k*k/4)*sizeof(int));
+  int numServers = k * k * k / 4;
+  int numPodSwitches = k * k;
+  int *addServers = malloc((k*k*k/4)*sizeof(int));
+  int *addNodes = malloc((k*k*5/4 + k*k*k/4)*sizeof(int));
 
   #pragma region addresses for servers
   // address for servers
@@ -21,20 +24,62 @@ int main(){
               delta = k*p*(1 + ((serverId - k) >> 31));
               
               delta = serverId - delta;
-              addServer[delta] = (10 << 24);
-              addServer[delta] |= (p << 16);
-              addServer[delta] |= (e << 8);
-              addServer[delta] |= h;
+              addServers[delta] = (10 << 24);
+              addServers[delta] |= (p << 16);
+              addServers[delta] |= (e << 8);
+              addServers[delta] |= h;
           }
       }
   }
   #pragma endregion
 
+  #pragma region addresses for switches
+  // address for switches
+  // address for pod's switches
+  for (int p = 0; p < k; p++) {
+      int offset = numEachPod * p;
+      for (int s = 0; s < k; s++) {
+          int switchId = offset + k * k / 4 + s;
+          addNodes[switchId] = (10 | 24) | (p << 16) | (s << 8) | 1;
+      }
+  }
+  // address for core switches
+  for (int j = 1; j <= k / 2; j++) {
+      for (int i = 1; i <= k / 2; i++) {
+          int offset = numPodSwitches + numServers;
+          int switchId = offset + (j - 1) * k / 2 + i - 1;
+          //printf("Switch iD of Core = %d\n", switchId);
+          addNodes[switchId] = (10 << 24) | (k << 16) | (j << 8) | i;
+      }
+  }
+
+  
+  #pragma endregion
+
+
   for(p = 0; p < k*k*k/4; p++){
-    printf("address of server %d = %d, its IPv4 = %d\n", 
-              p, addServer[p], getIPv4OfHost(p, k));
-    assert(addServer[p] == getIPv4OfHost(p, k));
-    assert(p == getIndexOfHost(addServer[p], k));
+    //printf("address of server %d = %d, its IPv4 = %d\n", 
+    //          p, addServers[p], getIPv4OfHost(p, k));
+    assert(addServers[p] == getIPv4OfHost(p, k));
+    assert(p == getIndexOfHost(addServers[p], k));
+  }
+
+  int node; int index;
+  for(node = 0; node < k*k*k/4 + 5*k*k/4; node++){
+    if(node < k*k*k/4 + k*k)
+    {
+      int pod = node / (k*k/4 + k);
+      index = node - pod*(k*k/4);
+    }
+    else{
+      index = node - k*k*k/4;
+      printf("address of core switch %d = %d, its IPv4 (index = %d) = %d\n", 
+              node, addNodes[node], index, getIPv4OfSwitch(index, k));
+      assert(addNodes[node] == getIPv4OfSwitch(index, k));
+      //assert(p == getIndexOfHost(addServers[p], k));
+      
+    }
+    //
   }
   return 0;
 }
