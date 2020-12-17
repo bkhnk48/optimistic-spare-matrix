@@ -9,7 +9,8 @@ enum TypesOfNode
 {
     HOST = 0, //host
     POD_SWITCH = 1, //pod switch
-    CORE_SWITCH = 2 //core switch
+    CORE_SWITCH = 2, //core switch
+    ERROR = -1
 };
 
 int getIPv4OfHost(int index, int k){
@@ -69,7 +70,12 @@ int typeOfNode(int ipv4, int k){
 }
 
 int getIndexOfSwitch(int ipv4, int k){
-  
+  int node = typeOfNode(ipv4, k);
+  if(node == HOST) return ERROR;
+  if(node == POD_SWITCH){
+    //p = 
+  }
+  return ERROR;
 }
 #endif
 
