@@ -87,7 +87,6 @@ int main(){
       assert(index == getIndexOfSwitch(addNodes[node], k));
       assert(CORE_SWITCH == typeOfNode(getIPv4OfSwitch(index, k), k));
     }
-    //
   }
   return 0;
 }
