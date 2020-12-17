@@ -73,7 +73,19 @@ int getIndexOfSwitch(int ipv4, int k){
   int node = typeOfNode(ipv4, k);
   if(node == HOST) return ERROR;
   if(node == POD_SWITCH){
-    //p = 
+    int p = (ipv4 << 8) >> 24;
+    int s = (ipv4 << 16) >> 24;
+    int index = p*k + s;
+    return index;
+  }
+  else if(node == CORE_SWITCH){
+    //index = a*(k/2) + b + numOfPodSwitches;
+    int i = ipv4 & 255;
+    int j = (ipv4 >> 8) & 255;
+    int b = i - 1;
+    int a = (j - 1) + (b*2/k);
+    int index = ((a*k/2) + b) + k*k;
+    return index;
   }
   return ERROR;
 }
