@@ -77,7 +77,11 @@ int main(){
         //        node, addNodes[node], index, getIPv4OfSwitch(index, k));
         assert(addNodes[node] == getIPv4OfSwitch(index, k));
         assert(index == getIndexOfSwitch(addNodes[node], k));
-        assert(POD_SWITCH == typeOfNode(getIPv4OfSwitch(index, k), k));
+        int indexInPod = node % (k*k/4 + k);
+        if(indexInPod >= k*k/4 && indexInPod < ((k*k/4) + k/2))
+          assert(EDGE_SWITCH == typeOfNode(getIPv4OfSwitch(index, k), k));
+        else
+          assert(AGG_SWITCH == typeOfNode(getIPv4OfSwitch(index, k), k));
       }
     }
     else{
