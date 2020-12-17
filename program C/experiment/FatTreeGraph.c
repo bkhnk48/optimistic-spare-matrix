@@ -8,8 +8,9 @@
 enum TypesOfNode
 {
     HOST = 0, //host
-    POD_SWITCH = 1, //pod switch
-    CORE_SWITCH = 2, //core switch
+    EDGE_SWITCH = 1, //pod switch
+    AGG_SWITCH = 2,
+    CORE_SWITCH = 3, //core switch
     ERROR = -1
 };
 
@@ -64,15 +65,20 @@ int typeOfNode(int ipv4, int k){
   if(B == k)
     return CORE_SWITCH;//the core switch
   int lastBit = (ipv4 & 255);
-  if(lastBit == 1)
-    return POD_SWITCH;//the pod switch
+  if(lastBit == 1){
+    int s = (ipv4 >> 8) & 255;
+    if(s >= 0 && s <= (k/2) - 1)
+      return EDGE_SWITCH;//the edge switch
+    else 
+      return AGG_SWITCH;
+  }
   return HOST; //the host
 }
 
 int getIndexOfSwitch(int ipv4, int k){
   int node = typeOfNode(ipv4, k);
   if(node == HOST) return ERROR;
-  if(node == POD_SWITCH){
+  if(node == EDGE_SWITCH || node == AGG_SWITCH){
     int p = (ipv4 << 8) >> 24;
     int s = (ipv4 << 16) >> 24;
     int index = p*k + s;
