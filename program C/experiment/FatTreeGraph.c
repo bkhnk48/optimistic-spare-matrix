@@ -5,6 +5,13 @@
 #ifndef _LIB_OF_FATTREE_
 #define _LIB_OF_FATTREE_
 
+enum TypesOfNode
+{
+    HOST = 0, //host
+    POD_SWITCH = 1, //pod switch
+    CORE_SWITCH = 2 //core switch
+};
+
 int getIPv4OfHost(int index, int k){
   //each pod has numOfPorts^2/4 servers and numOfPorts switches
   int numOfNodesInPod = k*k/4 + k;
@@ -43,8 +50,26 @@ int getIPv4OfSwitch(int index, int k){
     int s = index % k;
     ipv4 = (10 << 24) | (p << 16) | (s << 8) | 1;
   }
-  
   return ipv4;
+}
+
+/*if this function returns 0: the ipv4 address is of Host
+ *                         1: the node is pod switch
+ *                         2: the node is core switch
+*/
+int typeOfNode(int ipv4, int k){
+  
+  int B = (ipv4 << 8) >> 24;
+  if(B == k)
+    return CORE_SWITCH;//the core switch
+  int lastBit = (ipv4 & 255);
+  if(lastBit == 1)
+    return POD_SWITCH;//the pod switch
+  return HOST; //the host
+}
+
+int getIndexOfSwitch(int ipv4, int k){
+  
 }
 #endif
 
