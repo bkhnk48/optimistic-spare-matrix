@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "FatTreeGraph.c"
+#include "FatTreeTables.c"
 
 int main(){
   int k = 4;
