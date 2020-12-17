@@ -39,8 +39,31 @@ void buildTables(Tables *tablesOfSwitches, int k){
     }
   }
   #pragma endregion
+}
 
-  
+int getNeighborIP(int currentIP, enum TypesOfNode typeOfNode, int port, int k){
+  int neighborIP;
+  if(typeOfNode == HOST){
+    int pod = (currentIP >> 16) & 255;
+    int _switch = (currentIP >> 8) & 255;
+    neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | 1;
+    return neighborIP;
+  }
+  if(typeOfNode == EDGE_SWITCH){
+    int pod = (currentIP >> 16) & 255;
+    int _switch = (currentIP >> 8) & 255;
+    if(port >= k/2){
+      _switch += port;
+      neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | 1;
+      return neighborIP;
+    }
+    else{
+      int ID = 2 + port;
+      neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | ID;
+      return neighborIP;
+    }
+  }
+  return neighborIP;
 }
 #endif
 
