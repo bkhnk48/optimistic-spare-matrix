@@ -75,6 +75,7 @@ int main(){
         //printf("address of POD switch %d = %d, its IPv4 (index = %d) = %d\n", 
         //        node, addNodes[node], index, getIPv4OfSwitch(index, k));
         assert(addNodes[node] == getIPv4OfSwitch(index, k));
+        assert(index == getIndexOfSwitch(addNodes[node], k));
         assert(POD_SWITCH == typeOfNode(getIPv4OfSwitch(index, k), k));
       }
     }
@@ -83,9 +84,8 @@ int main(){
       //printf("address of core switch %d = %d, its IPv4 (index = %d) = %d\n", 
       //        node, addNodes[node], index, getIPv4OfSwitch(index, k));
       assert(addNodes[node] == getIPv4OfSwitch(index, k));
-      //assert(p == getIndexOfHost(addServers[p], k));
+      assert(index == getIndexOfSwitch(addNodes[node], k));
       assert(CORE_SWITCH == typeOfNode(getIPv4OfSwitch(index, k), k));
-      
     }
     //
   }
