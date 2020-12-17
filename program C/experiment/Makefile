@@ -33,9 +33,6 @@ n:
 	gcc VoidSplayTest.c -o vstest.o -lm
 	gcc DeleteSplayTest.c -o delS.o -lm
 	gcc test.c -o test.o -lm
-#gcc NormalSplay.c -o no.o
-#gcc -c MultiOpSplay.c
-#gcc MultiOpSplayTest.c -o mtest.o
 	gcc -c ListSplay.c
 	gcc ListSplayTest.c -DDO_PREFETCH -o ltest.o -lm
 	gcc -c Node.c
