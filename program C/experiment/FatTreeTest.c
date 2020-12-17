@@ -62,6 +62,7 @@ int main(){
     //          p, addServers[p], getIPv4OfHost(p, k));
     assert(addServers[p] == getIPv4OfHost(p, k));
     assert(p == getIndexOfHost(addServers[p], k));
+    assert(HOST == typeOfNode(getIPv4OfHost(p, k), k));
   }
 
   int node; int index;
@@ -71,17 +72,19 @@ int main(){
       int pod = node / (k*k/4 + k);
       if(node >= pod*(k*k/4 + k) + (k*k/4)){
         index = node - pod*(k*k/4) - (k*k/4);
-        printf("address of POD switch %d = %d, its IPv4 (index = %d) = %d\n", 
-                node, addNodes[node], index, getIPv4OfSwitch(index, k));
+        //printf("address of POD switch %d = %d, its IPv4 (index = %d) = %d\n", 
+        //        node, addNodes[node], index, getIPv4OfSwitch(index, k));
         assert(addNodes[node] == getIPv4OfSwitch(index, k));
+        assert(POD_SWITCH == typeOfNode(getIPv4OfSwitch(index, k), k));
       }
     }
     else{
       index = node - k*k*k/4;
-      printf("address of core switch %d = %d, its IPv4 (index = %d) = %d\n", 
-              node, addNodes[node], index, getIPv4OfSwitch(index, k));
+      //printf("address of core switch %d = %d, its IPv4 (index = %d) = %d\n", 
+      //        node, addNodes[node], index, getIPv4OfSwitch(index, k));
       assert(addNodes[node] == getIPv4OfSwitch(index, k));
       //assert(p == getIndexOfHost(addServers[p], k));
+      assert(CORE_SWITCH == typeOfNode(getIPv4OfSwitch(index, k), k));
       
     }
     //
