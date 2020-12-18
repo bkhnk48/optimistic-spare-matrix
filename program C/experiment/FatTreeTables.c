@@ -78,7 +78,10 @@ int getNeighborIP(int currentIP, enum TypesOfNode typeOfNode, int port, int k){
       return neighborIP;
     }
     else{//neighbor is core switch
-
+      int indexOfAggInPod = _switch % (k/2);
+      int core = indexOfAggInPod*(k/2) + port + (k*k*k/4);
+      neighborIP = getIPv4OfSwitch(core, k);
+      return neighborIP;
     }  
   }
   #pragma endregion
