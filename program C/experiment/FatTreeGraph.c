@@ -95,5 +95,14 @@ int getIndexOfSwitch(int ipv4, int k){
   }
   return ERROR;
 }
+
+void printIPv4(int ipv4){
+  //an IPv4 address has format: A.B.C.D
+  int A = (ipv4 >> 24) & 255;
+  int B = (ipv4 >> 16) & 255;
+  int C = (ipv4 >>  8) & 255;
+  int D = ipv4 & 255;
+  printf("%d.%d.%d.%d", A, B, C, D);
+}
 #endif
 
