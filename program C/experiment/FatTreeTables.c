@@ -19,7 +19,7 @@ typedef struct _tables{
 void buildTables(Tables *tablesOfSwitches, int k){
   //In Fat-tree, build total k*k*5/4 routing tables
   tablesOfSwitches->tables = (RoutingTable *)malloc((k*k*5/4)*sizeof(RoutingTable));
-  int i ;
+  int i, j ;
   int numOfSwitches = k*k*5/4;
   #pragma region initialization
   for(i = 0; i < numOfSwitches; i++){
@@ -28,9 +28,25 @@ void buildTables(Tables *tablesOfSwitches, int k){
         tablesOfSwitches->tables[i].type = EDGE_SWITCH;
         tablesOfSwitches->tables[i].prefixTable = NULL;
         tablesOfSwitches->tables[i].subPrefix = 0;
+        int ipv4 = getIPv4OfSwitch(i, k);
+        tablesOfSwitches->tables[i].suffixTable = 
+              (int *)malloc(k*sizeof(int));
+        for(j = 0; j < k; j++){
+          tablesOfSwitches->tables[i].suffixTable[j]
+            = getNeighborIP(ipv4, EDGE_SWITCH, j, k);
+        }
+        
       }
       else{
         tablesOfSwitches->tables[i].type = AGG_SWITCH;
+        tablesOfSwitches->tables[i].subPrefix = 0;
+        int ipv4 = getIPv4OfSwitch(i, k);
+        tablesOfSwitches->tables[i].suffixTable = 
+              (int *)malloc(k*sizeof(int));
+        for(j = 0; j < k; j++){
+          tablesOfSwitches->tables[i].suffixTable[j]
+            = getNeighborIP(ipv4, AGG_SWITCH, j, k);
+        }
       }
     }
     else{
