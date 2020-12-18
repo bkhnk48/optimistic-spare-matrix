@@ -49,20 +49,39 @@ int getNeighborIP(int currentIP, enum TypesOfNode typeOfNode, int port, int k){
     neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | 1;
     return neighborIP;
   }
+
+  #pragma region neighbor of edge switch
   if(typeOfNode == EDGE_SWITCH){
     int pod = (currentIP >> 16) & 255;
     int _switch = (currentIP >> 8) & 255;
-    if(port >= k/2){
+    if(port >= k/2){//neighbor is agg switch
       _switch += port;
       neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | 1;
       return neighborIP;
     }
-    else{
+    else{//neighbor is host
       int ID = 2 + port;
       neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | ID;
       return neighborIP;
     }
   }
+  #pragma endregion
+
+  #pragma region neighbor of agg switch
+  if(typeOfNode == AGG_SWITCH){
+    int pod = (currentIP >> 16) & 255;
+    int _switch = (currentIP >> 8) & 255;
+
+    if(port >= 0 && port < k/2){//neighbor is edge switch
+      int ID = 2 + port;
+      neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | ID;
+      return neighborIP;
+    }
+    else{//neighbor is core switch
+
+    }  
+  }
+  #pragma endregion
   return neighborIP;
 }
 #endif
