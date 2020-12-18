@@ -41,7 +41,8 @@ void buildTables(Tables *tablesOfSwitches, int k){
   #pragma endregion
 }
 
-int getNeighborIP(int currentIP, enum TypesOfNode typeOfNode, int port, int k){
+int getNeighborIP(int currentIP, enum TypesOfNode typeOfNode,
+                      int port, int k){
   int neighborIP;
   if(typeOfNode == HOST){
     int pod = (currentIP >> 16) & 255;
