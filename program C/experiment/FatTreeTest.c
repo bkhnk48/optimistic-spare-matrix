@@ -73,21 +73,35 @@ int main(){
       int pod = node / (k*k/4 + k);
       if(node >= pod*(k*k/4 + k) + (k*k/4)){
         index = node - pod*(k*k/4) - (k*k/4);
-        //printf("address of POD switch %d = %d, its IPv4 (index = %d) = %d\n", 
-        //        node, addNodes[node], index, getIPv4OfSwitch(index, k));
+        
+         
+        //        node, addNodes[node], index, );
         assert(addNodes[node] == getIPv4OfSwitch(index, k));
         assert(index == getIndexOfSwitch(addNodes[node], k));
         int indexInPod = node % (k*k/4 + k);
-        if(indexInPod >= k*k/4 && indexInPod < ((k*k/4) + k/2))
+        if(indexInPod >= k*k/4 && indexInPod < ((k*k/4) + k/2)){
           assert(EDGE_SWITCH == typeOfNode(getIPv4OfSwitch(index, k), k));
-        else
+          printf("address of EDGE switch %d = ", node);
+        }
+        else{
           assert(AGG_SWITCH == typeOfNode(getIPv4OfSwitch(index, k), k));
+          printf("address of AGG switch %d = ", node);
+        }
+        printIPv4(addNodes[node]);
+        printf(" its IPv4 (index = %d) = ", index);
+        printIPv4(getIPv4OfSwitch(index, k));
+        printf("\n");
       }
     }
     else{
       index = node - k*k*k/4;
       //printf("address of core switch %d = %d, its IPv4 (index = %d) = %d\n", 
       //        node, addNodes[node], index, getIPv4OfSwitch(index, k));
+      printf("address of CORE switch %d = ", node);
+      printIPv4(addNodes[node]);
+      printf(" its IPv4 (index = %d) = ", index);
+      printIPv4(getIPv4OfSwitch(index, k));
+      printf("\n"), 
       assert(addNodes[node] == getIPv4OfSwitch(index, k));
       assert(index == getIndexOfSwitch(addNodes[node], k));
       assert(CORE_SWITCH == typeOfNode(getIPv4OfSwitch(index, k), k));
