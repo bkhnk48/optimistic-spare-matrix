@@ -59,8 +59,9 @@ int main(){
 
 
   for(p = 0; p < k*k*k/4; p++){
-    //printf("address of server %d = %d, its IPv4 = %d\n", 
-    //          p, addServers[p], getIPv4OfHost(p, k));
+    printf("address of server %d = %d, its IPv4 = ", 
+              p, addServers[p]);
+    printIPv4(getIPv4OfHost(p, k)); printf("\n");
     assert(addServers[p] == getIPv4OfHost(p, k));
     assert(p == getIndexOfHost(addServers[p], k));
     assert(HOST == typeOfNode(getIPv4OfHost(p, k), k));
