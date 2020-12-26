@@ -109,8 +109,16 @@ void buildTables(Tables *tablesOfSwitches, int k){
       }
     }
     else{
+      int ipv4 = getIPv4OfSwitch(i, k);
       tablesOfSwitches->tables[i].type = CORE_SWITCH;
       tablesOfSwitches->tables[i].suffixTable = NULL;
+      tablesOfSwitches->tables[i].subPrefix = 0;
+      tablesOfSwitches->tables[i].prefixTable = 
+            (int *)malloc(k*sizeof(int));
+      for(j = 0; j < k; j++){
+        tablesOfSwitches->tables[i].prefixTable[j]
+          = getNeighborIP(ipv4, CORE_SWITCH, j, k);//AGG SWITCH
+      }
     }
   }
   #pragma endregion
