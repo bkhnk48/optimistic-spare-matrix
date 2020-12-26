@@ -4,6 +4,11 @@
 #include "FatTreeGraph.c"
 #include "FatTreeTables.c"
 
+void testBuildingTables(int k, int *addServer, int *addNodes){
+
+}
+
+
 int main(){
   int k = 4;
   int serverId = 0;
