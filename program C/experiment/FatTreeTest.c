@@ -5,7 +5,44 @@
 #include "FatTreeTables.c"
 
 void testBuildingTables(int k, int *addServer, int *addNodes){
+  Tables *tablesOfSwitches = NULL;
+  buildTables(tablesOfSwitches, k);
+  //Ta se kiem tra viec dinh tuyen co thanh cong hay khong?
+  //(a) Neu nut edge nhan duoc goi tin yeu cau di den host cung subnet => chuyen sang cac cong [0..k/2-1]
+  //      va host dich se la lang gieng cua nut edge
+  //        Con neu nut edge nhan duoc goi tin yeu cau di den host khong cung subnet => chuyen
+  //        sang cac cong [k/2..k/2 - 1] de den cac agg
+  //(b) Neu nut agg nhan duoc goi tin yeu cau di den host cung pod (voi agg)
+  //      => chuyen sang cac cong [0..k/2- 1] de den cac edge
+  //        Con neu nut agg nhan duoc goi tin yeu cau di den host khong cung pod => chuyen sang
+  //        cac cong [k/2..k/2 - 1] de den cac core
+  //(c) Neu nut core nhan duoc cac goi tin di den cac host => chuyen den agg co cung
+  //      pod voi host do
+  int i = 0, j = 0;
+  for(i = 0; i < k*k*5/4; i++){
+    if(i < k*k){
+      #pragma region Routing at Edge switch
+      if((i % k) >= 0 && (i %k) <= (k/2 - 1)){
+        for(j = 0; j < k*k*k/4; j++){
+          int destIP = getIPv4OfHost(j, k);
+          int edgeIP = getIPv4OfSwitch(i, k);
+          int podOfDest = (destIP << 8) >> 16;
+          int subnetOfDest = (destIP << 16) >> 24;
+          int podOfEdge = (edgeIP << 8) >> 16;
+          int subnetOfEdge = (edgeIP << 16) >> 24;
 
+          if(subnetOfDest != subnetOfEdge 
+                || podOfDest != podOfEdge){
+            int suffix = destIP & 255;
+            suffix -= 2;
+            int nextIP = tablesOfSwitches->tables[i].suffixTable[suffix];
+            assert(typeOfNode(nextIP, k) == AGG_SWITCH);
+          }
+        }
+      }
+      #pragma endregion
+    }
+  }
 }
 
 
@@ -113,5 +150,7 @@ int main(){
       assert(CORE_SWITCH == typeOfNode(getIPv4OfSwitch(index, k), k));
     }
   }
+  
+  testBuildingTables(k, addServers, addNodes);
   return 0;
 }
