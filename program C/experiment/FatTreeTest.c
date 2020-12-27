@@ -50,13 +50,19 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
           int podOfDest = (destIP << 8) >> 16;
           int subnetOfDest = (destIP << 16) >> 24;
           int podOfAgg = (aggIP << 8) >> 16;
-          int subnetOfAgg = (aggIP << 16) >> 24;
+          int suffix = destIP & 255; 
+          suffix -= 2;
+          //int subnetOfAgg = (aggIP << 16) >> 24;
 
           if(podOfDest == podOfAgg){
           //agg nhan duoc goi tin yeu cau di den host cung pod (voi agg)
             int nextIP = tablesOfSwitches->tables[i].prefixTable[subnetOfDest];
             //printIPv4(nextIP); printf("\n");
             assert(typeOfNode(nextIP, k) == EDGE_SWITCH);
+          }
+          else{
+            int nextIP = tablesOfSwitches->tables[i].suffixTable[suffix];
+            assert(typeOfNode(nextIP, k) == CORE_SWITCH);
           }
         }
         #pragma endregion
