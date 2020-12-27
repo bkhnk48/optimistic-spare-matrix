@@ -36,12 +36,32 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
             int suffix = destIP & 255;
             suffix -= 2;
             int nextIP = tablesOfSwitches->tables[i].suffixTable[suffix];
+            printIPv4(nextIP); printf("\n");
             assert(typeOfNode(nextIP, k) == AGG_SWITCH);
           }
         }
       }
       #pragma endregion
+      else{
+        #pragma region Routing at Agg switch
+        for(j = 0; j < k*k*k/4; j++){
+          int destIP = getIPv4OfHost(j, k);
+          int aggIP = getIPv4OfSwitch(i, k);
+          int podOfDest = (destIP << 8) >> 16;
+          int subnetOfDest = (destIP << 16) >> 24;
+          int podOfAgg = (aggIP << 8) >> 16;
+          int subnetOfAgg = (aggIP << 16) >> 24;
+
+          if(podOfDest == podOfAgg){
+            int nextIP = tablesOfSwitches->tables[i].prefixTable[subnetOfDest];
+            printIPv4(nextIP); printf("\n");
+            assert(typeOfNode(nextIP, k) == EDGE_SWITCH);
+          }
+        }
+        #pragma endregion
+      }
     }
+    
   }
 }
 
