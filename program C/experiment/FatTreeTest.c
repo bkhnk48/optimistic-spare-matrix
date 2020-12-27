@@ -28,9 +28,9 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
         for(j = 0; j < k*k*k/4; j++){
           int destIP = getIPv4OfHost(j, k);
           int edgeIP = getIPv4OfSwitch(i, k);
-          int podOfDest = (destIP << 8) >> 16;
+          int podOfDest = (destIP << 8) >> 24;
           int subnetOfDest = (destIP << 16) >> 24;
-          int podOfEdge = (edgeIP << 8) >> 16;
+          int podOfEdge = (edgeIP << 8) >> 24;
           int subnetOfEdge = (edgeIP << 16) >> 24;
 
           if(subnetOfDest != subnetOfEdge 
@@ -52,15 +52,17 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
         for(j = 0; j < k*k*k/4; j++){
           int destIP = getIPv4OfHost(j, k);
           int aggIP = getIPv4OfSwitch(i, k);
-          int podOfDest = (destIP << 8) >> 16;
+          int podOfDest = (destIP << 8) >> 24;
           int subnetOfDest = (destIP << 16) >> 24;
-          int podOfAgg = (aggIP << 8) >> 16;
+          int podOfAgg = (aggIP << 8) >> 24;
           int suffix = destIP & 255; 
           suffix -= 2;
           
           if(podOfDest == podOfAgg){
           //agg nhan duoc goi tin yeu cau di den host cung pod (voi agg)
             int nextIP = tablesOfSwitches->tables[i].prefixTable[subnetOfDest];
+            //printf(" agg ip = "); printIPv4(aggIP); 
+            //printf(" dest IP = "); printIPv4(destIP); printf(" ");
             //printIPv4(nextIP); printf("\n");
             assert(typeOfNode(nextIP, k) == EDGE_SWITCH);
           }
@@ -76,10 +78,10 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
       #pragma region routing at core switch
       for(j = 0; j < k*k*k/4; j++){
         int destIP = getIPv4OfHost(j, k);
-        int podOfDest = (destIP << 8) >> 16;
+        int podOfDest = (destIP << 8) >> 24;
         int nextIP = tablesOfSwitches->tables[i].prefixTable[podOfDest];
-        int podOfAgg = (nextIP << 8) >> 16;
-        printf("pod of dest = %d, pod of agg = %d\n", podOfDest, podOfAgg);
+        int podOfAgg = (nextIP << 8) >> 24;
+        //printf("pod of dest = %d, pod of agg = %d\n", podOfDest, podOfAgg);
         assert(podOfDest == podOfAgg);
         assert(typeOfNode(nextIP, k) == AGG_SWITCH);
       }
