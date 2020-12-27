@@ -53,6 +53,7 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
           int subnetOfAgg = (aggIP << 16) >> 24;
 
           if(podOfDest == podOfAgg){
+          //agg nhan duoc goi tin yeu cau di den host cung pod (voi agg)
             int nextIP = tablesOfSwitches->tables[i].prefixTable[subnetOfDest];
             //printIPv4(nextIP); printf("\n");
             assert(typeOfNode(nextIP, k) == EDGE_SWITCH);
