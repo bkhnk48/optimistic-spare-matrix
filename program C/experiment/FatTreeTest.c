@@ -5,6 +5,8 @@
 #include "FatTreeTables.c"
 
 void testBuildingTables(int k, int *addServer, int *addNodes){
+  printf("Test the routing tables of all switches\n");
+  printf("=======================================\n");
   Tables *tablesOfSwitches = malloc(sizeof(Tables));
   buildTables(tablesOfSwitches, k);
   //Ta se kiem tra viec dinh tuyen co thanh cong hay khong?
@@ -36,8 +38,11 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
             int suffix = destIP & 255;
             suffix -= 2;
             int nextIP = tablesOfSwitches->tables[i].suffixTable[suffix];
-            //printIPv4(nextIP); printf("\n");
+            //printf("Through "); 
+            //printIPv4(edgeIP);
+            //printf(", packet to "); printIPv4(destIP); 
             assert(typeOfNode(nextIP, k) == AGG_SWITCH);
+            //printf(" will be next to AGG SWITCH\n");
           }
         }
       }
@@ -52,8 +57,7 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
           int podOfAgg = (aggIP << 8) >> 16;
           int suffix = destIP & 255; 
           suffix -= 2;
-          //int subnetOfAgg = (aggIP << 16) >> 24;
-
+          
           if(podOfDest == podOfAgg){
           //agg nhan duoc goi tin yeu cau di den host cung pod (voi agg)
             int nextIP = tablesOfSwitches->tables[i].prefixTable[subnetOfDest];
