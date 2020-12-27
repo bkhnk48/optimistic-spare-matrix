@@ -72,6 +72,19 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
         #pragma endregion
       }
     }
+    else{
+      #pragma region routing at core switch
+      for(j = 0; j < k*k*k/4; j++){
+        int destIP = getIPv4OfHost(j, k);
+        int podOfDest = (destIP << 8) >> 16;
+        int nextIP = tablesOfSwitches->tables[i].prefixTable[podOfDest];
+        int podOfAgg = (nextIP << 8) >> 16;
+        printf("pod of dest = %d, pod of agg = %d\n", podOfDest, podOfAgg);
+        assert(podOfDest == podOfAgg);
+        assert(typeOfNode(nextIP, k) == AGG_SWITCH);
+      }
+      #pragma endregion
+    }
     
   }
 }
