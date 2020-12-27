@@ -95,7 +95,7 @@ void buildTables(Tables *tablesOfSwitches, int k){
               (int *)malloc((k/2)*sizeof(int));
         for(j = 0; j < k/2; j++){
           tablesOfSwitches->tables[i].suffixTable[j]
-            = getNeighborIP(ipv4, AGG_SWITCH, j, k);//CORE SWITCH
+            = getNeighborIP(ipv4, AGG_SWITCH, j + k/2, k);//CORE SWITCH
         }
         int p = i/k;
         tablesOfSwitches->tables[i].subPrefix = (10 << 16) | (p << 8);
