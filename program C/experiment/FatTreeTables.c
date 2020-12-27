@@ -49,8 +49,9 @@ int getNeighborIP(int currentIP, enum TypesOfNode typeOfNode,
     int _switch = (currentIP >> 8) & 255;
 
     if(port >= 0 && port < k/2){//neighbor is edge switch
-      int ID = 2 + port;
-      neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | ID;
+      //int ID = 2 + port;
+      _switch -= k/2;
+      neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | 1;
       return neighborIP;
     }
     else{//neighbor is core switch
@@ -59,6 +60,17 @@ int getNeighborIP(int currentIP, enum TypesOfNode typeOfNode,
       neighborIP = getIPv4OfSwitch(core, k);
       return neighborIP;
     }  
+  }
+  #pragma endregion
+
+  #pragma region neighbor of core switch
+  if(typeOfNode == CORE_SWITCH){
+    //address of Core: 10.k.j.i
+    int j = (currentIP >> 8) & 255;
+    j -= 1;
+    int _switch = j + (k/2);
+    neighborIP = (10 << 24) | (port << 16) | (_switch << 8) | 1;
+    return neighborIP;
   }
   #pragma endregion
   return neighborIP;
