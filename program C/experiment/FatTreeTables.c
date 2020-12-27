@@ -83,7 +83,7 @@ void buildTables(Tables *tablesOfSwitches, int k){
               (int *)malloc((k/2)*sizeof(int));
         for(j = 0; j < k/2; j++){
           tablesOfSwitches->tables[i].suffixTable[j]
-            = getNeighborIP(ipv4, EDGE_SWITCH, j, k);//AGG SWITCH
+            = getNeighborIP(ipv4, EDGE_SWITCH, j + k/2, k);//AGG SWITCH
         }
       }
       #pragma endregion
