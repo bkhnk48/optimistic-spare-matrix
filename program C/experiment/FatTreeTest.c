@@ -36,7 +36,7 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
             int suffix = destIP & 255;
             suffix -= 2;
             int nextIP = tablesOfSwitches->tables[i].suffixTable[suffix];
-            printIPv4(nextIP); printf("\n");
+            //printIPv4(nextIP); printf("\n");
             assert(typeOfNode(nextIP, k) == AGG_SWITCH);
           }
         }
@@ -54,7 +54,7 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
 
           if(podOfDest == podOfAgg){
             int nextIP = tablesOfSwitches->tables[i].prefixTable[subnetOfDest];
-            printIPv4(nextIP); printf("\n");
+            //printIPv4(nextIP); printf("\n");
             assert(typeOfNode(nextIP, k) == EDGE_SWITCH);
           }
         }
