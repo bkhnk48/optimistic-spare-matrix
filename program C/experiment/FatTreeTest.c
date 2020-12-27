@@ -5,7 +5,7 @@
 #include "FatTreeTables.c"
 
 void testBuildingTables(int k, int *addServer, int *addNodes){
-  Tables *tablesOfSwitches = NULL;
+  Tables *tablesOfSwitches = malloc(sizeof(Tables));
   buildTables(tablesOfSwitches, k);
   //Ta se kiem tra viec dinh tuyen co thanh cong hay khong?
   //(a) Neu nut edge nhan duoc goi tin yeu cau di den host cung subnet => chuyen sang cac cong [0..k/2-1]
