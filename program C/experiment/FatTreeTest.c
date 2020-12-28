@@ -91,6 +91,9 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
   }
 }
 
+void testPath(int k, int ipOfHost, int ipOfDest, Tables *tablesOfSwitches){
+
+}
 
 int main(){
   int k = 4;
