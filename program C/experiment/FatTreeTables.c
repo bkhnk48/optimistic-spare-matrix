@@ -50,7 +50,7 @@ int getNeighborIP(int currentIP, enum TypesOfNode typeOfNode,
 
     if(port >= 0 && port < k/2){//neighbor is edge switch
       //int ID = 2 + port;
-      _switch -= k/2;
+      _switch = port;
       neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | 1;
       return neighborIP;
     }
