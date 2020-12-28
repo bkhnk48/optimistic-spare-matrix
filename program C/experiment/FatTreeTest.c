@@ -92,7 +92,28 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
 }
 
 void testPath(int k, int ipOfHost, int ipOfDest, Tables *tablesOfSwitches){
-
+  int i, j;
+  int nextIP;
+  for(i = 0; i < k*k*k/4; i++){
+    for(j = 0; j < k*k*k/4; j++){
+      if(i != j){
+        int count = 0;
+        int srcIP = getIPv4OfHost(i, k);
+        int destIP = getIPv4OfHost(j, k);
+        int podOfSrc = (srcIP >> 16) & 255;
+        int podOfDst = (destIP >> 16) & 255;
+        int subnetOfSrc = (srcIP >> 8) & 255;
+        int subnetOfDest = (destIP >> 8) & 255;
+        if(subnetOfDest == subnetOfSrc){
+          count = 1;
+          nextIP = getNeighborIP(srcIP, HOST, 0, k);
+          while(count != 0){
+            
+          }
+        }
+      }
+    }
+  }
 }
 
 int main(){
