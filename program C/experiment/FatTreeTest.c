@@ -227,8 +227,8 @@ int main(){
   
   testBuildingTables(k, addServers, addNodes);
 
-  //Tables *tablesOfSwitches = malloc(sizeof(Tables));
-  //buildTables(tablesOfSwitches, k);
-  //testPath(k, tablesOfSwitches);
+  Tables *tablesOfSwitches = malloc(sizeof(Tables));
+  buildTables(tablesOfSwitches, k);
+  testPath(k, tablesOfSwitches);
   return 0;
 }
