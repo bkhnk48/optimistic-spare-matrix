@@ -91,9 +91,10 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
   }
 }
 
-void testPath(int k, int ipOfHost, int ipOfDest, Tables *tablesOfSwitches){
+void testPath(int k, Tables *tablesOfSwitches){
   int i, j;
   int nextIP;
+  
   for(i = 0; i < k*k*k/4; i++){
     for(j = 0; j < k*k*k/4; j++){
       if(i != j){
@@ -106,10 +107,13 @@ void testPath(int k, int ipOfHost, int ipOfDest, Tables *tablesOfSwitches){
         int subnetOfDest = (destIP >> 8) & 255;
         if(subnetOfDest == subnetOfSrc){
           count = 1;
-          nextIP = getNeighborIP(srcIP, HOST, 0, k);
-          while(count != 0){
-            
+          nextIP = next(srcIP, srcIP, destIP, k, tablesOfSwitches);
+          while (nextIP != destIP)
+          {
+            count--;
+            nextIP = next(srcIP, nextIP, destIP, k, tablesOfSwitches);
           }
+          assert(count == 0);
         }
       }
     }
@@ -222,5 +226,9 @@ int main(){
   }
   
   testBuildingTables(k, addServers, addNodes);
+
+  //Tables *tablesOfSwitches = malloc(sizeof(Tables));
+  //buildTables(tablesOfSwitches, k);
+  //testPath(k, tablesOfSwitches);
   return 0;
 }
