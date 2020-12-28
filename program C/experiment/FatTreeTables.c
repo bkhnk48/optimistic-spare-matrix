@@ -136,5 +136,51 @@ void buildTables(Tables *tablesOfSwitches, int k){
   #pragma endregion
 }
 
+//int next(int source, int current, int destination, int k) {
+int next(int srcIP, int currIP, int destIP, int k, Tables *tablesOfSwitches) {
+  //int srcIP = getIPv4OfHost(source, k);
+  //int destIP = getIPv4OfHost(destination, k);
+  int nextIP ;
+  int podOfSrc = (srcIP >> 16) & 255;
+  int podOfDst = (destIP >> 16) & 255;
+  int subnetOfSrc = (srcIP >> 8) & 255;
+  int subnetOfDest = (destIP >> 8) & 255;
+  if(currIP == srcIP)
+    return getNeighborIP(srcIP, HOST, 0, k);
+  else{
+    int aheadOfDst = getNeighborIP(destIP, HOST, 0, k);
+    if(aheadOfDst == currIP)
+      return destIP;
+    int typeOfSwitch = typeOfNode(currIP, k);
+    int i = getIndexOfSwitch(currIP, k);
+    int suffix = destIP & 255; 
+    int podOfCurr = (currIP >> 16) & 255;
+    suffix -= 2;
+    if(typeOfSwitch == CORE_SWITCH){
+      nextIP = tablesOfSwitches->tables[i].prefixTable[podOfDst];
+      return nextIP;
+    }  
+    if(typeOfSwitch == AGG_SWITCH){
+      
+      if(podOfDst == podOfCurr){
+        //agg nhan duoc goi tin yeu cau di den host cung pod (voi agg)
+        nextIP = tablesOfSwitches->tables[i].prefixTable[subnetOfDest];
+        return nextIP;
+      }
+      else{
+        nextIP = tablesOfSwitches->tables[i].suffixTable[suffix];
+        return nextIP;
+      }
+    }
+    if(typeOfSwitch == EDGE_SWITCH){
+      int subnetOfEdge = (currIP >> 8) & 255;
+      if(subnetOfDest != subnetOfEdge 
+          || podOfDst != podOfCurr){
+        nextIP = tablesOfSwitches->tables[i].suffixTable[suffix];
+        return nextIP;
+      }
+    }
+  }
+}
 #endif
 
