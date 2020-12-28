@@ -105,6 +105,7 @@ void testPath(int k, Tables *tablesOfSwitches){
         int podOfDst = (destIP >> 16) & 255;
         int subnetOfSrc = (srcIP >> 8) & 255;
         int subnetOfDest = (destIP >> 8) & 255;
+        #pragma region src and dst are in the same subnet
         if(subnetOfDest == subnetOfSrc && podOfDst == podOfSrc){
           count = 1;
           nextIP = next(srcIP, srcIP, destIP, k, tablesOfSwitches);
@@ -115,6 +116,18 @@ void testPath(int k, Tables *tablesOfSwitches){
           }
           assert(count == 0);
         }
+        #pragma endregion
+        else if(podOfDst == podOfSrc){
+          count = 2;
+          nextIP = next(srcIP, srcIP, destIP, k, tablesOfSwitches);
+          while (nextIP != destIP)
+          {
+            count--;
+            nextIP = next(srcIP, nextIP, destIP, k, tablesOfSwitches);
+          }
+          assert(count == 0);
+        }
+        
       }
     }
   }
