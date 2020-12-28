@@ -105,7 +105,7 @@ void testPath(int k, Tables *tablesOfSwitches){
         int podOfDst = (destIP >> 16) & 255;
         int subnetOfSrc = (srcIP >> 8) & 255;
         int subnetOfDest = (destIP >> 8) & 255;
-        if(subnetOfDest == subnetOfSrc){
+        if(subnetOfDest == subnetOfSrc && podOfDst == podOfSrc){
           count = 1;
           nextIP = next(srcIP, srcIP, destIP, k, tablesOfSwitches);
           while (nextIP != destIP)
