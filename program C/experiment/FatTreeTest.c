@@ -118,7 +118,7 @@ void testPath(int k, Tables *tablesOfSwitches){
         }
         #pragma endregion
         else if(podOfDst == podOfSrc){
-          count = 2;
+          count = 3;
           nextIP = next(srcIP, srcIP, destIP, k, tablesOfSwitches);
           while (nextIP != destIP)
           {
