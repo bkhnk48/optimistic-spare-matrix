@@ -262,10 +262,10 @@ int main(){
   }
   
   testNeighbors(k);
-  //testBuildingTables(k, addServers, addNodes);
+  testBuildingTables(k, addServers, addNodes);
 
   Tables *tablesOfSwitches = malloc(sizeof(Tables));
   buildTables(tablesOfSwitches, k);
-  //testPath(k, tablesOfSwitches);
+  testPath(k, tablesOfSwitches);
   return 0;
 }
