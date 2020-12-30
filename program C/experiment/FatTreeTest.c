@@ -118,7 +118,10 @@ void testPath(int k, Tables *tablesOfSwitches){
         }
         #pragma endregion
         else if(podOfDst == podOfSrc){
-          count = 2;
+          count = 3;
+          if(srcIP == 167772418 && destIP == 167772163)
+            printf("From (%d) ", srcIP); printIPv4(srcIP); printf(" to (%d) ", destIP); printIPv4(destIP); printf("\n");
+          
           nextIP = next(srcIP, srcIP, destIP, k, tablesOfSwitches);
           while (nextIP != destIP)
           {
