@@ -130,6 +130,20 @@ void testPath(int k, Tables *tablesOfSwitches){
           assert(count == 0);
           #pragma endregion
         }
+        else{
+          #pragma region src and dst are in different pods
+          count = 5;
+          if(srcIP == 167772162 && destIP == 167837699)
+            printf("From %d to %d\n", srcIP, destIP);
+          nextIP = next(srcIP, srcIP, destIP, k, tablesOfSwitches);
+          while (nextIP != destIP)
+          {
+            count--;
+            nextIP = next(srcIP, nextIP, destIP, k, tablesOfSwitches);
+          }
+          assert(count == 0);
+          #pragma endregion
+        } 
         
       }
     }
