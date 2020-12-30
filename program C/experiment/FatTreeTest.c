@@ -150,7 +150,7 @@ void testNeighbors(int k){
     for(p = k/2; p < k; p++){
       int aggIP = getNeighborIP(edgeIP, EDGE_SWITCH, p, k);
       int indexOfAgg = getIndexOfSwitch(aggIP, k);
-      printf("indexOfAgg = %d\n", indexOfAgg);
+      //printf("indexOfAgg = %d\n", indexOfAgg);
       assert(indexOfAgg == pod*k + p);
     }
   }
