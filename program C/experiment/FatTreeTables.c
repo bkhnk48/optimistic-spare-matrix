@@ -31,8 +31,8 @@ int getNeighborIP(int currentIP, enum TypesOfNode typeOfNode,
     int pod = (currentIP >> 16) & 255;
     int _switch = (currentIP >> 8) & 255;
     if(port >= k/2){//neighbor is agg switch
-      _switch += port;
-      neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | 1;
+      int _switchOfAgg = port;
+      neighborIP = (10 << 24) | (pod << 16) | (_switchOfAgg << 8) | 1;
       return neighborIP;
     }
     else{//neighbor is host
