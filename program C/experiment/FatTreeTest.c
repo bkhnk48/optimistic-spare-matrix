@@ -133,6 +133,26 @@ void testPath(int k, Tables *tablesOfSwitches){
   }
 }
 
+void testNeighbors(int k){
+  int i = 0, p = 0;
+  for(i = 0; i < k*k*k/4; i++){
+    int ipOfHost = getIPv4OfHost(i, k);
+    int edgeIP = getNeighborIP(ipOfHost, HOST, 0, k);
+    int indexOfEdge = getIndexOfSwitch(edgeIP, k);
+    int subnetOfHost = (i % (k*k/4))/ (k/2);
+    int podOfHost = i / (k*k/4);
+    int subnet = subnetOfHost;
+    int pod = podOfHost;
+    assert(indexOfEdge == (subnetOfHost + podOfHost*k));
+    for(p = k/2; p < k; p++){
+      int aggIP = getNeighborIP(edgeIP, EDGE_SWITCH, p, k);
+      int indexOfAgg = getIndexOfSwitch(aggIP, k);
+      printf("indexOfAgg = %d\n", indexOfAgg);
+      assert(indexOfAgg == pod*k + p);
+    }
+  }
+}
+
 int main(){
   int k = 4;
   int serverId = 0;
@@ -238,10 +258,11 @@ int main(){
     }
   }
   
-  testBuildingTables(k, addServers, addNodes);
+  testNeighbors(k);
+  //testBuildingTables(k, addServers, addNodes);
 
   Tables *tablesOfSwitches = malloc(sizeof(Tables));
   buildTables(tablesOfSwitches, k);
-  testPath(k, tablesOfSwitches);
+  //testPath(k, tablesOfSwitches);
   return 0;
 }
