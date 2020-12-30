@@ -118,6 +118,7 @@ void testPath(int k, Tables *tablesOfSwitches){
         }
         #pragma endregion
         else if(podOfDst == podOfSrc){
+          #pragma region src and dst are in the same pod but different subnets
           count = 3;
           
           nextIP = next(srcIP, srcIP, destIP, k, tablesOfSwitches);
@@ -127,6 +128,7 @@ void testPath(int k, Tables *tablesOfSwitches){
             nextIP = next(srcIP, nextIP, destIP, k, tablesOfSwitches);
           }
           assert(count == 0);
+          #pragma endregion
         }
         
       }
