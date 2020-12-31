@@ -17,6 +17,9 @@ int main(int argc, char** argv) {
     ProcStatm proc_statm;
     long page_size = sysconf(_SC_PAGESIZE);
     int k = 4;
+    int PACKET_SIZE = 12*1000; //12KB
+    int packets_per_sec = 1000;//each sec generated 1000 packets
+    int T = 1000000;
 
     if(argc >= 2)
     {
@@ -50,6 +53,50 @@ int main(int argc, char** argv) {
     timing(&wc1, &cpuT);
 
     root = -1;
+
+    for(i = 0; i < 16; i++)
+    {
+      add(0, i, 0, 0, &root, arr);
+    }
+
+    removeFirst(&first, &root, arr);
+
+    unsigned long ongoingTime = arr[first][3];
+    while(currentTime <= endTime && ongoingTime != -1)
+    {
+        if(ongoingTime == currentTime)
+        {
+            count++;
+         
+            int type = arr[first][0];
+            i = arr[first][1];
+            arr[first][3] = -1L;
+            arr[first][4] = -1L;
+            arr[first][5] = -1L;
+            arr[first][6] = -1L;
+         
+
+            if(type == A)
+            {
+                add(A, i, 0, currentTime + T, &root, arr
+                        );
+                //add(B, i, 0, currentTime +  defaultBias*13
+                //              , &root, arr
+                //        );
+            }
+            else if(type == B){
+                //add(C, i, 0, currentTime +  defaultBias*33
+                //              , &root, arr
+                //        );
+            }
+        }
+        ongoingTime = -1;
+        removeFirst(&first, &root, arr
+               );
+      
+        currentTime = arr[first][3];
+        ongoingTime = arr[first][3];
+    }
 
     return 0;
 
