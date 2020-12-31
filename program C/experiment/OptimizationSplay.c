@@ -10,7 +10,8 @@ void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
                 int *root,
-                unsigned long arr[20250][7]
+                //unsigned long arr[20250][7]
+                unsigned long arr[384][7]//4*4*4*4/4 + 4*5*4*4*4/4 = 6*4*4*4 = 384
                 );
 /* From now on, an event has 7 fields about:
    + it's type
@@ -22,22 +23,27 @@ void add(int type, int idElementInGroup,
    + index of right
 */
 
-void splay(int e, unsigned long arr[20250][7]
+void splay(int e, //unsigned long arr[20250][7]
+                  unsigned long arr[384][7]
                   );
 
-void removeFirst(int * first, int * root, unsigned long arr[20250][7]
+void removeFirst(int * first, int * root, //unsigned long arr[20250][7]
+                     unsigned long arr[384][7]
                   );
 
-void show(unsigned long arr[20250][7], 
+void show(//unsigned long arr[20250][7], 
+            unsigned long arr[384][7],
                int root);
-void leaf(unsigned long arr[20250][7], 
+void leaf(//unsigned long arr[20250][7], 
+            unsigned long arr[384][7],
                int root, enum Side side);
 
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
                 int *root,
-                unsigned long arr[20250][7]
+                //unsigned long arr[20250][7]
+                unsigned long arr[384][7]
                 )
 {
    //sizeOfTree++;
@@ -181,7 +187,8 @@ void add(int type, int idElementInGroup,
 
 }
 
-void splay(int e, unsigned long arr[20250][7]
+void splay(int e, //unsigned long arr[20250][7]
+                  unsigned long arr[384][7]
                )
 {
    int left;
@@ -295,7 +302,9 @@ void splay(int e, unsigned long arr[20250][7]
    }
 }
 
-void removeFirst(int * first, int * root, unsigned long arr[20250][7]
+void removeFirst(int * first, int * root, 
+                     //unsigned long arr[20250][7]
+                     unsigned long arr[384][7]
                   )
 {
    //sizeOfTree--;
@@ -376,7 +385,8 @@ void removeFirst(int * first, int * root, unsigned long arr[20250][7]
    
 }
 
-void show(unsigned long arr[20250][7], 
+void show(//unsigned long arr[20250][7], 
+            unsigned long arr[384][7],
             int root)
 {
    if(root != -1 && arr[root][3] != -1)
@@ -393,7 +403,8 @@ void show(unsigned long arr[20250][7],
    }
 }
 
-void leaf(unsigned long arr[20250][7], 
+void leaf(//unsigned long arr[20250][7], 
+            unsigned long arr[384][7],
             int root, enum Side side)
 {
    printf("===========> ");
@@ -418,7 +429,8 @@ void leaf(unsigned long arr[20250][7],
    }
 }
 
-void validate(unsigned long arr[20250][7], 
+void validate(//unsigned long arr[20250][7], 
+               unsigned long arr[384][7],
                int index)
 {
    //return;
