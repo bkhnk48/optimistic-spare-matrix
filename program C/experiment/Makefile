@@ -24,6 +24,7 @@ serial:
 	gcc randomFile.c -pg -o ran.o
 	gcc -ggdb3 -O0 -std=c99 -Wall -Wextra -pedantic -o main.out main.c
 	gcc FatTreeTest.c -g -o ftg.o
+	gcc FatTree4PortsTest.c -g -o f4t.o -lm
 n:
 	gcc -c Event.c
 	gcc -c memory.c -lm
@@ -49,6 +50,7 @@ n:
 	gcc randomFile.c -o ran.o
 	gcc -ggdb3 -O0 -std=c99 -Wall -Wextra -pedantic -o main.out main.c
 	gcc FatTreeTest.c -o ftg.o
+	gcc FatTree4PortsTest.c -o f4t.o -lm
 clean: 
 	-rm *.o
 	-rm out
