@@ -132,10 +132,9 @@ void testPath(int k, Tables *tablesOfSwitches){
         }
         else{
           #pragma region src and dst are in different pods
-          count = 5;
-          if(srcIP == 167772162 && destIP == 167837699)
-            printf("From %d to %d\n", srcIP, destIP);
+          count = 5; 
           nextIP = next(srcIP, srcIP, destIP, k, tablesOfSwitches);
+          
           while (nextIP != destIP)
           {
             count--;
@@ -257,7 +256,7 @@ int main(){
         printIPv4(addNodes[node]);
         printf(" its IPv4 (index = %d) = ", index);
         printIPv4(getIPv4OfSwitch(index, k));
-        printf("\n");
+        printf("(original = %d \n", addNodes[node]);
       }
     }
     else{
@@ -268,7 +267,7 @@ int main(){
       printIPv4(addNodes[node]);
       printf(" its IPv4 (index = %d) = ", index);
       printIPv4(getIPv4OfSwitch(index, k));
-      printf("\n"), 
+      printf("(original = %d \n", addNodes[node]);
       assert(addNodes[node] == getIPv4OfSwitch(index, k));
       assert(index == getIndexOfSwitch(addNodes[node], k));
       assert(CORE_SWITCH == typeOfNode(getIPv4OfSwitch(index, k), k));
