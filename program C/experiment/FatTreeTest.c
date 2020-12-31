@@ -281,5 +281,7 @@ int main(){
   Tables *tablesOfSwitches = malloc(sizeof(Tables));
   buildTables(tablesOfSwitches, k);
   testPath(k, tablesOfSwitches);
+
+  BufferSwitch *bufferSwitches = initBufferSwitches(k);
   return 0;
 }
