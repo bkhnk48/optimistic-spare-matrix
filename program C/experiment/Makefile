@@ -6,6 +6,7 @@ serial:
 	gcc -pg -c timing.c
 	gcc -pg -c FatTreeGraph.c
 	gcc -pg -g -c FatTreeTables.c
+	gcc -pg -g -c FatTreeNode.c
 	gcc -pg -c OptimizationSplay.c
 	gcc OptimizationSplayTest.c -pg -o optest.o -lm
 	gcc -pg -c VoidSplay.c 
@@ -29,6 +30,7 @@ n:
 	gcc -c timing.c
 	gcc -c FatTreeGraph.c
 	gcc -c FatTreeTables.c
+	gcc -c FatTreeNode.c
 	gcc -c OptimizationSplay.c
 	gcc OptimizationSplayTest.c -o optest.o -lm
 	gcc -c VoidSplay.c -lm
