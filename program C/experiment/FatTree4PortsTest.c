@@ -47,6 +47,7 @@ int main(int argc, char** argv) {
     buildTables(tablesOfSwitches, k);
     BufferHost *bufferHosts = initBufferHosts(k*k*k/4);
     BufferSwitch *bufferSwitches = initBufferSwitches(k*k*5/4, k);
+    NetworkNode *allNodes = initNetworkNodes(k*k*k/4, 5*k*k/4, k);
 
     setlocale(LC_NUMERIC, "");
    
@@ -94,9 +95,13 @@ int main(int argc, char** argv) {
                 }
             }
             else if(type == B){
-                //add(C, i, 0, currentTime +  defaultBias*33
-                //              , &root, arr
-                //        );
+                int generateEventC = actionB(&bufferHosts[i],
+                                        allNodes[i].links[0]
+                                        );
+                if(generateEventC)
+                    add(C, i, 0, currentTime +  defaultBias*33
+                              , &root, arr
+                            );
             }
         }
         ongoingTime = -1;
