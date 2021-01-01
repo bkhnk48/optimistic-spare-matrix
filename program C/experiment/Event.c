@@ -45,7 +45,7 @@ int actionA(int T,
     return generateEventB;
 }
 
-int actionB(BufferHost *bufferHost, int link){
+int actionB(BufferHost *bufferHost, Packet *pktInLink){
     int packetID = -1;
     int generateEventC = 0;
     if(bufferHost->firstSQ != -1){
@@ -72,12 +72,12 @@ int actionB(BufferHost *bufferHost, int link){
         bufferHost->lastEXB = packetID;
     }
     
-    generateEventC = link == 0;
+    generateEventC = (pktInLink->id == -1);
     return generateEventC;
 }
 
 void actionC(BufferHost *bufferHost){
-    
+
 }
 /*void loadArray(int a[1000]){
     printf("fsdfsdf");
