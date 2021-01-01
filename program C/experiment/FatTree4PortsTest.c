@@ -83,6 +83,7 @@ int main(int argc, char** argv) {
             arr[first][5] = -1L;
             arr[first][6] = -1L;
          
+            #pragma region action of Event type A
             if(type == A)
             {
                 add(A, i, 0, currentTime + T, &root, arr
@@ -94,6 +95,9 @@ int main(int argc, char** argv) {
                         );  
                 }
             }
+            #pragma endregion 
+            
+            #pragma region action of Event type B
             else if(type == B){
                 int generateEventC = actionB(&bufferHosts[i],
                                         allNodes[i].links[0]
@@ -102,6 +106,10 @@ int main(int argc, char** argv) {
                     add(C, i, 0, currentTime +  defaultBias*33
                               , &root, arr
                             );
+            }
+            #pragma endregion
+            else if(type == C){
+                
             }
         }
         ongoingTime = -1;
