@@ -91,5 +91,29 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
     return bufferSwitches;
 }
 
+int actionA(int type, int idElementInGroup,
+                int T, 
+                unsigned long currentTime,
+                BufferHost* bufferHost
+                ){
+    //Cap nhat source queue
+    if(bufferHost->firstSQ == -1){
+        bufferHost->firstSQ = currentTime/T;
+    }
+    else{
+        bufferHost->lastSQ = currentTime/T;
+    }
 
+    //Kiem tra EXB cua host
+    int generateEventB = 0;
+    if(bufferHost->firstEXB == -1 || (bufferHost->lastEXB == -1)){
+        generateEventB = 1;
+    }
+    else {
+        generateEventB = 
+            (bufferHost->lastEXB - bufferHost->firstEXB + 1) 
+                    < BUFFER_SIZE;
+    }
+    return generateEventB;
+}
 #endif
