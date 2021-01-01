@@ -45,7 +45,33 @@ int actionA(int T,
     return generateEventB;
 }
 
+void leaveSourceQueue(BufferHost *bufferHost){
+    int packetID = -1;
+    if(bufferHost->firstSQ != -1){
+        if(bufferHost->lastSQ == -1)
+        {
+            packetID = bufferHost->firstSQ;
+            bufferHost->firstSQ = -1;
+        }
+        else{
+            packetID = bufferHost->lastSQ;
+            if(bufferHost->lastSQ == bufferHost->firstSQ + 1){
+                bufferHost->lastSQ = -1;
+            }
+            else{
+                bufferHost->lastSQ--;
+            }
+        }
+    }
 
+    if(bufferHost->firstEXB == -1){
+        bufferHost->firstEXB = packetID;
+    }
+    else{
+        bufferHost->lastEXB = packetID;
+    }
+    
+}
 /*void loadArray(int a[1000]){
     printf("fsdfsdf");
    int num;
