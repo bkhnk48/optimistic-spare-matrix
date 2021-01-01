@@ -292,16 +292,20 @@ int main(){
       int subIndex = (i - (k*k*k/4)) % (k);
       if(i < (k*k*k/4)){
         assert(allNodes[i].type == HOST);
+        assert(typeOfNode(allNodes[i].ipv4, k) == HOST);
       }
       else if(subIndex < k/2){
         assert(allNodes[i].type == EDGE_SWITCH);
+        assert(typeOfNode(allNodes[i].ipv4, k) == EDGE_SWITCH);
       }
       else{
         assert(allNodes[i].type == AGG_SWITCH);
+        assert(typeOfNode(allNodes[i].ipv4, k) == AGG_SWITCH);
       }
     }
     else{
       assert(allNodes[i].type == CORE_SWITCH);
+      assert(typeOfNode(allNodes[i].ipv4, k) == CORE_SWITCH);
     }
   }
   #pragma endregion
