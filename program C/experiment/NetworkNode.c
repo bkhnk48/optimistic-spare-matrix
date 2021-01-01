@@ -32,10 +32,10 @@ typedef struct _networkNode{
 typedef struct _bufferHost{
     int indexInGroup;
     //int indexInNodes;
-    long firstSQ;
-    long lastSQ;
-    long firstEXB;  
-    long lastEXB;
+    unsigned long firstSQ;
+    unsigned long lastSQ;
+    unsigned long firstEXB;  
+    unsigned long lastEXB;
 } BufferHost;
 
 typedef struct _bufferSwitch{
