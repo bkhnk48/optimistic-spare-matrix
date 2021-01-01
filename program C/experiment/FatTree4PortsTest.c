@@ -45,6 +45,8 @@ int main(int argc, char** argv) {
     pairs = Stride(8, k);
     Tables *tablesOfSwitches = malloc(sizeof(Tables));
     buildTables(tablesOfSwitches, k);
+    BufferHost *bufferHosts = initBufferHosts(k*k*k/4);
+    BufferSwitch *bufferSwitches = initBufferSwitches(k*k*5/4, k);
 
     setlocale(LC_NUMERIC, "");
    
