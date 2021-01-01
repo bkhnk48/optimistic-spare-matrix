@@ -100,7 +100,7 @@ int main(int argc, char** argv) {
             #pragma region action of Event type B
             else if(type == B){
                 int generateEventC = actionB(&bufferHosts[i],
-                                        allNodes[i].links[0]
+                                        &allNodes[i].links[0]
                                         );
                 if(generateEventC)
                     add(C, i, 0, currentTime +  defaultBias*33
@@ -109,7 +109,7 @@ int main(int argc, char** argv) {
             }
             #pragma endregion
             else if(type == C){
-                
+
             }
         }
         ongoingTime = -1;
