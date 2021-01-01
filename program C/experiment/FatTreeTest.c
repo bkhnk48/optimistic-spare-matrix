@@ -284,15 +284,16 @@ int main(){
   BufferSwitch *bufferSwitches = initBufferSwitches(k*k*5/4, k);
 
   NetworkNode *allNodes = initNetworkNodes(k*k*k/4, 5*k*k/4, k);
-  printf("assert network type");
+  printf("assert network type\n");
+  #pragma region Test type of network nodes
   for(i = 0; i < (k*k*k/4) + (5*k*k/4); i++){
     if(i < (k*k*k/4) + (k*k)){
       int pod = i / (k + k*k/4);
-      int subIndex = i % (k + k*k/4);
-      if(subIndex < k*k/4){
+      int subIndex = (i - (k*k*k/4)) % (k);
+      if(i < (k*k*k/4)){
         assert(allNodes[i].type == HOST);
       }
-      else if(subIndex < k*k/4 + k/2){
+      else if(subIndex < k/2){
         assert(allNodes[i].type == EDGE_SWITCH);
       }
       else{
@@ -303,5 +304,6 @@ int main(){
       assert(allNodes[i].type == CORE_SWITCH);
     }
   }
+  #pragma endregion
   return 0;
 }
