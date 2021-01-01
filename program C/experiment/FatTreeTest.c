@@ -94,6 +94,8 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
 void testPath(int k, Tables *tablesOfSwitches){
   int i, j;
   int nextIP;
+  RoutingTable table;
+  int index;
   
   for(i = 0; i < k*k*k/4; i++){
     for(j = 0; j < k*k*k/4; j++){
@@ -108,11 +110,13 @@ void testPath(int k, Tables *tablesOfSwitches){
         #pragma region src and dst are in the same subnet
         if(subnetOfDest == subnetOfSrc && podOfDst == podOfSrc){
           count = 1;
-          nextIP = next(srcIP, srcIP, destIP, k, tablesOfSwitches);
+          nextIP = next(srcIP, srcIP, destIP, k, NULL);
           while (nextIP != destIP)
           {
+            index = getIndexOfSwitch(nextIP, k);
             count--;
-            nextIP = next(srcIP, nextIP, destIP, k, tablesOfSwitches);
+            table = tablesOfSwitches->tables[index];
+            nextIP = next(srcIP, nextIP, destIP, k, &table);
           }
           assert(count == 0);
         }
@@ -121,11 +125,13 @@ void testPath(int k, Tables *tablesOfSwitches){
           #pragma region src and dst are in the same pod but different subnets
           count = 3;
           
-          nextIP = next(srcIP, srcIP, destIP, k, tablesOfSwitches);
+          nextIP = next(srcIP, srcIP, destIP, k, NULL);
           while (nextIP != destIP)
           {
+            index = getIndexOfSwitch(nextIP, k);
             count--;
-            nextIP = next(srcIP, nextIP, destIP, k, tablesOfSwitches);
+            table = tablesOfSwitches->tables[index];
+            nextIP = next(srcIP, nextIP, destIP, k, &table);
           }
           assert(count == 0);
           #pragma endregion
@@ -133,12 +139,14 @@ void testPath(int k, Tables *tablesOfSwitches){
         else{
           #pragma region src and dst are in different pods
           count = 5; 
-          nextIP = next(srcIP, srcIP, destIP, k, tablesOfSwitches);
+          nextIP = next(srcIP, srcIP, destIP, k, NULL);
           
           while (nextIP != destIP)
           {
+            index = getIndexOfSwitch(nextIP, k);
             count--;
-            nextIP = next(srcIP, nextIP, destIP, k, tablesOfSwitches);
+            table = tablesOfSwitches->tables[index];
+            nextIP = next(srcIP, nextIP, destIP, k, &table);
           }
           assert(count == 0);
           #pragma endregion
