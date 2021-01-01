@@ -139,5 +139,15 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
   }
   return networkNodes;
 }
+
+int *Stride(int stride, int k){
+    int *pairs = malloc((k*k*k/4) * sizeof(int));
+    int i;
+    int numOfHosts = k*k*k/4;
+    for(i = 0; i < numOfHosts; i++){
+        pairs[i] = (i + stride) % numOfHosts;
+    }
+    return pairs;
+}
 #endif
 
