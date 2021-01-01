@@ -110,8 +110,11 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
     networkNodes[i].indexInNodes = i % (k*k/4) + pod*((k*k/4) + k);
     networkNodes[i].ipv4 = getIPv4OfHost(i, k);
     networkNodes[i].type = HOST;
-    networkNodes[i].links = malloc(1*sizeof(int));
-    networkNodes[i].links[0] = 0;
+    networkNodes[i].links = malloc(1*sizeof(Packet));
+    networkNodes[i].links[0].id = -1;
+    networkNodes[i].links[0].srcIP = networkNodes[i].ipv4;
+    networkNodes[i].links[0].currIP = networkNodes[i].ipv4;
+    networkNodes[i].links[0].dstIP = -1;
   }
   
   for(i = numOfHosts; i < numOfHosts + numOfSwitches - (k*k/4); i++){
@@ -121,9 +124,13 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
     networkNodes[i].indexInNodes = index + pod*((k*k/4) + k) + k*k/4;
     networkNodes[i].ipv4 = getIPv4OfSwitch(index, k);
     networkNodes[i].type = (index % k < k/2 ? EDGE_SWITCH : AGG_SWITCH);
-    networkNodes[i].links = malloc(k*sizeof(int));
-    for(j = 0; j < k; j++)
-      networkNodes[i].links[j] = 0;
+    networkNodes[i].links = malloc(k*sizeof(Packet));
+    for(j = 0; j < k; j++){
+      networkNodes[i].links[j].id = -1;
+      networkNodes[i].links[j].srcIP = -1;
+      networkNodes[i].links[j].currIP = networkNodes[i].ipv4;
+      networkNodes[i].links[j].dstIP = -1;
+    }
   }
   
   for(i = numOfHosts + numOfSwitches - (k*k/4); 
@@ -133,9 +140,13 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
     networkNodes[i].indexInNodes = i ;
     networkNodes[i].ipv4 = getIPv4OfSwitch(index, k);
     networkNodes[i].type = CORE_SWITCH;
-    networkNodes[i].links = malloc(k*sizeof(int));
-    for(j = 0; j < k; j++)
-      networkNodes[i].links[j] = 0;
+    networkNodes[i].links = malloc(k*sizeof(Packet));
+    for(j = 0; j < k; j++){
+      networkNodes[i].links[j].id = -1;
+      networkNodes[i].links[j].srcIP = -1;
+      networkNodes[i].links[j].currIP = networkNodes[i].ipv4;
+      networkNodes[i].links[j].dstIP = -1;
+    }
   }
   return networkNodes;
 }
