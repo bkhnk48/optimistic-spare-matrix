@@ -116,9 +116,9 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
       pod = i / (k*k/4 + k);
       index = i - pod*(k*k/4) - (k*k/4);
       networkNodes[i].indexInGroup = index;
-      //networkNodes[i].indexInNodes = i % (k*k/4) + pod*((k*k/4) + k);
+      networkNodes[i].indexInNodes = index + pod*((k*k/4) + k) + k*k/4;
       networkNodes[i].ipv4 = getIPv4OfSwitch(index, k);
-      networkNodes[i].type = typeOfNode(networkNodes[i].ipv4, k);
+      networkNodes[i].type = (index % k < k/2 ? EDGE_SWITCH : AGG_SWITCH);
       networkNodes[i].links = malloc(k*sizeof(int));
       for(j = 0; j < k; j++)
         networkNodes[i].links[j] = 0;
