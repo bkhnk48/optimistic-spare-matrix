@@ -32,10 +32,10 @@ typedef struct _networkNode{
 typedef struct _bufferHost{
     int indexInGroup;
     //int indexInNodes;
-    unsigned long firstSQ;
-    unsigned long lastSQ;
-    unsigned long firstEXB;  
-    unsigned long lastEXB;
+    long firstSQ;
+    long lastSQ;
+    long firstEXB;  
+    long lastEXB;
 } BufferHost;
 
 typedef struct _bufferSwitch{
@@ -50,13 +50,13 @@ BufferHost *initBufferHosts(int numOfHosts){
                                                 *sizeof(BufferHost));
     int i; int pod;
     for(i = 0; i < numOfHosts; i++){
-        bufferHosts->indexInGroup = i;
+        bufferHosts[i].indexInGroup = i;
         //pod = i / (k*k/4);
         //bufferHosts->indexInNodes = i % (k*k/4) + pod*((k*k/4) + k);
-        bufferHosts->firstSQ = -1;
-        bufferHosts->lastSQ = -1;
-        bufferHosts->firstEXB = -1;
-        bufferHosts->lastEXB = -1;
+        bufferHosts[i].firstSQ = -1;
+        bufferHosts[i].lastSQ = -1;
+        bufferHosts[i].firstEXB = -1;
+        bufferHosts[i].lastEXB = -1;
     }
     return bufferHosts;
 }
