@@ -76,7 +76,7 @@ int actionB(BufferHost *bufferHost, Packet *pktInLink){
     return generateEventC;
 }
 
-void actionC(BufferHost *bufferHost){
+void actionC(BufferHost *bufferHost, Packet *pktInLink){
 
 }
 /*void loadArray(int a[1000]){
