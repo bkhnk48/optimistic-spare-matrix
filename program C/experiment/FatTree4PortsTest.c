@@ -40,6 +40,9 @@ int main(int argc, char** argv) {
          arr[i][j] = -1L;
       }
     }
+
+    int *pairs = NULL;
+    pairs = Stride(8, k);
     setlocale(LC_NUMERIC, "");
    
     printf("Simulation time is %ld (s)\n", endTime / (1000*1000));
@@ -74,11 +77,11 @@ int main(int argc, char** argv) {
             arr[first][5] = -1L;
             arr[first][6] = -1L;
          
-
             if(type == A)
             {
                 add(A, i, 0, currentTime + T, &root, arr
                         );
+                
                 //add(B, i, 0, currentTime +  defaultBias*13
                 //              , &root, arr
                 //        );
