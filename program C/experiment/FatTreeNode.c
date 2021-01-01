@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include "FatTreeGraph.c"
 
-#ifndef _LIB_OF_FATTREE_NODE
-#define _LIB_OF_FATTREE_NODE
+#ifndef _LIB_OF_NETWORK_NODE
+#define _LIB_OF_NETWORK_NODE
 #define BUFFER_SIZE 5
 typedef struct _networkNode{
   int indexInGroup;
@@ -14,7 +14,7 @@ typedef struct _networkNode{
 
 typedef struct _bufferHost{
     int indexInGroup;
-    int indexInNodes;
+    //int indexInNodes;
     unsigned long firstSQ;
     unsigned long lastSQ;
     unsigned long firstEXB;  
@@ -30,19 +30,19 @@ typedef struct _packet{
 
 typedef struct _bufferSwitch{
     int indexInGroup;
-    int indexInNodes;
+    //int indexInNodes;
     Packet **ENB;
     Packet **EXB;
 } BufferSwitch;
 
-BufferHost *initBufferHosts(int k){
-    BufferHost *bufferHosts = (BufferHost *)malloc((k*k*k/4)
+BufferHost *initBufferHosts(int numOfHosts){
+    BufferHost *bufferHosts = (BufferHost *)malloc(numOfHosts
                                                 *sizeof(BufferHost));
     int i; int pod;
-    for(i = 0; i < k*k*k/4; i++){
+    for(i = 0; i < numOfHosts; i++){
         bufferHosts->indexInGroup = i;
-        pod = i / (k*k/4);
-        bufferHosts->indexInNodes = i % (k*k/4) + pod*((k*k/4) + k);
+        //pod = i / (k*k/4);
+        //bufferHosts->indexInNodes = i % (k*k/4) + pod*((k*k/4) + k);
         bufferHosts->firstSQ = -1;
         bufferHosts->lastSQ = -1;
         bufferHosts->firstEXB = -1;
@@ -51,14 +51,12 @@ BufferHost *initBufferHosts(int k){
     return bufferHosts;
 }
 
-BufferSwitch *initBufferSwitches(int k){
-    BufferSwitch *bufferSwitches = (BufferSwitch *)malloc((k*k*5/4)
+BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
+    BufferSwitch *bufferSwitches = (BufferSwitch *)malloc(numOfSwitches
                                                 *sizeof(BufferSwitch));
     int i, j; int pod;
-    for(i = 0; i < k*k*5/4; i++){
+    for(i = 0; i < numOfSwitches; i++){
         bufferSwitches->indexInGroup = i;
-        //pod = i / (k*k/4);
-        //bufferSwitches->indexInNodes = i % (k*k/4) + pod*((k*k/4) + k);
         Packet **temp1 = NULL;
         temp1 = malloc(sizeof * temp1 * k);
         for(j = 0; j < k; j++){
