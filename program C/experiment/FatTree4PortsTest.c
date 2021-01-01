@@ -86,7 +86,9 @@ int main(int argc, char** argv) {
             {
                 add(A, i, 0, currentTime + T, &root, arr
                         );
-                //if(actionA(T, currentTime, _bufferHost))
+                if(actionA(T, currentTime, &bufferHosts[i])){
+                    
+                }
                 //add(B, i, 0, currentTime +  defaultBias*13
                 //              , &root, arr
                 //        );
