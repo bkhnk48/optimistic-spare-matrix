@@ -113,7 +113,7 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
     networkNodes[i].links = malloc(1*sizeof(int));
     networkNodes[i].links[0] = 0;
   }
-  printf("assign POD SWITCH\n");
+  
   for(i = numOfHosts; i < numOfHosts + numOfSwitches - (k*k/4); i++){
     pod = i / (k*k/4 + k);
     index = i - pod*(k*k/4) - (k*k/4);
@@ -125,7 +125,7 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
     for(j = 0; j < k; j++)
       networkNodes[i].links[j] = 0;
   }
-  printf("assign CORE SWITCH\n");
+  
   for(i = numOfHosts + numOfSwitches - (k*k/4); 
             i < numOfHosts + numOfSwitches; i++){
     index = i - (k*k*k/4);
