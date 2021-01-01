@@ -173,7 +173,7 @@ int main(){
   int k = 4;
   int serverId = 0;
   int delta = 0;
-  int p, e, h;
+  int i, p, e, h;
   int numEachPod = k*k/4 + k;
   int numServers = k * k * k / 4;
   int numPodSwitches = k * k;
@@ -282,5 +282,26 @@ int main(){
   testPath(k, tablesOfSwitches);
 
   BufferSwitch *bufferSwitches = initBufferSwitches(k*k*5/4, k);
+
+  NetworkNode *allNodes = initNetworkNodes(k*k*k/4, 5*k*k/4, k);
+  printf("assert network type");
+  for(i = 0; i < (k*k*k/4) + (5*k*k/4); i++){
+    if(i < (k*k*k/4) + (k*k)){
+      int pod = i / (k + k*k/4);
+      int subIndex = i % (k + k*k/4);
+      if(subIndex < k*k/4){
+        assert(allNodes[i].type == HOST);
+      }
+      else if(subIndex < k*k/4 + k/2){
+        assert(allNodes[i].type == EDGE_SWITCH);
+      }
+      else{
+        assert(allNodes[i].type == AGG_SWITCH);
+      }
+    }
+    else{
+      assert(allNodes[i].type == CORE_SWITCH);
+    }
+  }
   return 0;
 }
