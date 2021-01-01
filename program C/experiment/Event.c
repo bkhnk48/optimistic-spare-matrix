@@ -45,7 +45,7 @@ int actionA(int T,
     return generateEventB;
 }
 
-int leaveSourceQueue(BufferHost *bufferHost, int link){
+int actionB(BufferHost *bufferHost, int link){
     int packetID = -1;
     int generateEventC = 0;
     if(bufferHost->firstSQ != -1){
