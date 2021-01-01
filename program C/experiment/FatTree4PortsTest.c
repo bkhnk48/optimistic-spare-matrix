@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
     double wc1 = 0, wc2 = 0, cpuT = 0;
     int first = -1;
     int defaultSec = 1;
-    int defaultBias = 1;
+    int defaultBias = 0;
     ProcStatm proc_statm;
     long page_size = sysconf(_SC_PAGESIZE);
     int k = 4;
@@ -88,11 +88,10 @@ int main(int argc, char** argv) {
                         );
                 int generateEventB = actionA(T, currentTime, &bufferHosts[i]);
                 if(generateEventB){
-                    
+                  add(B, i, 0, currentTime +  defaultBias*13
+                              , &root, arr
+                        );  
                 }
-                //add(B, i, 0, currentTime +  defaultBias*13
-                //              , &root, arr
-                //        );
             }
             else if(type == B){
                 //add(C, i, 0, currentTime +  defaultBias*33
