@@ -19,6 +19,7 @@ typedef struct _networkNode{
   int indexInNodes;
   int ipv4;
   enum TypesOfNode type;
+  int *links;
 } NetworkNode;
 
 typedef struct _bufferHost{
@@ -89,5 +90,6 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
     }
     return bufferSwitches;
 }
+
 
 #endif
