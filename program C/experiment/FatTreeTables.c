@@ -137,7 +137,9 @@ void buildTables(Tables *tablesOfSwitches, int k){
 }
 
 //int next(int source, int current, int destination, int k) {
-int next(int srcIP, int currIP, int destIP, int k, Tables *tablesOfSwitches) {
+int next(int srcIP, int currIP, int destIP, int k, //Tables *tablesOfSwitches
+            RoutingTable *table
+          ) {
   //int srcIP = getIPv4OfHost(source, k);
   //int destIP = getIPv4OfHost(destination, k);
   int nextIP ;
@@ -152,23 +154,26 @@ int next(int srcIP, int currIP, int destIP, int k, Tables *tablesOfSwitches) {
     if(aheadOfDst == currIP)
       return destIP;
     int typeOfSwitch = typeOfNode(currIP, k);
-    int i = getIndexOfSwitch(currIP, k);
+    //int i = getIndexOfSwitch(currIP, k);
     int suffix = destIP & 255; 
     int podOfCurr = (currIP >> 16) & 255;
     suffix -= 2;
     if(typeOfSwitch == CORE_SWITCH){
-      nextIP = tablesOfSwitches->tables[i].prefixTable[podOfDst];
+      nextIP = //tablesOfSwitches->tables[i].
+                table->prefixTable[podOfDst];
       return nextIP;
     }  
     if(typeOfSwitch == AGG_SWITCH){
       
       if(podOfDst == podOfCurr){
         //agg nhan duoc goi tin yeu cau di den host cung pod (voi agg)
-        nextIP = tablesOfSwitches->tables[i].prefixTable[subnetOfDest];
+        nextIP = //tablesOfSwitches->tables[i].
+                  table->prefixTable[subnetOfDest];
         return nextIP;
       }
       else{
-        nextIP = tablesOfSwitches->tables[i].suffixTable[suffix];
+        nextIP = //tablesOfSwitches->tables[i].
+                  table->suffixTable[suffix];
         return nextIP;
       }
     }
@@ -176,7 +181,8 @@ int next(int srcIP, int currIP, int destIP, int k, Tables *tablesOfSwitches) {
       int subnetOfEdge = (currIP >> 8) & 255;
       if(subnetOfDest != subnetOfEdge 
           || podOfDst != podOfCurr){
-        nextIP = tablesOfSwitches->tables[i].suffixTable[suffix];
+        nextIP = //tablesOfSwitches->tables[i].
+                  table->suffixTable[suffix];
         return nextIP;
       }
     }
