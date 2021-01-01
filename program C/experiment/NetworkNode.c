@@ -14,12 +14,19 @@ enum TypesOfNode
     ERROR = -1
 };
 
+typedef struct _packet{
+    unsigned long id;
+    int srcIP;
+    int dstIP;
+    int currIP;
+}Packet;
+
 typedef struct _networkNode{
   int indexInGroup;
   int indexInNodes;
   int ipv4;
   enum TypesOfNode type;
-  int *links;
+  Packet *links;
 } NetworkNode;
 
 typedef struct _bufferHost{
@@ -30,13 +37,6 @@ typedef struct _bufferHost{
     unsigned long firstEXB;  
     unsigned long lastEXB;
 } BufferHost;
-
-typedef struct _packet{
-    unsigned long id;
-    int srcIP;
-    int dstIP;
-    int currIP;
-}Packet;
 
 typedef struct _bufferSwitch{
     int indexInGroup;
