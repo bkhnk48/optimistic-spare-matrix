@@ -45,8 +45,9 @@ int actionA(int T,
     return generateEventB;
 }
 
-void leaveSourceQueue(BufferHost *bufferHost){
+int leaveSourceQueue(BufferHost *bufferHost, int link){
     int packetID = -1;
+    int generateEventC = 0;
     if(bufferHost->firstSQ != -1){
         if(bufferHost->lastSQ == -1)
         {
@@ -71,6 +72,8 @@ void leaveSourceQueue(BufferHost *bufferHost){
         bufferHost->lastEXB = packetID;
     }
     
+    generateEventC = link == 0;
+    return generateEventC;
 }
 /*void loadArray(int a[1000]){
     printf("fsdfsdf");
