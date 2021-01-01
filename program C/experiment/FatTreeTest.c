@@ -282,6 +282,6 @@ int main(){
   buildTables(tablesOfSwitches, k);
   testPath(k, tablesOfSwitches);
 
-  BufferSwitch *bufferSwitches = initBufferSwitches(k);
+  BufferSwitch *bufferSwitches = initBufferSwitches(k*k*5/4, k);
   return 0;
 }
