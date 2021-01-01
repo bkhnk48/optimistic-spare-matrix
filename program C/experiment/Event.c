@@ -75,6 +75,10 @@ int actionB(BufferHost *bufferHost, int link){
     generateEventC = link == 0;
     return generateEventC;
 }
+
+void actionC(BufferHost *bufferHost){
+    
+}
 /*void loadArray(int a[1000]){
     printf("fsdfsdf");
    int num;
