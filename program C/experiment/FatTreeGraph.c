@@ -1,18 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "FatTreeNode.c"
 
 #ifndef _LIB_OF_FATTREE_
 #define _LIB_OF_FATTREE_
 
-enum TypesOfNode
-{
-    HOST = 0, //host
-    EDGE_SWITCH = 1, //pod switch
-    AGG_SWITCH = 2,
-    CORE_SWITCH = 3, //core switch
-    ERROR = -1
-};
+
 
 int getIPv4OfHost(int index, int k){
   //each pod has numOfPorts^2/4 servers and numOfPorts switches
