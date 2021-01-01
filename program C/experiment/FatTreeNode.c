@@ -1,10 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "FatTreeGraph.c"
+//#include "FatTreeGraph.c"
 
 #ifndef _LIB_OF_NETWORK_NODE
 #define _LIB_OF_NETWORK_NODE
 #define BUFFER_SIZE 5
+enum TypesOfNode
+{
+    HOST = 0, //host
+    EDGE_SWITCH = 1, //pod switch
+    AGG_SWITCH = 2,
+    CORE_SWITCH = 3, //core switch
+    ERROR = -1
+};
+
 typedef struct _networkNode{
   int indexInGroup;
   int indexInNodes;
