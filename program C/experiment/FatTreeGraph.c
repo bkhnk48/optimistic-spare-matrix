@@ -97,5 +97,43 @@ void printIPv4(int ipv4){
   int D = ipv4 & 255;
   printf("%d.%d.%d.%d", A, B, C, D);
 }
+
+NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
+    NetworkNode *networkNodes = malloc((numOfSwitches + numOfHosts) 
+                                        *sizeof(NetworkNode)
+                                        );
+    
+    int i, j; int pod, index;
+    for(i = 0; i < numOfHosts; i++){
+      networkNodes[i].indexInGroup = i;
+      pod = i / (k*k/4);
+      networkNodes[i].indexInNodes = i % (k*k/4) + pod*((k*k/4) + k);
+      networkNodes[i].ipv4 = getIPv4OfHost(i, k);
+      networkNodes[i].type = HOST;
+      networkNodes[i].links = malloc(1*sizeof(int));
+    }
+    for(i = numOfHosts; i < numOfHosts + numOfSwitches - (k*k/4); i++){
+      pod = i / (k*k/4 + k);
+      index = i - pod*(k*k/4) - (k*k/4);
+      networkNodes[i].indexInGroup = index;
+      //networkNodes[i].indexInNodes = i % (k*k/4) + pod*((k*k/4) + k);
+      networkNodes[i].ipv4 = getIPv4OfSwitch(index, k);
+      networkNodes[i].type = typeOfNode(networkNodes[i].ipv4, k);
+      networkNodes[i].links = malloc(k*sizeof(int));
+      for(j = 0; j < k; j++)
+        networkNodes[i].links[j] = 0;
+    }
+    for(i = numOfHosts + numOfSwitches - (k*k/4); 
+              i < numOfHosts + numOfSwitches; i++){
+      index = i - (k*k*k/4);
+      networkNodes[i].indexInGroup = index;
+      networkNodes[i].indexInNodes = i ;
+      networkNodes[i].ipv4 = getIPv4OfSwitch(index, k);
+      networkNodes[i].type = CORE_SWITCH;
+      networkNodes[i].links = malloc(k*sizeof(int));
+      for(j = 0; j < k; j++)
+        networkNodes[i].links[j] = 0;
+    }
+}
 #endif
 
