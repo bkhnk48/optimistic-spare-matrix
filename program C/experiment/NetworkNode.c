@@ -91,8 +91,7 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
     return bufferSwitches;
 }
 
-int actionA(int type, int idElementInGroup,
-                int T, 
+int actionA(int T, 
                 unsigned long currentTime,
                 BufferHost* bufferHost
                 ){
