@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "NetworkNode.c"
 
 #ifndef _TYPES_OF_EVENT_
 #define _TYPES_OF_EVENT_
@@ -18,6 +19,32 @@ enum TypesOfEvent
 };
 
 enum Side{LEFT, RIGHT};
+
+int actionA(int T, 
+                unsigned long currentTime,
+                BufferHost* bufferHost
+                ){
+    //Cap nhat source queue
+    if(bufferHost->firstSQ == -1){
+        bufferHost->firstSQ = currentTime/T;
+    }
+    else{
+        bufferHost->lastSQ = currentTime/T;
+    }
+
+    //Kiem tra EXB cua host
+    int generateEventB = 0;
+    if(bufferHost->firstEXB == -1 || (bufferHost->lastEXB == -1)){
+        generateEventB = 1;
+    }
+    else {
+        generateEventB = 
+            (bufferHost->lastEXB - bufferHost->firstEXB + 1) 
+                    < BUFFER_SIZE;
+    }
+    return generateEventB;
+}
+
 
 /*void loadArray(int a[1000]){
     printf("fsdfsdf");
