@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "FatTreeNode.c"
+#include "NetworkNode.c"
 
 #ifndef _LIB_OF_FATTREE_
 #define _LIB_OF_FATTREE_
