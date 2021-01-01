@@ -45,7 +45,7 @@ int actionA(int T,
     return generateEventB;
 }
 
-int actionB(BufferHost *bufferHost, Packet *pktInLink){
+int actionB(BufferHost *bufferHost, Packet *pktInLink, Packet *connectedENB){
     int packetID = -1;
     int generateEventC = 0;
     if(bufferHost->firstSQ != -1){
@@ -73,6 +73,10 @@ int actionB(BufferHost *bufferHost, Packet *pktInLink){
     }
     
     generateEventC = (pktInLink->id == -1);
+    if(generateEventC){
+        //Check buffer of next switch
+
+    }
     return generateEventC;
 }
 
