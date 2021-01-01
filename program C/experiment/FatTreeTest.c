@@ -3,7 +3,6 @@
 #include <assert.h>
 #include "FatTreeGraph.c"
 #include "FatTreeTables.c"
-#include "FatTreeNode.c"
 
 void testBuildingTables(int k, int *addServer, int *addNodes){
   printf("Test the routing tables of all switches\n");
