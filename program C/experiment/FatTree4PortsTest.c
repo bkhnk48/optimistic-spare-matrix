@@ -43,6 +43,9 @@ int main(int argc, char** argv) {
 
     int *pairs = NULL;
     pairs = Stride(8, k);
+    Tables *tablesOfSwitches = malloc(sizeof(Tables));
+    buildTables(tablesOfSwitches, k);
+
     setlocale(LC_NUMERIC, "");
    
     printf("Simulation time is %ld (s)\n", endTime / (1000*1000));
@@ -81,7 +84,7 @@ int main(int argc, char** argv) {
             {
                 add(A, i, 0, currentTime + T, &root, arr
                         );
-                
+                //if(actionA(T, currentTime, _bufferHost))
                 //add(B, i, 0, currentTime +  defaultBias*13
                 //              , &root, arr
                 //        );
