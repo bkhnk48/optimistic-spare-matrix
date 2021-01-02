@@ -23,8 +23,10 @@ typedef struct _packet{
 
 typedef struct _link{
     Packet *pkt;
-    int inport;
+    int nextPort;
+    //int currPort;
     int nextIndex;
+    //int currIndex;
 } Link;
 
 typedef struct _networkNode{
