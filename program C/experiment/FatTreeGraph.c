@@ -5,7 +5,8 @@
 #ifndef _LIB_OF_FATTREE_
 #define _LIB_OF_FATTREE_
 
-
+#define INPORT 0
+#define OUTPORT 1
 
 int getIPv4OfHost(int index, int k){
   //each pod has numOfPorts^2/4 servers and numOfPorts switches
@@ -159,6 +160,59 @@ int *Stride(int stride, int k){
         pairs[i] = (i + stride) % numOfHosts;
     }
     return pairs;
+}
+
+int* getInOutPorts(int currIP, int nextIP, int k){
+  int* results = NULL;
+  results = malloc(2*sizeof(int));
+
+  int inport = 0, outport = 0;
+  int typeCurr = typeOfNode(currIP, k);
+  if(typeCurr == HOST){
+    inport = (currIP & 255) - 2;
+    outport = 0;
+  }
+  int typeNext = typeOfNode(nextIP, k);
+  if(typeNext == HOST){
+    inport = 0; 
+    outport = (nextIP & 255) - 2;
+  }
+
+  if(typeCurr == EDGE_SWITCH 
+      && typeNext == AGG_SWITCH){
+    int _switchOfEgde = (currIP >> 8) & 255;
+    int _switchOfAgg = (nextIP >> 8) & 255;
+    inport = _switchOfEdge;
+    outport = _switchOfAgg;
+  }
+
+  if(typeCurr == AGG_SWITCH 
+      && typeNext == EDGE_SWITCH){
+    int _switchOfAgg = (currIP >> 8) & 255;
+    int _switchOfEdge = (nextIP >> 8) & 255;
+    inport = _switchOfAgg;
+    outport = _switchOfEdge;
+  }
+
+  if(typeCurr == AGG_SWITCH 
+      && typeNext == CORE_SWITCH){
+    int _switchOfAgg = (currIP >> 8) & 255;
+    int portOfAgg = (nextIP & 255) - 1 + k/2;
+    inport = _switchOfAgg - k/2;
+    outport = portOfAgg;
+  }
+
+  if(typeCurr == CORE_SWITCH 
+      && typeNext == AGG_SWITCH){
+    int _switchOfAgg = (nextIP >> 8) & 255;
+    int portOfAgg = (currIP & 255) - 1 + k/2;
+    inport = portOfAgg; 
+    outport = _switchOfAgg - k/2;
+  }
+
+  results[INPORT] = inport;
+  results[OUTPORT] = outport;
+  return results;
 }
 #endif
 
