@@ -57,6 +57,10 @@ int main(int argc, char** argv) {
 
     printf("Start Simulating ......\n");
     unsigned long count = 0;
+    int nextIP = 0;
+    int nextIndex;
+    int *inOutPorts = NULL;
+    int generateEventB, generateEventC;
     //char* p = malloc(1 * 1024 * 1024 * 1024);
     timing(&wc1, &cpuT);
 
@@ -88,7 +92,7 @@ int main(int argc, char** argv) {
             {
                 add(A, i, 0, currentTime + T, &root, arr
                         );
-                int generateEventB = actionA(T, currentTime, &bufferHosts[i]);
+                generateEventB = actionA(T, currentTime, &bufferHosts[i]);
                 if(generateEventB){
                   add(B, i, 0, currentTime +  defaultBias*13
                               , &root, arr
@@ -100,10 +104,10 @@ int main(int argc, char** argv) {
             #pragma region action of Event type B
             else if(type == B){
               
-              int nextIP = getNeighborIP(allNodes[i].ipv4, HOST, 0, k);
-              int nextIndex = getIndexOfSwitch(nextIP, k);
-              int *inOutPorts = getInOutPorts(allNodes[i].ipv4, nextIP, k);
-              int generateEventC = actionB(&bufferHosts[i],
+              nextIP = getNeighborIP(allNodes[i].ipv4, HOST, 0, k);
+              nextIndex = getIndexOfSwitch(nextIP, k);
+              inOutPorts = getInOutPorts(allNodes[i].ipv4, nextIP, k);
+              generateEventC = actionB(&bufferHosts[i],
                                         &allNodes[i].links[0],
                                         bufferSwitches[nextIndex].EXB[inOutPorts[INPORT]]
                                         );
