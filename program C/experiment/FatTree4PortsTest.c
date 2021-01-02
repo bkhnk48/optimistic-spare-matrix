@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 
     unsigned long arr[384][7];//384 = 6*(k*k*k) as k = 4
     //= 16*5 + (4*4/2)*((4/2)*4 + 3*(4/2)) + idElementInGroup*4*4 + portID*4 + (type - D);
-    //= 80 + 112 + 
+    //= 80 + 5*4*4*4*4/4 - 4*4*4/2 = 80 + 320 - 32 = 400 - 32 = 368
     unsigned long i;
     int j, N, root = -1;
     for(i = 0; i < 384; i++)
