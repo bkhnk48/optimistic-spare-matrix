@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
     unsigned long count = 0;
     int nextIP = 0;
     int nextIndex;
-    int *inOutPorts = NULL;
+    int inport = 0;
     int generateEventB, generateEventC;
     //char* p = malloc(1 * 1024 * 1024 * 1024);
     timing(&wc1, &cpuT);
@@ -104,12 +104,10 @@ int main(int argc, char** argv) {
             #pragma region action of Event type B
             else if(type == B){
               
-              nextIP = getNeighborIP(allNodes[i].ipv4, HOST, 0, k);
-              nextIndex = getIndexOfSwitch(nextIP, k);
-              inOutPorts = getInOutPorts(allNodes[i].ipv4, nextIP, k);
+              inport = allNodes[i].links[0].inport;
               generateEventC = actionB(&bufferHosts[i],
                                         allNodes[i].links[0].pkt,
-                                        bufferSwitches[nextIndex].EXB[inOutPorts[INPORT]]
+                                        bufferSwitches[nextIndex].EXB[inport]
                                         );
               if(generateEventC)
                 add(C, i, 0, currentTime +  defaultBias*33
@@ -119,9 +117,7 @@ int main(int argc, char** argv) {
             #pragma endregion
             
             else if(type == C){
-              nextIP = getNeighborIP(allNodes[i].ipv4, HOST, 0, k);
-              nextIndex = getIndexOfSwitch(nextIP, k);
-              inOutPorts = getInOutPorts(allNodes[i].ipv4, nextIP, k);
+              
               
             }
         }
