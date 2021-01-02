@@ -66,7 +66,7 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
                                                 *sizeof(BufferSwitch));
     int i, j, buff; int pod;
     for(i = 0; i < numOfSwitches; i++){
-        bufferSwitches->indexInGroup = i;
+        bufferSwitches[i].indexInGroup = i;
         Packet **temp1 = NULL;
         temp1 = malloc(sizeof * temp1 * k);
         for(j = 0; j < k; j++){
@@ -78,7 +78,7 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
                 temp1[j][buff].currIP = -1;
             }
         }
-        bufferSwitches->ENB = temp1;
+        bufferSwitches[i].ENB = temp1;
         Packet **temp2 = NULL;
         temp2 = malloc(sizeof * temp2 * k);
         for(j = 0; j < k; j++){
@@ -90,7 +90,7 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
                 temp2[j][buff].currIP = -1;
             }
         }
-        bufferSwitches->EXB = temp2;
+        bufferSwitches[i].EXB = temp2;
     }
     return bufferSwitches;
 }
