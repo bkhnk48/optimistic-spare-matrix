@@ -160,58 +160,7 @@ int getNeighborIP(int currentIP, enum TypesOfNode typeOfNode,
   return neighborIP;
 }
 
-int* getInOutPorts(int currIP, int nextIP, int k){
-  int* results = NULL;
-  results = malloc(2*sizeof(int));
 
-  int inport = 0, outport = 0;
-  int typeCurr = typeOfNode(currIP, k);
-  if(typeCurr == HOST){
-    inport = (currIP & 255) - 2;
-    outport = 0;
-  }
-  int typeNext = typeOfNode(nextIP, k);
-  if(typeNext == HOST){
-    inport = 0; 
-    outport = (nextIP & 255) - 2;
-  }
-
-  if(typeCurr == EDGE_SWITCH 
-      && typeNext == AGG_SWITCH){
-    int _switchOfEgde = (currIP >> 8) & 255;
-    int _switchOfAgg = (nextIP >> 8) & 255;
-    inport = _switchOfEgde;
-    outport = _switchOfAgg;
-  }
-
-  if(typeCurr == AGG_SWITCH 
-      && typeNext == EDGE_SWITCH){
-    int _switchOfAgg = (currIP >> 8) & 255;
-    int _switchOfEdge = (nextIP >> 8) & 255;
-    inport = _switchOfAgg;
-    outport = _switchOfEdge;
-  }
-
-  if(typeCurr == AGG_SWITCH 
-      && typeNext == CORE_SWITCH){
-    int _switchOfAgg = (currIP >> 8) & 255;
-    int portOfAgg = (nextIP & 255) - 1 + k/2;
-    inport = _switchOfAgg - k/2;
-    outport = portOfAgg;
-  }
-
-  if(typeCurr == CORE_SWITCH 
-      && typeNext == AGG_SWITCH){
-    int _switchOfAgg = (nextIP >> 8) & 255;
-    int portOfAgg = (currIP & 255) - 1 + k/2;
-    inport = portOfAgg; 
-    outport = _switchOfAgg - k/2;
-  }
-
-  results[INPORT] = inport;
-  results[OUTPORT] = outport;
-  return results;
-}
 
 NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
   NetworkNode *networkNodes = malloc((numOfSwitches + numOfHosts) 
