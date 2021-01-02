@@ -182,7 +182,7 @@ int* getInOutPorts(int currIP, int nextIP, int k){
       && typeNext == AGG_SWITCH){
     int _switchOfEgde = (currIP >> 8) & 255;
     int _switchOfAgg = (nextIP >> 8) & 255;
-    inport = _switchOfEdge;
+    inport = _switchOfEgde;
     outport = _switchOfAgg;
   }
 
