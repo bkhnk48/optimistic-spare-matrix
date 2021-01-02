@@ -119,7 +119,10 @@ int main(int argc, char** argv) {
             #pragma endregion
             
             else if(type == C){
-
+              nextIP = getNeighborIP(allNodes[i].ipv4, HOST, 0, k);
+              nextIndex = getIndexOfSwitch(nextIP, k);
+              inOutPorts = getInOutPorts(allNodes[i].ipv4, nextIP, k);
+              
             }
         }
         ongoingTime = -1;
