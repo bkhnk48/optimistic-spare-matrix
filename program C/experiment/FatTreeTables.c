@@ -16,66 +16,6 @@ typedef struct _tables{
   RoutingTable *tables;
 }Tables;
 
-int getNeighborIP(int currentIP, enum TypesOfNode typeOfNode,
-                      int port, int k){
-  int neighborIP;
-  if(typeOfNode == HOST){
-    int pod = (currentIP >> 16) & 255;
-    int _switch = (currentIP >> 8) & 255;
-    neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | 1;
-    return neighborIP;
-  }
-
-  #pragma region neighbor of edge switch
-  if(typeOfNode == EDGE_SWITCH){
-    int pod = (currentIP >> 16) & 255;
-    int _switch = (currentIP >> 8) & 255;
-    if(port >= k/2){//neighbor is agg switch
-      int _switchOfAgg = port;
-      neighborIP = (10 << 24) | (pod << 16) | (_switchOfAgg << 8) | 1;
-      return neighborIP;
-    }
-    else{//neighbor is host
-      int ID = 2 + port;
-      neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | ID;
-      return neighborIP;
-    }
-  }
-  #pragma endregion
-
-  #pragma region neighbor of agg switch
-  if(typeOfNode == AGG_SWITCH){
-    int pod = (currentIP >> 16) & 255;
-    int _switch = (currentIP >> 8) & 255;
-
-    if(port >= 0 && port < k/2){//neighbor is edge switch
-      //int ID = 2 + port;
-      _switch = port;
-      neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | 1;
-      return neighborIP;
-    }
-    else{//neighbor is core switch
-      int indexOfAggInPod = _switch % (k/2);
-      int core = indexOfAggInPod*(k/2) + (port - (k/2)) + (k*k);  
-      neighborIP = getIPv4OfSwitch(core, k);
-      return neighborIP;
-    }  
-  }
-  #pragma endregion
-
-  #pragma region neighbor of core switch
-  if(typeOfNode == CORE_SWITCH){
-    //address of Core: 10.k.j.i
-    int j = (currentIP >> 8) & 255;
-    j -= 1;
-    int _switch = j + (k/2);
-    neighborIP = (10 << 24) | (port << 16) | (_switch << 8) | 1;
-    return neighborIP;
-  }
-  #pragma endregion
-  return neighborIP;
-}
-
 
 void buildTables(Tables *tablesOfSwitches, int k){
   //In Fat-tree, build total k*k*5/4 routing tables
