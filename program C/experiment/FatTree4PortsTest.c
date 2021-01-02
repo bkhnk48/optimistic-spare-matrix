@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
     unsigned long count = 0;
     int nextIP = 0;
     int nextIndex;
-    int inport = 0;
+    int nextPort = 0;
     int generateEventB, generateEventC;
     //char* p = malloc(1 * 1024 * 1024 * 1024);
     timing(&wc1, &cpuT);
@@ -104,10 +104,10 @@ int main(int argc, char** argv) {
             #pragma region action of Event type B
             else if(type == B){
               nextIndex = allNodes[i].links[0].nextIndex;
-              inport = allNodes[i].links[0].inport;
+              nextPort = allNodes[i].links[0].nextPort;
               generateEventC = actionB(&bufferHosts[i],
                                         allNodes[i].links[0].pkt,
-                                        bufferSwitches[nextIndex].ENB[inport]
+                                        bufferSwitches[nextIndex].ENB[nextPort]
                                         );
               if(generateEventC)
                 add(C, i, 0, currentTime +  defaultBias*33
