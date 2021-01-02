@@ -19,6 +19,8 @@ int main(int argc, char** argv) {
     int PACKET_SIZE = 12*1000; //12KB
     int packets_per_sec = 1000;//each sec generated 1000 packets
     int T = 1000000;
+    int BANDWIDTH_HOST = 12*1000*1000;//12MByte/s
+    int loadingTime = BANDWIDTH_HOST / PACKET_SIZE + 13;
 
     if(argc >= 2)
     {
@@ -31,6 +33,8 @@ int main(int argc, char** argv) {
     unsigned long endTime = defaultSec*((unsigned long)(1000*1000));
 
     unsigned long arr[384][7];//384 = 6*(k*k*k) as k = 4
+    //= 16*5 + (4*4/2)*((4/2)*4 + 3*(4/2)) + idElementInGroup*4*4 + portID*4 + (type - D);
+    //= 80 + 112 + 
     unsigned long i;
     int j, N, root = -1;
     for(i = 0; i < 384; i++)
@@ -60,7 +64,7 @@ int main(int argc, char** argv) {
     int nextIP = 0;
     int nextIndex;
     int nextPort = 0;
-    int generateEventB, generateEventC;
+    int generateEventB, generateEventC, generateEventD;
     //char* p = malloc(1 * 1024 * 1024 * 1024);
     timing(&wc1, &cpuT);
 
@@ -117,8 +121,21 @@ int main(int argc, char** argv) {
             #pragma endregion
             
             else if(type == C){
-              
-              
+              nextIndex = allNodes[i].links[0].nextIndex;
+              nextPort = allNodes[i].links[0].nextPort;
+              generateEventB = 0;
+              generateEventD = actionC(&bufferHosts[i], 
+                              allNodes[i].links, &generateEventB,
+                              getIPv4OfHost(pairs[i], k)
+                              );
+              if(generateEventB)
+                add(B, i, 0, currentTime +  defaultBias*13
+                              , &root, arr
+                        ); 
+              if(generateEventD)
+                add(-D, nextIndex, nextPort, currentTime + loadingTime
+                              , &root, arr
+                        );
             }
         }
         ongoingTime = -1;
