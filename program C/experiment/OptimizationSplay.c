@@ -46,8 +46,6 @@ void add(int type, int idElementInGroup,
                 unsigned long arr[384][7]
                 )
 {
-   //sizeOfTree++;
-   //if(maxSize < sizeOfTree) maxSize = sizeOfTree;
    /* Quy ước các event từ A đến G (tức type = 0..4) sẽ là 
       các event xảy ra trên hosts
       Các biến type < 0 sẽ là event xảy ra trên các edge switch
