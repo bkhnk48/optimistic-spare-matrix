@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
     //So su kien xay ra tren HOST: (k*k*k/4)*5 = 80
     //So su kien xay ra tren Edge: (4*(k/2) + 3*(k/2))*k*k/2 = 14*8 = 112
     //So su kien xay ra tren Switch: (4*k)*3*k*k/4 = 3*k*k*k = 192
-    //Tong: 80 + 112 + 192 = 80 + 304 = 384
+    //Tong: 80 + 112 + 192 = 80 + 304 = 384 (6*k*k*k)
     unsigned long i;
     int j, N, root = -1;
     for(i = 0; i < 384; i++)
