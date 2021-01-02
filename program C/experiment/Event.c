@@ -83,8 +83,38 @@ int actionB(BufferHost *bufferHost, Packet *pktInLink, Packet *connectedENB){
     return generateEventC;
 }
 
-void actionC(BufferHost *bufferHost, Link *link){
-    
+int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
+                int dstIP
+                ){
+    int packetID = -1;
+    int isFull = 0; 
+                
+
+    if(bufferHost->firstEXB != -1){
+        if(bufferHost->lastEXB == -1)
+        {
+            packetID = bufferHost->firstEXB;
+            bufferHost->firstEXB = -1;
+        }
+        else{
+            isFull = (bufferHost->lastEXB - bufferHost->firstEXB + 1);
+            packetID = bufferHost->lastEXB;
+            if(bufferHost->lastEXB == bufferHost->firstEXB + 1){
+                bufferHost->lastEXB = -1;
+            }
+            else{
+                bufferHost->lastEXB--;
+            }
+        }
+    }
+
+    link[0].pkt->id = packetID;
+    link[0].pkt->dstIP = dstIP;
+
+    if(isFull && bufferHost->firstSQ != -1){
+        *generateEventB = 1;
+    }
+    return 1;
 }
 /*void loadArray(int a[1000]){
     printf("fsdfsdf");
