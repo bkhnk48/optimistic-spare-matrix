@@ -45,7 +45,8 @@ int actionA(int T,
     return generateEventB;
 }
 
-int actionB(BufferHost *bufferHost, Packet *pktInLink, Packet *connectedENB){
+int actionB(BufferHost *bufferHost, Packet *pktInLink//, Packet *connectedENB
+                ){
     int packetID = -1;
     int generateEventC = 0;
 
@@ -78,7 +79,8 @@ int actionB(BufferHost *bufferHost, Packet *pktInLink, Packet *connectedENB){
     generateEventC = (pktInLink->id == -1);
     if(generateEventC){
         //Check buffer of next switch
-        generateEventC = (connectedENB[BUFFER_SIZE - 1].id == -1);
+        generateEventC = //(connectedENB[BUFFER_SIZE - 1].id == -1);
+                        bufferHost->countNextENB > 0;
     }
     return generateEventC;
 }
@@ -88,7 +90,6 @@ int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
                 ){
     int packetID = -1;
     int isFull = 0; 
-                
 
     if(bufferHost->firstEXB != -1){
         if(bufferHost->lastEXB == -1)
@@ -110,6 +111,7 @@ int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
 
     link[0].pkt->id = packetID;
     link[0].pkt->dstIP = dstIP;
+    bufferHost->countNextENB--;
 
     if(isFull && bufferHost->firstSQ != -1){
         *generateEventB = 1;
