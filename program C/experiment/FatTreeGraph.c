@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "NetworkNode.c"
+#include "Event.c"
 
 #ifndef _LIB_OF_FATTREE_
 #define _LIB_OF_FATTREE_
@@ -281,5 +282,13 @@ int *Stride(int stride, int k){
     return pairs;
 }
 
+int hash(int idInGroup,enum TypesOfNode typeOfNode, 
+          enum TypesOfEvent typeOfEvent, int port, int k){
+  int newIndex = 0;
+  if(typeOfNode == HOST){
+
+  }
+  return newIndex;
+}
 #endif
 
