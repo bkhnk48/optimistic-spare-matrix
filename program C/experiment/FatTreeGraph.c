@@ -219,7 +219,7 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
                                       );
   
   int i, j; int pod, index;
-  int nextIP, nextIndex; currIP;
+  int nextIP, nextIndex, currIP;
   for(i = 0; i < numOfHosts; i++){
     networkNodes[i].indexInGroup = i;
     pod = i / (k*k/4);
@@ -241,7 +241,8 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
     index = i - pod*(k*k/4) - (k*k/4);
     networkNodes[i].indexInGroup = index;
     networkNodes[i].indexInNodes = index + pod*((k*k/4) + k) + k*k/4;
-    networkNodes[i].ipv4 = getIPv4OfSwitch(index, k);
+    currIP = getIPv4OfSwitch(index, k);
+    networkNodes[i].ipv4 = currIP;
     networkNodes[i].type = (index % k < k/2 ? EDGE_SWITCH : AGG_SWITCH);
     networkNodes[i].links = malloc(k*sizeof(Link));
     for(j = 0; j < k; j++){
@@ -250,6 +251,21 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
       networkNodes[i].links[j].pkt->srcIP = -1;
       networkNodes[i].links[j].pkt->currIP = networkNodes[i].ipv4;
       networkNodes[i].links[j].pkt->dstIP = -1;
+      networkNodes[i].links[j].inport = 0;
+    }
+
+    if(networkNodes[i].type == EDGE_SWITCH){
+      for(j = k/2; j < k; j++){
+        networkNodes[i].links[j].inport = (currIP >> 8) & 255;
+      }
+    }
+    else if(networkNodes[i].type == AGG_SWITCH){
+      for(j = 0; j < k/2; j++){
+        networkNodes[i].links[j].inport = (currIP >> 8) & 255;
+      }
+      for(j = k/2; j < k; j++){
+        networkNodes[i].links[j].inport = ((currIP >> 8) & 255) - k/2;
+      }
     }
   }
   
@@ -258,7 +274,8 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
     index = i - (k*k*k/4);
     networkNodes[i].indexInGroup = index;
     networkNodes[i].indexInNodes = i ;
-    networkNodes[i].ipv4 = getIPv4OfSwitch(index, k);
+    currIP = getIPv4OfSwitch(index, k);
+    networkNodes[i].ipv4 = currIP;
     networkNodes[i].type = CORE_SWITCH;
     networkNodes[i].links = malloc(k*sizeof(Link));
     for(j = 0; j < k; j++){
@@ -267,9 +284,10 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
       networkNodes[i].links[j].pkt->srcIP = -1;
       networkNodes[i].links[j].pkt->currIP = networkNodes[i].ipv4;
       networkNodes[i].links[j].pkt->dstIP = -1;
+      networkNodes[i].links[j].inport = (currIP & 255) - 1 + k/2;
     }
   }
-  free(inOutPorts);
+  
   return networkNodes;
 }
 
