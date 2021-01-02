@@ -39,6 +39,7 @@ typedef struct _networkNode{
 
 typedef struct _bufferHost{
     int indexInGroup;
+    int countNextENB;
     //int indexInNodes;
     unsigned long firstSQ;
     unsigned long lastSQ;
@@ -51,6 +52,7 @@ typedef struct _bufferSwitch{
     //int indexInNodes;
     Packet **ENB;
     Packet **EXB;
+    int *countNextENB;
 } BufferSwitch;
 
 BufferHost *initBufferHosts(int numOfHosts){
@@ -59,12 +61,11 @@ BufferHost *initBufferHosts(int numOfHosts){
     int i; int pod;
     for(i = 0; i < numOfHosts; i++){
         bufferHosts[i].indexInGroup = i;
-        //pod = i / (k*k/4);
-        //bufferHosts->indexInNodes = i % (k*k/4) + pod*((k*k/4) + k);
         bufferHosts[i].firstSQ = -1;
         bufferHosts[i].lastSQ = -1;
         bufferHosts[i].firstEXB = -1;
         bufferHosts[i].lastEXB = -1;
+        bufferHosts[i].countNextENB = BUFFER_SIZE;
     }
     return bufferHosts;
 }
@@ -99,6 +100,11 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
             }
         }
         bufferSwitches[i].EXB = temp2;
+
+        bufferSwitches[i].countNextENB = malloc(k*sizeof(int));
+        for(j = 0; j < k; j++){
+            bufferSwitches[i].countNextENB[j] = BUFFER_SIZE;
+        }
     }
     return bufferSwitches;
 }
