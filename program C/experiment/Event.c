@@ -83,8 +83,8 @@ int actionB(BufferHost *bufferHost, Packet *pktInLink, Packet *connectedENB){
     return generateEventC;
 }
 
-void actionC(BufferHost *bufferHost, Packet *pktInLink){
-
+void actionC(BufferHost *bufferHost, Link *link){
+    
 }
 /*void loadArray(int a[1000]){
     printf("fsdfsdf");
