@@ -48,6 +48,8 @@ int actionA(int T,
 int actionB(BufferHost *bufferHost, Packet *pktInLink, Packet *connectedENB){
     int packetID = -1;
     int generateEventC = 0;
+
+    #pragma region modify source queue and EXB of HOST
     if(bufferHost->firstSQ != -1){
         if(bufferHost->lastSQ == -1)
         {
@@ -71,11 +73,12 @@ int actionB(BufferHost *bufferHost, Packet *pktInLink, Packet *connectedENB){
     else{
         bufferHost->lastEXB = packetID;
     }
+    #pragma endregion 
     
     generateEventC = (pktInLink->id == -1);
     if(generateEventC){
         //Check buffer of next switch
-
+        generateEventC = (connectedENB[BUFFER_SIZE - 1].id == -1);
     }
     return generateEventC;
 }
