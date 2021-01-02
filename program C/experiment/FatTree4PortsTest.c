@@ -108,7 +108,7 @@ int main(int argc, char** argv) {
               nextIndex = getIndexOfSwitch(nextIP, k);
               inOutPorts = getInOutPorts(allNodes[i].ipv4, nextIP, k);
               generateEventC = actionB(&bufferHosts[i],
-                                        &allNodes[i].links[0],
+                                        allNodes[i].links[0].pkt,
                                         bufferSwitches[nextIndex].EXB[inOutPorts[INPORT]]
                                         );
               if(generateEventC)
