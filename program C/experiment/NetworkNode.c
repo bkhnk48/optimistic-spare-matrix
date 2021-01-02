@@ -24,6 +24,7 @@ typedef struct _packet{
 typedef struct _link{
     Packet *pkt;
     int inport;
+    int nextIndex;
 } Link;
 
 typedef struct _networkNode{
