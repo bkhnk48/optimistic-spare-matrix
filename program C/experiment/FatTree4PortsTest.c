@@ -103,11 +103,11 @@ int main(int argc, char** argv) {
             
             #pragma region action of Event type B
             else if(type == B){
-              
+              nextIndex = allNodes[i].links[0].nextIndex;
               inport = allNodes[i].links[0].inport;
               generateEventC = actionB(&bufferHosts[i],
                                         allNodes[i].links[0].pkt,
-                                        bufferSwitches[nextIndex].EXB[inport]
+                                        bufferSwitches[nextIndex].ENB[inport]
                                         );
               if(generateEventC)
                 add(C, i, 0, currentTime +  defaultBias*33
