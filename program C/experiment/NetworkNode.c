@@ -64,27 +64,31 @@ BufferHost *initBufferHosts(int numOfHosts){
 BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
     BufferSwitch *bufferSwitches = (BufferSwitch *)malloc(numOfSwitches
                                                 *sizeof(BufferSwitch));
-    int i, j; int pod;
+    int i, j, buff; int pod;
     for(i = 0; i < numOfSwitches; i++){
         bufferSwitches->indexInGroup = i;
         Packet **temp1 = NULL;
         temp1 = malloc(sizeof * temp1 * k);
         for(j = 0; j < k; j++){
             temp1[j] = malloc(sizeof * temp1[j] * BUFFER_SIZE);
-            temp1[j]->id = -1;
-            temp1[j]->srcIP = -1;
-            temp1[j]->dstIP = -1;
-            temp1[j]->currIP = -1;
+            for(buff = 0; buff < BUFFER_SIZE; buff++){
+                temp1[j][buff].id = -1;
+                temp1[j][buff].srcIP = -1;
+                temp1[j][buff].dstIP = -1;
+                temp1[j][buff].currIP = -1;
+            }
         }
         bufferSwitches->ENB = temp1;
         Packet **temp2 = NULL;
         temp2 = malloc(sizeof * temp2 * k);
         for(j = 0; j < k; j++){
             temp2[j] = malloc(sizeof * temp2[j] * BUFFER_SIZE);
-            temp2[j]->id = -1;
-            temp2[j]->srcIP = -1;
-            temp2[j]->dstIP = -1;
-            temp2[j]->currIP = -1;
+            for(buff = 0; buff < BUFFER_SIZE; buff++){
+                temp2[j][buff].id = -1;
+                temp2[j][buff].srcIP = -1;
+                temp2[j][buff].dstIP = -1;
+                temp2[j][buff].currIP = -1;
+            }
         }
         bufferSwitches->EXB = temp2;
     }
