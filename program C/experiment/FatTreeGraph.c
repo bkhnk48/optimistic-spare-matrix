@@ -182,11 +182,13 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
     networkNodes[i].links[0].pkt->srcIP = networkNodes[i].ipv4;
     networkNodes[i].links[0].pkt->currIP = networkNodes[i].ipv4;
     networkNodes[i].links[0].pkt->dstIP = -1;
-    networkNodes[i].links[0].inport = (currIP & 255) - 2;
+    networkNodes[i].links[0].nextPort = (currIP & 255) - 2;
+    //networkNodes[i].links[0].currPort = 0;
     networkNodes[i].links[0].nextIndex = 
                   getIndexOfSwitch(
                       getNeighborIP(currIP, HOST, 0, k), k
                     );
+    //networkNodes[i].links[0].currIndex = i;
   }
   
   for(i = numOfHosts; i < numOfHosts + numOfSwitches - (k*k/4); i++){
@@ -204,8 +206,10 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
       networkNodes[i].links[j].pkt->srcIP = -1;
       networkNodes[i].links[j].pkt->currIP = networkNodes[i].ipv4;
       networkNodes[i].links[j].pkt->dstIP = -1;
-      networkNodes[i].links[j].inport = 0;
+      networkNodes[i].links[j].nextPort = 0;
+      //networkNodes[i].links[j].currPort = j;
       networkNodes[i].links[j].nextIndex = 0;
+      //networkNodes[i].links[j].currIndex = i;
     }
 
     if(networkNodes[i].type == EDGE_SWITCH){
@@ -216,7 +220,7 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
               );
       }
       for(j = k/2; j < k; j++){
-        networkNodes[i].links[j].inport = (currIP >> 8) & 255;
+        networkNodes[i].links[j].nextPort = (currIP >> 8) & 255;
         networkNodes[i].links[j].nextIndex = 
               getIndexOfSwitch(
                 getNeighborIP(currIP, EDGE_SWITCH, j, k), k
@@ -231,10 +235,10 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
               );
       }
       for(j = 0; j < k/2; j++){
-        networkNodes[i].links[j].inport = (currIP >> 8) & 255;
+        networkNodes[i].links[j].nextPort = (currIP >> 8) & 255;
       }
       for(j = k/2; j < k; j++){
-        networkNodes[i].links[j].inport = ((currIP >> 8) & 255) - k/2;
+        networkNodes[i].links[j].nextPort = ((currIP >> 8) & 255) - k/2;
       }
     }
   }
@@ -254,11 +258,13 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
       networkNodes[i].links[j].pkt->srcIP = -1;
       networkNodes[i].links[j].pkt->currIP = networkNodes[i].ipv4;
       networkNodes[i].links[j].pkt->dstIP = -1;
-      networkNodes[i].links[j].inport = (currIP & 255) - 1 + k/2;
+      networkNodes[i].links[j].nextPort = (currIP & 255) - 1 + k/2;
+      //networkNodes[i].links[j].currPort = j;
       networkNodes[i].links[j].nextIndex = 
               getIndexOfSwitch(
                 getNeighborIP(currIP, CORE_SWITCH, j, k), k
               );
+      //networkNodes[i].links[j].currIndex = i;
     }
   }
   
