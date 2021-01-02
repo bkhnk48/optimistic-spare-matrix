@@ -99,67 +99,65 @@ void printIPv4(int ipv4){
   printf("%d.%d.%d.%d", A, B, C, D);
 }
 
-NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
-  NetworkNode *networkNodes = malloc((numOfSwitches + numOfHosts) 
-                                      *sizeof(NetworkNode)
-                                      );
-  
-  int i, j; int pod, index;
-  for(i = 0; i < numOfHosts; i++){
-    networkNodes[i].indexInGroup = i;
-    pod = i / (k*k/4);
-    networkNodes[i].indexInNodes = i % (k*k/4) + pod*((k*k/4) + k);
-    networkNodes[i].ipv4 = getIPv4OfHost(i, k);
-    networkNodes[i].type = HOST;
-    networkNodes[i].links = malloc(1*sizeof(Packet));
-    networkNodes[i].links[0].id = -1;
-    networkNodes[i].links[0].srcIP = networkNodes[i].ipv4;
-    networkNodes[i].links[0].currIP = networkNodes[i].ipv4;
-    networkNodes[i].links[0].dstIP = -1;
-  }
-  
-  for(i = numOfHosts; i < numOfHosts + numOfSwitches - (k*k/4); i++){
-    pod = i / (k*k/4 + k);
-    index = i - pod*(k*k/4) - (k*k/4);
-    networkNodes[i].indexInGroup = index;
-    networkNodes[i].indexInNodes = index + pod*((k*k/4) + k) + k*k/4;
-    networkNodes[i].ipv4 = getIPv4OfSwitch(index, k);
-    networkNodes[i].type = (index % k < k/2 ? EDGE_SWITCH : AGG_SWITCH);
-    networkNodes[i].links = malloc(k*sizeof(Packet));
-    for(j = 0; j < k; j++){
-      networkNodes[i].links[j].id = -1;
-      networkNodes[i].links[j].srcIP = -1;
-      networkNodes[i].links[j].currIP = networkNodes[i].ipv4;
-      networkNodes[i].links[j].dstIP = -1;
-    }
-  }
-  
-  for(i = numOfHosts + numOfSwitches - (k*k/4); 
-            i < numOfHosts + numOfSwitches; i++){
-    index = i - (k*k*k/4);
-    networkNodes[i].indexInGroup = index;
-    networkNodes[i].indexInNodes = i ;
-    networkNodes[i].ipv4 = getIPv4OfSwitch(index, k);
-    networkNodes[i].type = CORE_SWITCH;
-    networkNodes[i].links = malloc(k*sizeof(Packet));
-    for(j = 0; j < k; j++){
-      networkNodes[i].links[j].id = -1;
-      networkNodes[i].links[j].srcIP = -1;
-      networkNodes[i].links[j].currIP = networkNodes[i].ipv4;
-      networkNodes[i].links[j].dstIP = -1;
-    }
-  }
-  return networkNodes;
-}
 
-int *Stride(int stride, int k){
-    int *pairs = malloc((k*k*k/4) * sizeof(int));
-    int i;
-    int numOfHosts = k*k*k/4;
-    for(i = 0; i < numOfHosts; i++){
-        pairs[i] = (i + stride) % numOfHosts;
+int getNeighborIP(int currentIP, enum TypesOfNode typeOfNode,
+                      int port, int k){
+  int neighborIP;
+  if(typeOfNode == HOST){
+    int pod = (currentIP >> 16) & 255;
+    int _switch = (currentIP >> 8) & 255;
+    neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | 1;
+    return neighborIP;
+  }
+
+  #pragma region neighbor of edge switch
+  if(typeOfNode == EDGE_SWITCH){
+    int pod = (currentIP >> 16) & 255;
+    int _switch = (currentIP >> 8) & 255;
+    if(port >= k/2){//neighbor is agg switch
+      int _switchOfAgg = port;
+      neighborIP = (10 << 24) | (pod << 16) | (_switchOfAgg << 8) | 1;
+      return neighborIP;
     }
-    return pairs;
+    else{//neighbor is host
+      int ID = 2 + port;
+      neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | ID;
+      return neighborIP;
+    }
+  }
+  #pragma endregion
+
+  #pragma region neighbor of agg switch
+  if(typeOfNode == AGG_SWITCH){
+    int pod = (currentIP >> 16) & 255;
+    int _switch = (currentIP >> 8) & 255;
+
+    if(port >= 0 && port < k/2){//neighbor is edge switch
+      //int ID = 2 + port;
+      _switch = port;
+      neighborIP = (10 << 24) | (pod << 16) | (_switch << 8) | 1;
+      return neighborIP;
+    }
+    else{//neighbor is core switch
+      int indexOfAggInPod = _switch % (k/2);
+      int core = indexOfAggInPod*(k/2) + (port - (k/2)) + (k*k);  
+      neighborIP = getIPv4OfSwitch(core, k);
+      return neighborIP;
+    }  
+  }
+  #pragma endregion
+
+  #pragma region neighbor of core switch
+  if(typeOfNode == CORE_SWITCH){
+    //address of Core: 10.k.j.i
+    int j = (currentIP >> 8) & 255;
+    j -= 1;
+    int _switch = j + (k/2);
+    neighborIP = (10 << 24) | (port << 16) | (_switch << 8) | 1;
+    return neighborIP;
+  }
+  #pragma endregion
+  return neighborIP;
 }
 
 int* getInOutPorts(int currIP, int nextIP, int k){
@@ -214,5 +212,77 @@ int* getInOutPorts(int currIP, int nextIP, int k){
   results[OUTPORT] = outport;
   return results;
 }
+
+NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
+  NetworkNode *networkNodes = malloc((numOfSwitches + numOfHosts) 
+                                      *sizeof(NetworkNode)
+                                      );
+  
+  int i, j; int pod, index;
+  int nextIP, nextIndex; int* inOutPorts;
+  for(i = 0; i < numOfHosts; i++){
+    networkNodes[i].indexInGroup = i;
+    pod = i / (k*k/4);
+    networkNodes[i].indexInNodes = i % (k*k/4) + pod*((k*k/4) + k);
+    networkNodes[i].ipv4 = getIPv4OfHost(i, k);
+    networkNodes[i].type = HOST;
+    networkNodes[i].links = malloc(1*sizeof(Link));
+    nextIP = getNeighborIP(networkNodes[i].ipv4, HOST, 0, k);
+    nextIndex = getIndexOfSwitch(nextIP, k);
+    inOutPorts = getInOutPorts(networkNodes[i].ipv4, nextIP, k);
+    networkNodes[i].links[0].pkt = malloc(1*sizeof(Packet));
+    networkNodes[i].links[0].pkt->id = -1;
+    networkNodes[i].links[0].pkt->srcIP = networkNodes[i].ipv4;
+    networkNodes[i].links[0].pkt->currIP = networkNodes[i].ipv4;
+    networkNodes[i].links[0].pkt->dstIP = -1;
+  }
+  
+  for(i = numOfHosts; i < numOfHosts + numOfSwitches - (k*k/4); i++){
+    pod = i / (k*k/4 + k);
+    index = i - pod*(k*k/4) - (k*k/4);
+    networkNodes[i].indexInGroup = index;
+    networkNodes[i].indexInNodes = index + pod*((k*k/4) + k) + k*k/4;
+    networkNodes[i].ipv4 = getIPv4OfSwitch(index, k);
+    networkNodes[i].type = (index % k < k/2 ? EDGE_SWITCH : AGG_SWITCH);
+    networkNodes[i].links = malloc(k*sizeof(Link));
+    for(j = 0; j < k; j++){
+      networkNodes[i].links[j].pkt = malloc(1*sizeof(Packet));
+      networkNodes[i].links[j].pkt->id = -1;
+      networkNodes[i].links[j].pkt->srcIP = -1;
+      networkNodes[i].links[j].pkt->currIP = networkNodes[i].ipv4;
+      networkNodes[i].links[j].pkt->dstIP = -1;
+    }
+  }
+  
+  for(i = numOfHosts + numOfSwitches - (k*k/4); 
+            i < numOfHosts + numOfSwitches; i++){
+    index = i - (k*k*k/4);
+    networkNodes[i].indexInGroup = index;
+    networkNodes[i].indexInNodes = i ;
+    networkNodes[i].ipv4 = getIPv4OfSwitch(index, k);
+    networkNodes[i].type = CORE_SWITCH;
+    networkNodes[i].links = malloc(k*sizeof(Link));
+    for(j = 0; j < k; j++){
+      networkNodes[i].links[j].pkt = malloc(1*sizeof(Packet));
+      networkNodes[i].links[j].pkt->id = -1;
+      networkNodes[i].links[j].pkt->srcIP = -1;
+      networkNodes[i].links[j].pkt->currIP = networkNodes[i].ipv4;
+      networkNodes[i].links[j].pkt->dstIP = -1;
+    }
+  }
+  free(inOutPorts);
+  return networkNodes;
+}
+
+int *Stride(int stride, int k){
+    int *pairs = malloc((k*k*k/4) * sizeof(int));
+    int i;
+    int numOfHosts = k*k*k/4;
+    for(i = 0; i < numOfHosts; i++){
+        pairs[i] = (i + stride) % numOfHosts;
+    }
+    return pairs;
+}
+
 #endif
 
