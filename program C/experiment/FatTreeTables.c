@@ -137,7 +137,7 @@ void buildTables(Tables *tablesOfSwitches, int k){
 }
 
 //int next(int source, int current, int destination, int k) {
-int next(int srcIP, int currIP, int destIP, int k, //Tables *tablesOfSwitches
+int next(int srcIP, int currIP, int destIP, int k, 
             RoutingTable *table
           ) {
   //int srcIP = getIPv4OfHost(source, k);
@@ -147,14 +147,15 @@ int next(int srcIP, int currIP, int destIP, int k, //Tables *tablesOfSwitches
   int podOfDst = (destIP >> 16) & 255;
   int subnetOfSrc = (srcIP >> 8) & 255;
   int subnetOfDest = (destIP >> 8) & 255;
-  if(currIP == srcIP)
+  if(currIP == srcIP){
     return getNeighborIP(srcIP, HOST, 0, k);
+  }
   else{
     int aheadOfDst = getNeighborIP(destIP, HOST, 0, k);
-    if(aheadOfDst == currIP)
+    if(aheadOfDst == currIP){
       return destIP;
+    }
     int typeOfSwitch = typeOfNode(currIP, k);
-    //int i = getIndexOfSwitch(currIP, k);
     int suffix = destIP & 255; 
     int podOfCurr = (currIP >> 16) & 255;
     suffix -= 2;
@@ -167,6 +168,7 @@ int next(int srcIP, int currIP, int destIP, int k, //Tables *tablesOfSwitches
       
       if(podOfDst == podOfCurr){
         //agg nhan duoc goi tin yeu cau di den host cung pod (voi agg)
+        //agg se chuyen goi tin sang edge cung pod
         nextIP = //tablesOfSwitches->tables[i].
                   table->prefixTable[subnetOfDest];
         return nextIP;
