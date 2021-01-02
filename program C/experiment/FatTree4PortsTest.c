@@ -99,12 +99,16 @@ int main(int argc, char** argv) {
             
             #pragma region action of Event type B
             else if(type == B){
-                int generateEventC = actionB(&bufferHosts[i],
+              
+              int nextIP = getNeighborIP(allNodes[i].ipv4, HOST, 0, k);
+              int nextIndex = getIndexOfSwitch(nextIP, k);
+              int *inOutPorts = getInOutPorts(allNodes[i].ipv4, nextIP, k);
+              int generateEventC = actionB(&bufferHosts[i],
                                         &allNodes[i].links[0],
-                                        NULL
+                                        bufferSwitches[nextIndex].EXB[inOutPorts[INPORT]]
                                         );
-                if(generateEventC)
-                    add(C, i, 0, currentTime +  defaultBias*33
+              if(generateEventC)
+                add(C, i, 0, currentTime +  defaultBias*33
                               , &root, arr
                             );
             }
