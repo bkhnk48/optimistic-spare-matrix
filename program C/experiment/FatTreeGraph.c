@@ -219,17 +219,16 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
                                       );
   
   int i, j; int pod, index;
-  int nextIP, nextIndex; int* inOutPorts;
+  int nextIP, nextIndex; currIP;
   for(i = 0; i < numOfHosts; i++){
     networkNodes[i].indexInGroup = i;
     pod = i / (k*k/4);
     networkNodes[i].indexInNodes = i % (k*k/4) + pod*((k*k/4) + k);
-    networkNodes[i].ipv4 = getIPv4OfHost(i, k);
+    currIP = getIPv4OfHost(i, k);
+    networkNodes[i].ipv4 = currIP;
     networkNodes[i].type = HOST;
     networkNodes[i].links = malloc(1*sizeof(Link));
-    nextIP = getNeighborIP(networkNodes[i].ipv4, HOST, 0, k);
-    nextIndex = getIndexOfSwitch(nextIP, k);
-    inOutPorts = getInOutPorts(networkNodes[i].ipv4, nextIP, k);
+    networkNodes[i].links[0].inport = (currIP & 255) - 2;
     networkNodes[i].links[0].pkt = malloc(1*sizeof(Packet));
     networkNodes[i].links[0].pkt->id = -1;
     networkNodes[i].links[0].pkt->srcIP = networkNodes[i].ipv4;
