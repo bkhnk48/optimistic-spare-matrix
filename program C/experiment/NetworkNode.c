@@ -21,12 +21,17 @@ typedef struct _packet{
     int currIP;
 }Packet;
 
+typedef struct _link{
+    Packet *pkt;
+    int inport;
+} Link;
+
 typedef struct _networkNode{
   int indexInGroup;
   int indexInNodes;
   int ipv4;
   enum TypesOfNode type;
-  Packet *links;
+  Link *links;
 } NetworkNode;
 
 typedef struct _bufferHost{
