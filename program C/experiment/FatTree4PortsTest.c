@@ -119,6 +119,7 @@ int main(int argc, char** argv) {
             #pragma endregion
             
             else if(type == C){
+            #pragma region action of Event type C
               nextIndex = allNodes[i].links[0].nextIndex;
               nextPort = allNodes[i].links[0].nextPort;
               generateEventB = 0;
@@ -135,6 +136,7 @@ int main(int argc, char** argv) {
                               , &root, arr
                         );
             }
+            #pragma endregion
         }
         ongoingTime = -1;
         removeFirst(&first, &root, arr
