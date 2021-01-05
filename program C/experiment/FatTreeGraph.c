@@ -297,10 +297,10 @@ int hash(int idInGroup,enum TypesOfNode typeOfNode,
     newIndex += 5*k*k*k/4;
     if(port < k/2)
     {
-      newIndex += port*3 + typeOfEvent;
+      newIndex += port*3 + (typeOfEvent - D);
     }
     else{
-      newIndex += (3*k/2) + (port - k/2)*4 + typeOfEvent;
+      newIndex += (3*k/2) + (port - k/2)*4 + (typeOfEvent - D);
     }
   }
   else{
@@ -316,7 +316,7 @@ int hash(int idInGroup,enum TypesOfNode typeOfNode,
       newIndex *= 4*k;
       newIndex += (5*k*k*k/4) + (7*k*k*k/4) + (4*k*k*k/2);
     }
-    newIndex += port*4 + typeOfEvent;
+    newIndex += port*4 + (typeOfEvent - D);
   }
   return newIndex;
 }
