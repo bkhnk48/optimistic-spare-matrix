@@ -237,6 +237,7 @@ void testHash(int k){
   for(i = 1; i < numOfHosts; i++){
     for(j = 5*(i - 1) + 1; j < 5*i; j++){
       assert(arr[j][0] == arr[j - 1][0]);
+      assert(arr[j][3] == arr[j - 1][3] + 1);
     }
     assert(arr[i*5][1] == arr[5*(i-1)][1]);
   }
