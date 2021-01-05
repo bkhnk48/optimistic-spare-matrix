@@ -177,6 +177,71 @@ void testNeighbors(int k){
   }
 }
 
+void testHash(int k){
+  int size = 6*k*k*k;
+  int **arr = malloc(sizeof * arr * size);
+  int i, j;
+  for(i = 0; i < size; i++){
+    arr[i] = malloc(sizeof * arr[i] * 4);
+    arr[i][0] = 0; //id in group
+    arr[i][1] = 0; //type of Node
+    arr[i][2] = 0; //port ID
+    arr[i][3] = 0; //type of Event
+  }
+  int numOfHosts = k*k*k/4;
+  int numOfSwitches = 5*k*k/4;
+  int index = 0;
+  int eventsOfHost[5] = {A, B, C, H_HOST, G};
+  for(i = 0; i < numOfHosts + numOfSwitches; i++){
+    if(i < numOfHosts){
+      for(j = 0; j < 5; j++){
+        index = hash(i, HOST, 0, eventsOfHost[j], k);
+        arr[index][0] = i;
+        arr[index][1] = HOST; //type of Node
+        arr[index][2] = 0; //port ID
+        arr[index][3] = eventsOfHost[j]; //type of Event
+      }
+    }
+  
+    else if(i < numOfHosts + k*k/2){
+      for(j = 0; j < k/2; j++){
+        index = hash(i - numOfHosts, EDGE_SWITCH, j, D, k);
+        index = hash(i - numOfHosts, EDGE_SWITCH, j, E, k);
+        index = hash(i - numOfHosts, EDGE_SWITCH, j, F, k);
+      }
+      for(j = k/2; j < k; j++){
+        index = hash(i - numOfHosts, EDGE_SWITCH, j, D, k);
+        index = hash(i - numOfHosts, EDGE_SWITCH, j, E, k);
+        index = hash(i - numOfHosts, EDGE_SWITCH, j, F, k);
+        index = hash(i - numOfHosts, EDGE_SWITCH, j, H, k);
+      }
+    }
+    else if(i < numOfHosts + k*k){
+      for(j = 0; j < k; j++){
+        index = hash(i - numOfHosts, AGG_SWITCH, j, D, k);
+        index = hash(i - numOfHosts, AGG_SWITCH, j, E, k);
+        index = hash(i - numOfHosts, AGG_SWITCH, j, F, k);
+        index = hash(i - numOfHosts, AGG_SWITCH, j, H, k);
+      }
+    }
+    else{
+      for(j = 0; j < k; j++){
+        index = hash(i - numOfHosts, CORE_SWITCH, j, D, k);
+        index = hash(i - numOfHosts, CORE_SWITCH, j, E, k);
+        index = hash(i - numOfHosts, CORE_SWITCH, j, F, k);
+        index = hash(i - numOfHosts, CORE_SWITCH, j, H, k);
+      }
+    }
+  }
+
+  for(i = 1; i < numOfHosts; i++){
+    for(j = 5*(i - 1) + 1; j < 5*i; j++){
+      assert(arr[j][0] == arr[j - 1][0]);
+    }
+    assert(arr[i*5][1] == arr[5*(i-1)][1]);
+  }
+}
+
 int main(){
   int k = 4;
   int serverId = 0;
@@ -317,5 +382,7 @@ int main(){
     }
   }
   #pragma endregion
+  
+  testHash(k);
   return 0;
 }
