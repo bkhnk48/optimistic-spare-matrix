@@ -283,10 +283,40 @@ int *Stride(int stride, int k){
 }
 
 int hash(int idInGroup,enum TypesOfNode typeOfNode, 
-          enum TypesOfEvent typeOfEvent, int port, int k){
+            int port, int typeOfEvent,
+            int k){
   int newIndex = 0;
   if(typeOfNode == HOST){
-
+    newIndex = idInGroup*5 + typeOfEvent;
+  }
+  else if(typeOfNode == EDGE_SWITCH){
+    int segment = (idInGroup/(k/2))/2;
+    int offset = (idInGroup %(k/2));
+    newIndex = segment*k/2 + offset;
+    newIndex *= 7*k/2;
+    newIndex += 5*k*k*k/4;
+    if(port < k/2)
+    {
+      newIndex += port*3 + typeOfEvent;
+    }
+    else{
+      newIndex += (3*k/2) + (port - k/2)*4 + typeOfEvent;
+    }
+  }
+  else{
+    if(typeOfNode == AGG_SWITCH){
+      int segment = idInGroup/k;
+      int offset = (idInGroup %k) - (k/2);
+      newIndex = segment*(k/2) + offset;
+      newIndex *= 4*k;
+      newIndex += (5*k*k*k/4) + (7*k*k*k/4);
+    }
+    else{
+      newIndex = idInGroup - (k*k);
+      newIndex *= 4*k;
+      newIndex += (5*k*k*k/4) + (7*k*k*k/4) + (4*k*k*k/2);
+    }
+    newIndex += port*4 + typeOfEvent;
   }
   return newIndex;
 }
