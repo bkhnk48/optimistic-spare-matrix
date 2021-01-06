@@ -276,6 +276,27 @@ void testHash(int k){
       assert(arr[index + j*3 + (F - D)][3] == F);//event
     }
     //assert(arr[i*5][1] == arr[5*(i-1)][1]);//trung typeOfNode
+    for(j = k/2; j < k; j++){
+      assert(arr[index + j*3 + (D - D)][0] == i - numOfHosts);//trung id 
+      assert(arr[index + j*3 + (E - D)][0] == i - numOfHosts);//trung id 
+      assert(arr[index + j*3 + (F - D)][0] == i - numOfHosts);//trung id 
+      assert(arr[index + j*3 + (H - D)][0] == i - numOfHosts);//trung id 
+
+      assert(arr[index + j*3 + (D - D)][1] == EDGE_SWITCH);//edge switch
+      assert(arr[index + j*3 + (E - D)][1] == EDGE_SWITCH);//edge switch 
+      assert(arr[index + j*3 + (F - D)][1] == EDGE_SWITCH);//edge switch
+      assert(arr[index + j*3 + (H - D)][1] == EDGE_SWITCH);//edge switch
+
+      assert(arr[index + j*3 + (D - D)][2] == j);//port
+      assert(arr[index + j*3 + (E - D)][2] == j);//port
+      assert(arr[index + j*3 + (F - D)][2] == j);//port
+      assert(arr[index + j*3 + (H - D)][2] == j);//port
+
+      assert(arr[index + j*3 + (D - D)][3] == D);//event
+      assert(arr[index + j*3 + (E - D)][3] == E);//event
+      assert(arr[index + j*3 + (F - D)][3] == F);//event
+      assert(arr[index + j*3 + (H - D)][3] == H);//event
+    }
   }
 }
 
