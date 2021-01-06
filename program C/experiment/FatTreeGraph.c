@@ -290,7 +290,7 @@ int hash(int idInGroup,enum TypesOfNode typeOfNode,
     newIndex = idInGroup*5 + typeOfEvent;
   }
   else if(typeOfNode == EDGE_SWITCH){
-    int segment = (idInGroup/(k/2))/2;
+    int segment = (idInGroup/(k/2));
     int offset = (idInGroup %(k/2));
     newIndex = segment*k/2 + offset;
     newIndex *= 7*k/2;
