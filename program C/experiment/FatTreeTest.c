@@ -218,10 +218,15 @@ void testHash(int k){
         }
       }
       for(j = k/2; j < k; j++){
-        index = hash(i - numOfHosts, EDGE_SWITCH, j, D, k);
-        index = hash(i - numOfHosts, EDGE_SWITCH, j, E, k);
-        index = hash(i - numOfHosts, EDGE_SWITCH, j, F, k);
-        index = hash(i - numOfHosts, EDGE_SWITCH, j, H, k);
+        for(ev = 0; ev < 4; ev ++){
+          index = hash(i - numOfHosts, EDGE_SWITCH, j, 
+                        eventsDEFH[ev],
+                        k);
+          arr[index][0] = i - numOfHosts;
+          arr[index][1] = EDGE_SWITCH; //type of Node
+          arr[index][2] = j; //port ID
+          arr[index][3] = eventsDEFH[ev]; //type of Event
+        }
       }
     }
     else if(i < numOfHosts + k*k){
@@ -257,8 +262,18 @@ void testHash(int k){
       assert(arr[index + j*3 + (D - D)][0] == i - numOfHosts);//trung id 
       assert(arr[index + j*3 + (E - D)][0] == i - numOfHosts);//trung id 
       assert(arr[index + j*3 + (F - D)][0] == i - numOfHosts);//trung id 
-      //assert(arr[index + j*3][3] == arr[j - 1][3] + 1);
-      //cac event khac nhau: A, B, C, H_HOST, G
+
+      assert(arr[index + j*3 + (D - D)][1] == EDGE_SWITCH);//edge switch
+      assert(arr[index + j*3 + (E - D)][1] == EDGE_SWITCH);//edge switch 
+      assert(arr[index + j*3 + (F - D)][1] == EDGE_SWITCH);//edge switch
+
+      assert(arr[index + j*3 + (D - D)][2] == j);//port
+      assert(arr[index + j*3 + (E - D)][2] == j);//port
+      assert(arr[index + j*3 + (F - D)][2] == j);//port
+
+      assert(arr[index + j*3 + (D - D)][3] == D);//event
+      assert(arr[index + j*3 + (E - D)][3] == E);//event
+      assert(arr[index + j*3 + (F - D)][3] == F);//event
     }
     //assert(arr[i*5][1] == arr[5*(i-1)][1]);//trung typeOfNode
   }
