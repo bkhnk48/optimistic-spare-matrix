@@ -192,7 +192,8 @@ void testHash(int k){
   int numOfSwitches = 5*k*k/4;
   int index = 0;
   int eventsOfHost[5] = {A, B, C, H_HOST, G};
-  int eventsOfPortsConnectsToHosts[3] = {D, E, F};
+  int eventsDEF[3] = {D, E, F};
+  int eventsDEFH[4] = {D, E, F, H};
   for(i = 0; i < numOfHosts + numOfSwitches; i++){
     if(i < numOfHosts){
       for(j = 0; j < 5; j++){
@@ -208,12 +209,12 @@ void testHash(int k){
       for(j = 0; j < k/2; j++){
         for(ev = 0; ev < 3; ev ++){
           index = hash(i - numOfHosts, EDGE_SWITCH, j, 
-                        eventsOfPortsConnectsToHosts[ev],
+                        eventsDEF[ev],
                         k);
           arr[index][0] = i - numOfHosts;
           arr[index][1] = EDGE_SWITCH; //type of Node
           arr[index][2] = j; //port ID
-          arr[index][3] = eventsOfPortsConnectsToHosts[ev]; //type of Event
+          arr[index][3] = eventsDEF[ev]; //type of Event
         }
       }
       for(j = k/2; j < k; j++){
