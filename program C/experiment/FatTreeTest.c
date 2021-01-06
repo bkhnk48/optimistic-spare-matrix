@@ -180,7 +180,7 @@ void testNeighbors(int k){
 void testHash(int k){
   int size = 6*k*k*k;
   int **arr = malloc(sizeof * arr * size);
-  int i, j;
+  int i, j, ev;
   for(i = 0; i < size; i++){
     arr[i] = malloc(sizeof * arr[i] * 4);
     arr[i][0] = 0; //id in group
@@ -192,6 +192,7 @@ void testHash(int k){
   int numOfSwitches = 5*k*k/4;
   int index = 0;
   int eventsOfHost[5] = {A, B, C, H_HOST, G};
+  int eventsOfPortsConnectsToHosts[3] = {D, E, F};
   for(i = 0; i < numOfHosts + numOfSwitches; i++){
     if(i < numOfHosts){
       for(j = 0; j < 5; j++){
@@ -205,9 +206,15 @@ void testHash(int k){
   
     else if(i < numOfHosts + k*k/2){
       for(j = 0; j < k/2; j++){
-        index = hash(i - numOfHosts, EDGE_SWITCH, j, D, k);
-        index = hash(i - numOfHosts, EDGE_SWITCH, j, E, k);
-        index = hash(i - numOfHosts, EDGE_SWITCH, j, F, k);
+        for(ev = 0; ev < 3; ev ++){
+          index = hash(i - numOfHosts, EDGE_SWITCH, j, 
+                        eventsOfPortsConnectsToHosts[ev],
+                        k);
+          arr[index][0] = i - numOfHosts;
+          arr[index][1] = EDGE_SWITCH; //type of Node
+          arr[index][2] = j; //port ID
+          arr[index][3] = eventsOfPortsConnectsToHosts[ev]; //type of Event
+        }
       }
       for(j = k/2; j < k; j++){
         index = hash(i - numOfHosts, EDGE_SWITCH, j, D, k);
@@ -236,10 +243,23 @@ void testHash(int k){
 
   for(i = 1; i < numOfHosts; i++){
     for(j = 5*(i - 1) + 1; j < 5*i; j++){
-      assert(arr[j][0] == arr[j - 1][0]);
+      assert(arr[j][0] == arr[j - 1][0]);//trung id 
       assert(arr[j][3] == arr[j - 1][3] + 1);
+      //cac event khac nhau: A, B, C, H_HOST, G
     }
-    assert(arr[i*5][1] == arr[5*(i-1)][1]);
+    assert(arr[i*5][1] == arr[5*(i-1)][1]);//trung typeOfNode
+  }
+  
+  for(i = numOfHosts; i < numOfHosts + k*k/2; i++){
+    index = (i - numOfHosts)*7*k/2 + 5*numOfHosts;
+    for(j = 0; j < k/2; j++){
+      assert(arr[index + j*3 + (D - D)][0] == i - numOfHosts);//trung id 
+      assert(arr[index + j*3 + (E - D)][0] == i - numOfHosts);//trung id 
+      assert(arr[index + j*3 + (F - D)][0] == i - numOfHosts);//trung id 
+      //assert(arr[index + j*3][3] == arr[j - 1][3] + 1);
+      //cac event khac nhau: A, B, C, H_HOST, G
+    }
+    //assert(arr[i*5][1] == arr[5*(i-1)][1]);//trung typeOfNode
   }
 }
 
