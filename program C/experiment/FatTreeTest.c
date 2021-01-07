@@ -258,6 +258,9 @@ void testHash(int k){
   
   for(i = numOfHosts; i < numOfHosts + k*k/2; i++){
     index = (i - numOfHosts)*7*k/2 + 5*numOfHosts;
+    if(i - numOfHosts >= 1){
+      assert(arr[index - 1][0] == i - numOfHosts - 1);
+    }
     for(j = 0; j < k/2; j++){
       assert(arr[index + j*3 + (D - D)][0] == i - numOfHosts);//trung id 
       assert(arr[index + j*3 + (E - D)][0] == i - numOfHosts);//trung id 
