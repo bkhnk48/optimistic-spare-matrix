@@ -10,6 +10,7 @@ void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
                 int *root,
+                int k,
                 //unsigned long arr[20250][7]
                 unsigned long arr[384][7]//4*4*4*4/4 + 4*5*4*4*4/4 = 6*4*4*4 = 384
                 );
@@ -42,6 +43,7 @@ void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
                 int *root,
+                int k,
                 //unsigned long arr[20250][7]
                 unsigned long arr[384][7]
                 )
@@ -55,8 +57,7 @@ void add(int type, int idElementInGroup,
    int idNewNode = 0;
    if(type == A || type == B || type == C || type == H_HOST || type == G)
    {
-      idNewNode = idElementInGroup*5 + type;//Nhan 5 vi co 5 loai su kien 
-                                            //A, B, C, H_HOST, G
+      idNewNode = hash(idElementInGroup, HOST, portID, type, k);
    }
    else if(type < 0)//Is event of edge switch
    {
