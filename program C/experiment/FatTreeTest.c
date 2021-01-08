@@ -250,10 +250,15 @@ void testHash(int k){
     }
     else{
       for(j = 0; j < k; j++){
-        index = hash(i - numOfHosts, CORE_SWITCH, j, D, k);
-        index = hash(i - numOfHosts, CORE_SWITCH, j, E, k);
-        index = hash(i - numOfHosts, CORE_SWITCH, j, F, k);
-        index = hash(i - numOfHosts, CORE_SWITCH, j, H, k);
+        for(ev = 0; ev < 4; ev ++){
+            index = hash(i - numOfHosts, CORE_SWITCH, j, 
+                          eventsDEFH[ev],
+                          k);
+            arr[index][0] = i - numOfHosts;
+            arr[index][1] = CORE_SWITCH; //type of Node
+            arr[index][2] = j; //port ID
+            arr[index][3] = eventsDEFH[ev]; //type of Event
+        }
       }
     }
   }
