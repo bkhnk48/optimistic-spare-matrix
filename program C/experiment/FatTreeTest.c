@@ -303,6 +303,28 @@ void testHash(int k){
     }
   
     if(arr[i][1] == AGG_SWITCH){
+      if(currAgg != arr[i][0]){
+        countAgg++;
+        currAgg = arr[i][0];
+        if(countAgg > 1){
+          assert(countEvent == 4*k);
+          assert(countPort == k);
+        }
+        countEvent = 1;
+        countPort = 1;
+        currEvent = arr[i][3];
+        currPort = arr[i][2];
+      }
+      else{
+        if(currEvent != arr[i][3]){
+          countEvent++;
+          currEvent = arr[i][3];
+        }
+        if(currPort != arr[i][2]){
+          countPort++;
+          currPort = arr[i][2];
+        }
+      }
     }
   }
   assert(countEdge == k*k/2);
