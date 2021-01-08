@@ -328,7 +328,7 @@ void testHash(int k){
     }
   }
   assert(countEdge == k*k/2);
-
+  assert(countAgg == k*k/2);
 }
 
 int main(){
