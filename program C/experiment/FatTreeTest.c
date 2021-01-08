@@ -266,7 +266,7 @@ void testHash(int k){
     }
     assert(arr[i*5][1] == arr[5*(i-1)][1]);//trung typeOfNode
   }
-  int countEdge = 0, currEdge = -1;
+  int countEdge = 0, currEdge = -1, countAgg = 0, currAgg = -1;
   int countPortOfEdge = 0, currPortOfEdge = -1;
   int countEventOfEdge = 0, currEventOfEdge = -1;
 
