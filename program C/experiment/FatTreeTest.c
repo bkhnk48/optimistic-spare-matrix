@@ -276,7 +276,6 @@ void testHash(int k){
   int minIndex = hash(0, EDGE_SWITCH, 0, D, k);
   int maxIndex = hash(k*k - 1, AGG_SWITCH, k - 1, H, k);
   for(i = minIndex; i <= maxIndex; i++){
-
     if(arr[i][1] == EDGE_SWITCH){
       if(currEdge != arr[i][0]){
         countEdge++;
@@ -332,6 +331,39 @@ void testHash(int k){
 
   assert(countEdge * 7*k/2 + countAgg * 4 * k 
             == maxIndex - minIndex + 1);
+
+  minIndex = hash(k*k, CORE_SWITCH, 0, D, k);
+  maxIndex = hash(5*k*k/4 - 1, CORE_SWITCH, k - 1, H, k);
+
+  int currCore = -1, countCore = 0;
+  countEvent = 0; countPort = 0;
+  for(i = minIndex; i <= maxIndex; i++){
+    if(arr[i][1] == CORE_SWITCH){
+      if(currCore != arr[i][0]){
+        countCore++;
+        currCore = arr[i][0];
+        if(countCore > 1){
+          assert(countEvent == 4*k);
+          assert(countPort == k);
+        }
+        countEvent = 1;
+        countPort = 1;
+        currEvent = arr[i][3];
+        currPort = arr[i][2];
+      }
+      else{
+        if(currEvent != arr[i][3]){
+          countEvent++;
+          currEvent = arr[i][3];
+        }
+        if(currPort != arr[i][2]){
+          countPort++;
+          currPort = arr[i][2];
+        }
+      }
+    }
+  }
+  assert(countCore == k*k/4);
 }
 
 int main(){
