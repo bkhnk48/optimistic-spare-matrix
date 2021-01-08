@@ -278,7 +278,7 @@ void testHash(int k){
         countEdge++;
         currEdge = arr[i][0];
         if(countEdge > 1){
-          assert(countEvent == 14);
+          assert(countEvent == 7*k/2);
           assert(countPort == k);
         }
         countEvent = 1;
