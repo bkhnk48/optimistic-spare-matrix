@@ -267,8 +267,8 @@ void testHash(int k){
     assert(arr[i*5][1] == arr[5*(i-1)][1]);//trung typeOfNode
   }
   int countEdge = 0, currEdge = -1, prevEdge = -1;
-  int countPort = 0, currPort = -1;
-  int countEvent = 0, currEvent = -1;
+  int countPortOfEdge = 0, currPortOfEdge = -1;
+  int countEventOfEdge = 0, currEventOfEdge = -1;
   int minIndex = hash(0, EDGE_SWITCH, 0, D, k);
   int maxIndex = hash(k*k - 1, AGG_SWITCH, k - 1, H, k);
   for(i = minIndex; i <= maxIndex; i++){
@@ -278,98 +278,31 @@ void testHash(int k){
         countEdge++;
         currEdge = arr[i][0];
         if(countEdge > 1){
-          assert(countEvent == 7*k/2);
-          assert(countPort == k);
+          assert(countEventOfEdge == 7*k/2);
+          assert(countPortOfEdge == k);
         }
-        countEvent = 1;
-        countPort = 1;
-        currEvent = arr[i][3];
-        currPort = arr[i][2];
+        countEventOfEdge = 1;
+        countPortOfEdge = 1;
+        currEventOfEdge = arr[i][3];
+        currPortOfEdge = arr[i][2];
       }
       else{
-        if(currEvent != arr[i][3]){
-          countEvent++;
-          currEvent = arr[i][3];
+        if(currEventOfEdge != arr[i][3]){
+          countEventOfEdge++;
+          currEventOfEdge = arr[i][3];
         }
-        if(currPort != arr[i][2]){
-          countPort++;
-          currPort = arr[i][2];
+        if(currPortOfEdge != arr[i][2]){
+          countPortOfEdge++;
+          currPortOfEdge = arr[i][2];
         }
       }
-      /*index = (i - numOfHosts)*7*k/2 + 5*numOfHosts;
-
-      if(i - numOfHosts >= 1){
-        assert(arr[index - 1][0] == i - numOfHosts - 1);
-      }
-      for(j = 0; j < k/2; j++){
-        assert(arr[index + j*3 + (D - D)][0] == i - numOfHosts);//trung id 
-        assert(arr[index + j*3 + (E - D)][0] == i - numOfHosts);//trung id 
-        assert(arr[index + j*3 + (F - D)][0] == i - numOfHosts);//trung id 
-
-        assert(arr[index + j*3 + (D - D)][1] == EDGE_SWITCH);//edge switch
-        assert(arr[index + j*3 + (E - D)][1] == EDGE_SWITCH);//edge switch 
-        assert(arr[index + j*3 + (F - D)][1] == EDGE_SWITCH);//edge switch
-
-        assert(arr[index + j*3 + (D - D)][2] == j);//port
-        assert(arr[index + j*3 + (E - D)][2] == j);//port
-        assert(arr[index + j*3 + (F - D)][2] == j);//port
-
-        assert(arr[index + j*3 + (D - D)][3] == D);//event
-        assert(arr[index + j*3 + (E - D)][3] == E);//event
-        assert(arr[index + j*3 + (F - D)][3] == F);//event
-      }
-      
-      index += 3*k/2;
-      for(j = k/2; j < k; j++){
-        port = j - k/2;
-        assert(arr[index + port*4 + (D - D)][0] == i - numOfHosts);//trung id 
-        assert(arr[index + port*4 + (E - D)][0] == i - numOfHosts);//trung id 
-        assert(arr[index + port*4 + (F - D)][0] == i - numOfHosts);//trung id 
-        assert(arr[index + port*4 + (H - D)][0] == i - numOfHosts);//trung id 
-
-        assert(arr[index + port*4 + (D - D)][1] == EDGE_SWITCH);//edge switch
-        assert(arr[index + port*4 + (E - D)][1] == EDGE_SWITCH);//edge switch 
-        assert(arr[index + port*4 + (F - D)][1] == EDGE_SWITCH);//edge switch
-        assert(arr[index + port*4 + (H - D)][1] == EDGE_SWITCH);//edge switch
-
-        assert(arr[index + port*4 + (D - D)][2] == j);//port
-        assert(arr[index + port*4 + (E - D)][2] == j);//port
-        assert(arr[index + port*4 + (F - D)][2] == j);//port
-        assert(arr[index + port*4 + (H - D)][2] == j);//port
-
-        assert(arr[index + port*4 + (D - D)][3] == D);//event
-        assert(arr[index + port*4 + (E - D)][3] == E);//event
-        assert(arr[index + port*4 + (F - D)][3] == F);//event
-        assert(arr[index + port*4 + (H - D)][3] == H);//event
-      }*/
+    }
+  
+    if(arr[i][1] == AGG_SWITCH){
     }
   }
   assert(countEdge == k*k/2);
 
-  /*for(i = numOfHosts + k*k/2; i < numOfHosts + k*k; i++){
-    index = (i - numOfHosts - k*k/2)*4*k + 5*numOfHosts + (7*k*k*k/4);
-    for(j = 0; j < k; j++){
-      assert(arr[index + j*4 + (D - D)][0] == i - numOfHosts);//trung id 
-      assert(arr[index + j*4 + (E - D)][0] == i - numOfHosts);//trung id 
-      assert(arr[index + j*4 + (F - D)][0] == i - numOfHosts);//trung id 
-      assert(arr[index + j*4 + (H - D)][0] == i - numOfHosts);//trung id 
-
-      assert(arr[index + j*4 + (D - D)][1] == AGG_SWITCH);//Agg switch
-      assert(arr[index + j*4 + (E - D)][1] == AGG_SWITCH);//Agg switch 
-      assert(arr[index + j*4 + (F - D)][1] == AGG_SWITCH);//Agg switch
-      assert(arr[index + j*4 + (H - D)][1] == AGG_SWITCH);//Agg switch
-
-      assert(arr[index + j*4 + (D - D)][2] == j);//port
-      assert(arr[index + j*4 + (E - D)][2] == j);//port
-      assert(arr[index + j*4 + (F - D)][2] == j);//port
-      assert(arr[index + j*4 + (H - D)][2] == j);//port
-
-      assert(arr[index + j*4 + (D - D)][3] == D);//event
-      assert(arr[index + j*4 + (E - D)][3] == E);//event
-      assert(arr[index + j*4 + (F - D)][3] == F);//event
-      assert(arr[index + j*4 + (H - D)][3] == H);//event
-    }
-  }*/
 }
 
 int main(){
