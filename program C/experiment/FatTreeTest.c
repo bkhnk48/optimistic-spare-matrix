@@ -273,7 +273,7 @@ void testHash(int k){
   int maxIndex = hash(k*k - 1, AGG_SWITCH, k - 1, H, k);
   for(i = minIndex; i <= maxIndex; i++){
 
-    if(arr[i][0] == EDGE_SWITCH){
+    if(arr[i][1] == EDGE_SWITCH){
       if(currEdge != arr[i][0]){
         countEdge++;
         currEdge = arr[i][0];
@@ -344,6 +344,7 @@ void testHash(int k){
       }*/
     }
   }
+  assert(countEdge == k*k/2);
 
   /*for(i = numOfHosts + k*k/2; i < numOfHosts + k*k; i++){
     index = (i - numOfHosts - k*k/2)*4*k + 5*numOfHosts + (7*k*k*k/4);
