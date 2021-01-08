@@ -329,6 +329,9 @@ void testHash(int k){
   }
   assert(countEdge == k*k/2);
   assert(countAgg == k*k/2);
+
+  assert(countEdge * 7*k/2 + countAgg * 4 * k 
+            == maxIndex - minIndex + 1);
 }
 
 int main(){
