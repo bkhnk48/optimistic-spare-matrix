@@ -3,7 +3,7 @@
 #include <assert.h>
 #include "FatTreeGraph.c"
 #include "FatTreeTables.c"
-#include "OptimizationSplay.c"
+#include "SplitSplay.c"
 #include "timing.c"
 #include <locale.h>
 #include <math.h>
