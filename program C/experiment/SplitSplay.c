@@ -9,6 +9,7 @@ void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
                 int *root
+                , int idNewNode
                 );
 /* From now on, an event has 7 fields about:
    + it's type
@@ -35,7 +36,8 @@ void leaf(//unsigned long arr[20250][3],
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
-                int *root//,
+                int *root,
+                int idNewNode 
                 //unsigned long arr[20250][3]
                 )
 {
@@ -45,7 +47,7 @@ void add(int type, int idElementInGroup,
       Các biến type có bit cuối cùng là 1 sẽ là các event xảy ra trên Core switch
       Các biến type có bit cuối cùng là 0 sẽ là các event xảy ra trên Agg switch
    */
-   int idNewNode = 0;
+   //int idNewNode = 0;
    if(type == A || type == B || type == C || type == H_HOST || type == G)
    {
       idNewNode = idElementInGroup*3 + type;//Nhan 3 vi hien tai moi chi co 3 loai su kien A, B, C
@@ -70,7 +72,8 @@ void add(int type, int idElementInGroup,
                      + idElementInGroup*4*4 + portID*4 + (type - D);
    }
 
-   data[idNewNode] = ((unsigned long)idElementInGroup << 32) | portID;
+   data[idNewNode] = ((unsigned long)idElementInGroup << 32)
+                         | ((portID) & 65535) << 16 | (type & 65535);
    arr[idNewNode][0] = endTime;
    int formerFather = (int)arr[idNewNode][1]; // & 0x7fffffff;
    if(formerFather != -1)
