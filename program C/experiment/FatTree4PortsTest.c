@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
 
     for(i = 0; i < 16; i++)
     {
-      add(0, i, 0, 0, &root, k, arr);
+      add(0, i, 0, 0, &root, arr);
     }
 
     removeFirst(&first, &root, arr);
@@ -98,12 +98,12 @@ int main(int argc, char** argv) {
             #pragma region action of Event type A
             if(type == A)
             {
-                add(A, i, 0, currentTime + T, &root, k, arr
+                add(A, i, 0, currentTime + T, &root, arr
                         );
                 generateEventB = actionA(T, currentTime, &bufferHosts[i]);
                 if(generateEventB){
                   add(B, i, 0, currentTime +  defaultBias*13
-                              , &root, k, arr
+                              , &root, arr
                         );  
                 }
             }
@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
                                         );
               if(generateEventC)
                 add(C, i, 0, currentTime +  defaultBias*33
-                              , &root, k, arr
+                              , &root, arr
                             );
             }
             #pragma endregion
@@ -133,11 +133,11 @@ int main(int argc, char** argv) {
                               );
               if(generateEventB)
                 add(B, i, 0, currentTime +  defaultBias*13
-                              , &root, k, arr
+                              , &root, arr
                         ); 
               if(generateEventD)
                 add(-D, nextIndex, nextPort, currentTime + loadingTime
-                              , &root, k, arr
+                              , &root, arr
                         );
             }
             #pragma endregion
