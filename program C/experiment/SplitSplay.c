@@ -207,10 +207,10 @@ void splay(int e//, unsigned long arr[20250][3]
    int f;   // Tree * f;
    int gf;  // Tree * gf;
    int ggf; // Tree * ggf;
-   while(arr[e][4] != -1)//while(e->father != NULL)
+   while((int)arr[e][1] != __INT32_MAX__)//while(e->father != NULL)
    {
-      f = arr[e][4];  //  f = e->father;
-      gf = arr[f][4]; //  gf = f->father;
+      f = (int)arr[e][1];  //  f = e->father;
+      gf = (int)arr[f][1]; //  gf = f->father;
       left = (e == arr[f][5] ? 1 : 0);  //left = (e == f->left ? 1 : 0);
       if(left)
       {
