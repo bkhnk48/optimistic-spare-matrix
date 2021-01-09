@@ -141,9 +141,9 @@ int main(int argc, char** argv) {
                               , &root, first
                         ); 
               if(generateEventD){
-                idNode = hash()
+                idNode = hash(nextIndex, EDGE_SWITCH, nextPort, D, k);
                 add(D, nextIndex, nextPort, currentTime + loadingTime
-                              , &root//, arr
+                              , &root, idNode
                         );
               }
             }
