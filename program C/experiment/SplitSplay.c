@@ -41,11 +41,11 @@ void add(int type, int idElementInGroup,
                 //unsigned long arr[20250][3]
                 )
 {
-   /* Quy ước các event từ A đến G (tức type = 0..4) sẽ là 
-      các event xảy ra trên hosts
-      Các biến type < 0 sẽ là event xảy ra trên các edge switch
-      Các biến type có bit cuối cùng là 1 sẽ là các event xảy ra trên Core switch
-      Các biến type có bit cuối cùng là 0 sẽ là các event xảy ra trên Agg switch
+   /* Quy ước arr[i][3] se luu cac phan tu
+    *  arr[i][0] luu tru endTime cua event
+    *  arr[i][1] luu tru id cua father
+    *  arr[i][2] co 4 bytes dau tien luu tru id cua left
+    *               4 bytes tiep theo luu tru id cua right
    */
    
    data[idNewNode] = ((unsigned long)idElementInGroup << 32)
