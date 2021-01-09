@@ -5,6 +5,7 @@
 #include "FatTreeTables.c"
 #include "SplitSplay.c"
 #include "timing.c"
+#include <limits.h>
 #include <locale.h>
 #include <math.h>
 
@@ -39,8 +40,8 @@ int main(int argc, char** argv) {
     //So su kien xay ra tren Edge: (4*(k/2) + 3*(k/2))*k*k/2 = 14*8 = 112
     //So su kien xay ra tren Switch: (4*k)*3*k*k/4 = 3*k*k*k = 192
     //Tong: 80 + 112 + 192 = 80 + 304 = 384 (6*k*k*k)
-    unsigned long i;
-    int j, N, root = -1;
+    unsigned long i, j;
+    int N, root = -1;
     for(i = 0; i < 384; i++)
     {
       for(j = 0; j < 7; j++)
@@ -93,12 +94,11 @@ int main(int argc, char** argv) {
         {
             count++;
          
-            int type = arr[first][0];
-            i = arr[first][1];
-            arr[first][3] = -1L;
-            arr[first][4] = -1L;
-            arr[first][5] = -1L;
-            arr[first][6] = -1L;
+            int type = data[first] & 65535;
+            i = data[first] >> 32;
+            arr[first][0] = ULONG_MAX;
+            arr[first][1] = ULONG_MAX;
+            arr[first][2] = ULONG_MAX;
          
             #pragma region action of Event type A
             if(type == A)
