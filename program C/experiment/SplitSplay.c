@@ -47,31 +47,7 @@ void add(int type, int idElementInGroup,
       Các biến type có bit cuối cùng là 1 sẽ là các event xảy ra trên Core switch
       Các biến type có bit cuối cùng là 0 sẽ là các event xảy ra trên Agg switch
    */
-   //int idNewNode = 0;
-   if(type == A || type == B || type == C || type == H_HOST || type == G)
-   {
-      idNewNode = idElementInGroup*3 + type;//Nhan 3 vi hien tai moi chi co 3 loai su kien A, B, C
-   }
-   else if(type < 0)//Is event of edge switch
-   {
-      int positiveType = -type;
-      //type *= -1;
-      idNewNode = 16*5 + idElementInGroup*((4/2)*4 + 3*(4/2));
-      if(portID < 4/2)
-      {
-         idNewNode += portID * 3 + (positiveType - D);
-      } // + type;
-      else{
-         idNewNode += (4/2) * 3 + (portID - 4/2) * 4 + (positiveType - D);
-      }
-   }  
-   else{
-      int isCoreSwitch = type & 1;
-      type = type >> 1;
-      idNewNode = 16*5 + (4*4/2)*((4/2)*4 + 3*(4/2)) 
-                     + idElementInGroup*4*4 + portID*4 + (type - D);
-   }
-
+   
    data[idNewNode] = ((unsigned long)idElementInGroup << 32)
                          | ((portID) & 65535) << 16 | (type & 65535);
    arr[idNewNode][0] = endTime;
