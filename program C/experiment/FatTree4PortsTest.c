@@ -76,10 +76,12 @@ int main(int argc, char** argv) {
 
     for(i = 0; i < 16; i++)
     {
-      add(0, i, 0, 0, &root, arr);
+      add(0, i, 0, 0, &root//, arr
+                  );
     }
 
-    removeFirst(&first, &root, arr);
+    removeFirst(&first, &root//, arr
+                  );
 
     unsigned long ongoingTime = arr[first][3];
     while(currentTime <= endTime && ongoingTime != -1)
@@ -98,12 +100,12 @@ int main(int argc, char** argv) {
             #pragma region action of Event type A
             if(type == A)
             {
-                add(A, i, 0, currentTime + T, &root, arr
+                add(A, i, 0, currentTime + T, &root//, arr
                         );
                 generateEventB = actionA(T, currentTime, &bufferHosts[i]);
                 if(generateEventB){
                   add(B, i, 0, currentTime +  defaultBias*13
-                              , &root, arr
+                              , &root//, arr
                         );  
                 }
             }
@@ -117,7 +119,7 @@ int main(int argc, char** argv) {
                                         );
               if(generateEventC)
                 add(C, i, 0, currentTime +  defaultBias*33
-                              , &root, arr
+                              , &root//, arr
                             );
             }
             #pragma endregion
@@ -133,17 +135,17 @@ int main(int argc, char** argv) {
                               );
               if(generateEventB)
                 add(B, i, 0, currentTime +  defaultBias*13
-                              , &root, arr
+                              , &root//, arr
                         ); 
               if(generateEventD)
                 add(-D, nextIndex, nextPort, currentTime + loadingTime
-                              , &root, arr
+                              , &root//, arr
                         );
             }
             #pragma endregion
         }
         ongoingTime = -1;
-        removeFirst(&first, &root, arr
+        removeFirst(&first, &root//, arr
                );
       
         currentTime = arr[first][3];
