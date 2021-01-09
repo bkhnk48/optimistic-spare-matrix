@@ -12,6 +12,7 @@ serial:
 	gcc -pg -c VoidSplay.c 
 	gcc VoidSplayTest.c -pg -o vstest.o -lm
 	gcc DeleteSplayTest.c -pg -o delS.o -lm
+	gcc -pg -g -c SplitSplay.c
 	gcc -pg -c ListSplay.c
 	gcc ListSplayTest.c -pg -o ltest.o -lm
 	gcc -pg -c Node.c
@@ -37,6 +38,7 @@ n:
 	gcc -c VoidSplay.c -lm
 	gcc VoidSplayTest.c -o vstest.o -lm
 	gcc DeleteSplayTest.c -o delS.o -lm
+	gcc -pg -c SplitSplay.c
 	gcc test.c -o test.o -lm
 	gcc -c ListSplay.c
 	gcc ListSplayTest.c -DDO_PREFETCH -o ltest.o -lm
