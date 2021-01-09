@@ -70,9 +70,7 @@ void add(int type, int idElementInGroup,
                      + idElementInGroup*4*4 + portID*4 + (type - D);
    }
 
-   data[idNewNode][0] = type;
-   data[idNewNode][1] = idElementInGroup;
-   data[idNewNode][2] = portID;
+   data[idNewNode] = ((unsigned long)idElementInGroup << 32) | portID;
    arr[idNewNode][0] = endTime;
    int formerFather = (int)arr[idNewNode][1]; // & 0x7fffffff;
    if(formerFather != -1)
