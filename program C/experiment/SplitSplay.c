@@ -3,7 +3,7 @@
 #include "Event.c"
 
 
-unsigned long data[384][3];
+unsigned long data[384];
 unsigned long arr[384][3];
 void add(int type, int idElementInGroup,
                 int portID, 
