@@ -103,12 +103,12 @@ int main(int argc, char** argv) {
             #pragma region action of Event type A
             if(type == A)
             {
-                add(A, i, 0, currentTime + T, &root//, arr
+                add(A, i, 0, currentTime + T, &root, first
                         );
                 generateEventB = actionA(T, currentTime, &bufferHosts[i]);
                 if(generateEventB){
                   add(B, i, 0, currentTime +  defaultBias*13
-                              , &root//, arr
+                              , &root, first
                         );  
                 }
             }
@@ -122,7 +122,7 @@ int main(int argc, char** argv) {
                                         );
               if(generateEventC)
                 add(C, i, 0, currentTime +  defaultBias*33
-                              , &root//, arr
+                              , &root, first
                             );
             }
             #pragma endregion
@@ -138,12 +138,14 @@ int main(int argc, char** argv) {
                               );
               if(generateEventB)
                 add(B, i, 0, currentTime +  defaultBias*13
-                              , &root//, arr
+                              , &root, first
                         ); 
-              if(generateEventD)
-                add(-D, nextIndex, nextPort, currentTime + loadingTime
+              if(generateEventD){
+                idNode = hash()
+                add(D, nextIndex, nextPort, currentTime + loadingTime
                               , &root//, arr
                         );
+              }
             }
             #pragma endregion
         }
@@ -151,8 +153,8 @@ int main(int argc, char** argv) {
         removeFirst(&first, &root//, arr
                );
       
-        currentTime = arr[first][3];
-        ongoingTime = arr[first][3];
+        currentTime = arr[first][0];
+        ongoingTime = arr[first][0];
     }
 
     return 0;
