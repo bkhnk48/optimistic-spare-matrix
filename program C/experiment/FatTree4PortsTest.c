@@ -69,6 +69,7 @@ int main(int argc, char** argv) {
     int nextIndex;
     int nextPort = 0;
     int generateEventB, generateEventC, generateEventD;
+    int idNode = 0;
     //char* p = malloc(1 * 1024 * 1024 * 1024);
     timing(&wc1, &cpuT);
 
@@ -76,7 +77,9 @@ int main(int argc, char** argv) {
 
     for(i = 0; i < 16; i++)
     {
+      idNode = hash(i, HOST, 0, A, k);
       add(0, i, 0, 0, &root//, arr
+                    , idNode
                   );
     }
 
