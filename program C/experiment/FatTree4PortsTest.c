@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
     removeFirst(&first, &root//, arr
                   );
 
-    unsigned long ongoingTime = arr[first][3];
+    unsigned long ongoingTime = arr[first][0];
     while(currentTime <= endTime && ongoingTime != -1)
     {
         if(ongoingTime == currentTime)
