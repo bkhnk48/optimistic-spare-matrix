@@ -264,39 +264,71 @@ void splay(int e//, unsigned long arr[20250][3]
             // f, suivis de la rotation de e avec f
             ggf = arr[gf][1]; //ggf = gf->father;
 
-            arr[gf][5] = arr[f][6]; //gf->left = f->right;
-            if(arr[gf][5] != -1)//if(gf->left != NULL)
-               arr[arr[gf][5]][4] = gf; //gf->left->father = gf;
-            arr[f][6] = gf; //f->right = gf;
-            arr[gf][4] = f; //gf->father = f;
+            arr[gf][2] &= RIGHT_MASK;
+            arr[gf][2] |= (arr[f][2] << 32);
+            //gf->left = f->right;
+            if((int)(arr[gf][2] >> 32) != __INT32_MAX__){
+            //if(gf->left != NULL)
+               arr[arr[gf][2] >> 32][1] = gf; 
+               //gf->left->father = gf;
+            }
+            arr[f][2] &= LEFT_MASK; 
+            arr[f][2] |= gf; 
+            //f->right = gf;
+            arr[gf][1] = f; //gf->father = f;
 
-            arr[f][5] = arr[e][6]; //f->left = e->right;
-            if(arr[f][5] != -1) //if(f->left != NULL)
-               arr[ arr[f][5] ][4] = f; //f->left->father = f;
-            arr[f][4] = e; //f->father = e;
-            arr[e][6] = f; //e->right = f;
+            arr[f][2] &= RIGHT_MASK; 
+            arr[f][2] |= arr[e][2] << 32; 
+            //f->left = e->right;
+            if((int)(arr[f][2] >> 32) != __INT32_MAX__) {
+            //if(f->left != NULL)
+               arr[ arr[f][2] >> 32 ][1] = f; 
+               //f->left->father = f;
+            }
+            arr[f][1] = e; 
+            //f->father = e;
+            arr[e][2] &= LEFT_MASK;
+            arr[e][2] |= f; 
+            //e->right = f;
 
             // on rattache e a son nouveau pere
-            arr[e][4] = ggf; //e->father = ggf;
-            if(ggf != -1) //if(ggf != NULL)
-               if(arr[ggf][5] == gf) //if(ggf->left == gf)
-                  arr[ggf][5] = e; //ggf->left = e;
+            arr[e][1] = ggf; //e->father = ggf;
+            if(ggf != __INT32_MAX__){
+            //if(ggf != NULL)
+               if(arr[ggf][2] >> 32 == gf){
+               //if(ggf->left == gf)
+                  arr[ggf][2] &= RIGHT_MASK;
+                  arr[ggf][2] |= e; 
+                  //ggf->left = e;
+               }
                else
-                  arr[ggf][6] = e; //ggf->right = e;
+                  arr[ggf][2] &= LEFT_MASK;
+                  arr[ggf][2] |= e; 
+                  //ggf->right = e;
+            }
          }
       }
       else
       {
          //cas du fils droit
-         if(gf == -1){ //if(gf == NULL) {
+         if(gf == __INT32_MAX__){ 
+            //if(gf == NULL) {
             // cas "zig", on fait la rotation de f (la racine) et e
 
-            arr[f][4] = e; //f->father = e;
-            arr[f][6] = arr[e][5]; //f->right = e->left;
-            if(arr[f][6] != -1) //if(f->right != NULL)
-               arr[arr[f][6]][4] = f; //f->right->father = f;
-            arr[e][5] = f; //e->left = f;
-            arr[e][4] = -1; //e->father = NULL;
+            arr[f][1] = e; //f->father = e;
+            arr[f][2] &= LEFT_MASK; 
+            arr[f][2] |= arr[e][2] >> 32; 
+            //f->right = e->left;
+            if((int)arr[f][2] != __INT32_MAX__){ 
+            //if(f->right != NULL)
+               arr[(int)arr[f][2]][1] = f; 
+               //f->right->father = f;
+            }
+            arr[e][2] &= RIGHT_MASK; 
+            arr[e][2] |= (unsigned long)f << 32; 
+            //e->left = f;
+            arr[e][1] = __INT32_MAX__; 
+            //e->father = NULL;
          }
          else if( arr[gf][5] == f) {//if(gf->left == f) {
             // cas "zig-zag", simplifie, pareil que le cas "zig"
