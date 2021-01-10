@@ -4,6 +4,8 @@
 
 unsigned long data[384];
 int arr[384][5];
+const unsigned long RIGHT_MASK = 0x7fffffff;
+   const unsigned long LEFT_MASK = ((unsigned long)0x7fffffff << 32);
 //int sizeOfTree = 0;
 //int maxSize = 0;
 
@@ -62,7 +64,7 @@ void add(int type, int idElementInGroup,
    */
    
 
-   arr[idNewNode][0] = type;
+   arr[idNewNode][0] = (int)(endTime >> 32);
    arr[idNewNode][1] = idElementInGroup;
    arr[idNewNode][2] = portID;
    arr[idNewNode][3] = endTime;
