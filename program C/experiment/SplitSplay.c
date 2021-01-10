@@ -204,6 +204,9 @@ void add(int type, int idElementInGroup,
 void splay(int e//, unsigned long arr[20250][3]
                )
 {
+   unsigned long RIGHT_MASK = 0x7fffffff;
+   unsigned long LEFT_MASK = ((unsigned long)0x7fffffff << 32);
+
    int left;
    int f;   // Tree * f;
    int gf;  // Tree * gf;
@@ -220,9 +223,8 @@ void splay(int e//, unsigned long arr[20250][3]
          if (gf == __INT32_MAX__) {//if (gf == NULL) {
             // cas "zig", on fait la rotation de f (la racine) et e
             arr[f][1] = e; //f->father = e;
-            arr[f][2] &= 0x7fffffff;
-            arr[f][2] |= (arr[e][2] &
-                            ((unsigned long)0x7fffffff << 32));
+            arr[f][2] &= RIGHT_MASK;
+            arr[f][2] |= (arr[e][2] & LEFT_MASK);
             //f->left = e->right;
             if(arr[f][5] != -1) //if(f->left != NULL)
                arr[arr[f][5]][4] = f; //f->left->father = f;
