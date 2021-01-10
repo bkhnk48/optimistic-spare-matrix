@@ -11,17 +11,11 @@ serial:
 	gcc OptimizationSplayTest.c -pg -o optest.o -lm
 	gcc -pg -c VoidSplay.c 
 	gcc VoidSplayTest.c -pg -o vstest.o -lm
-	gcc DeleteSplayTest.c -pg -o delS.o -lm
-	gcc -pg -g -c SplitSplay.c
-	gcc -pg -c ListSplay.c
-	gcc ListSplayTest.c -pg -o ltest.o -lm
 	gcc -pg -c Node.c
 	gcc -pg -c LinkedList.c
 	gcc -pg -c CalendarQueue.c
 	gcc CalendarQueueTest.c -pg -o cqtest.o -lm
 	gcc -pg -c CAQueue.c
-	gcc -pg -c CASplay.c
-	gcc CASplayTest.c -pg -o catest.o -lm
 	gcc randomFile.c -pg -o ran.o
 	gcc -ggdb3 -O0 -std=c99 -Wall -Wextra -pedantic -o main.out main.c
 	gcc FatTreeTest.c -g -o ftg.o
@@ -37,18 +31,11 @@ n:
 	gcc OptimizationSplayTest.c -o optest.o -lm
 	gcc -c VoidSplay.c -lm
 	gcc VoidSplayTest.c -o vstest.o -lm
-	gcc DeleteSplayTest.c -o delS.o -lm
-	gcc -pg -c SplitSplay.c
-	gcc test.c -o test.o -lm
-	gcc -c ListSplay.c
-	gcc ListSplayTest.c -DDO_PREFETCH -o ltest.o -lm
 	gcc -c Node.c
 	gcc -c LinkedList.c
 	gcc -c CalendarQueue.c
 	gcc CalendarQueueTest.c -o cqtest.o -lm
 	gcc -c CAQueue.c
-	gcc -c CASplay.c
-	gcc CASplayTest.c -o catest.o -lm
 	gcc randomFile.c -o ran.o
 	gcc -ggdb3 -O0 -std=c99 -Wall -Wextra -pedantic -o main.out main.c
 	gcc FatTreeTest.c -o ftg.o
