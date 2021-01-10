@@ -212,7 +212,8 @@ void splay(int e//, unsigned long arr[20250][3]
    {
       f = (int)arr[e][1];  //  f = e->father;
       gf = (int)arr[f][1]; //  gf = f->father;
-      left = (e == arr[f][5] ? 1 : 0);  //left = (e == f->left ? 1 : 0);
+      left = (e == ((int)(arr[f][2] >> 32)) ? 1 : 0);  
+      //left = (e == f->left ? 1 : 0);
       if(left)
       {
          // cas du fils gauche
