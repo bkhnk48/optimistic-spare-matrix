@@ -16,14 +16,17 @@ void add(int type, int idElementInGroup,
                 //int k,
                 //unsigned long arr[20250][7]
                 );
-/* From now on, an event has 7 fields about:
-   + it's type
-   + idElementInGroup is the index of element in each group Hosts, Ways, Switches Edge, Agg, Core
-   + the portID where the event happens (= -1 in case event - A, B, C, G, H occurs on host)
+/* From now on, an event (is stored in arr) has 5 fields:
    + endTime: the time of event to be finished.
    + index of father.
    + index of left
    + index of right
+
+   Location, type of event are stored in array named data:
+   + it's type
+   + idElementInGroup is the index of element in each group Hosts, Ways, Switches Edge, Agg, Core
+   + the portID where the event happens (= -1 in case event - A, B, C, G, H occurs on host)
+   
 */
 
 void splay(int e//, //unsigned long arr[20250][7]
@@ -50,11 +53,12 @@ void add(int type, int idElementInGroup,
                 //unsigned long arr[384][7]
                 )
 {
-   /* Quy ước các event từ A đến G (tức type = 0..4) sẽ là 
-      các event xảy ra trên hosts
-      Các biến type < 0 sẽ là event xảy ra trên các edge switch
-      Các biến type có bit cuối cùng là 1 sẽ là các event xảy ra trên Core switch
-      Các biến type có bit cuối cùng là 0 sẽ là các event xảy ra trên Agg switch
+   /* Quy ước arr[i][3] se luu cac phan tu
+    *  arr[i][0] luu tru 4 bytes tren cua endTime
+    *  arr[i][1] luu tru 4 bytes cuoi cua endTime 
+    *  arr[i][2] luu tru id cua father
+    *  arr[i][3] luu tru id cua left
+    *  arr[i][4] luu tru id cua right
    */
    
 
@@ -370,7 +374,7 @@ void show(//unsigned long arr[20250][7],
 {
    if(root != -1 && arr[root][3] != -1)
    {
-      printf("\n===========> for event type = %ld at end = %ld in %ld\n", 
+      printf("\n===========> for event type = %d at end = %d in %d\n", 
                arr[root][0], arr[root][3], arr[root][1]);
       leaf(//arr, 
                arr[root][5], LEFT);
@@ -396,7 +400,7 @@ void leaf(//unsigned long arr[20250][7],
    }
    if(root != -1 && arr[root][3] != -1)
    {
-      printf("for event type = %ld at end = %ld in %ld. It's index = %d\n", 
+      printf("for event type = %d at end = %d in %d. It's index = %d\n", 
                arr[root][0], arr[root][3], arr[root][1], root);
       leaf(//arr, 
             arr[root][5], LEFT);
@@ -426,7 +430,7 @@ void validate(//unsigned long arr[20250][7],
    {
       if(arr[father][5] != index && arr[father][6] != index)
       {
-         printf("Wrong content as arr[%d][5] = %ld and arr[%d][6] = %ld while it's child(index = %d) has father: %ld\n"
+         printf("Wrong content as arr[%d][5] = %d and arr[%d][6] = %d while it's child(index = %d) has father: %d\n"
                   , father, arr[father][5], father, arr[father][6], index, arr[index][4]);
          exit(1);
       }
