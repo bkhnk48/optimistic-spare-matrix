@@ -217,10 +217,13 @@ void splay(int e//, unsigned long arr[20250][3]
       if(left)
       {
          // cas du fils gauche
-         if (gf == -1) {//if (gf == NULL) {
+         if (gf == __INT32_MAX__) {//if (gf == NULL) {
             // cas "zig", on fait la rotation de f (la racine) et e
-            arr[f][4] = e; //f->father = e;
-            arr[f][5] = arr[e][6]; //f->left = e->right;
+            arr[f][1] = e; //f->father = e;
+            arr[f][2] &= 0x7fffffff;
+            arr[f][2] |= (arr[e][2] &
+                            ((unsigned long)0x7fffffff << 32));
+            //f->left = e->right;
             if(arr[f][5] != -1) //if(f->left != NULL)
                arr[arr[f][5]][4] = f; //f->left->father = f;
             arr[e][6] = f; //e->right = f;
