@@ -204,8 +204,8 @@ void add(int type, int idElementInGroup,
 void splay(int e//, unsigned long arr[20250][3]
                )
 {
-   unsigned long RIGHT_MASK = 0x7fffffff;
-   unsigned long LEFT_MASK = ((unsigned long)0x7fffffff << 32);
+   const unsigned long RIGHT_MASK = 0x7fffffff;
+   const unsigned long LEFT_MASK = ((unsigned long)0x7fffffff << 32);
 
    int left;
    int f;   // Tree * f;
@@ -237,21 +237,32 @@ void splay(int e//, unsigned long arr[20250][3]
             arr[e][1] = __INT32_MAX__; 
             //e->father = NULL;
          }
-         else if(arr[gf][6] == f) { //if (gf->right == f) {
+         else if((arr[gf][2] & RIGHT_MASK) == f) 
+              //if (gf->right == f) {
+         { 
             // cas "zig-zag", simplifie, pareil que le cas "zig"
-            arr[gf][6] = e; //gf->right = e;
+            arr[gf][2] &= LEFT_MASK;
+            arr[gf][2] |= e; 
+            //gf->right = e;
 
-            arr[f][4] = e;  //f->father = e;
-            arr[f][5] = arr[e][6]; //f->left = e->right;
-            if(arr[f][5] != -1) //if(f->left != NULL)
-               arr[arr[f][5]][4] = f; //f->left->father = f;
-            arr[e][6] = f; //e->right = f;
-            arr[e][4] = gf; //e->father = gf;
+            arr[f][1] = e;  //f->father = e;
+            arr[f][2] &= RIGHT_MASK; 
+            arr[f][2] |= (int)arr[e][2]; 
+            //f->left = e->right;
+            if((arr[f][2] >> 32) != __INT32_MAX__) {
+            //if(f->left != NULL)
+               arr[(arr[f][2] >> 32)][1] = f; 
+               //f->left->father = f;
+            }
+            arr[e][2] &= LEFT_MASK;
+            arr[e][2] |= f; 
+            //e->right = f;
+            arr[e][1] = gf; //e->father = gf;
          }
          else {
             // cas "zig-zig", on fait la rotation de gf avec
             // f, suivis de la rotation de e avec f
-            ggf = arr[gf][4]; //ggf = gf->father;
+            ggf = arr[gf][1]; //ggf = gf->father;
 
             arr[gf][5] = arr[f][6]; //gf->left = f->right;
             if(arr[gf][5] != -1)//if(gf->left != NULL)
