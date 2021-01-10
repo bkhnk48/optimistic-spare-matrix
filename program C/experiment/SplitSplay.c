@@ -341,18 +341,22 @@ void splay(int e//, unsigned long arr[20250][3]
             arr[f][2] &= LEFT_MASK;
             arr[f][2] |= arr[e][2] >> 32; 
             //f->right = e->left;
-            if(arr[f][6] != -1)//if(f->right != NULL)
-               arr[arr[f][6]][4] = f;//f->right->father = f;
-            arr[e][5] = f; //e->left = f;
-            arr[e][4] = gf; //e->father = gf;
+            if((int)arr[f][2] != __INT32_MAX__)//if(f->right != NULL)
+               arr[(int)arr[f][2]][1] = f;//f->right->father = f;
+            arr[e][2] &= RIGHT_MASK;
+            arr[e][2] |= (unsigned long)f << 32; 
+            //e->left = f;
+            arr[e][1] = gf; //e->father = gf;
          }
          else {
             // cas "zig-zig", on fait la rotation de gf avec
             // f, suivis de la rotation de e avec f
-            ggf = arr[gf][4]; //ggf = gf->father;
+            ggf = arr[gf][1]; //ggf = gf->father;
 
-            arr[gf][6] = arr[f][5]; //gf->right = f->left;
-            if( arr[gf][6] != -1 ) //if(gf->right != NULL)
+            arr[gf][2] &= LEFT_MASK; 
+            arr[gf][2] |= arr[f][2] >> 32; 
+            //gf->right = f->left;
+            if( (int)arr[gf][2] != __INT32_MAX__ ) //if(gf->right != NULL)
                arr[arr[gf][6]][4] = gf; //gf->right->father = gf;
             arr[f][5] = gf; //f->left = gf;
             arr[gf][4] = f; //gf->father = f;
