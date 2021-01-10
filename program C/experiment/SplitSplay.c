@@ -226,10 +226,16 @@ void splay(int e//, unsigned long arr[20250][3]
             arr[f][2] &= RIGHT_MASK;
             arr[f][2] |= (arr[e][2] & LEFT_MASK);
             //f->left = e->right;
-            if(arr[f][5] != -1) //if(f->left != NULL)
-               arr[arr[f][5]][4] = f; //f->left->father = f;
-            arr[e][6] = f; //e->right = f;
-            arr[e][4] = -1; //e->father = NULL;
+            if((int)(arr[f][2] >> 32) != __INT32_MAX__){ 
+            //if(f->left != NULL)
+               arr[(arr[f][2] >> 32)][1] = f; 
+               //f->left->father = f;
+            }
+            arr[e][2] &= LEFT_MASK;
+            arr[e][2] |= f; 
+            //e->right = f;
+            arr[e][1] = __INT32_MAX__; 
+            //e->father = NULL;
          }
          else if(arr[gf][6] == f) { //if (gf->right == f) {
             // cas "zig-zag", simplifie, pareil que le cas "zig"
