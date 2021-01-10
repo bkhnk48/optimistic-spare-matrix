@@ -48,6 +48,7 @@ void add(int type, int idElementInGroup,
     *               4 bytes tiep theo luu tru id cua right
    */
    
+   #pragma region code
    data[idNewNode] = ((unsigned long)idElementInGroup << 32)
                          | ((portID) & 65535) << 16 | (type & 65535);
    arr[idNewNode][0] = endTime;
@@ -197,7 +198,7 @@ void add(int type, int idElementInGroup,
 
    //return newNode;
    *root = idNewNode;
-
+   #pragma endregion
 }
 
 void splay(int e//, unsigned long arr[20250][3]
