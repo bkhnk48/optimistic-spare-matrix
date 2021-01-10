@@ -11,6 +11,7 @@ serial:
 	gcc OptimizationSplayTest.c -pg -o optest.o -lm
 	gcc -pg -c VoidSplay.c 
 	gcc VoidSplayTest.c -pg -o vstest.o -lm
+	gcc -pg -g -c MergeSplay.c
 	gcc -pg -c Node.c
 	gcc -pg -c LinkedList.c
 	gcc -pg -c CalendarQueue.c
@@ -31,6 +32,7 @@ n:
 	gcc OptimizationSplayTest.c -o optest.o -lm
 	gcc -c VoidSplay.c -lm
 	gcc VoidSplayTest.c -o vstest.o -lm
+	gcc -pg -c MergeSplay.c
 	gcc -c Node.c
 	gcc -c LinkedList.c
 	gcc -c CalendarQueue.c
