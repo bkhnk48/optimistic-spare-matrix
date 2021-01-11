@@ -18,8 +18,8 @@ int main(){
     timing(&wc1, &cpuT);
 
     #pragma omp parallel for num_threads(4) private(x, y, i, j)
-    for(i = MAX; i < 2*MAX; i++){
-        for(j = MAX; j < 2*MAX; j++){
+    for(i = MAX; i < 200000 + MAX; i++){
+        for(j = MAX; j < 200000 + MAX; j++){
             x = j >> 32;
             y = (unsigned int)j;
             int 
