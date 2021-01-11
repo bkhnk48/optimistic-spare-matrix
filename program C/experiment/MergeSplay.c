@@ -10,6 +10,7 @@ const int MASK_INT = 65535;
 //int sizeOfTree = 0;
 //int maxSize = 0;
 
+
 //unsigned long arr[20250][7];
 void add(int type, int idElementInGroup,
                 int portID, 
@@ -47,6 +48,24 @@ void leaf(//unsigned long arr[20250][7],
             //unsigned long arr[384][7],
                int root, enum Side side);
 
+static inline int compare(unsigned long endTime, 
+                        unsigned int upper, 
+                        unsigned int lower){
+   unsigned int part2 = (unsigned int)(endTime >> 32);
+   if(part2 > upper)
+      return 1;
+   if(part2 < upper)
+      return -1;
+   if(part2 == upper){
+      unsigned int part1 = (unsigned int)endTime;
+      if(part1 > lower)
+         return 1;
+      if(part1 < lower)
+         return -1;
+   }
+   return 0;
+}   
+
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
@@ -69,24 +88,22 @@ void add(int type, int idElementInGroup,
 
    arr[idNewNode][0] = (unsigned int)(endTime >> 32);
    arr[idNewNode][1] = (unsigned int)(endTime & RIGHT_MASK);
-   //idElementInGroup;
-   arr[idNewNode][2] = portID;
-   arr[idNewNode][3] = endTime;
-   int formerFather = arr[idNewNode][4];
+   
+   int formerFather = arr[idNewNode][2];
    if(formerFather != -1)
    { 
-      if(arr[formerFather][5] == idNewNode)
+      if(arr[formerFather][3] == idNewNode)
       {
-         arr[formerFather][5] = -1;
+         arr[formerFather][3] = -1;
       }
-      else if(arr[formerFather][6] == idNewNode)
+      else if(arr[formerFather][4] == idNewNode)
       {
-         arr[formerFather][6] = -1;
+         arr[formerFather][4] = -1;
       }
    }
+   arr[idNewNode][2] = -1;
+   arr[idNewNode][3] = -1;
    arr[idNewNode][4] = -1;
-   arr[idNewNode][5] = -1;
-   arr[idNewNode][6] = -1;
 
    if(*root == -1)
    {
