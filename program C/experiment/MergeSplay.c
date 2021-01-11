@@ -15,8 +15,8 @@ const int MASK_INT = 65535;
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
-                int *root,
-                int idNewNode
+                unsigned int *root,
+                unsigned int idNewNode
                 //int k,
                 //unsigned long arr[20250][7]
                 );
@@ -69,8 +69,8 @@ static inline int compare(unsigned long endTime,
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
-                int *root,
-                int idNewNode
+                unsigned int *root,
+                unsigned int idNewNode
                 //unsigned long arr[20250][7]
                 //unsigned long arr[384][7]
                 )
@@ -87,7 +87,7 @@ void add(int type, int idElementInGroup,
                          | (type & MASK_INT);
 
    arr[idNewNode][0] = (unsigned int)(endTime >> 32);
-   arr[idNewNode][1] = (unsigned int)(endTime & RIGHT_MASK);
+   arr[idNewNode][1] = (unsigned int)(endTime);
    
    int formerFather = arr[idNewNode][2];
    if(formerFather != -1)
@@ -110,14 +110,15 @@ void add(int type, int idElementInGroup,
       *root = idNewNode;
       return;
    }
-   int left = idNewNode, right = idNewNode, temp = -1;
+   unsigned int left = idNewNode, right = idNewNode, temp = -1;
    int end_splay = 0;
-   int t = *root;
+   unsigned int t = *root;
    while (end_splay == 0) {
-      if(endTime > arr[t][3])//if(endTime > t->endTime)
+      int comp = compare(endTime, arr[t][0], arr[t][1]);
+      if(comp > 0)//if(endTime > t->endTime)
       {
-         temp = arr[t][6];//temp = t->right;
-         if(temp == -1)//if(temp == NULL)
+         temp = arr[t][4];//temp = t->right;
+         if(temp == __INT32_MAX__)//if(temp == NULL)
          {
             //cas "zig"
             arr[left][6] = t; //left->right = t;
