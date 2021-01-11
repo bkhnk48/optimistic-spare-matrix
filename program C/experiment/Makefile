@@ -12,6 +12,8 @@ serial:
 	gcc -pg -c VoidSplay.c 
 	gcc VoidSplayTest.c -pg -o vstest.o -lm
 	gcc -pg -g -c MergeSplay.c
+	export OMP_NUM_THREADS=4
+	gcc MergeSplayTest.c -g -o mstest.o -lm -fopenmp
 	gcc -pg -c Node.c
 	gcc -pg -c LinkedList.c
 	gcc -pg -c CalendarQueue.c
@@ -33,6 +35,8 @@ n:
 	gcc -c VoidSplay.c -lm
 	gcc VoidSplayTest.c -o vstest.o -lm
 	gcc -pg -c MergeSplay.c
+	export OMP_NUM_THREADS=4
+	gcc MergeSplayTest.c -o mstest.o -lm -fopenmp
 	gcc -c Node.c
 	gcc -c LinkedList.c
 	gcc -c CalendarQueue.c
