@@ -131,65 +131,69 @@ void add(int type, int idElementInGroup,
          //if(endTime < temp->endTime)
          {
             //cas "zig-zag" simplifie
-            arr[left][6] = t;//left->right = t;
-            arr[t][4] = left;//t->father = left;
+            arr[left][4] = t;//left->right = t;
+            arr[t][2] = left;//t->father = left;
             left = t;//left = t;
             t = temp;//t = temp;
          }
          else {
             //cas "zig-zig"
-            arr[t][6] = arr[temp][5]; //t->right = temp->left;
-            if(arr[temp][5] != -1)//if (temp->left != NULL)
-               arr[  arr[temp][5]  ][  4  ] = t; //temp->left->father = t;
-            arr[left][6] = temp;//left->right = temp;
-            arr[temp][4] = left;//temp->father = left;
-            arr[temp][5] = t;//temp->left = t;
-            arr[t][4] = temp;//t->father = temp;
+            arr[t][4] = arr[temp][3]; //t->right = temp->left;
+            if(arr[temp][3] != UINT_MAX)//if (temp->left != NULL)
+               arr[  arr[temp][3]  ][  2  ] = t; 
+               //temp->left->father = t;
+            arr[left][4] = temp;//left->right = temp;
+            arr[temp][2] = left;//temp->father = left;
+            arr[temp][3] = t;//temp->left = t;
+            arr[t][2] = temp;//t->father = temp;
             left = temp;
-            t = arr[temp][6];//t = temp->right;
+            t = arr[temp][4];//t = temp->right;
             if(t == UINT_MAX){//if (t == NULL) {
-               arr[right][5] = UINT_MAX;//right->left = NULL;
+               arr[right][3] = UINT_MAX;//right->left = NULL;
                end_splay = 1;
             }
          }
       }else {
-         temp = arr[t][5]; //temp = t->left;
+         temp = arr[t][3]; //temp = t->left;
          if(temp == UINT_MAX){//if (temp == NULL) {
             //cas "zig"
-            arr[right][5] = t; //right->left = t;
-            arr[t][4] = right; //t->father = right;
-            arr[left][6] = UINT_MAX;     //left->right = NULL;
+            arr[right][3] = t; //right->left = t;
+            arr[t][2] = right; //t->father = right;
+            arr[left][4] = UINT_MAX;     //left->right = NULL;
             end_splay = 1;
          }
-         else if (endTime > arr[temp][3]) {//if (endTime > temp->endTime) {
+         else if (compare(endTime, arr[temp][0], arr[temp][1]) > 0) {
+            //if (endTime > temp->endTime) {
             //cas "zig-zag" simplifie
-            arr[right][5] = t; //right->left = t;
-            arr[t][4] = right; //t->father = right;
+            arr[right][3] = t; //right->left = t;
+            arr[t][2] = right; //t->father = right;
             right = t;//right = t;
             t = temp;//t = temp;
          }
          else {
             //cas "zig-zig"
-            arr[t][5] = arr[temp][6]; //t->left = temp->right;
-            if (arr[temp][6] != UINT_MAX)//if (temp->right != NULL)
-               arr[  arr[temp][6]  ][4] = t; //temp->right->father = t;
-            arr[right][5] = temp; //right->left = temp;
-            arr[temp][4] = right; //temp->father = right;
-            arr[temp][6] = t; //temp->right = t;
-            arr[t][4] = temp; //t->father = temp;
+            arr[t][3] = arr[temp][4]; //t->left = temp->right;
+            if (arr[temp][4] != UINT_MAX)//if (temp->right != NULL)
+               arr[  arr[temp][4]  ][2] = t; 
+               //temp->right->father = t;
+            arr[right][3] = temp; //right->left = temp;
+            arr[temp][2] = right; //temp->father = right;
+            arr[temp][4] = t; //temp->right = t;
+            arr[t][2] = temp; //t->father = temp;
             right = temp;         //right = temp;
-            t = arr[temp][5]; //t = temp->left;
+            t = arr[temp][3]; //t = temp->left;
             if(t == UINT_MAX) {//if (t == NULL) {
-               arr[left][6] = UINT_MAX; //left->right = NULL;
+               arr[left][4] = UINT_MAX; //left->right = NULL;
                end_splay = 1;
             }
          }
       }
    }
 
-   temp = arr[idNewNode][5]; //temp = newNode->left;
-   arr[idNewNode][5] = arr[idNewNode][6]; //newNode->left = newNode->right;
-   arr[idNewNode][6] = temp; //newNode->right = temp;
+   temp = arr[idNewNode][3]; //temp = newNode->left;
+   arr[idNewNode][3] = arr[idNewNode][4]; 
+   //newNode->left = newNode->right;
+   arr[idNewNode][4] = temp; //newNode->right = temp;
 
    //return newNode;
    *root = idNewNode;
