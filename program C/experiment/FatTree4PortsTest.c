@@ -44,9 +44,9 @@ int main(int argc, char** argv) {
     unsigned int N, root = UINT_MAX;
     for(i = 0; i < 384; i++)
     {
-      for(j = 0; j < 7; j++)
+      for(j = 0; j < 5; j++)
       {
-         arr[i][j] = -1L;
+         arr[i][j] = UINT_MAX;
       }
     }
 
@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
     //char* p = malloc(1 * 1024 * 1024 * 1024);
     timing(&wc1, &cpuT);
 
-    root = -1;
+    root = UINT_MAX;
 
     for(i = 0; i < 16; i++)
     {
