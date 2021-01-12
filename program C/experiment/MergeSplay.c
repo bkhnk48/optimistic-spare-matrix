@@ -410,7 +410,7 @@ void show(//unsigned long arr[20250][7],
 {
    if(root != UINT_MAX && arr[root][1] != -1)
    {
-      printf("\n===========> for event type = %d at end = %d in %d\n", 
+      printf("\n===========> for event type = %ld at end = %d in %d\n", 
                data[root], arr[root][1], arr[root][1]);
       leaf(//arr, 
                arr[root][3], LEFT);
