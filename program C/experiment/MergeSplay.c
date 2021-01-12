@@ -48,7 +48,7 @@ void show(//unsigned long arr[20250][7],
             unsigned int root);
 void leaf(//unsigned long arr[20250][7], 
             //unsigned long arr[384][7],
-               int root, enum Side side);
+               unsigned int root, enum Side side);
 
 static inline int compare(unsigned long endTime, 
                         unsigned int upper, 
