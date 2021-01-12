@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Event.c"
+#include <limits.h>
 
 unsigned long data[384];
 unsigned int arr[384][5];
@@ -118,12 +119,12 @@ void add(int type, int idElementInGroup,
       if(comp > 0)//if(endTime > t->endTime)
       {
          temp = arr[t][4];//temp = t->right;
-         if(temp == __INT32_MAX__)//if(temp == NULL)
+         if(temp == UINT_MAX)//if(temp == NULL)
          {
             //cas "zig"
-            arr[left][6] = t; //left->right = t;
-            arr[t][4] = left; //t->father = left;
-            arr[right][5] = -1;//right->left = NULL;
+            arr[left][4] = t; //left->right = t;
+            arr[t][2] = left; //t->father = left;
+            arr[right][3] = -1;//right->left = NULL;
             end_splay = 1;
          }
          else if(endTime < arr[temp][3])//if(endTime < temp->endTime)
