@@ -11,7 +11,7 @@
 
 int main(int argc, char** argv) {
     double wc1 = 0, wc2 = 0, cpuT = 0;
-    int first = -1;
+    unsigned int first = UINT_MAX;
     int defaultSec = 1;
     int defaultBias = 0;
     ProcStatm proc_statm;
@@ -96,9 +96,9 @@ int main(int argc, char** argv) {
          
             int type = data[first] & 65535;
             i = data[first] >> 32;
-            arr[first][0] = ULONG_MAX;
-            arr[first][1] = ULONG_MAX;
-            arr[first][2] = ULONG_MAX;
+            arr[first][0] = UINT_MAX;
+            arr[first][1] = UINT_MAX;
+            arr[first][2] = UINT_MAX;
          
             #pragma region action of Event type A
             if(type == A)
