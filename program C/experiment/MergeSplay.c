@@ -127,7 +127,8 @@ void add(int type, int idElementInGroup,
             arr[right][3] = UINT_MAX;//right->left = NULL;
             end_splay = 1;
          }
-         else if(endTime < arr[temp][3])//if(endTime < temp->endTime)
+         else if(compare(endTime, arr[temp][0], arr[temp][1]) < 0)
+         //if(endTime < temp->endTime)
          {
             //cas "zig-zag" simplifie
             arr[left][6] = t;//left->right = t;
