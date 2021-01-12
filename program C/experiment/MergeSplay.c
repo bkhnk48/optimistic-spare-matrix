@@ -91,22 +91,22 @@ void add(int type, int idElementInGroup,
    arr[idNewNode][1] = (unsigned int)(endTime);
    
    int formerFather = arr[idNewNode][2];
-   if(formerFather != -1)
+   if(formerFather != UINT_MAX)
    { 
       if(arr[formerFather][3] == idNewNode)
       {
-         arr[formerFather][3] = -1;
+         arr[formerFather][3] = UINT_MAX;
       }
       else if(arr[formerFather][4] == idNewNode)
       {
-         arr[formerFather][4] = -1;
+         arr[formerFather][4] = UINT_MAX;
       }
    }
-   arr[idNewNode][2] = -1;
-   arr[idNewNode][3] = -1;
-   arr[idNewNode][4] = -1;
+   arr[idNewNode][2] = UINT_MAX;
+   arr[idNewNode][3] = UINT_MAX;
+   arr[idNewNode][4] = UINT_MAX;
 
-   if(*root == -1)
+   if(*root == UINT_MAX)
    {
       *root = idNewNode;
       return;
@@ -124,7 +124,7 @@ void add(int type, int idElementInGroup,
             //cas "zig"
             arr[left][4] = t; //left->right = t;
             arr[t][2] = left; //t->father = left;
-            arr[right][3] = -1;//right->left = NULL;
+            arr[right][3] = UINT_MAX;//right->left = NULL;
             end_splay = 1;
          }
          else if(endTime < arr[temp][3])//if(endTime < temp->endTime)
@@ -146,18 +146,18 @@ void add(int type, int idElementInGroup,
             arr[t][4] = temp;//t->father = temp;
             left = temp;
             t = arr[temp][6];//t = temp->right;
-            if(t == -1){//if (t == NULL) {
-               arr[right][5] = -1;//right->left = NULL;
+            if(t == UINT_MAX){//if (t == NULL) {
+               arr[right][5] = UINT_MAX;//right->left = NULL;
                end_splay = 1;
             }
          }
       }else {
          temp = arr[t][5]; //temp = t->left;
-         if(temp == -1){//if (temp == NULL) {
+         if(temp == UINT_MAX){//if (temp == NULL) {
             //cas "zig"
             arr[right][5] = t; //right->left = t;
             arr[t][4] = right; //t->father = right;
-            arr[left][6] = -1;     //left->right = NULL;
+            arr[left][6] = UINT_MAX;     //left->right = NULL;
             end_splay = 1;
          }
          else if (endTime > arr[temp][3]) {//if (endTime > temp->endTime) {
@@ -170,7 +170,7 @@ void add(int type, int idElementInGroup,
          else {
             //cas "zig-zig"
             arr[t][5] = arr[temp][6]; //t->left = temp->right;
-            if (arr[temp][6] != -1)//if (temp->right != NULL)
+            if (arr[temp][6] != UINT_MAX)//if (temp->right != NULL)
                arr[  arr[temp][6]  ][4] = t; //temp->right->father = t;
             arr[right][5] = temp; //right->left = temp;
             arr[temp][4] = right; //temp->father = right;
@@ -178,8 +178,8 @@ void add(int type, int idElementInGroup,
             arr[t][4] = temp; //t->father = temp;
             right = temp;         //right = temp;
             t = arr[temp][5]; //t = temp->left;
-            if(t == -1) {//if (t == NULL) {
-               arr[left][6] = -1; //left->right = NULL;
+            if(t == UINT_MAX) {//if (t == NULL) {
+               arr[left][6] = UINT_MAX; //left->right = NULL;
                end_splay = 1;
             }
          }
