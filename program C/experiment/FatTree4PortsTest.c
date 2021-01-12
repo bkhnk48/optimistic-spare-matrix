@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
     //So su kien xay ra tren Switch: (4*k)*3*k*k/4 = 3*k*k*k = 192
     //Tong: 80 + 112 + 192 = 80 + 304 = 384 (6*k*k*k)
     unsigned long i, j;
-    int N, root = -1;
+    unsigned int N, root = UINT_MAX;
     for(i = 0; i < 384; i++)
     {
       for(j = 0; j < 7; j++)
