@@ -100,6 +100,8 @@ int main(int argc, char** argv) {
             arr[first][0] = UINT_MAX;
             arr[first][1] = UINT_MAX;
             arr[first][2] = UINT_MAX;
+            arr[first][3] = UINT_MAX;
+            arr[first][4] = UINT_MAX;
          
             #pragma region action of Event type A
             if(type == A)
