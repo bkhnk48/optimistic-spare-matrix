@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     unsigned long currentTime = 0;
     unsigned long endTime = defaultSec*((unsigned long)(1000*1000));
 
-    unsigned long arr[384][7];//384 = 6*(k*k*k) as k = 4
+    unsigned int arr[384][5];//384 = 6*(k*k*k) as k = 4
     //= 16*5 + (4*4/2)*((4/2)*4 + 3*(4/2)) + idElementInGroup*4*4 + portID*4 + (type - D);
     //Cach tinh khac:
     //So su kien xay ra tren HOST: (k*k*k/4)*5 = 80
