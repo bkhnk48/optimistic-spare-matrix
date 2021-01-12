@@ -408,14 +408,14 @@ void show(//unsigned long arr[20250][7],
             //unsigned long arr[384][7],
             unsigned int root)
 {
-   if(root != -1 && arr[root][3] != -1)
+   if(root != UINT_MAX && arr[root][1] != -1)
    {
       printf("\n===========> for event type = %d at end = %d in %d\n", 
-               arr[root][0], arr[root][3], arr[root][1]);
+               data[root], arr[root][1], arr[root][1]);
       leaf(//arr, 
-               arr[root][5], LEFT);
+               arr[root][3], LEFT);
       leaf(//arr, 
-               arr[root][6], RIGHT);
+               arr[root][4], RIGHT);
    }
    else{
       printf("===========> left NULL\n");
@@ -424,7 +424,7 @@ void show(//unsigned long arr[20250][7],
 
 void leaf(//unsigned long arr[20250][7], 
             //unsigned long arr[384][7],
-            int root, enum Side side)
+            unsigned int root, enum Side side)
 {
    printf("===========> ");
    if(side == LEFT)
@@ -434,14 +434,14 @@ void leaf(//unsigned long arr[20250][7],
    else{
        printf("right ");
    }
-   if(root != -1 && arr[root][3] != -1)
+   if(root != UINT_MAX && arr[root][3] != -1)
    {
       printf("for event type = %d at end = %d in %d. It's index = %d\n", 
                arr[root][0], arr[root][3], arr[root][1], root);
       leaf(//arr, 
-            arr[root][5], LEFT);
+            arr[root][3], LEFT);
       leaf(//arr, 
-            arr[root][6], RIGHT);
+            arr[root][4], RIGHT);
    }
    else{
       printf("NULL\n");
