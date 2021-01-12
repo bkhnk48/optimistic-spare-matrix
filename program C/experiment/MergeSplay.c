@@ -45,7 +45,7 @@ void removeFirst(unsigned int * first,
 
 void show(//unsigned long arr[20250][7], 
             //unsigned long arr[384][7],
-               int root);
+            unsigned int root);
 void leaf(//unsigned long arr[20250][7], 
             //unsigned long arr[384][7],
                int root, enum Side side);
@@ -406,7 +406,7 @@ void removeFirst(unsigned int * first, unsigned int * root
 
 void show(//unsigned long arr[20250][7], 
             //unsigned long arr[384][7],
-            int root)
+            unsigned int root)
 {
    if(root != -1 && arr[root][3] != -1)
    {
