@@ -34,11 +34,12 @@ void add(int type, int idElementInGroup,
    
 */
 
-void splay(int e//, //unsigned long arr[20250][7]
+void splay(unsigned int e//, //unsigned long arr[20250][7]
                   //unsigned long arr[384][7]
                   );
 
-void removeFirst(int * first, int * root //unsigned long arr[20250][7]
+void removeFirst(unsigned int * first, 
+                  unsigned int * root //unsigned long arr[20250][7]
                      //unsigned long arr[384][7]
                   );
 
@@ -200,7 +201,7 @@ void add(int type, int idElementInGroup,
 
 }
 
-void splay(int e //unsigned long arr[20250][7]
+void splay(unsigned int e //unsigned long arr[20250][7]
                   //unsigned long arr[384][7]
                )
 {
@@ -316,79 +317,83 @@ void splay(int e //unsigned long arr[20250][7]
    }
 }
 
-void removeFirst(int * first, int * root 
+void removeFirst(unsigned int * first, unsigned int * root 
                      //unsigned long arr[20250][7]
                      //unsigned long arr[384][7]
                   )
 {
    //sizeOfTree--;
-   int t = *root;
+   unsigned int t = *root;
    if(t == -1)
    {  
-      *first = -1; 
+      *first = UINT_MAX; 
       return;//return NULL;
    }
-   int temp = t;
-   while(arr[temp][5] != -1)//while(temp->left != NULL)
+   unsigned int temp = t;
+   while(arr[temp][3] != UINT_MAX)//while(temp->left != NULL)
    {
-      temp = arr[temp][5]; //temp = temp->left;
+      temp = arr[temp][3]; //temp = temp->left;
    }
    *first = temp;
    
    splay(*first//, arr
                   );
-   while(arr[t][4] != -1)
+   while(arr[t][2] != UINT_MAX)
    {
-      t = arr[t][4];
+      t = arr[t][2];
    }
 
    int leftTree, rightTree;
-   leftTree = arr[t][5];//leftTree = t->left;
-   if(leftTree != -1)//if(leftTree != NULL)
+   leftTree = arr[t][3];//leftTree = t->left;
+   if(leftTree != UINT_MAX)//if(leftTree != NULL)
    {
-      arr[leftTree][4] = -1;//leftTree->father = NULL;
+      arr[leftTree][2] = UINT_MAX;//leftTree->father = NULL;
    }
-   rightTree = arr[t][6]; //rightTree = t->right;
-   if(rightTree != -1) //if(rightTree != NULL)
-      arr[rightTree][4] = -1; //rightTree->father = NULL;
+   rightTree = arr[t][4]; //rightTree = t->right;
+   if(rightTree != UINT_MAX) //if(rightTree != NULL)
+      arr[rightTree][2] = UINT_MAX; //rightTree->father = NULL;
    int removedFather = 0;
-   if(temp == arr[t][4])//if(temp == t->father)
+   if(temp == arr[t][2])//if(temp == t->father)
    {
         removedFather = 1;
    }  
-   if(rightTree == -1 && 
-            leftTree == -1 && 
+   if(rightTree == UINT_MAX && 
+            leftTree == UINT_MAX && 
                removedFather == 1
-               //if(rightTree == NULL && leftTree == NULL && removedFather == 1
+               //if(rightTree == NULL && leftTree == NULL 
+                  //&& removedFather == 1
             )
    {  
       *first = t; return; //return t;
    }
-   if(rightTree == -1)//if(rightTree == NULL)
+   if(rightTree == UINT_MAX)//if(rightTree == NULL)
    {     
       t = leftTree; //t = leftTree;
    }
-   else if(leftTree == -1) //if(leftTree == NULL)
+   else if(leftTree == UINT_MAX) //if(leftTree == NULL)
    {
       t = rightTree; //t = rightTree;
    }
    else 
    {
-      int newRoot = rightTree; //Tree * newRoot = rightTree;
-      while(arr[newRoot][5] != -1) //while(newRoot->left != NULL)
+      unsigned int newRoot = rightTree; 
+      //Tree * newRoot = rightTree;
+      while(arr[newRoot][3] != UINT_MAX) 
+      //while(newRoot->left != NULL)
       {
-         newRoot = arr[rightTree][5]; //newRoot = rightTree->left;
+         newRoot = arr[rightTree][3]; 
+         //newRoot = rightTree->left;
       }
 
       //splay(newRoot, arr);
       splay(newRoot);
-      while(arr[newRoot][4] != -1)
+      while(arr[newRoot][2] != UINT_MAX)
       {
-         newRoot = arr[newRoot][4];
+         newRoot = arr[newRoot][2];
       }
 
-      arr[newRoot][5] = leftTree; //newRoot->left = leftTree;
-      arr[leftTree][4] = newRoot; //leftTree->father = newRoot;
+      arr[newRoot][3] = leftTree; //newRoot->left = leftTree;
+      arr[leftTree][2] = newRoot; //leftTree->father = newRoot;
       //return newRoot;
       *first = newRoot;
       return;
