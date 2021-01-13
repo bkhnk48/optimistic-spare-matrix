@@ -343,7 +343,7 @@ void removeFirst(unsigned int * first, unsigned int * root
       t = arr[t][2];
    }
 
-   int leftTree, rightTree;
+   unsigned int leftTree, rightTree;
    leftTree = arr[t][3];//leftTree = t->left;
    if(leftTree != UINT_MAX)//if(leftTree != NULL)
    {
