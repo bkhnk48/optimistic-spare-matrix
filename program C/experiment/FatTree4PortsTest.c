@@ -125,7 +125,7 @@ int main(int argc, char** argv) {
                                         );
               if(generateEventC)
                 add(C, i, 0, currentTime +  defaultBias*33
-                              , &root, first
+                              , &root, first + 1
                             );
             }
             #pragma endregion
