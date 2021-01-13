@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
          
             #pragma region get value from data array
             int type = data[first] & 65535;
-            i = data[first] >> 32;
+            i = data[first] >> 32;//idElementInGroup
             arr[first][0] = UINT_MAX;
             arr[first][1] = UINT_MAX;
             arr[first][2] = UINT_MAX;
@@ -154,7 +154,7 @@ int main(int argc, char** argv) {
             #pragma endregion
             }
             else if(type == D){
-
+              int portID = (data[first] >> 16) & MASK_INT;
             }
         }
         ongoingTime = -1;
