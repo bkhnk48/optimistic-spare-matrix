@@ -126,7 +126,7 @@ int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
 int actionD(Packet *ENB, //int *generateEventE,
                 Packet *pkt
                 ){
-    /* This func return 1 means the event E will be generated
+    /* This func returns 1 means the event E will be generated
      * otherwise, no event E will occur.
     */
     int i = 0;
@@ -134,7 +134,7 @@ int actionD(Packet *ENB, //int *generateEventE,
         if(ENB[i].id == -1)
             break;//found empty slot in ENB
     }
-    
+
     return i;
 }
 
