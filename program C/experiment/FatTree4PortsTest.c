@@ -95,6 +95,7 @@ int main(int argc, char** argv) {
         {
             count++;
          
+            #pragma region get value from data array
             int type = data[first] & 65535;
             i = data[first] >> 32;
             arr[first][0] = UINT_MAX;
@@ -102,6 +103,7 @@ int main(int argc, char** argv) {
             arr[first][2] = UINT_MAX;
             arr[first][3] = UINT_MAX;
             arr[first][4] = UINT_MAX;
+            #pragma endregion
          
             #pragma region action of Event type A
             if(type == A)
@@ -150,6 +152,9 @@ int main(int argc, char** argv) {
                         );
               }
             #pragma endregion
+            }
+            else if(type == D){
+
             }
         }
         ongoingTime = -1;
