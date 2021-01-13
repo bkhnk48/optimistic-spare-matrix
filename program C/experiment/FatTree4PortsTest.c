@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
 
     root = UINT_MAX;
 
-    for(i = 0; i < 16; i++)
+    for(i = 0; i < 1; i++)
     {
       idNode = hash(i, HOST, 0, A, k);
       add(0, i, 0, 0, &root//, arr
@@ -156,7 +156,7 @@ int main(int argc, char** argv) {
         removeFirst(&first, &root//, arr
                );
       
-        currentTime = (unsigned long)arr[first][0] << 32 
+        currentTime = ((unsigned long)arr[first][0] << 32)
                                   + arr[first][1];
         ongoingTime = currentTime;
     }
