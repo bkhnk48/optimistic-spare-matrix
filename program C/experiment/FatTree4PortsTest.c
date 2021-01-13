@@ -31,6 +31,7 @@ int main(int argc, char** argv) {
             defaultBias = atoi(argv[3]);
     }
     unsigned long currentTime = 0;
+    int numOfHosts = k*k*k/4;
     unsigned long endTime = defaultSec*((unsigned long)(1000*1000));
 
     //unsigned int arr[384][5];//384 = 6*(k*k*k) as k = 4
@@ -155,6 +156,9 @@ int main(int argc, char** argv) {
             }
             else if(type == D){
               int portID = (data[first] >> 16) & MASK_INT;
+              Packet *ENB = bufferSwitches[i].ENB[portID];
+              int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
+              Packet *pkt = allNodes[idPrevHost].links[0].pkt;
             }
         }
         ongoingTime = -1;
