@@ -111,7 +111,7 @@ int main(int argc, char** argv) {
                 generateEventB = actionA(T, currentTime, &bufferHosts[i]);
                 if(generateEventB){
                   add(B, i, 0, currentTime +  defaultBias*13
-                              , &root, first
+                              , &root, first + 1
                         );  
                 }
             }
@@ -156,8 +156,9 @@ int main(int argc, char** argv) {
         removeFirst(&first, &root//, arr
                );
       
-        currentTime = arr[first][0];
-        ongoingTime = arr[first][0];
+        currentTime = (unsigned long)arr[first][0] << 32 
+                                  + arr[first][1];
+        ongoingTime = currentTime;
     }
 
     return 0;
