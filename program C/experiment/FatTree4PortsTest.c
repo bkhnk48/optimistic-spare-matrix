@@ -71,6 +71,7 @@ int main(int argc, char** argv) {
     int nextIndex;
     int nextPort = 0;
     int generateEventB, generateEventC, generateEventD;
+    int generateEventE;
     int idNode = 0;
     //char* p = malloc(1 * 1024 * 1024 * 1024);
     timing(&wc1, &cpuT);
@@ -159,6 +160,7 @@ int main(int argc, char** argv) {
               Packet *ENB = bufferSwitches[i].ENB[portID];
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
+              generateEventE = actionD(ENB, pkt);
             }
         }
         ongoingTime = -1;
