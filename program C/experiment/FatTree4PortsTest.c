@@ -149,8 +149,8 @@ int main(int argc, char** argv) {
                               , &root, idNode
                         );
               }
-            }
             #pragma endregion
+            }
         }
         ongoingTime = -1;
         removeFirst(&first, &root//, arr
