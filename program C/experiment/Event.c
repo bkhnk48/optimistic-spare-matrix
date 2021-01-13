@@ -20,7 +20,7 @@ enum TypesOfEvent
 
 enum Side{LEFT, RIGHT};
 
-int actionD(BufferSwitch *bufferSwitch, int *generateEventE,
+int actionD(Packet *ENB, int *generateEventE,
                 Packet *pkt
                 );
 
