@@ -161,8 +161,6 @@ int getNeighborIP(int currentIP, enum TypesOfNode typeOfNode,
   return neighborIP;
 }
 
-
-
 NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
   NetworkNode *networkNodes = malloc((numOfSwitches + numOfHosts) 
                                       *sizeof(NetworkNode)
