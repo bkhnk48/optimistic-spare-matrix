@@ -141,7 +141,7 @@ int main(int argc, char** argv) {
                               );
               if(generateEventB)
                 add(B, i, 0, currentTime +  defaultBias*13
-                              , &root, first
+                              , &root, first - 1 
                         ); 
               if(generateEventD){
                 idNode = hash(nextIndex, EDGE_SWITCH, nextPort, D, k);
