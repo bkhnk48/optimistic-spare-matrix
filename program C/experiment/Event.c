@@ -128,9 +128,14 @@ int actionD(Packet *ENB, //int *generateEventE,
                 ){
     /* This func return 1 means the event E will be generated
      * otherwise, no event E will occur.
-     *
     */
+    int i = 0;
+    for(i = 0; i < BUFFER_SIZE; i++){
+        if(ENB[i].id == -1)
+            break;//found empty slot in ENB
+    }
     
+    return i;
 }
 
 /*void loadArray(int a[1000]){
