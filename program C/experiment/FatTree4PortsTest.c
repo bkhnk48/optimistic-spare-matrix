@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
 
     root = UINT_MAX;
 
-    for(i = 0; i < 1; i++)
+    for(i = 0; i < 16; i++)
     {
       idNode = hash(i, HOST, 0, A, k);
       add(0, i, 0, 0, &root//, arr
@@ -161,6 +161,10 @@ int main(int argc, char** argv) {
         ongoingTime = currentTime;
     }
 
+    timing(&wc2, &cpuT);
+    printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
+    printf("================================\n");
+    badness(wc2 - wc1, page_size, proc_statm);
     return 0;
 
 }
