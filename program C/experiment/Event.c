@@ -118,6 +118,13 @@ int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
     }
     return 1;
 }
+
+int actionD(BufferSwitch *bufferHost, int *generateEventE,
+                int dstIP
+                ){
+    
+}
+
 /*void loadArray(int a[1000]){
     printf("fsdfsdf");
    int num;
