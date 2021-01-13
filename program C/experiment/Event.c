@@ -20,6 +20,10 @@ enum TypesOfEvent
 
 enum Side{LEFT, RIGHT};
 
+int actionD(BufferSwitch *bufferSwitch, int *generateEventE,
+                Packet *pkt
+                );
+
 int actionA(int T, 
                 unsigned long currentTime,
                 BufferHost* bufferHost
@@ -119,8 +123,8 @@ int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
     return 1;
 }
 
-int actionD(BufferSwitch *bufferHost, int *generateEventE,
-                int dstIP
+int actionD(Packet *ENB, int *generateEventE,
+                Packet *pkt
                 ){
     
 }
