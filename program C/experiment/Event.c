@@ -145,7 +145,7 @@ int actionD(Packet *ENB, //int *generateEventE,
         pkt->currIP = -1;
 
     }
-    return i;
+    return (i == 0);
 }
 
 /*void loadArray(int a[1000]){
