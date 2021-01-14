@@ -134,7 +134,17 @@ int actionD(Packet *ENB, //int *generateEventE,
         if(ENB[i].id == -1)
             break;//found empty slot in ENB
     }
+    if(i < BUFFER_SIZE - 1){
+        ENB[i].id = pkt->id;
+        pkt->id = -1;
+        ENB[i].srcIP = pkt->srcIP;
+        pkt->srcIP = -1;
+        //ENB[i].currIP = pkt->id
+        ENB[i].dstIP = pkt->dstIP;
+        pkt->dstIP = -1;
+        pkt->currIP = -1;
 
+    }
     return i;
 }
 
