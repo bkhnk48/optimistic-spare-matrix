@@ -160,7 +160,11 @@ int main(int argc, char** argv) {
               Packet *ENB = bufferSwitches[i].ENB[portID];
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
+              printf("Before event D finished, pkt in link has id = %ld ",
+                      allNodes[idPrevHost].links[0].pkt->id);
               generateEventE = actionD(ENB, pkt);
+              printf("after that id = %ld\n",
+                      allNodes[idPrevHost].links[0].pkt->id);
             }
         }
         ongoingTime = -1;
