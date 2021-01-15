@@ -156,11 +156,13 @@ int main(int argc, char** argv) {
             #pragma endregion
             }
             else if(type == D){
+              printf("Event D at switch id = %ld\n", i);
               int portID = (data[first] >> 16) & MASK_INT;
               Packet *ENB = bufferSwitches[i].ENB[portID];
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
-              printf("Before event D finished, pkt in link has id = %ld ",
+              printf("\tBefore event D finished, pkt in link of host %d has id = %ld ",
+                      idPrevHost,
                       allNodes[idPrevHost].links[0].pkt->id);
               generateEventE = actionD(ENB, pkt);
               printf("after that id = %ld\n",
