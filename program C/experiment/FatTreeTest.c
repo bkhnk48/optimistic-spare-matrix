@@ -504,6 +504,7 @@ int main(){
           int host1 = allNodes[i].links[j - 1].nextIndex;
           int host2 = allNodes[i].links[j].nextIndex;
           assert(host1 == host2 - 1);
+          assert(host1 / (k/2) == host2 / (k/2));
         }
       }
       else{
