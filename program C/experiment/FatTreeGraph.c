@@ -191,10 +191,10 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
   }
   
   for(i = numOfHosts; i < numOfHosts + numOfSwitches - (k*k/4); i++){
-    pod = i / (k*k/4 + k);
-    index = i - pod*(k*k/4) - (k*k/4);
+    //pod = (i - numOfHosts)/ (k);
+    index = (i - numOfHosts) % k;
     networkNodes[i].indexInGroup = index;
-    networkNodes[i].indexInNodes = index + pod*((k*k/4) + k) + k*k/4;
+    networkNodes[i].indexInNodes = i;
     currIP = getIPv4OfSwitch(index, k);
     networkNodes[i].ipv4 = currIP;
     networkNodes[i].type = (index % k < k/2 ? EDGE_SWITCH : AGG_SWITCH);
