@@ -509,6 +509,8 @@ int main(){
                         allNodes[i].indexInGroup / k);
           assert(host1 / (k*k/4) == 
                         allNodes[i].indexInGroup / k); 
+          assert(allNodes[host1].links[0].nextIndex == 
+                      i - numServers);
         }
       }
       else{
