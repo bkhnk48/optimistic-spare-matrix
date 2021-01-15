@@ -494,6 +494,7 @@ int main(){
       int subIndex = (i - (k*k*k/4)) % (k);
       if(i < (k*k*k/4)){
         assert(allNodes[i].type == HOST);
+        assert(allNodes[i].indexInGroup == i);
         assert(typeOfNode(allNodes[i].ipv4, k) == HOST);
       }
       else if(subIndex < k/2){
