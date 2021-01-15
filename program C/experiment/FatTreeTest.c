@@ -513,6 +513,13 @@ int main(){
   }
   #pragma endregion
   
+  for(i = 0; i < k*k*k/4 - 1; i++){
+    if(i / (k/2) == (i + 1)/(k/2)){
+      int switch1 = allNodes[i].links[0].nextIndex;
+      int switch2 = allNodes[i + 1].links[0].nextIndex;
+      assert(switch1 == switch2);
+    }
+  }
   testHash(k);
   return 0;
 }
