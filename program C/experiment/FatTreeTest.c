@@ -505,6 +505,10 @@ int main(){
           int host2 = allNodes[i].links[j].nextIndex;
           assert(host1 == host2 - 1);
           assert(host1 / (k/2) == host2 / (k/2));
+          assert(host2 / (k*k/4) == 
+                        allNodes[i].indexInGroup / k);
+          assert(host1 / (k*k/4) == 
+                        allNodes[i].indexInGroup / k); 
         }
       }
       else{
