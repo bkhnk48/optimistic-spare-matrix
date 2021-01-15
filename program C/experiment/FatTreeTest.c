@@ -375,7 +375,7 @@ int main(){
   int k = 4;
   int serverId = 0;
   int delta = 0;
-  int i, p, e, h;
+  int i, j, p, e, h;
   int numEachPod = k*k/4 + k;
   int numServers = k * k * k / 4;
   int numPodSwitches = k * k;
@@ -500,6 +500,11 @@ int main(){
       else if(subIndex < k/2){
         assert(allNodes[i].type == EDGE_SWITCH);
         assert(typeOfNode(allNodes[i].ipv4, k) == EDGE_SWITCH);
+        for(j = 1; j < k/2; j++){
+          int host1 = allNodes[i].links[j - 1].nextIndex;
+          int host2 = allNodes[i].links[j].nextIndex;
+          assert(host1 == host2 - 1);
+        }
       }
       else{
         assert(allNodes[i].type == AGG_SWITCH);
