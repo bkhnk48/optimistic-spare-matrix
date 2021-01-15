@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
 
     root = UINT_MAX;
 
-    for(i = 1; i < 2; i++)
+    for(i = 0; i < 16; i++)
     {
       idNode = hash(i, HOST, 0, A, k);
       add(0, i, 0, 0, &root//, arr
@@ -156,18 +156,11 @@ int main(int argc, char** argv) {
             #pragma endregion
             }
             else if(type == D){
-              printf("Event D at switch id = %ld\n", i + numOfHosts);
               int portID = (data[first] >> 16) & MASK_INT;
               Packet *ENB = bufferSwitches[i].ENB[portID];
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
-              printf("\tport of switch: %d ", portID);
-              printf("Before event D finished, pkt in link of host %d has id = %ld ",
-                      idPrevHost,
-                      allNodes[idPrevHost].links[0].pkt->id);
               generateEventE = actionD(ENB, pkt);
-              printf("after that id = %ld\n",
-                      allNodes[idPrevHost].links[0].pkt->id);
             }
         }
         ongoingTime = -1;
