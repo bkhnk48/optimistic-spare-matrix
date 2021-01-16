@@ -38,11 +38,7 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
             int suffix = destIP & 255;
             suffix -= 2;
             int nextIP = tablesOfSwitches->tables[i].suffixTable[suffix];
-            //printf("Through "); 
-            //printIPv4(edgeIP);
-            //printf(", packet to "); printIPv4(destIP); 
             assert(typeOfNode(nextIP, k) == AGG_SWITCH);
-            //printf(" will be next to AGG SWITCH\n");
           }
         }
       }
@@ -81,7 +77,6 @@ void testBuildingTables(int k, int *addServer, int *addNodes){
         int podOfDest = (destIP << 8) >> 24;
         int nextIP = tablesOfSwitches->tables[i].prefixTable[podOfDest];
         int podOfAgg = (nextIP << 8) >> 24;
-        //printf("pod of dest = %d, pod of agg = %d\n", podOfDest, podOfAgg);
         assert(podOfDest == podOfAgg);
         assert(typeOfNode(nextIP, k) == AGG_SWITCH);
       }
