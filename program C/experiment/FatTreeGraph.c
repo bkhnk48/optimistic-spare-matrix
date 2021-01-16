@@ -70,6 +70,22 @@ int typeOfNode(int ipv4, int k){
   return HOST; //the host
 }
 
+enum TypesOfNode typeOfIndex(int index, int k){
+  if(index < k*k*k/4){
+    return HOST;
+  }
+  int maxPodSwitch = k*k*k/4 + k*k;
+  if(index >= k*k*k/4 && index < maxPodSwitch){
+    index -= k*k*k/4;
+    int isEdge = (index % k) < k/2;
+    return (isEdge ? EDGE_SWITCH : AGG_SWITCH);
+  }
+  if(index < maxPodSwitch + k*k/4){
+    return CORE_SWITCH;
+  }
+  return -1; //Error
+}
+
 int getIndexOfSwitch(int ipv4, int k){
   int node = typeOfNode(ipv4, k);
   if(node == HOST) return ERROR;
