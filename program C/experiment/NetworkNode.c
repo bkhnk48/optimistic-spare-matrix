@@ -14,6 +14,15 @@ enum TypesOfNode
     ERROR = -1
 };
 
+enum StatesOfEXB{
+    X01 = 1, //EXB is not full and able to transfer packet.
+    X00 = 0, /*EXB is not full and unable to transfer packet
+                 (due to the next ENB is full).*/
+    X10 = 2, /*EXB is full and unable to transfer packet 
+                 (due to the next ENB is full).*/
+    X11 = 3  //EXB is full and able to transfer packet.
+};
+
 typedef struct _packet{
     unsigned long id;
     int srcIP;
