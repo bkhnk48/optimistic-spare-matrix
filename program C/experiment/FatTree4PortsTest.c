@@ -57,6 +57,7 @@ int main(int argc, char** argv) {
     buildTables(tablesOfSwitches, k);
     BufferHost *bufferHosts = initBufferHosts(k*k*k/4);
     BufferSwitch *bufferSwitches = initBufferSwitches(k*k*5/4, k);
+    assignTypeOfSwitch(bufferSwitches, k);
     NetworkNode *allNodes = initNetworkNodes(k*k*k/4, 5*k*k/4, k);
 
     setlocale(LC_NUMERIC, "");
