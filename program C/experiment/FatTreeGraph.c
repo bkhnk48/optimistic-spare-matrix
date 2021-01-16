@@ -116,6 +116,14 @@ void printIPv4(int ipv4){
   printf("%d.%d.%d.%d", A, B, C, D);
 }
 
+void assignTypeOfSwitch(BufferSwitch *bufferSwitches, int k){
+  int numOfSwitches = 5*k*k/4;
+  int numOfHosts = k*k*k/4;
+  int i;
+  for(i = 0; i < numOfSwitches; i++){
+    bufferSwitches[i].type = typeOfIndex(i + numOfHosts, k);
+  }
+}
 
 int getNeighborIP(int currentIP, enum TypesOfNode typeOfNode,
                       int port, int k){
