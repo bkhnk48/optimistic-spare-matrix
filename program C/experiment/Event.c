@@ -127,7 +127,7 @@ int actionD(Packet *ENB, //int *generateEventE,
                 Packet *pkt
                 ){
     /* This func returns 1 means the event E will be generated
-     * otherwise, no event E will occur.
+     * otherwise, no new event E will occur.
     */
     int i = 0;
     for(i = 0; i < BUFFER_SIZE; i++){
