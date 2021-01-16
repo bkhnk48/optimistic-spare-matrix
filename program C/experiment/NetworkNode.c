@@ -17,7 +17,9 @@ enum TypesOfNode
 enum StatesOfEXB{
     X01 = 1, //EXB is not full and able to transfer packet.
     X00 = 0, /*EXB is not full and unable to transfer packet
-                 (due to the next ENB is full).*/
+                 (due to the next ENB is full
+                 or EXB already chooses a packet
+                 ).*/
     X10 = 2, /*EXB is full and unable to transfer packet 
                  (due to the next ENB is full).*/
     X11 = 3  //EXB is full and able to transfer packet.
