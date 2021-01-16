@@ -145,7 +145,10 @@ int actionD(Packet *ENB, //int *generateEventE,
         pkt->currIP = -1;
 
     }
-    return (i == 0);
+    int generateEventE = 0;
+    if(i == 0){//Packet is ahead of all other ones on ENB
+
+    }
 }
 
 /*void loadArray(int a[1000]){
