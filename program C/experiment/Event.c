@@ -121,6 +121,7 @@ int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
     
     link[0].pkt->id = packetID;
     link[0].pkt->dstIP = dstIP;
+    link[0].pkt->state = P3;//the packet is moved in a unidirectional way.
 
     bufferHost->countNextENB--;
 
@@ -150,6 +151,7 @@ int actionD(Packet *ENB, //int *generateEventE,
         ENB[i].dstIP = pkt->dstIP;
         pkt->dstIP = -1;
         pkt->currIP = -1;
+        pkt->state = P_NULL;
 
     }
     int generateEventE = 0;
