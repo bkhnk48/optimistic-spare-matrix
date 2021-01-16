@@ -21,7 +21,8 @@ enum TypesOfEvent
 enum Side{LEFT, RIGHT};
 
 int actionD(Packet *ENB, //int *generateEventE,
-                Packet *pkt
+                Packet *pkt,
+                int currIP
                 );
 
 int actionA(int T, 
@@ -132,7 +133,8 @@ int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
 }
 
 int actionD(Packet *ENB, //int *generateEventE,
-                Packet *pkt
+                Packet *pkt,
+                int currIP
                 ){
     /* This func returns 1 means the event E will be generated
      * otherwise, no new event E will occur.
