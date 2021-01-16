@@ -31,13 +31,14 @@ enum StatesOfPkt{
     P4bis = 7, //the packet is choosen to move on the next EXB
     P5 = 5, //the packet is located at EXB of switch.
     P6 = 6  //the packet is received by the destination node.
-}
+};
 
 typedef struct _packet{
     unsigned long id;
     int srcIP;
     int dstIP;
     int currIP;
+    enum StatesOfPkt state;
 }Packet;
 
 typedef struct _link{
