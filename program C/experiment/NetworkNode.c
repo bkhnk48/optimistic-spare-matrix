@@ -23,6 +23,16 @@ enum StatesOfEXB{
     X11 = 3  //EXB is full and able to transfer packet.
 };
 
+enum StatesOfPkt{
+    P1 = 1, //the packet is generated.
+    P2 = 2, //the packet is located at EXB of the source node.
+    P3 = 3, //the packet is moved in a unidirectional way.
+    P4 = 4, //the packet is located at ENB of switch.
+    P4bis = 7, //the packet is choosen to move on the next EXB
+    P5 = 5, //the packet is located at EXB of switch.
+    P6 = 6  //the packet is received by the destination node.
+}
+
 typedef struct _packet{
     unsigned long id;
     int srcIP;
