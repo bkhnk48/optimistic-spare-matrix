@@ -116,6 +116,10 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
         for(j = 0; j < k; j++){
             bufferSwitches[i].countNextENB[j] = BUFFER_SIZE;
         }
+        bufferSwitches[i].stsEXB = malloc(k*sizeof(int));
+        for(j = 0; j < k; j++){
+            bufferSwitches[i].stsEXB[j] = X01;
+        }
     }
     return bufferSwitches;
 }
