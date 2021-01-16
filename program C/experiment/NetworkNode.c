@@ -58,10 +58,12 @@ typedef struct _bufferHost{
 
 typedef struct _bufferSwitch{
     int indexInGroup;
+    enum TypesOfNode type;
     //int indexInNodes;
     Packet **ENB;
     Packet **EXB;
     int *countNextENB;
+    enum StatesOfEXB *stsEXB;
 } BufferSwitch;
 
 BufferHost *initBufferHosts(int numOfHosts){
