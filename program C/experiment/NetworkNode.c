@@ -24,6 +24,7 @@ enum StatesOfEXB{
 };
 
 enum StatesOfPkt{
+    P_NULL = -1,  //the packet disappeared.
     P1 = 1, //the packet is generated.
     P2 = 2, //the packet is located at EXB of the source node.
     P3 = 3, //the packet is moved in a unidirectional way.
