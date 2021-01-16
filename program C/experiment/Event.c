@@ -113,8 +113,15 @@ int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
         }
     }
 
+    if(packetID == -1)
+    {
+        *generateEventB = 0;
+        return 0;
+    }
+    
     link[0].pkt->id = packetID;
     link[0].pkt->dstIP = dstIP;
+
     bufferHost->countNextENB--;
 
     if(isFull && bufferHost->firstSQ != -1){
