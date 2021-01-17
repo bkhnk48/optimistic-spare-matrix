@@ -109,7 +109,6 @@ int next(int srcIP, int currIP, int destIP, int k,
   int subnetOfSrc = (srcIP >> 8) & 255;
   int subnetOfDest = (destIP >> 8) & 255;
   if(currIP == srcIP){
-    //won't update exbID
     return getNeighborIP(srcIP, HOST, 0, k);
   }
   else{
