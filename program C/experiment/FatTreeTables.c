@@ -76,9 +76,32 @@ void buildTables(Tables *tablesOfSwitches, int k){
   #pragma endregion
 }
 
+int getEXB_ID(int nextIP, int typeOfCurr, int k){
+  int pod = (nextIP >> 16) & 255;
+  if(typeOfCurr == CORE_SWITCH){
+    return pod;
+  }
+  if(typeOfCurr == AGG_SWITCH){
+    if(pod == k){//nextIP is of CORE
+      int i = nextIP & 255;
+      return (i + k/2 - 1);
+    }
+    else{
+      int _switch = (nextIP >> 8) & 255;
+      return _switch;
+    }
+  }
+  if(typeOfCurr == EDGE_SWITCH){
+    int ID = nextIP & 255;
+    return (ID - 2);
+  }
+  return -1;
+
+}
+
 //int next(int source, int current, int destination, int k) {
 int next(int srcIP, int currIP, int destIP, int k, 
-            RoutingTable *table
+            RoutingTable *table, int *exbID
           ) {
   int nextIP ;
   int podOfSrc = (srcIP >> 16) & 255;
@@ -86,6 +109,7 @@ int next(int srcIP, int currIP, int destIP, int k,
   int subnetOfSrc = (srcIP >> 8) & 255;
   int subnetOfDest = (destIP >> 8) & 255;
   if(currIP == srcIP){
+    //won't update exbID
     return getNeighborIP(srcIP, HOST, 0, k);
   }
   else{
@@ -100,6 +124,7 @@ int next(int srcIP, int currIP, int destIP, int k,
     if(typeOfSwitch == CORE_SWITCH){
       nextIP = //tablesOfSwitches->tables[i].
                 table->prefixTable[podOfDst];
+      
       return nextIP;
     }  
     if(typeOfSwitch == AGG_SWITCH){
