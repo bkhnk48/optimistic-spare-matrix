@@ -101,7 +101,7 @@ int getEXB_ID(int nextIP, int typeOfCurr, int k){
 
 //int next(int source, int current, int destination, int k) {
 int next(int srcIP, int currIP, int destIP, int k, 
-            RoutingTable *table, int *exbID
+            RoutingTable *table
           ) {
   int nextIP ;
   int podOfSrc = (srcIP >> 16) & 255;
