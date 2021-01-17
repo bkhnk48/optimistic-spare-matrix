@@ -80,8 +80,6 @@ void buildTables(Tables *tablesOfSwitches, int k){
 int next(int srcIP, int currIP, int destIP, int k, 
             RoutingTable *table
           ) {
-  //int srcIP = getIPv4OfHost(source, k);
-  //int destIP = getIPv4OfHost(destination, k);
   int nextIP ;
   int podOfSrc = (srcIP >> 16) & 255;
   int podOfDst = (destIP >> 16) & 255;
@@ -123,9 +121,14 @@ int next(int srcIP, int currIP, int destIP, int k,
       int subnetOfEdge = (currIP >> 8) & 255;
       if(subnetOfDest != subnetOfEdge 
           || podOfDst != podOfCurr){
-        nextIP = //tablesOfSwitches->tables[i].
-                  table->suffixTable[suffix];
+        //If destination host is not the same subnet of edge
+        //Or pod of dest is not the pod of edge    
+        nextIP = table->suffixTable[suffix];
         return nextIP;
+      }
+      else{
+        //Dest host is one of the neighbor of edge
+        return destIP;
       }
     }
   }
