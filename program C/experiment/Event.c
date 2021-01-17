@@ -22,7 +22,8 @@ enum Side{LEFT, RIGHT};
 
 int actionD(Packet *ENB, //int *generateEventE,
                 Packet *pkt,
-                int currIP
+                int currIP,
+                int nextPort
                 );
 
 int actionA(int T, 
@@ -134,7 +135,8 @@ int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
 
 int actionD(Packet *ENB, //int *generateEventE,
                 Packet *pkt,
-                int currIP
+                int currIP,
+                int nextPort
                 ){
     /* This func returns 1 means the event E will be generated
      * otherwise, no new event E will occur.
