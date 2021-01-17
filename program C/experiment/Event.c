@@ -148,9 +148,10 @@ int actionD(Packet *ENB, //int *generateEventE,
         ENB[i].id = pkt->id;
         pkt->id = -1;
         ENB[i].srcIP = pkt->srcIP;
-        pkt->srcIP = -1;
         //ENB[i].currIP = pkt->id
         ENB[i].dstIP = pkt->dstIP;
+        ENB[i].state = P4;
+        pkt->srcIP = -1;
         pkt->dstIP = -1;
         pkt->currIP = -1;
         pkt->state = P_NULL;
