@@ -99,7 +99,7 @@ int main(int argc, char** argv) {
             count++;
          
             #pragma region get value from data array
-            int type = data[first] & 65535;
+            int type = data[first] & 65535;//type of event
             i = data[first] >> 32;//idElementInGroup
             arr[first][0] = UINT_MAX;
             arr[first][1] = UINT_MAX;
