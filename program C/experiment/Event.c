@@ -133,11 +133,8 @@ int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
     return 1;
 }
 
-int actionD(Packet *ENB, //int *generateEventE,
-                Packet *pkt,
-                int currIP,
-                int nextPort
-                ){
+int receivePacket(Packet *ENB, 
+                Packet *pkt){
     /* This func returns 1 means the event E will be generated
      * otherwise, no new event E will occur.
     */
@@ -150,15 +147,23 @@ int actionD(Packet *ENB, //int *generateEventE,
         ENB[i].id = pkt->id;
         pkt->id = -1;
         ENB[i].srcIP = pkt->srcIP;
-        ENB[i].currIP = currIP;
+        
         ENB[i].dstIP = pkt->dstIP;
         ENB[i].state = P4;
         pkt->srcIP = -1;
         pkt->dstIP = -1;
         pkt->currIP = -1;
         pkt->state = P_NULL;
-
     }
+    return i;
+}
+
+int actionD(Packet *ENB, //int *generateEventE,
+                Packet *pkt,
+                int i,
+                int nextPort
+                ){
+    
     int generateEventE = 0;
     if(i == 0){//Packet is ahead of all other ones on ENB
 
