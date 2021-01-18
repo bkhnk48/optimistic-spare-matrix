@@ -162,6 +162,13 @@ int main(int argc, char** argv) {
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
               int posInENB = receivePacket(ENB, pkt);
+              if(posInENB == 0){
+                int nextIP = next(ENB[0].srcIP, allNodes[i + numOfHosts].ipv4,
+                                    ENB[0].dstIP,
+                                    k, tablesOfSwitches[i].tables
+                                  );
+                
+              }
               //printf("At switch %ld, pos in ENB = %d\n", i, posInENB);
 
               /*generateEventE = actionD(ENB, pkt, 
