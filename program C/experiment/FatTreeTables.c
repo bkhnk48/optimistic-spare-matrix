@@ -93,7 +93,7 @@ int getEXB_ID(int nextIP, int typeOfCurr, int k){
   }
   if(typeOfCurr == EDGE_SWITCH){
     int ID = nextIP & 255;
-    if(ID == 1){//nextIP is pod switch
+    if(ID == 1){//nextIP is AGG switch
       int _switch = (nextIP >> 8) & 255;
       return _switch;
     }
