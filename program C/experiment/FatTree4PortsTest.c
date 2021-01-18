@@ -161,8 +161,13 @@ int main(int argc, char** argv) {
               Packet *ENB = bufferSwitches[i].ENB[portID];
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
-              generateEventE = actionD(ENB, pkt, 
-                                  allNodes[i + numOfHosts].ipv4);
+              int posInENB = receivePacket(ENB, pkt);
+              //printf("At switch %ld, pos in ENB = %d\n", i, posInENB);
+
+              /*generateEventE = actionD(ENB, pkt, 
+                                  allNodes[i + numOfHosts].ipv4,
+                                  -1
+                                  );*/
             }
         }
         ongoingTime = -1;
