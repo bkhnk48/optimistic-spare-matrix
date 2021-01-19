@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
 
     root = UINT_MAX;
 
-    for(i = 0; i < 16; i++)
+    for(i = 0; i < 1; i++)
     {
       idNode = hash(i, HOST, 0, A, k);
       add(0, i, 0, 0, &root//, arr
@@ -161,13 +161,16 @@ int main(int argc, char** argv) {
               Packet *ENB = bufferSwitches[i].ENB[portID];
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
-              int posInENB = receivePacket(ENB, pkt);
+              int posInENB = receivePacket(&bufferSwitches[i], 
+                                              ENB, pkt);
               if(posInENB == 0){
-                int nextIP = next(ENB[0].srcIP, allNodes[i + numOfHosts].ipv4,
+                int nextIP = next(ENB[0].srcIP, 
+                                  allNodes[i + numOfHosts].ipv4,
                                     ENB[0].dstIP,
                                     k, tablesOfSwitches[i].tables
                                   );
-                
+                int nextEXB = getEXB_ID(nextIP, 
+                                typeOfIndex(i + numOfHosts, k), k);
               }
               //printf("At switch %ld, pos in ENB = %d\n", i, posInENB);
 
