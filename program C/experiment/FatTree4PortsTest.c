@@ -18,6 +18,7 @@ int main(int argc, char** argv) {
     long page_size = sysconf(_SC_PAGESIZE);
     int k = 4;
     int PACKET_SIZE = 12*1000; //12KB
+    int SWITCH_CYCLE = 100;
     int packets_per_sec = 1000;//each sec generated 1000 packets
     int T = 1000000;
     int BANDWIDTH_HOST = 12*1000*1000;//12MByte/s
@@ -79,7 +80,7 @@ int main(int argc, char** argv) {
 
     root = UINT_MAX;
 
-    for(i = 2; i < 3; i++)
+    for(i = 0; i < 16; i++)
     {
       idNode = hash(i, HOST, 0, A, k);
       add(0, i, 0, 0, &root//, arr
@@ -177,6 +178,14 @@ int main(int argc, char** argv) {
                 generateEventE = actionD(portID, 
                                           bufferSwitches[i].EXB[nextEXB],
                                           &bufferSwitches[i].stsEXBs[nextEXB]);
+                if(generateEventE){
+                  idNode = hash(i, EDGE_SWITCH, nextEXB, E, k);
+                  //printf("first = %d, port of ENB = %d, id new node = %d, port of EXB = %d\n", 
+                  //        first, portID, nextEXB, idNode);
+                  add(E, i, nextEXB, currentTime + SWITCH_CYCLE
+                              , &root, idNode
+                        );
+                }
               }
               //printf("At switch %ld, pos in ENB = %d\n", i, posInENB);
 
