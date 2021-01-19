@@ -176,7 +176,7 @@ int main(int argc, char** argv) {
                                 typeOfIndex(i + numOfHosts, k), k);
                 generateEventE = actionD(portID, 
                                           bufferSwitches[i].EXB[nextEXB],
-                                          bufferSwitches[i].stsEXBs[nextEXB]);
+                                          &bufferSwitches[i].stsEXBs[nextEXB]);
               }
               //printf("At switch %ld, pos in ENB = %d\n", i, posInENB);
 
