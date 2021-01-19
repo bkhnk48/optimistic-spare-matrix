@@ -161,7 +161,7 @@ int main(int argc, char** argv) {
               Packet *ENB = bufferSwitches[i].ENB[portID];
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
-              int posInENB = receivePacket(&bufferSwitches[i], 
+              int posInENB = receivePacket(&bufferSwitches[i].stsENBs[portID], 
                                               ENB, pkt);
               if(posInENB == 0){
                 int nextIP = next(ENB[0].srcIP, 
