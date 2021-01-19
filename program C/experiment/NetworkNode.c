@@ -116,6 +116,7 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
                 temp1[j][buff].srcIP = -1;
                 temp1[j][buff].dstIP = -1;
                 temp1[j][buff].currIP = -1;
+                temp1[j][buff].state = P_NULL;
             }
         }
         bufferSwitches[i].ENB = temp1;
@@ -128,6 +129,7 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
                 temp2[j][buff].srcIP = -1;
                 temp2[j][buff].dstIP = -1;
                 temp2[j][buff].currIP = -1;
+                temp2[j][buff].state = P_NULL;
             }
         }
         bufferSwitches[i].EXB = temp2;
