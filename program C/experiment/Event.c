@@ -22,7 +22,7 @@ enum Side{LEFT, RIGHT};
 
 int actionD(int portENB, //int *generateEventE,
                 Packet *EXB,
-                enum StatesOfEXB stateEXB
+                enum StatesOfEXB *stateEXB
                 );
 
 int actionA(int T, 
@@ -162,12 +162,12 @@ int receivePacket(enum StatesOfENB *stateENB,
 
 int actionD(int portENB, //int *generateEventE,
                 Packet *EXB,
-                enum StatesOfEXB stateEXB
+                enum StatesOfEXB *stateEXB
                 ){
     
     int generateEventE = 0;
     int i = 0;
-    if(stateEXB == X01 || stateEXB == X00){
+    if(*stateEXB == X01 || *stateEXB == X00){
         //EXB is not full
         for(i = 0; i < BUFFER_SIZE; i++){
             if(EXB[i].srcIP == -1 && 
@@ -183,6 +183,8 @@ int actionD(int portENB, //int *generateEventE,
             EXB[i].state = P_NULL;
             generateEventE = 1;
         }
+        else
+            *stateEXB = (*stateEXB == X01) ? X11 : X10;
     }
     return generateEventE;
 }
