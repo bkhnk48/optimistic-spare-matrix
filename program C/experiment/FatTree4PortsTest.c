@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
 
     root = UINT_MAX;
 
-    for(i = 0; i < 1; i++)
+    for(i = 2; i < 3; i++)
     {
       idNode = hash(i, HOST, 0, A, k);
       add(0, i, 0, 0, &root//, arr
@@ -170,7 +170,7 @@ int main(int argc, char** argv) {
                 int nextIP = next(ENB[0].srcIP, 
                                   allNodes[i + numOfHosts].ipv4,
                                     ENB[0].dstIP,
-                                    k, tablesOfSwitches[i].tables
+                                    k, &(tablesOfSwitches->tables[i])
                                   );
                 int nextEXB = getEXB_ID(nextIP, 
                                 typeOfIndex(i + numOfHosts, k), k);
