@@ -182,7 +182,7 @@ int main(int argc, char** argv) {
                 if(generateEventE){
                   idNode = hash(i, EDGE_SWITCH, nextEXB, E, k);
                   //printf("first = %d, port of ENB = %d, id new node = %d, port of EXB = %d\n", 
-                  //        first, portID, nextEXB, idNode);
+                  //        first, portID, idNode, nextEXB);
                   add(E, i, nextEXB, currentTime + SWITCH_CYCLE
                               , &root, idNode
                         );
