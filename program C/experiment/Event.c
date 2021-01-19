@@ -133,7 +133,8 @@ int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
     return 1;
 }
 
-int receivePacket(Packet *ENB, 
+int receivePacket(BufferSwitch *bufferSwitch, 
+                    Packet *ENB, 
                 Packet *pkt){
     /* This func returns 1 means the event E will be generated
      * otherwise, no new event E will occur.
@@ -155,11 +156,13 @@ int receivePacket(Packet *ENB,
         pkt->currIP = -1;
         pkt->state = P_NULL;
     }
+    //if(i == BUFFER_SIZE - 1)
+    //    bufferSwitch.
     return i;
 }
 
 int actionD(Packet *ENB, //int *generateEventE,
-                Packet *pkt,
+                Packet *EXB,
                 int i,
                 int nextPort
                 ){
