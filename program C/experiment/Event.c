@@ -20,10 +20,9 @@ enum TypesOfEvent
 
 enum Side{LEFT, RIGHT};
 
-int actionD(Packet *ENB, //int *generateEventE,
-                Packet *pkt,
-                int currIP,
-                int nextPort
+int actionD(int portENB, //int *generateEventE,
+                Packet *EXB,
+                enum StatesOfEXB stateEXB
                 );
 
 int actionA(int T, 
@@ -163,17 +162,25 @@ int receivePacket(enum StatesOfENB *stateENB,
 
 int actionD(int portENB, //int *generateEventE,
                 Packet *EXB,
-                int i,
-                enum StatesOfEXB *stateEXB
+                enum StatesOfEXB stateEXB
                 ){
     
     int generateEventE = 0;
-    if(i == 0){//Packet is ahead of all other ones on ENB
-        if(*stateEXB == X01 || *stateEXB == X00){
-            //EXB is not full
-            EXB->id = portENB;
+    int i = 0;
+    if(stateEXB == X01 || stateEXB == X00){
+        //EXB is not full
+        for(i = 0; i < BUFFER_SIZE; i++){
+            if(EXB[i].srcIP == -1 && 
+                   EXB[i].dstIP == -1)
+                break;//found empty slot in EXB
         }
+        EXB[i].id = portENB;
+        EXB[i].srcIP = -1;
+        EXB[i].dstIP = -1;
+        EXB[i].state = P_NULL;
+        generateEventE = 1;
     }
+    return generateEventE;
 }
 
 /*void loadArray(int a[1000]){
