@@ -166,6 +166,7 @@ int main(int argc, char** argv) {
                                               ENB, pkt);
               //printf("AFTER that state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
               if(posInENB == 0){
+              //Packet is ahead of all other ones on ENB
                 int nextIP = next(ENB[0].srcIP, 
                                   allNodes[i + numOfHosts].ipv4,
                                     ENB[0].dstIP,
@@ -173,6 +174,9 @@ int main(int argc, char** argv) {
                                   );
                 int nextEXB = getEXB_ID(nextIP, 
                                 typeOfIndex(i + numOfHosts, k), k);
+                generateEventE = actionD(portID, 
+                                          bufferSwitches[i].EXB[nextEXB],
+                                          bufferSwitches[i].stsEXBs[nextEXB]);
               }
               //printf("At switch %ld, pos in ENB = %d\n", i, posInENB);
 
