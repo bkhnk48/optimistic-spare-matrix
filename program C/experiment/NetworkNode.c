@@ -25,6 +25,11 @@ enum StatesOfEXB{
     X11 = 3  //EXB is full and able to transfer packet.
 };
 
+enum StatesOfENB{
+    N0 = 0, //ENB is not full.
+    N1 = 1  //ENB is full.
+};
+
 enum StatesOfPkt{
     P_NULL = -1,  //the packet disappeared.
     P1 = 1, //the packet is generated.
@@ -77,6 +82,7 @@ typedef struct _bufferSwitch{
     Packet **ENB;
     Packet **EXB;
     int *countNextENB;
+    enum StatesOfENB *stsENB;
     enum StatesOfEXB *stsEXB;
 } BufferSwitch;
 
@@ -130,6 +136,11 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
         for(j = 0; j < k; j++){
             bufferSwitches[i].countNextENB[j] = BUFFER_SIZE;
         }
+        bufferSwitches[i].stsENB = malloc(k*sizeof(int));
+        for(j = 0; j < k; j++){
+            bufferSwitches[i].stsENB[j] = N0;
+        }
+
         bufferSwitches[i].stsEXB = malloc(k*sizeof(int));
         for(j = 0; j < k; j++){
             bufferSwitches[i].stsEXB[j] = X01;
