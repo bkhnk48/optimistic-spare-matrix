@@ -82,8 +82,8 @@ typedef struct _bufferSwitch{
     Packet **ENB;
     Packet **EXB;
     int *countNextENB;
-    enum StatesOfENB *stsENB;
-    enum StatesOfEXB *stsEXB;
+    enum StatesOfENB *stsENBs;
+    enum StatesOfEXB *stsEXBs;
 } BufferSwitch;
 
 BufferHost *initBufferHosts(int numOfHosts){
@@ -136,14 +136,14 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
         for(j = 0; j < k; j++){
             bufferSwitches[i].countNextENB[j] = BUFFER_SIZE;
         }
-        bufferSwitches[i].stsENB = malloc(k*sizeof(int));
+        bufferSwitches[i].stsENBs = malloc(k*sizeof(int));
         for(j = 0; j < k; j++){
-            bufferSwitches[i].stsENB[j] = N0;
+            bufferSwitches[i].stsENBs[j] = N0;
         }
 
-        bufferSwitches[i].stsEXB = malloc(k*sizeof(int));
+        bufferSwitches[i].stsEXBs = malloc(k*sizeof(int));
         for(j = 0; j < k; j++){
-            bufferSwitches[i].stsEXB[j] = X01;
+            bufferSwitches[i].stsEXBs[j] = X01;
         }
     }
     return bufferSwitches;
