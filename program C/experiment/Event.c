@@ -171,14 +171,18 @@ int actionD(int portENB, //int *generateEventE,
         //EXB is not full
         for(i = 0; i < BUFFER_SIZE; i++){
             if(EXB[i].srcIP == -1 && 
-                   EXB[i].dstIP == -1)
+                   EXB[i].dstIP == -1
+                   && EXB[i].id == -1
+                   )
                 break;//found empty slot in EXB
         }
-        EXB[i].id = portENB;
-        EXB[i].srcIP = -1;
-        EXB[i].dstIP = -1;
-        EXB[i].state = P_NULL;
-        generateEventE = 1;
+        if(i < BUFFER_SIZE){
+            EXB[i].id = portENB;
+            EXB[i].srcIP = -1;
+            EXB[i].dstIP = -1;
+            EXB[i].state = P_NULL;
+            generateEventE = 1;
+        }
     }
     return generateEventE;
 }
