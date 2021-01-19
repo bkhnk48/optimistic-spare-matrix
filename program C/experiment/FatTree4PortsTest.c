@@ -137,7 +137,7 @@ int main(int argc, char** argv) {
             #pragma endregion
             
             else if(type == C){
-            #pragma region action of Event type C
+              #pragma region action of Event type C
               nextIndex = allNodes[i].links[0].nextIndex;
               nextPort = allNodes[i].links[0].nextPort;
               generateEventB = 0;
@@ -158,6 +158,7 @@ int main(int argc, char** argv) {
             #pragma endregion
             }
             else if(type == D){
+              #pragma region action of Event type D
               int portID = (data[first] >> 16) & MASK_INT;
               Packet *ENB = bufferSwitches[i].ENB[portID];
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
@@ -187,12 +188,7 @@ int main(int argc, char** argv) {
                         );
                 }
               }
-              //printf("At switch %ld, pos in ENB = %d\n", i, posInENB);
-
-              /*generateEventE = actionD(ENB, pkt, 
-                                  allNodes[i + numOfHosts].ipv4,
-                                  -1
-                                  );*/
+              #pragma endregion
             }
         }
         ongoingTime = -1;
