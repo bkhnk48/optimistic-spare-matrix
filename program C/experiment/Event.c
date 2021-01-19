@@ -161,15 +161,18 @@ int receivePacket(enum StatesOfENB *stateENB,
     return i;
 }
 
-int actionD(Packet *ENB, //int *generateEventE,
+int actionD(int portENB, //int *generateEventE,
                 Packet *EXB,
                 int i,
-                int nextPort
+                enum StatesOfEXB *stateEXB
                 ){
     
     int generateEventE = 0;
     if(i == 0){//Packet is ahead of all other ones on ENB
-
+        if(*stateEXB == X01 || *stateEXB == X00){
+            //EXB is not full
+            EXB->id = portENB;
+        }
     }
 }
 
