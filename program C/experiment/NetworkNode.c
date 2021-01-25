@@ -139,6 +139,7 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
                 temp2[j][buff].dstIP = -1;
                 //temp2[j][buff].currIP = -1;
                 temp2[j][buff].state = P_NULL;
+                temp2[j][buff].requestedTime = -1;
             }
         }
         bufferSwitches[i].EXB = temp2;
