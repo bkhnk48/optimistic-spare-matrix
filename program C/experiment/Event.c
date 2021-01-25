@@ -21,7 +21,7 @@ enum TypesOfEvent
 enum Side{LEFT, RIGHT};
 
 int actionD(int portENB, //int *generateEventE,
-                Packet *EXB,
+                StoredPacket *EXB,
                 enum StatesOfEXB *stateEXB
                 );
 
@@ -163,7 +163,7 @@ int receivePacket(enum StatesOfENB *stateENB,
 }
 
 int actionD(int portENB, //int *generateEventE,
-                Packet *EXB,
+                StoredPacket *EXB,
                 enum StatesOfEXB *stateEXB
                 ){
     
