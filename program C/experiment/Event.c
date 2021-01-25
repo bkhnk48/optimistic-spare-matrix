@@ -179,13 +179,13 @@ int actionD(int portENB, //int *generateEventE,
                 couldSendPacket = 1;
                 break;//found empty slot in EXB
             }
-            if(EXB[i].srcIP == -1 && 
+            /*if(EXB[i].srcIP == -1 && 
                    EXB[i].dstIP == -1
                    && EXB[i].id != -1
                    ){
                 couldSendPacket = 0;
                 break;//EXB will pick up one packet from several incomming ones
-            }
+            }*/
         }
         if(i < BUFFER_SIZE){
             EXB[i].id = portENB;
