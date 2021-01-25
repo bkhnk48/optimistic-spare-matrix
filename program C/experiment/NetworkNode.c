@@ -46,9 +46,17 @@ typedef struct _packet{
     int srcIP;
     int dstIP;
     int currIP;
-    int generatedTime;
+    unsigned long generatedTime;
     enum StatesOfPkt state;
 }Packet;
+
+typedef struct _storedPacket{
+    unsigned long id;
+    int srcIP;
+    int dstIP;
+    unsigned long requestedTime;
+    enum StatesOfPkt state;
+}StoredPacket;
 
 typedef struct _link{
     Packet *pkt;
@@ -81,7 +89,7 @@ typedef struct _bufferSwitch{
     enum TypesOfNode type;
     //int indexInNodes;
     Packet **ENB;
-    Packet **EXB;
+    StoredPacket **EXB;
     int *countNextENB;
     enum StatesOfENB *stsENBs;
     enum StatesOfEXB *stsEXBs;
