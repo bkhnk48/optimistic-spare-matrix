@@ -1,6 +1,7 @@
 all: serial
 
 serial: 
+	gcc -pg -c -g ShiftBits.c
 	gcc -pg -c Event.c
 	gcc -pg -c memory.c -lm
 	gcc -pg -c timing.c
@@ -24,6 +25,7 @@ serial:
 	gcc FatTreeTest.c -g -o ftg.o
 	gcc FatTree4PortsTest.c -g -o f4t.o -lm
 n:
+	gcc -c ShiftBits.c
 	gcc -c Event.c
 	gcc -c memory.c -lm
 	gcc -c timing.c
