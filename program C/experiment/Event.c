@@ -167,14 +167,24 @@ int actionD(int portENB, //int *generateEventE,
     
     int generateEventE = 0;
     int i = 0;
+    int couldSendPacket = 0;
     if(*stateEXB == X01 || *stateEXB == X00){
         //EXB is not full
         for(i = 0; i < BUFFER_SIZE; i++){
             if(EXB[i].srcIP == -1 && 
                    EXB[i].dstIP == -1
                    && EXB[i].id == -1
-                   )
+                   ){
+                couldSendPacket = 1;
                 break;//found empty slot in EXB
+            }
+            if(EXB[i].srcIP == -1 && 
+                   EXB[i].dstIP == -1
+                   && EXB[i].id != -1
+                   ){
+                couldSendPacket = 0;
+                break;//EXB will pick up one packet from several incomming ones
+            }
         }
         if(i < BUFFER_SIZE){
             EXB[i].id = portENB;
