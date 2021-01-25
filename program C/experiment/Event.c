@@ -22,7 +22,8 @@ enum Side{LEFT, RIGHT};
 
 int actionD(int portENB, //int *generateEventE,
                 StoredPacket *EXB,
-                enum StatesOfEXB *stateEXB
+                enum StatesOfEXB *stateEXB,
+                unsigned long currentTime
                 );
 
 int actionA(int T, 
