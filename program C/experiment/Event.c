@@ -189,9 +189,9 @@ int actionD(int portENB, //int *generateEventE,
             }*/
         }
         if(i < BUFFER_SIZE){
-            int j = i - 1;
-            if(j < 0){
-                generateEventE = 1;
+            int j = i - 1;//Kiem tra goi tin o truoc o trong
+            if(j < 0){//neu khong co goi tin nhu the
+                generateEventE = 1;//tao event E
             }
             else {
                 if(EXB[i].srcIP == -1 &&
