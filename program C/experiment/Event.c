@@ -209,6 +209,7 @@ int actionD(int portENB, //int *generateEventE,
                         //it means
                         //EXB[j].requestedTime == currentTime
                         generateEventE = 1;
+                        i = j;//backward to the previous index j
                     }
                 }
             }
