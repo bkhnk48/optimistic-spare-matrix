@@ -198,10 +198,11 @@ int actionD(int portENB, //int *generateEventE,
             else {//neu truoc o trong co mot o khac
                 if(EXB[j].srcIP == -1 &&
                     EXB[j].dstIP == -1 &&
-                    EXB[j].id != -1 &&
+                    EXB[j].id != -1
                     ){
-                    if(EXB[j].requestedTime <= currentTime)
+                    if(EXB[j].requestedTime < currentTime)
                         generateEventE = 1;
+                    
                 }
             }
             if(generateEventE){
