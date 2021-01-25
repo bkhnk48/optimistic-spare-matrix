@@ -91,7 +91,7 @@ int actionB(BufferHost *bufferHost, Packet *pktInLink//, Packet *connectedENB
 }
 
 int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
-                int dstIP
+                int dstIP, int T
                 ){
     int packetID = -1;
     int isFull = 0; 
@@ -121,7 +121,8 @@ int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
     }
     
     link[0].pkt->id = packetID;
-    link[0].pkt->generatedTime = packetID*T;//Khong on neu viec sinh goi tin khong theo chu ky
+    link[0].pkt->generatedTime = (unsigned long)packetID*T;
+    //Khong on neu viec sinh goi tin khong theo chu ky
     link[0].pkt->dstIP = dstIP;
     link[0].pkt->state = P3;//the packet is moved in a unidirectional way.
 
