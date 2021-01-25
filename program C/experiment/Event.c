@@ -208,7 +208,7 @@ int actionD(int portENB, //int *generateEventE,
                     else{
                         //it means
                         //EXB[j].requestedTime == currentTime
-
+                        generateEventE = 1;
                     }
                 }
             }
