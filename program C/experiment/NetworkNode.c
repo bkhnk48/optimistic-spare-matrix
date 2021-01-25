@@ -46,6 +46,7 @@ typedef struct _packet{
     int srcIP;
     int dstIP;
     int currIP;
+    int generatedTime;
     enum StatesOfPkt state;
 }Packet;
 
