@@ -193,7 +193,7 @@ int main(int argc, char** argv) {
             else if(type == E){
               #pragma region action of Event type E
               int portID = (data[first] >> 16) & MASK_INT;
-              Packet *ENB = bufferSwitches[i].EXB[portID];
+              //Packet *ENB = bufferSwitches[i].EXB[portID];
               #pragma endregion
             }
         }
