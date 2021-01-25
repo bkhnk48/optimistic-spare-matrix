@@ -129,7 +129,7 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
             }
         }
         bufferSwitches[i].ENB = temp1;
-        Packet **temp2 = NULL;
+        StoredPacket **temp2 = NULL;
         temp2 = malloc(sizeof * temp2 * k);
         for(j = 0; j < k; j++){
             temp2[j] = malloc(sizeof * temp2[j] * BUFFER_SIZE);
@@ -137,7 +137,7 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
                 temp2[j][buff].id = -1;
                 temp2[j][buff].srcIP = -1;
                 temp2[j][buff].dstIP = -1;
-                temp2[j][buff].currIP = -1;
+                //temp2[j][buff].currIP = -1;
                 temp2[j][buff].state = P_NULL;
             }
         }
