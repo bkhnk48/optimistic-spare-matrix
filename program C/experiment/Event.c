@@ -196,12 +196,12 @@ int actionD(int portENB, //int *generateEventE,
                 generateEventE = 1;//tao event E
             }
             else {//neu truoc o trong co mot o khac
-                if(EXB[i].srcIP == -1 &&
-                    EXB[i].dstIP == -1 &&
-                    EXB[i].id != -1 &&
-                    EXB[i].requestedTime == currentTime
+                if(EXB[j].srcIP == -1 &&
+                    EXB[j].dstIP == -1 &&
+                    EXB[j].id != -1 &&
                     ){
-
+                    if(EXB[j].requestedTime <= currentTime)
+                        generateEventE = 1;
                 }
             }
             if(generateEventE){
@@ -209,6 +209,7 @@ int actionD(int portENB, //int *generateEventE,
                 EXB[i].srcIP = -1;
                 EXB[i].dstIP = -1;
                 EXB[i].state = P_NULL;
+                EXB[i].requestedTime = currentTime;
             }
             
         }
