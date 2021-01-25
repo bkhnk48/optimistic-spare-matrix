@@ -188,11 +188,23 @@ int actionD(int portENB, //int *generateEventE,
             }*/
         }
         if(i < BUFFER_SIZE){
-            EXB[i].id = portENB;
-            EXB[i].srcIP = -1;
-            EXB[i].dstIP = -1;
-            EXB[i].state = P_NULL;
-            generateEventE = 1;
+            int j = i - 1;
+            if(j < 0){
+                generateEventE = 1;
+            }
+            else {
+                if(EXB[i].srcIP == -1 &&
+                    EXB[i].dstIP == -1){
+
+                }
+            }
+            if(generateEventE){
+                EXB[i].id = portENB;
+                EXB[i].srcIP = -1;
+                EXB[i].dstIP = -1;
+                EXB[i].state = P_NULL;
+            }
+            
         }
         else
             *stateEXB = (*stateEXB == X01) ? X11 : X10;
