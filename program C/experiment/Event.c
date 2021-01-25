@@ -200,9 +200,12 @@ int actionD(int portENB, //int *generateEventE,
                     EXB[j].dstIP == -1 &&
                     EXB[j].id != -1
                     ){
-                    if(EXB[j].requestedTime < currentTime)
+                    if(EXB[j].requestedTime < currentTime){
                         generateEventE = 1;
-                    
+                    }
+                    else{
+
+                    }
                 }
             }
             if(generateEventE){
