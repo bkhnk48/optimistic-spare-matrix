@@ -164,7 +164,8 @@ int receivePacket(enum StatesOfENB *stateENB,
 
 int actionD(int portENB, //int *generateEventE,
                 StoredPacket *EXB,
-                enum StatesOfEXB *stateEXB
+                enum StatesOfEXB *stateEXB,
+                unsigned long currentTime
                 ){
     
     int generateEventE = 0;
@@ -193,9 +194,12 @@ int actionD(int portENB, //int *generateEventE,
             if(j < 0){//neu khong co goi tin nhu the
                 generateEventE = 1;//tao event E
             }
-            else {
+            else {//neu truoc o trong co mot o khac
                 if(EXB[i].srcIP == -1 &&
-                    EXB[i].dstIP == -1){
+                    EXB[i].dstIP == -1 &&
+                    EXB[i].id != -1 &&
+                    EXB[i].requestedTime == currentTime
+                    ){
 
                 }
             }
