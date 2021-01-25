@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "NetworkNode.c"
+#include "ShiftBits.c"
 
 #ifndef _TYPES_OF_EVENT_
 #define _TYPES_OF_EVENT_
@@ -201,9 +202,12 @@ int actionD(int portENB, //int *generateEventE,
                     EXB[j].id != -1
                     ){
                     if(EXB[j].requestedTime < currentTime){
-                        generateEventE = 1;
+                        generateEventE = 
+                            (BUFFER_SIZE - 1 > j + getCount(EXB[j].id));
                     }
                     else{
+                        //it means
+                        //EXB[j].requestedTime == currentTime
 
                     }
                 }
