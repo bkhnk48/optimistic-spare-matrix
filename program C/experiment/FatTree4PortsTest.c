@@ -143,7 +143,7 @@ int main(int argc, char** argv) {
               generateEventB = 0;
               generateEventD = actionC(&bufferHosts[i], 
                               allNodes[i].links, &generateEventB,
-                              getIPv4OfHost(pairs[i], k)
+                              getIPv4OfHost(pairs[i], k), T
                               );
               if(generateEventB)
                 add(B, i, 0, currentTime +  defaultBias*13
