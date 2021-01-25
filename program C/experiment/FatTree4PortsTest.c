@@ -178,7 +178,9 @@ int main(int argc, char** argv) {
                                 typeOfIndex(i + numOfHosts, k), k);
                 generateEventE = actionD(portID, 
                                           bufferSwitches[i].EXB[nextEXB],
-                                          &bufferSwitches[i].stsEXBs[nextEXB]);
+                                          &bufferSwitches[i].stsEXBs[nextEXB],
+                                          currentTime
+                                          );
                 if(generateEventE){
                   idNode = hash(i, EDGE_SWITCH, nextEXB, E, k);
                   //printf("first = %d, port of ENB = %d, id new node = %d, port of EXB = %d\n", 
