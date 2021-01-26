@@ -408,10 +408,10 @@ void show(//unsigned long arr[20250][7],
             //unsigned long arr[384][7],
             unsigned int root)
 {
-   if(root != UINT_MAX && arr[root][1] != -1)
+   if(root != UINT_MAX && arr[root][2] != -1)
    {
-      printf("\n===========> for event type = %ld at end = %d in %d\n", 
-               data[root], arr[root][1], arr[root][1]);
+      printf("\n===========> for event type = %ld at end = %ld \n", 
+               data[root] & 65535, ((unsigned long)arr[root][0] << 32) + arr[root][1]);
       leaf(//arr, 
                arr[root][3], LEFT);
       leaf(//arr, 
