@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
     unsigned int first = UINT_MAX;
     int defaultSec = 1;
     int defaultBias = 0;
-    int k = 4;
+    int k = 8;
     int PACKET_SIZE = 12*1000; //12KB
     int SWITCH_CYCLE = 100;
     int packets_per_sec = 1000;//each sec generated 1000 packets
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
 
     root = UINT_MAX;
 
-    for(i = 0; i < k/2; i++)//Only test first k/2 hosts
+    for(i = 0; i < 2; i++)//Only test first k/2 hosts
     {
       idNode = hash(i, HOST, 0, A, k);
       add(0, i, 0, 0, &root//, arr
@@ -170,6 +170,8 @@ int main(int argc, char** argv) {
                                     ENB[0].dstIP,
                                     k, &(tablesOfSwitches->tables[i])
                                   );
+                //if(first == 643)
+                  
                 int nextEXB = getEXB_ID(nextIP, 
                                 typeOfIndex(i + numOfHosts, k), k);
                 generateEventE = actionD(portID, 
@@ -179,8 +181,6 @@ int main(int argc, char** argv) {
                                           );
                 if(generateEventE){
                   idNode = hash(i, EDGE_SWITCH, nextEXB, E, k);
-                  //printf("first = %d, port of ENB = %d, id new node = %d, port of EXB = %d\n", 
-                  //        first, portID, idNode, nextEXB);
                   add(E, i, nextEXB, currentTime + SWITCH_CYCLE
                               , &root, idNode
                         );
@@ -191,6 +191,7 @@ int main(int argc, char** argv) {
             else if(type == E){
               #pragma region action of Event type E
               int portID = (data[first] >> 16) & MASK_INT;
+              printf("Event E\n");
               //Packet *ENB = bufferSwitches[i].EXB[portID];
               #pragma endregion
             }
