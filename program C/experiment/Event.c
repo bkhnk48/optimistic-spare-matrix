@@ -214,7 +214,8 @@ int actionD(int portENB, //int *generateEventE,
                 }
             }
             if(generateEventE){
-                EXB[i].id = portENB;
+                //EXB[i].id = portENB;
+                EXB[i].id = increase(EXB[i].id, portENB);
                 EXB[i].srcIP = -1;
                 EXB[i].dstIP = -1;
                 EXB[i].state = P_NULL;
