@@ -191,7 +191,11 @@ int main(int argc, char** argv) {
             else if(type == E){
               #pragma region action of Event type E
               int portID = (data[first] >> 16) & MASK_INT;
-              printf("Event E\n");
+              assert(portID == k/2 - 1 || (portID == 0));
+              if(portID == k/2 - 1){
+                
+              }
+              //printf("Event E at port = %d\n", portID);
               //Packet *ENB = bufferSwitches[i].EXB[portID];
               #pragma endregion
             }
@@ -204,6 +208,6 @@ int main(int argc, char** argv) {
                                   + arr[first][1];
         ongoingTime = currentTime;
     }
-
+    printf("\n\nFINISH !!!!!!!!!!!! ^_^....\n");
     return 0;
 }
