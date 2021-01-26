@@ -35,6 +35,8 @@ int main(int argc, char** argv) {
     int numOfHosts = k*k*k/4;
     unsigned long endTime = defaultSec*((unsigned long)(1000*1000));
 
+    unsigned long i, j;
+    unsigned int N, root = UINT_MAX;
     //unsigned int arr[384][5];//384 = 6*(k*k*k) as k = 4
     //= 16*5 + (4*4/2)*((4/2)*4 + 3*(4/2)) + idElementInGroup*4*4 + portID*4 + (type - D);
     //Cach tinh khac:
@@ -42,16 +44,17 @@ int main(int argc, char** argv) {
     //So su kien xay ra tren Edge: (4*(k/2) + 3*(k/2))*k*k/2 = 14*8 = 112
     //So su kien xay ra tren Switch: (4*k)*3*k*k/4 = 3*k*k*k = 192
     //Tong: 80 + 112 + 192 = 80 + 304 = 384 (6*k*k*k)
-    unsigned long i, j;
-    unsigned int N, root = UINT_MAX;
-    for(i = 0; i < 384; i++)
-    {
-      for(j = 0; j < 5; j++)
-      {
-         arr[i][j] = UINT_MAX;
-      }
+    
+
+    arr = malloc(sizeof * arr * (6*k*k*k));
+    for(j = 0; j < 6*k*k*k; j++){
+        arr[j] = malloc(sizeof * arr[j] * 5);
+        for(i = 0; i < 5; i++){
+            arr[i][j] = UINT_MAX;
+        }
     }
 
+    
     int *pairs = NULL;
     pairs = Stride(8, k);
     Tables *tablesOfSwitches = malloc(sizeof(Tables));
