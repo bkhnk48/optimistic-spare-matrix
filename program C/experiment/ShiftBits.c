@@ -16,4 +16,15 @@ int getMin(unsigned long id){
 int getMax(unsigned long id){
     return ((id >> 32) & USHRT_MAX);
 }
+
+int increase(unsigned long id, int portENB){
+    if(id == -1){
+        id = 0;
+        id |= 1;
+        id |= (portENB << 16);
+        return id;
+    }
+
+    return id;
+}
 #endif
