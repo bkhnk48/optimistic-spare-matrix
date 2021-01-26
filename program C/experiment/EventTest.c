@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
 
     root = UINT_MAX;
 
-    for(i = 0; i < 2; i++)//Only test first k/2 hosts
+    for(i = 0; i < k/2; i++)//Only test first k/2 hosts
     {
       idNode = hash(i, HOST, 0, A, k);
       add(0, i, 0, 0, &root//, arr
