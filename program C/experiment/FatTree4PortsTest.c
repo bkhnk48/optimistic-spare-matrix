@@ -47,11 +47,13 @@ int main(int argc, char** argv) {
     
 
     arr = malloc(sizeof * arr * (6*k*k*k));
-    for(j = 0; j < 6*k*k*k; j++){
-        arr[j] = malloc(sizeof * arr[j] * 5);
-        for(i = 0; i < 5; i++){
+    data = malloc((6*k*k*k)*sizeof(unsigned long));
+    for(i = 0; i < 6*k*k*k; i++){
+        arr[i] = malloc(sizeof * arr[i] * 5);
+        for(j = 0; j < 5; j++){
             arr[i][j] = UINT_MAX;
         }
+        data[i] = 0;
     }
 
     
