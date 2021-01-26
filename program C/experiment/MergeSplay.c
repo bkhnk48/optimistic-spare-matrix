@@ -3,8 +3,8 @@
 #include "Event.c"
 #include <limits.h>
 
-unsigned long data[384];
-unsigned int arr[384][5];
+unsigned long *data; //[384];
+unsigned int **arr; //[384][5];
 const unsigned long RIGHT_MASK = 0x7fffffff;
 const unsigned long LEFT_MASK = ((unsigned long)0x7fffffff << 32);
 const int MASK_INT = 65535;
