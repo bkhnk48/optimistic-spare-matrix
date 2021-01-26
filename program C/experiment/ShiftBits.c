@@ -41,8 +41,8 @@ int increase(unsigned long id, int portENB){
         }
         id = 0;
         id |= (unsigned short)count;
-        id |= ((unsigned short)min << 16);
-        id |= ((unsigned short)max << 32);
+        id |= (min << 16);
+        id |= ((unsigned long)max << 32);
         return id;
     }
 
