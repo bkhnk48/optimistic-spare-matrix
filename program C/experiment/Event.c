@@ -201,19 +201,22 @@ int actionD(int portENB, //int *generateEventE,
                     EXB[j].dstIP == -1 &&
                     EXB[j].id != -1
                     ){
+
                     if(EXB[j].requestedTime < currentTime){
                         generateEventE = 
-                            (BUFFER_SIZE - 1 > j + getCount(EXB[j].id));
+                           (BUFFER_SIZE - 1 > j + getCount(EXB[j].id));
+                        couldSendPacket = generateEventE;
                     }
                     else{
                         //it means
                         //EXB[j].requestedTime == currentTime
-                        generateEventE = 1;
+                        generateEventE = 0;
+                        couldSendPacket = 1;
                         i = j;//backward to the previous index j
                     }
                 }
             }
-            if(generateEventE){
+            if(generateEventE || couldSendPacket){
                 //EXB[i].id = portENB;
                 EXB[i].id = increase(EXB[i].id, portENB);
                 if(EXB[i].srcIP != -1){
