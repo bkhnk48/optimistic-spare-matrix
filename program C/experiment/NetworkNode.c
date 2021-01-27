@@ -158,6 +158,11 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
         for(j = 0; j < k; j++){
             bufferSwitches[i].stsEXBs[j] = X01;
         }
+
+        bufferSwitches[i].requestedTimeOfENB = malloc(k*sizeof(unsigned long));
+        for(j = 0; j < k; j++){
+            bufferSwitches[i].requestedTimeOfENB[j] = 0;
+        }
     }
     return bufferSwitches;
 }
