@@ -170,11 +170,13 @@ int main(int argc, char** argv) {
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
               //printf("Before receive state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
               int posInENB = receivePacket(&bufferSwitches[i].stsENBs[portID], 
-                                              ENB, pkt);
+                                              ENB, 
+                                              bufferSwitches[i].requestedTimeOfENB[portID], 
+                                              currentTime,
+                                              pkt);
               //printf("AFTER that state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
               if(posInENB == 0){
               //Packet is ahead of all other ones on ENB
-                bufferSwitches[i].requestedTimeOfENB[portID] = currentTime;
                 int nextIP = next(ENB[0].srcIP, 
                                   allNodes[i + numOfHosts].ipv4,
                                     ENB[0].dstIP,
