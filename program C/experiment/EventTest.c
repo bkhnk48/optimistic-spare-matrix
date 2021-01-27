@@ -192,6 +192,7 @@ int main(int argc, char** argv) {
               #pragma region action of Event type E
               int portID = (data[first] >> 16) & MASK_INT;
               assert(portID == k/2 - 1 || (portID == 0));
+              StoredPacket *EXB = bufferSwitches[i].EXB[portID];
               if(portID == k/2 - 1){
                 
               }
