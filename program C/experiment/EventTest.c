@@ -197,7 +197,17 @@ int main(int argc, char** argv) {
               int portID = (data[first] >> 16) & MASK_INT;
               assert(portID == k/2 - 1 || (portID == 0));
               StoredPacket *EXB = bufferSwitches[i].EXB[portID];
+              int found = 0;
               if(portID == k/2 - 1){
+                for(j = 0; j < BUFFER_SIZE; j++){
+                  if(EXB[j].dstIP == -1 
+                        && EXB[j].srcIP == -1 
+                        && EXB[j].id != -1){
+                    found = 1;
+                    break;
+                  }
+                }
+                assert(found == 1);
                 
               }
               //printf("Event E at port = %d\n", portID);
