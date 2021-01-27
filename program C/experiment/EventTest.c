@@ -208,7 +208,19 @@ int main(int argc, char** argv) {
                   }
                 }
                 assert(found == 1);
-                
+                int count = getCount(EXB[j].id);
+                int countRequestedTime = 0;
+                int m;
+                for(m = 0; m < k; m++){
+                  if(bufferSwitches[i].requestedTimeOfENB[m] 
+                          == EXB[j].requestedTime)
+                  {
+                      countRequestedTime++;
+                  }
+                }
+
+                printf("count = %d, countRequestedTime = %d\n", count, countRequestedTime);
+                assert(count == countRequestedTime);
               }
               //printf("Event E at port = %d\n", portID);
               //Packet *ENB = bufferSwitches[i].EXB[portID];
