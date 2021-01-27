@@ -93,6 +93,7 @@ typedef struct _bufferSwitch{
     int *countNextENB;
     enum StatesOfENB *stsENBs;
     enum StatesOfEXB *stsEXBs;
+    unsigned long *requestedTimeOfENB;
 } BufferSwitch;
 
 BufferHost *initBufferHosts(int numOfHosts){
