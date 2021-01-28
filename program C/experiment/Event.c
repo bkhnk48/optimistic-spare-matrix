@@ -138,8 +138,8 @@ int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
 
 int receivePacket(enum StatesOfENB *stateENB, 
                     Packet *ENB, 
-                    unsigned long *requestedTime,
-                    unsigned long currentTime,
+                    //unsigned long *requestedTime,
+                    //unsigned long currentTime,
                     Packet *pkt){
     /* This func returns 1 means the event E will be generated
      * otherwise, no new event E will occur.
@@ -160,9 +160,9 @@ int receivePacket(enum StatesOfENB *stateENB,
         pkt->dstIP = -1;
         pkt->currIP = -1;
         pkt->state = P_NULL;
-        if(i == 0){
-            *requestedTime = currentTime;
-        }
+        //if(i == 0){
+        //    *requestedTime = currentTime;
+        //}
     }
     if(i == BUFFER_SIZE - 1)
         *stateENB = N1;
@@ -235,8 +235,13 @@ int actionD(int portENB, //int *generateEventE,
     return generateEventE;
 }
 
-void signEXB_ID(int EXB_ID){
-    
+void signEXB_ID(int EXB_ID, int *registeredEXB){
+    *registeredEXB = EXB_ID;
+}
+
+void signRequestedTime(unsigned long *requestedTime, 
+                            unsigned long currentTime){
+    *requestedTime = currentTime;
 }
 /*void loadArray(int a[1000]){
     printf("fsdfsdf");
