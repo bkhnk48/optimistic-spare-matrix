@@ -23,8 +23,9 @@ int main(int argc, char** argv) {
     if(argc >= 2)
     {
         k = atoi(argv[1]);
-        defaultSec = atoi(argv[2]);
-        if(argc >= 3)
+        if(argc > 2)
+          defaultSec = atoi(argv[2]);
+        if(argc > 3)
             defaultBias = atoi(argv[3]);
     }
 
@@ -230,7 +231,6 @@ int main(int argc, char** argv) {
                   }
                 }
 
-                printf("count = %d, countRequestedTime = %d\n", count, countRequestedTime);
                 assert(count == countRequestedTime);
               }
               //printf("Event E at port = %d\n", portID);
