@@ -176,7 +176,12 @@ int main(int argc, char** argv) {
                   
                 int nextEXB = getEXB_ID(nextIP, 
                                 typeOfIndex(i + numOfHosts, k), k);
-                //signEXB_ID()
+                //this func has two params: 
+                // + nextEXB: the port ID of the next EXB
+                // + registeredEXB[portID]: the array's element to store the nextEXB
+                //additional info: portID - ID of ENB in which outgoing packet 
+                signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[portID]);
+                
                 generateEventE = actionD(portID, 
                                           bufferSwitches[i].EXB[nextEXB],
                                           &bufferSwitches[i].stsEXBs[nextEXB],
