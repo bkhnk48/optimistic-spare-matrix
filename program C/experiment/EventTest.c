@@ -163,12 +163,12 @@ int main(int argc, char** argv) {
               //printf("Before receive state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
               int posInENB = receivePacket(&bufferSwitches[i].stsENBs[portID], 
                                               ENB, 
+                                              &bufferSwitches[i].requestedTimeOfENB[portID],
+                                              currentTime,
                                               pkt);
               //printf("AFTER that state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
               if(posInENB == 0){
               //Packet is ahead of all other ones on ENB
-                signRequestedTime(&bufferSwitches[i].requestedTimeOfENB[portID],
-                                              currentTime);
                 assert(bufferSwitches[i].requestedTimeOfENB[portID] == currentTime);
                 
                 int nextIP = next(ENB[0].srcIP, 
