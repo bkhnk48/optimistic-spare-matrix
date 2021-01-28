@@ -235,7 +235,9 @@ int actionD(int portENB, //int *generateEventE,
     return generateEventE;
 }
 
-
+void signEXB_ID(int EXB_ID){
+    
+}
 /*void loadArray(int a[1000]){
     printf("fsdfsdf");
    int num;
