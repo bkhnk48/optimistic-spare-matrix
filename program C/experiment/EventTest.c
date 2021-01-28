@@ -166,6 +166,9 @@ int main(int argc, char** argv) {
               //printf("AFTER that state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
               if(posInENB == 0){
               //Packet is ahead of all other ones on ENB
+                signRequestedTime(&bufferSwitches[i].requestedTimeOfENB[portID],
+                                              currentTime);
+                assert(bufferSwitches[i].requestedTimeOfENB[portID] == currentTime);
                 
                 int nextIP = next(ENB[0].srcIP, 
                                   allNodes[i + numOfHosts].ipv4,
@@ -187,10 +190,7 @@ int main(int argc, char** argv) {
                                           currentTime
                                           );
                 if(generateEventE){
-                  signRequestedTime(&bufferSwitches[i].requestedTimeOfENB[portID],
-                                              currentTime);
-                  assert(bufferSwitches[i].requestedTimeOfENB[portID] == currentTime);
-                
+                  
                   idNode = hash(i, EDGE_SWITCH, nextEXB, E, k);
                   add(E, i, nextEXB, currentTime + SWITCH_CYCLE
                               , &root, idNode
@@ -220,7 +220,11 @@ int main(int argc, char** argv) {
                 int m;
                 for(m = 0; m < k; m++){
                   if(bufferSwitches[i].requestedTimeOfENB[m] 
-                          == EXB[j].requestedTime)
+                          == EXB[j].requestedTime
+                      && 
+                        bufferSwitches[i].registeredEXBs[m]
+                          == portID
+                          )
                   {
                       countRequestedTime++;
                   }
