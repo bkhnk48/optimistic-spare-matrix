@@ -240,6 +240,7 @@ int actionOfD(int portID, BufferSwitch *bufferSwitch,
                 NetworkNode *node, int currentTime,
                 int k){
     int generateEventE = 0;
+    Packet *ENB = bufferSwitch->ENB[portID];
     
     return generateEventE;
 }
