@@ -171,7 +171,9 @@ int main(int argc, char** argv) {
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
               //printf("Before receive state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
               int posInENB = receivePacket(&bufferSwitches[i].stsENBs[portID], 
-                                              ENB, 
+                                              ENB,
+                                              &bufferSwitches[i].requestedTimeOfENB[portID],
+                                              currentTime, 
                                               pkt);
               //printf("AFTER that state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
               if(posInENB == 0){
