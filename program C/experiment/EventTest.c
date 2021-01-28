@@ -167,7 +167,6 @@ int main(int argc, char** argv) {
               if(posInENB == 0){
               //Packet is ahead of all other ones on ENB
                 
-                assert(bufferSwitches[i].requestedTimeOfENB[portID] == currentTime);
                 int nextIP = next(ENB[0].srcIP, 
                                   allNodes[i + numOfHosts].ipv4,
                                     ENB[0].dstIP,
@@ -181,7 +180,7 @@ int main(int argc, char** argv) {
                 // + registeredEXB[portID]: the array's element to store the nextEXB
                 //additional info: portID - ID of ENB in which outgoing packet 
                 signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[portID]);
-                
+
                 generateEventE = actionD(portID, 
                                           bufferSwitches[i].EXB[nextEXB],
                                           &bufferSwitches[i].stsEXBs[nextEXB],
@@ -190,6 +189,8 @@ int main(int argc, char** argv) {
                 if(generateEventE){
                   signRequestedTime(&bufferSwitches[i].requestedTimeOfENB[portID],
                                               currentTime);
+                  assert(bufferSwitches[i].requestedTimeOfENB[portID] == currentTime);
+                
                   idNode = hash(i, EDGE_SWITCH, nextEXB, E, k);
                   add(E, i, nextEXB, currentTime + SWITCH_CYCLE
                               , &root, idNode
