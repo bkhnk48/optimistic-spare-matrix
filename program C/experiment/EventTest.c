@@ -158,6 +158,8 @@ int main(int argc, char** argv) {
               #pragma region action of Event type D
               int portID = (data[first] >> 16) & MASK_INT;
               Packet *ENB = bufferSwitches[i].ENB[portID];
+              actionOfD(portID, &bufferSwitches[i], &allNodes[i + numOfHosts],
+                          currentTime, k);
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
               //printf("Before receive state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
