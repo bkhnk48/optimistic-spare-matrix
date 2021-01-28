@@ -158,16 +158,16 @@ int main(int argc, char** argv) {
               #pragma region action of Event type D
               int portID = (data[first] >> 16) & MASK_INT;
               Packet *ENB = bufferSwitches[i].ENB[portID];
-              actionOfD(portID, &bufferSwitches[i], &allNodes[i + numOfHosts],
-                          currentTime, k);
+              
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
-              //printf("Before receive state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
+              
               int posInENB = receivePacket(&bufferSwitches[i].stsENBs[portID], 
                                               ENB, 
                                               &bufferSwitches[i].requestedTimeOfENB[portID],
                                               currentTime,
                                               pkt);
+              
               //printf("AFTER that state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
               if(posInENB == 0){
               //Packet is ahead of all other ones on ENB
@@ -180,7 +180,7 @@ int main(int argc, char** argv) {
                                   );
                   
                 int nextEXB = getEXB_ID(nextIP, 
-                                typeOfIndex(i + numOfHosts, k), k);
+                                allNodes[i + numOfHosts].type, k);
                 //this func has two params: 
                 // + nextEXB: the port ID of the next EXB
                 // + registeredEXB[portID]: the array's element to store the nextEXB
@@ -235,8 +235,7 @@ int main(int argc, char** argv) {
 
                 assert(count == countRequestedTime);
               }
-              //printf("Event E at port = %d\n", portID);
-              //Packet *ENB = bufferSwitches[i].EXB[portID];
+              
               #pragma endregion
             }
         }
