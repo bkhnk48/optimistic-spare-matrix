@@ -176,7 +176,6 @@ int main(int argc, char** argv) {
               if(posInENB == 0){
               //Packet is ahead of all other ones on ENB
                 
-                assert(bufferSwitches[i].requestedTimeOfENB[portID] == currentTime);
                 int nextIP = next(ENB[0].srcIP, 
                                   allNodes[i + numOfHosts].ipv4,
                                     ENB[0].dstIP,
