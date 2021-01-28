@@ -94,7 +94,7 @@ typedef struct _bufferSwitch{
     enum StatesOfENB *stsENBs;
     enum StatesOfEXB *stsEXBs;
     unsigned long *requestedTimeOfENB;
-    int *registedEXBs;
+    int *registeredEXBs;
 } BufferSwitch;
 
 BufferHost *initBufferHosts(int numOfHosts){
@@ -165,9 +165,9 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
             bufferSwitches[i].requestedTimeOfENB[j] = 0;
         }
 
-        bufferSwitches[i].registedEXBs = malloc(k*sizeof(int));
+        bufferSwitches[i].registeredEXBs = malloc(k*sizeof(int));
         for(j = 0; j < k; j++){
-            bufferSwitches[i].registedEXBs[j] = -1;
+            bufferSwitches[i].registeredEXBs[j] = -1;
         }
     }
     return bufferSwitches;
