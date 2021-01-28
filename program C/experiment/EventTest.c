@@ -219,9 +219,12 @@ int main(int argc, char** argv) {
                 }
                 assert(found == 1);
                 int count = getCount(EXB[j].id);
+                int min = getMin(EXB[j].id);
+                int max = getMax(EXB[j].id);
+                printf("min = %d, max = %d\n", min, max);
                 int countRequestedTime = 0;
                 int m;
-                for(m = 0; m < k; m++){
+                for(m = min; m <= max; m++){
                   if(bufferSwitches[i].requestedTimeOfENB[m] 
                           == EXB[j].requestedTime
                       && 
