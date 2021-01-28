@@ -236,14 +236,7 @@ int actionD(int portENB, //int *generateEventE,
 }
 
 
-int actionOfD(int portID, BufferSwitch *bufferSwitch, 
-                NetworkNode *node, int currentTime,
-                int k){
-    int generateEventE = 0;
-    Packet *ENB = bufferSwitch->ENB[portID];
-    
-    return generateEventE;
-}
+
 
 void signEXB_ID(int EXB_ID, int *registeredEXB){
     *registeredEXB = EXB_ID;
