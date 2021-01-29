@@ -222,7 +222,10 @@ int main(int argc, char** argv) {
                 int min = getMin(EXB[j].id);
                 int max = getMax(EXB[j].id);
                 int countRequestedTime = 0;
-                int m;
+                int m = min;
+                unsigned long soonestPkt = 
+                              bufferSwitches[i].ENB[min][0].generatedTime;
+                int pickUp = min;
                 for(m = min; m <= max; m++){
                   if(bufferSwitches[i].requestedTimeOfENB[m] 
                           == EXB[j].requestedTime
@@ -231,10 +234,15 @@ int main(int argc, char** argv) {
                           == portID
                           )
                   {
-                      countRequestedTime++;
+                    if(soonestPkt > bufferSwitches[i].ENB[m][0].generatedTime)
+                    {
+                      soonestPkt = bufferSwitches[i].ENB[m][0].generatedTime;
+                      pickUp = m;
+                    } 
+                    countRequestedTime++;
                   }
                 }
-
+                assert(pickUp >= min && pickUp <= max);
                 assert(count == countRequestedTime);
               }
               
