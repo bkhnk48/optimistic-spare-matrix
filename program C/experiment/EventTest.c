@@ -221,7 +221,6 @@ int main(int argc, char** argv) {
                 int count = getCount(EXB[j].id);
                 int min = getMin(EXB[j].id);
                 int max = getMax(EXB[j].id);
-                printf("min = %d, max = %d\n", min, max);
                 int countRequestedTime = 0;
                 int m;
                 for(m = min; m <= max; m++){
