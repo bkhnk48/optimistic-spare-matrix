@@ -208,7 +208,8 @@ int main(int argc, char** argv) {
               assert(portID == k/2 - 1 || (portID == 0));
               StoredPacket *EXB = bufferSwitches[i].EXB[portID];
               int found = 0;
-              if(portID == k/2 - 1){
+              //if(portID == 0)
+              {
                 for(j = 0; j < BUFFER_SIZE; j++){
                   if(EXB[j].dstIP == -1 
                         && EXB[j].srcIP == -1 
@@ -226,23 +227,39 @@ int main(int argc, char** argv) {
                 unsigned long soonestPkt = 
                               bufferSwitches[i].ENB[min][0].generatedTime;
                 int pickUp = min;
-                for(m = min; m <= max; m++){
-                  if(bufferSwitches[i].requestedTimeOfENB[m] 
-                          == EXB[j].requestedTime
-                      && 
-                        bufferSwitches[i].registeredEXBs[m]
-                          == portID
-                          )
-                  {
-                    if(soonestPkt > bufferSwitches[i].ENB[m][0].generatedTime)
+                if(count >= 2){
+                  for(m = min; m <= max; m++){
+                    if(bufferSwitches[i].requestedTimeOfENB[m] 
+                            == EXB[j].requestedTime
+                        && 
+                          bufferSwitches[i].registeredEXBs[m]
+                            == portID
+                            )
                     {
-                      soonestPkt = bufferSwitches[i].ENB[m][0].generatedTime;
-                      pickUp = m;
-                    } 
-                    countRequestedTime++;
+                      if(soonestPkt > bufferSwitches[i].ENB[m][0].generatedTime)
+                      {
+                        soonestPkt = bufferSwitches[i].ENB[m][0].generatedTime;
+                        pickUp = m;
+                      } 
+                      countRequestedTime++;
+                    }
                   }
+                  assert(pickUp <= max);
+                  assert(soonestPkt <= bufferSwitches[i].
+                        ENB[max][0].generatedTime);
                 }
-                assert(pickUp >= min && pickUp <= max);
+                else{
+                  countRequestedTime = 
+                    (bufferSwitches[i].requestedTimeOfENB[min] 
+                            == EXB[j].requestedTime
+                        && 
+                          bufferSwitches[i].registeredEXBs[min]
+                            == portID
+                            ) ? 1 : 0;
+                }
+                assert(soonestPkt <= bufferSwitches[i].
+                                        ENB[min][0].generatedTime);
+                assert(pickUp >= min);
                 assert(count == countRequestedTime);
               }
               
