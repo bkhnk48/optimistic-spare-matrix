@@ -29,6 +29,11 @@ enum StatesOfENB{
     N0 = 0, //ENB is not full.
     N1 = 1  //ENB is full.
 };
+/*N00 = 0, //ENB is empty and UNABLE to move packet.
+    N11 = 3, //ENB is not empty and ABLE to move packet to any EXB at will.
+    N10 = 2, //ENB is not empty but UNABLE to move packet to any EXB
+             //due to the next EXB is full or 
+    N1 = 1  //ENB is full.*/
 
 enum StatesOfPkt{
     P_NULL = -1,  //the packet disappeared.
