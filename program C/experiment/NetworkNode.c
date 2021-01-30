@@ -16,10 +16,8 @@ enum TypesOfNode
 
 enum StatesOfEXB{
     X01 = 1, //EXB is not full and able to transfer packet.
-    X00 = 0, //EXB is not full and unable to transfer packet
-             /*  (due to the next ENB is full
-                 or EXB already chooses a packet
-                 ).*/
+    X00 = 0, //EXB is not full and unable to transfer packet 
+             /* (due to the next ENB of neighbor switch is full).*/
     X10 = 2, //EXB is full and unable to transfer packet 
              /*  (due to the next ENB is full).*/
     X11 = 3  //EXB is full and able to transfer packet.
@@ -34,6 +32,8 @@ enum StatesOfENB{
     N10 = 2, //ENB is not empty but UNABLE to move packet to any EXB
              //due to the next EXB is full or 
     N1 = 1  //ENB is full.*/
+
+
 
 enum StatesOfPkt{
     P_NULL = -1,  //the packet disappeared.
@@ -100,6 +100,7 @@ typedef struct _bufferSwitch{
     enum StatesOfEXB *stsEXBs;
     unsigned long *requestedTimeOfENB;
     int *registeredEXBs;
+
 } BufferSwitch;
 
 BufferHost *initBufferHosts(int numOfHosts){
