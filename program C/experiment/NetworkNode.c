@@ -33,7 +33,10 @@ enum StatesOfENB{
              //due to the next EXB is full or 
     N1 = 1  //ENB is full.*/
 
-
+enum StatesOfInternalChannel{
+    C0 = 0, //Channel is unable to transfer packet from ENB to EXB in a same switch
+    C1 = 1  //Channel is able to transfer packet from ENB to EXB in a same switch
+};
 
 enum StatesOfPkt{
     P_NULL = -1,  //the packet disappeared.
