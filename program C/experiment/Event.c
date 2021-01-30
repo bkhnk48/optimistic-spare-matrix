@@ -183,37 +183,37 @@ int actionD(int portENB, //int *generateEventE,
         for(i = 0; i < BUFFER_SIZE; i++){
             if(EXB[i].srcIP == -1 && 
                    EXB[i].dstIP == -1
-                   && EXB[i].id == -1
+                   //&& EXB[i].id == -1
                    ){
                 couldSendPacket = 1;
                 break;//found empty slot in EXB
             }
             
         }
-        if(i < BUFFER_SIZE){
-            int j = i - 1;//Kiem tra goi tin o truoc o trong
-            if(j < 0){//neu khong co goi tin nhu the
+        if(couldSendPacket){
+            //int j = i - 1;//Kiem tra goi tin o truoc o trong
+            if(EXB[i].id == -1){//o thu (i) cua EXB thuc su trong
                 generateEventE = 1;//tao event E
             }
-            else {//neu truoc o trong co mot o khac
-                if(EXB[j].srcIP == -1 &&
-                    EXB[j].dstIP == -1 &&
-                    EXB[j].id != -1
+            else {//neu o thu (i) do dang danh cho 1 packet nao do
+                
+                if((EXB[i].requestedTime < currentTime 
+                    && EXB[i].requestedTime == 0//Gia tri 0 nay de reset, bao rang EXB nay chua co
+                    //nhan duoc yeu cau gui goi tin tu ENB sang
+                    ) || EXB[i].requestedTime == currentTime 
                     ){
-
-                    if(EXB[j].requestedTime < currentTime){
-                        generateEventE = 
-                           (BUFFER_SIZE - 1 > j + getCount(EXB[j].id));
-                        couldSendPacket = generateEventE;
-                    }
-                    else{
-                        //it means
-                        //EXB[j].requestedTime == currentTime
-                        generateEventE = 0;
-                        couldSendPacket = 1;
-                        i = j;//backward to the previous index j
-                    }
+                    generateEventE = 1;
+                        //(BUFFER_SIZE - 1 >= i + getCount(EXB[i].id) + 1);
+                    couldSendPacket = 1;
                 }
+                else{
+                    //it means
+                    //EXB[j].requestedTime > currentTime
+                    generateEventE = 0;
+                    couldSendPacket = 0;
+                    //i = j;//backward to the previous index j
+                }
+                //}
             }
             if(generateEventE || couldSendPacket){
                 //EXB[i].id = portENB;
