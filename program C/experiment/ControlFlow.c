@@ -5,7 +5,7 @@
 
 #ifndef _CONTROL_FLOW_
 #define _CONTROL_FLOW_
-int chooseENB_ID(int EXB_ID, BufferSwitch *bufferSwitch){
+int chooseENB_ID(int EXB_ID, BufferSwitch *bufferSwitch, int k){
     StoredPacket *EXB = bufferSwitch->EXB[EXB_ID];
     int found = 0;
     int j = bufferSwitch->firstLastEXBs[EXB_ID][1];
@@ -15,6 +15,8 @@ int chooseENB_ID(int EXB_ID, BufferSwitch *bufferSwitch){
         && EXB[j].id != -1){
         found = 1;
     }
+    if(found == 0)
+        return -1;
     int count = getCount(EXB[j].id);
     int min = getMin(EXB[j].id);
     int max = getMax(EXB[j].id);
@@ -49,6 +51,10 @@ int chooseENB_ID(int EXB_ID, BufferSwitch *bufferSwitch){
                 ? max : min;
     }
     
-              
+    if(pickUp < 0 || pickUp >= k
+        || pickUp == EXB_ID
+        )
+        return -1;
+    return pickUp;          
 }
 #endif
