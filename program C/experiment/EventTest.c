@@ -162,6 +162,7 @@ int main(int argc, char** argv) {
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
               
+              int preLast = bufferSwitches[i].firstLastENBs[portID][1];
               int posInENB = receivePacket(
                                               /*&bufferSwitches[i].stsENBs[portID], 
                                               ENB, 
@@ -170,6 +171,8 @@ int main(int argc, char** argv) {
                                               &bufferSwitches[i],
                                               currentTime,
                                               pkt);
+              int last = bufferSwitches[i].firstLastENBs[portID][1];
+              assert(last == (preLast + 1) % BUFFER_SIZE);
               
               //printf("AFTER that state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
               if(posInENB == bufferSwitches[i].firstLastENBs[portID][0]){
