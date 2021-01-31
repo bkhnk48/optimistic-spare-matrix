@@ -4,6 +4,7 @@
 #include "FatTreeGraph.c"
 #include "FatTreeTables.c"
 #include "MergeSplay.c"
+#include "ControlFlow.c"
 #include "timing.c"
 #include <limits.h>
 #include <locale.h>
@@ -173,7 +174,7 @@ int main(int argc, char** argv) {
                                               pkt);
               int last = bufferSwitches[i].firstLastENBs[portID][1];
               assert(last == (preLast + 1) % BUFFER_SIZE);
-              
+
               //printf("AFTER that state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
               if(posInENB == bufferSwitches[i].firstLastENBs[portID][0]){
               //Packet is ahead of all other ones on ENB
