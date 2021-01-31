@@ -185,7 +185,7 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
         for(j = 0; j < k; j++){
             temp3[j] = malloc(sizeof * temp3[j] * 2);
             temp3[j][0] = 0;
-            temp3[j][1] = 0;
+            temp3[j][1] = -1;
         }
         bufferSwitches[i].firstLastENBs = temp3;
 
