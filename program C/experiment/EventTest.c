@@ -216,7 +216,7 @@ int main(int argc, char** argv) {
               //assert(portID == k/2 - 1 || (portID == 0));
               int pickUp = chooseENB_ID(portID, 
                                     &bufferSwitches[i], k);
-              assert(pickUp >= 0 && pickUp <= k && pickUp != portID);
+              assert(pickUp >= 0 && pickUp < k && pickUp != portID);
 
               
               #pragma endregion
