@@ -165,22 +165,24 @@ int receivePacket(/*enum StatesOfENB *stateENB,
     }*/
     //if(i < BUFFER_SIZE - 1){
     if(i != -1){
-        ENB[i].id = pkt->id;
+        bufferSwitch->ENB[portID][i].id = pkt->id;
         pkt->id = -1;
-        ENB[i].srcIP = pkt->srcIP;
+        bufferSwitch->ENB[portID][i].srcIP = pkt->srcIP;
         
-        ENB[i].dstIP = pkt->dstIP;
-        ENB[i].state = P4;
+        bufferSwitch->ENB[portID][i].dstIP = pkt->dstIP;
+        bufferSwitch->ENB[portID][i].state = P4;
         pkt->srcIP = -1;
         pkt->dstIP = -1;
         pkt->currIP = -1;
         pkt->state = P_NULL;
         if(i == 0){
-            *requestedTime = currentTime;
+            //*requestedTime = currentTime;
+            bufferSwitch->requestedTimeOfENB[portID] = currentTime;
         }
+        bufferSwitch->firstLastENBs[portID][1] = i;
     }
-    if(i == BUFFER_SIZE - 1)
-        *stateENB = N1;
+    if((i + 1) % BUFFER_SIZE == first)
+        bufferSwitch->stsENBs[portID] = N1;
     return i;
 }
 
