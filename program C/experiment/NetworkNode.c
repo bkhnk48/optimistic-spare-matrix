@@ -183,7 +183,7 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
         temp3 = malloc(sizeof * temp3 * k);
         for(j = 0; j < k; j++){
             temp3[j] = malloc(sizeof * temp3[j] * k);
-            for(port = 0; port < k; buff++){
+            for(port = 0; port < k; port++){
                 temp3[j][port] = C1;
             }
             temp3[j][j] = C0;
