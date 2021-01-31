@@ -13,6 +13,7 @@ serial:
 	gcc -pg -c VoidSplay.c 
 	gcc VoidSplayTest.c -pg -o vstest.o -lm
 	gcc -pg -g -c MergeSplay.c
+	gcc -pg -g -c ControlFlow.c
 	export OMP_NUM_THREADS=4
 	gcc MergeSplayTest.c -g -o mstest.o -lm -fopenmp
 	gcc -pg -c Node.c
@@ -38,6 +39,7 @@ n:
 	gcc -c VoidSplay.c -lm
 	gcc VoidSplayTest.c -o vstest.o -lm
 	gcc -pg -c MergeSplay.c
+	gcc -pg -c ControlFlow.c
 	export OMP_NUM_THREADS=4
 	gcc MergeSplayTest.c -o mstest.o -lm -fopenmp
 	gcc -c Node.c
