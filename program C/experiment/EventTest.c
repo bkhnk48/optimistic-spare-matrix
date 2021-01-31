@@ -172,13 +172,13 @@ int main(int argc, char** argv) {
                                               pkt);
               
               //printf("AFTER that state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
-              if(posInENB == 0){
+              if(posInENB == bufferSwitches[i].firstLastENBs[portID][0]){
               //Packet is ahead of all other ones on ENB
                 assert(bufferSwitches[i].requestedTimeOfENB[portID] == currentTime);
-                
-                int nextIP = next(ENB[0].srcIP, 
+                int first = posInENB;
+                int nextIP = next(ENB[first].srcIP, 
                                   allNodes[i + numOfHosts].ipv4,
-                                    ENB[0].dstIP,
+                                    ENB[first].dstIP,
                                     k, &(tablesOfSwitches->tables[i])
                                   );
                   
