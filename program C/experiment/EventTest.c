@@ -213,9 +213,12 @@ int main(int argc, char** argv) {
             else if(type == E){
               #pragma region action of Event type E
               int portID = (data[first] >> 16) & MASK_INT;
-              assert(portID == k/2 - 1 || (portID == 0));
-              int pickUp = chooseENB_ID(portID, &bufferSwitches[i], k);
+              //assert(portID == k/2 - 1 || (portID == 0));
+              int pickUp = chooseENB_ID(portID, 
+                                    &bufferSwitches[i], k);
               assert(pickUp >= 0 && pickUp <= k && pickUp != portID);
+
+              
               #pragma endregion
             }
         }
