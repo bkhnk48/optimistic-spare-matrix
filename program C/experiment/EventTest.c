@@ -186,10 +186,11 @@ int main(int argc, char** argv) {
                 // + registeredEXB[portID]: the array's element to store the nextEXB
                 //additional info: portID - ID of ENB in which outgoing packet 
                 signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[portID]);
-
+                
                 generateEventE = actionD(portID, 
                                           bufferSwitches[i].EXB[nextEXB],
                                           &bufferSwitches[i].stsEXBs[nextEXB],
+                                          bufferSwitches[i].firstLastEXBs[nextEXB][1],
                                           currentTime
                                           );
                 if(generateEventE){
@@ -210,14 +211,16 @@ int main(int argc, char** argv) {
               int found = 0;
               //if(portID == 0)
               {
-                for(j = 0; j < BUFFER_SIZE; j++){
+                //for(j = 0; j < BUFFER_SIZE; j++){
+                  j = bufferSwitches[i].firstLastEXBs[portID][1];
+                  j = (j == -1) ? 0 : ((j + 1) % BUFFER_SIZE);
                   if(EXB[j].dstIP == -1 
                         && EXB[j].srcIP == -1 
                         && EXB[j].id != -1){
                     found = 1;
-                    break;
+                    //break;
                   }
-                }
+                //}
                 assert(found == 1);
                 int count = getCount(EXB[j].id);
                 int min = getMin(EXB[j].id);
