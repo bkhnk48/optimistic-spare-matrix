@@ -24,6 +24,7 @@ enum Side{LEFT, RIGHT};
 int actionD(int portENB, //int *generateEventE,
                 StoredPacket *EXB,
                 enum StatesOfEXB *stateEXB,
+                int last,
                 unsigned long currentTime
                 );
 
@@ -172,24 +173,31 @@ int receivePacket(enum StatesOfENB *stateENB,
 int actionD(int portENB, //int *generateEventE,
                 StoredPacket *EXB,
                 enum StatesOfEXB *stateEXB,
+                int last,
                 unsigned long currentTime
                 ){
     
     int generateEventE = 0;
     int i = 0;
     int couldSendPacket = 0;
+    //int first = firstLastEXB[0];
+    //int last = firstLastEXB[1];
     if(*stateEXB == X01 || *stateEXB == X00){
         //EXB is not full
-        for(i = 0; i < BUFFER_SIZE; i++){
-            if(EXB[i].srcIP == -1 && 
-                   EXB[i].dstIP == -1
-                   //&& EXB[i].id == -1
-                   ){
-                couldSendPacket = 1;
-                break;//found empty slot in EXB
-            }
-            
+        if(last == -1)//empty EXB
+            i = 0;
+        else{
+            i = (last + 1) % BUFFER_SIZE;
         }
+        /*for(i = 0; i < BUFFER_SIZE; i++){*/
+        if(EXB[i].srcIP == -1 && 
+                EXB[i].dstIP == -1
+                //&& EXB[i].id == -1
+                ){
+            couldSendPacket = 1;
+            //found empty slot in EXB
+        }
+        /*}*/
         if(couldSendPacket){
             //int j = i - 1;//Kiem tra goi tin o truoc o trong
             if(EXB[i].id == -1){//o thu (i) cua EXB thuc su trong
