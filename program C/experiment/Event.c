@@ -137,20 +137,34 @@ int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
     return 1;
 }
 
-int receivePacket(enum StatesOfENB *stateENB, 
+int receivePacket(/*enum StatesOfENB *stateENB, 
                     Packet *ENB, 
-                    unsigned long *requestedTime,
+                    unsigned long *requestedTime,*/
+                    int portID,
+                    BufferSwitch *bufferSwitch,
                     unsigned long currentTime,
                     Packet *pkt){
     /* This func returns 1 means the event E will be generated
      * otherwise, no new event E will occur.
     */
-    int i = 0;
-    for(i = 0; i < BUFFER_SIZE; i++){
+
+    int i = -1;
+    int first = bufferSwitch->firstLastENBs[portID][0];
+    int last = bufferSwitch->firstLastENBs[portID][1];
+    if(last == -1){
+        i = 0;
+    }
+    else{
+        if(first != (last + 1) % BUFFER_SIZE){
+            i = (last + 1) % BUFFER_SIZE;
+        }
+    }
+    /*for(i = 0; i < BUFFER_SIZE; i++){
         if(ENB[i].id == -1)
             break;//found empty slot in ENB
-    }
-    if(i < BUFFER_SIZE - 1){
+    }*/
+    //if(i < BUFFER_SIZE - 1){
+    if(i != -1){
         ENB[i].id = pkt->id;
         pkt->id = -1;
         ENB[i].srcIP = pkt->srcIP;
