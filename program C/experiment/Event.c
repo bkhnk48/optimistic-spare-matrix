@@ -202,7 +202,7 @@ int actionD(int portENB, //int *generateEventE,
                     //nhan duoc yeu cau gui goi tin tu ENB sang
                     ) || EXB[i].requestedTime == currentTime 
                     ){
-                    generateEventE = 1;
+                    generateEventE = (EXB[i].requestedTime != currentTime);
                         //(BUFFER_SIZE - 1 >= i + getCount(EXB[i].id) + 1);
                     couldSendPacket = 1;
                 }
