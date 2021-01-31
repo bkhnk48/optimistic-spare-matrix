@@ -171,23 +171,23 @@ int main(int argc, char** argv) {
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
               //printf("Before receive state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
-              int posInENB = receivePacket(&bufferSwitches[i].stsENBs[portID], 
-                                              ENB,
-                                              &bufferSwitches[i].requestedTimeOfENB[portID],
-                                              currentTime, 
-                                              pkt);
+              int posInENB = receivePacket(portID,
+                                            &bufferSwitches[i],
+                                            currentTime,
+                                            pkt);
               //printf("AFTER that state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
-              if(posInENB == 0){
+              if(posInENB == bufferSwitches[i].firstLastENBs[portID][0]){
               //Packet is ahead of all other ones on ENB
                 
-                int nextIP = next(ENB[0].srcIP, 
+                int first = posInENB;
+                int nextIP = next(ENB[first].srcIP, 
                                   allNodes[i + numOfHosts].ipv4,
-                                    ENB[0].dstIP,
+                                    ENB[first].dstIP,
                                     k, &(tablesOfSwitches->tables[i])
                                   );
                   
                 int nextEXB = getEXB_ID(nextIP, 
-                                typeOfIndex(i + numOfHosts, k), k);
+                                allNodes[i + numOfHosts].type, k);
                 //this func has two params: 
                 // + nextEXB: the port ID of the next EXB
                 // + registeredEXB[portID]: the array's element to store the nextEXB
@@ -197,11 +197,11 @@ int main(int argc, char** argv) {
                 generateEventE = actionD(portID, 
                                           bufferSwitches[i].EXB[nextEXB],
                                           &bufferSwitches[i].stsEXBs[nextEXB],
+                                          bufferSwitches[i].firstLastEXBs[nextEXB][1],
                                           currentTime
                                           );
                 if(generateEventE){
-                  signRequestedTime(&bufferSwitches[i].requestedTimeOfENB[portID],
-                                              currentTime);
+                  
                   idNode = hash(i, EDGE_SWITCH, nextEXB, E, k);
                   add(E, i, nextEXB, currentTime + SWITCH_CYCLE
                               , &root, idNode
