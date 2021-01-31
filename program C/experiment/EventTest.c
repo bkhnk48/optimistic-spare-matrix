@@ -73,7 +73,9 @@ int main(int argc, char** argv) {
     int nextIndex;
     int nextPort = 0;
     int generateEventB, generateEventC, generateEventD;
-    int generateEventE;
+    int generateEventE, generateEventF, generateEventH;
+    int generateEventH_HOST;
+    int generateEventG;
     int idNode = 0;
 
     root = UINT_MAX;
