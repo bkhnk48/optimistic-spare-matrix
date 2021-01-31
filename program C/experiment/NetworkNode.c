@@ -180,9 +180,23 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
             bufferSwitches[i].registeredEXBs[j] = -1;
         }
 
-        
+        int **temp3 = NULL;
+        temp3 = malloc(sizeof * temp3 * k);
+        for(j = 0; j < k; j++){
+            temp3[j] = malloc(sizeof * temp3[j] * 2);
+            temp3[j][0] = 0;
+            temp3[j][1] = 0;
+        }
+        bufferSwitches[i].firstLastENBs = temp3;
 
-
+        int **temp4 = NULL;
+        temp4 = malloc(sizeof * temp4 * k);
+        for(j = 0; j < k; j++){
+            temp4[j] = malloc(sizeof * temp4[j] * 2);
+            temp4[j][0] = 0;
+            temp4[j][1] = -1;
+        }
+        bufferSwitches[i].firstLastEXBs = temp4;
     }
     return bufferSwitches;
 }
