@@ -96,15 +96,15 @@ typedef struct _bufferSwitch{
     int indexInGroup;
     enum TypesOfNode type;
     //int indexInNodes;
-    Packet **ENB;
-    StoredPacket **EXB;
-    int *countNextENB;
-    enum StatesOfENB *stsENBs;
-    enum StatesOfEXB *stsEXBs;
-    unsigned long *requestedTimeOfENB;
-    int *registeredEXBs;
-    int **firstLastENBs;
-    int **firstLastEXBs;
+    Packet **ENB;//Luu tru cac goi tin trong k cai ENB
+    StoredPacket **EXB;//Luu tru cac goi tin trong k cai EXB
+    int *countNextENB;//Luu tru so luong cac goi tin trong cac ENB tiep theo
+    enum StatesOfENB *stsENBs;//Luu tru trang thai cua k cai ENB
+    enum StatesOfEXB *stsEXBs;//Luu tru trang thai cua k cai EXB
+    unsigned long *requestedTimeOfENB;//Luu tru thoi diem goi tin den duoc phan dau cua k cai ENB
+    int *registeredEXBs;//Luu tru thoi diem goi tin chuan bi chuyen sang k cai EXB
+    int **firstLastENBs;//Luu tru vi tri dau va cuoi cua goi tin trong buffer tai k cai ENB
+    int **firstLastEXBs;//Luu tru vi tri dau va cuoi cua goi tin trong buffer tai k cai EXB
 } BufferSwitch;
 
 BufferHost *initBufferHosts(int numOfHosts){
