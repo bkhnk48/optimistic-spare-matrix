@@ -4,6 +4,7 @@
 #include "FatTreeGraph.c"
 #include "FatTreeTables.c"
 #include "MergeSplay.c"
+#include "ControlFlow.c"
 #include "timing.c"
 #include <limits.h>
 #include <locale.h>
