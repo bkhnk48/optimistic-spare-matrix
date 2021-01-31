@@ -162,9 +162,12 @@ int main(int argc, char** argv) {
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
               
-              int posInENB = receivePacket(&bufferSwitches[i].stsENBs[portID], 
+              int posInENB = receivePacket(
+                                              /*&bufferSwitches[i].stsENBs[portID], 
                                               ENB, 
-                                              &bufferSwitches[i].requestedTimeOfENB[portID],
+                                              &bufferSwitches[i].requestedTimeOfENB[portID],*/
+                                              portID,
+                                              &bufferSwitches[i],
                                               currentTime,
                                               pkt);
               
