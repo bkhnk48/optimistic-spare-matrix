@@ -296,7 +296,7 @@ int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
     if(numOngoingE > 1){
         if(countEmptySlots(firstEXB, lastEXB) > 0){
             result |= 1;
-            
+            int newLast = (lastEXB + 1) % BUFFER_SIZE;
         }
     }
     if(lastEXB == 0 && firstEXB == 0)
