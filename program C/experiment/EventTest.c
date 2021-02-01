@@ -224,7 +224,7 @@ int main(int argc, char** argv) {
                     1 : 0);
               move(pickUp, portID, &bufferSwitches[i]);
 
-              //Shift packet
+              #pragma region Shift packet in ENB
               Packet *ENB = bufferSwitches[i].ENB[pickUp];
               int posInENB = bufferSwitches[i].firstLastENBs[pickUp][0];
               int nextIP = next(ENB[posInENB].srcIP, 
@@ -240,8 +240,10 @@ int main(int argc, char** argv) {
               // + registeredEXB[portID]: the array's element to store the nextEXB
               //additional info: portID - ID of ENB in which outgoing packet 
               signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUp]);
-              
+              #pragma endregion
 
+              
+              
               #pragma endregion
             }
         }
