@@ -223,8 +223,7 @@ int main(int argc, char** argv) {
                     pickUp < (k/2 - 1)
                     ) ?
                     1 : 0);
-              int result = actionE(pickUp, portID, 
-                                    &bufferSwitches[i]);
+              move(pickUp, portID, &bufferSwitches[i]);
 
               #pragma endregion
             }
