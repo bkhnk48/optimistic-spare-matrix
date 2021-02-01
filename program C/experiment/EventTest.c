@@ -166,14 +166,10 @@ int main(int argc, char** argv) {
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
               
               int preLast = bufferSwitches[i].firstLastENBs[portID][1];
-              int posInENB = receivePacket(
-                                              /*&bufferSwitches[i].stsENBs[portID], 
-                                              ENB, 
-                                              &bufferSwitches[i].requestedTimeOfENB[portID],*/
-                                              portID,
-                                              &bufferSwitches[i],
-                                              currentTime,
-                                              pkt);
+              int posInENB = receivePacket(portID,
+                                            &bufferSwitches[i],
+                                            currentTime,
+                                            pkt);
               int last = bufferSwitches[i].firstLastENBs[portID][1];
               assert(last == (preLast + 1) % BUFFER_SIZE);
 
