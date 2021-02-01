@@ -242,8 +242,10 @@ int main(int argc, char** argv) {
               signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUp]);
               #pragma endregion
 
-              
-              
+              actionE(pickUp, portID, &bufferSwitches[i],
+                    &allNodes[i + numOfHosts].links[portID]
+                  );
+
               #pragma endregion
             }
         }
