@@ -281,9 +281,11 @@ int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
 
     bufferSwitch->EXB[portEXB][lastEXB].id = bufferSwitch->ENB[portENB][firstENB].id;
     bufferSwitch->ENB[portENB][firstENB].id = -1;
-    bufferSwitch->EXB[portEXB][lastEXB].srcIP = bufferSwitch->ENB[portENB][firstENB].srcIP;
+    bufferSwitch->EXB[portEXB][lastEXB].srcIP = 
+                    bufferSwitch->ENB[portENB][firstENB].srcIP;
     bufferSwitch->ENB[portENB][firstENB].srcIP = -1;
-    bufferSwitch->EXB[portEXB][lastEXB].dstIP = bufferSwitch->ENB[portENB][firstENB].dstIP;
+    bufferSwitch->EXB[portEXB][lastEXB].dstIP = 
+                    bufferSwitch->ENB[portENB][firstENB].dstIP;
     bufferSwitch->ENB[portENB][firstENB].dstIP = -1;
     bufferSwitch->EXB[portEXB][lastEXB].requestedTime 
                 = bufferSwitch->ENB[portENB][firstENB].generatedTime;
