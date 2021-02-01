@@ -294,8 +294,10 @@ int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
     bufferSwitch->ENB[portENB][firstENB].state = P_NULL;
 
     if(numOngoingE > 1){
-        result |= 1;
-
+        if(countEmptySlots(firstEXB, lastEXB) > 0){
+            result |= 1;
+            
+        }
     }
     if(lastEXB == 0 && firstEXB == 0)
         result |= 2;//will generate event F
@@ -320,6 +322,12 @@ void changeForRemove(int *firstLastBuffer){
 
 void changeForInsert(int *firstLastBuffer){
     firstLastBuffer[1] = (firstLastBuffer[1] + 1) % BUFFER_SIZE;
+}
+
+int countEmptySlots(int first, int last){
+    if(first == 0 && last == -1)
+        return BUFFER_SIZE;
+    return (BUFFER_SIZE - (last - first + 1));
 }
 
 void signEXB_ID(int EXB_ID, int *registeredEXB){
