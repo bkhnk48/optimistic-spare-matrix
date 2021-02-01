@@ -265,8 +265,8 @@ int actionD(int portENB, //int *generateEventE,
 }
 
 
-int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
-    int result = 0;
+void move(int portENB, int portEXB, BufferSwitch *bufferSwitch){
+    //int result = 0;
     /*
      *The variable result will contain several bit to represent:
      *(i)   generateEventE at bit 0
@@ -280,9 +280,7 @@ int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
     lastEXB = (lastEXB + 1) % BUFFER_SIZE;
     unsigned long temp = bufferSwitch->EXB[portEXB][lastEXB].id;
     unsigned long requestedTime = bufferSwitch->EXB[portEXB][lastEXB].requestedTime;
-    int numOngoingE = getCount(temp);//number of ongoing event E
-    int min = getMin(temp);
-    int max = getMax(temp);
+    
 
     bufferSwitch->EXB[portEXB][lastEXB].id = bufferSwitch->ENB[portENB][firstENB].id;
     bufferSwitch->ENB[portENB][firstENB].id = -1;
@@ -298,17 +296,8 @@ int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
     bufferSwitch->EXB[portEXB][lastEXB].state = P5;
     bufferSwitch->ENB[portENB][firstENB].state = P_NULL;
 
-    if(numOngoingE > 1){
-        if(countEmptySlots(firstEXB, lastEXB) > 0){
-            result |= 1;
-            int newLast = (lastEXB + 1) % BUFFER_SIZE;
-        }
-    }
-    if(lastEXB == 0 && firstEXB == 0)
-        result |= 2;//will generate event F
     changeForRemove(bufferSwitch->firstLastENBs[portENB]);
     changeForInsert(bufferSwitch->firstLastEXBs[portEXB]);
-    return result;
 }
 
 void changeForRemove(int *firstLastBuffer){
