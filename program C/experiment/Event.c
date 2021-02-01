@@ -34,6 +34,10 @@ void changeForInsert(int *firstLastBuffer);
 
 int countEmptySlots(int first, int last);
 
+void update(int portENB, int portEXB, 
+                    unsigned long temp, 
+                    BufferSwitch *bufferSwitch);
+
 int actionA(int T, 
                 unsigned long currentTime,
                 BufferHost* bufferHost
@@ -266,12 +270,7 @@ int actionD(int portENB, //int *generateEventE,
 
 
 void move(int portENB, int portEXB, BufferSwitch *bufferSwitch){
-    //int result = 0;
-    /*
-     *The variable result will contain several bit to represent:
-     *(i)   generateEventE at bit 0
-     *(ii)  generateEventF at bit 1
-    */
+    
     int firstEXB = bufferSwitch->firstLastEXBs[portEXB][0];
     int lastEXB = bufferSwitch->firstLastEXBs[portEXB][1];
 
@@ -298,7 +297,89 @@ void move(int portENB, int portEXB, BufferSwitch *bufferSwitch){
 
     changeForRemove(bufferSwitch->firstLastENBs[portENB]);
     changeForInsert(bufferSwitch->firstLastEXBs[portEXB]);
+    if(countEmptySlots(firstEXB, lastEXB) > 0){
+    //It means EXB[portEXB] has at least one empty slot
+        int count = getCount(temp) - 1;
+        if(count > 0){
+            update(portENB, portEXB, temp, bufferSwitch);
+        }
+    }
+    
 }
+
+void update(int portENB, int portEXB, 
+                    unsigned long temp, BufferSwitch *bufferSwitch){
+    int count = getCount(temp) - 1;
+    int last = bufferSwitch->firstLastEXBs[portEXB][1];
+    int newLast = 
+            (bufferSwitch->firstLastEXBs[portEXB][1] + 1)
+                             % BUFFER_SIZE;
+    int min = getMin(temp);
+    int max = getMax(temp);
+    if(count == 1){
+        if(min == portENB){
+            min = max;
+            max = 0;
+        }
+        if(max == portENB){
+            max = 0;
+        }
+    }
+    else{
+        //it means count > 1
+        int i = 0;
+        if(min == portENB){
+            min = portENB + 1;
+            for(i = min; i <= max; i++){
+                if(bufferSwitch->requestedTimeOfENB[i] 
+                    == bufferSwitch->EXB[portEXB][last].requestedTime
+                && 
+                    bufferSwitch->registeredEXBs[i]
+                    == portEXB
+                    )
+                { 
+                    min = i;
+                    break;
+                }
+            }
+        }
+        if(max == portENB){
+            max = portENB - 1;
+            for(i = max; i >= min; i--){
+                if(bufferSwitch->requestedTimeOfENB[i] 
+                    == bufferSwitch->EXB[portEXB][last].requestedTime
+                && 
+                    bufferSwitch->registeredEXBs[i]
+                    == portEXB
+                    )
+                { 
+                    max = i;
+                    break;
+                }
+            }
+        }
+    }
+
+    unsigned long result = 0;
+    result |= (unsigned short)count;
+    result |= (min << 16);
+    result |= ((unsigned long)max << 32);
+    bufferSwitch->EXB[portEXB][newLast].id = result;
+}
+
+int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
+    int result = 0;
+    /*
+    *The variable result will contain several bit to represent:
+    *(i)   generateEventE at bit 0
+    *(ii)  generateEventF at bit 1
+    */
+    int firstEXB = bufferSwitch->firstLastEXBs[portEXB][0];
+    int lastEXB = bufferSwitch->firstLastEXBs[portEXB][1];
+    
+
+}
+
 
 void changeForRemove(int *firstLastBuffer){
     int first = firstLastBuffer[0];
