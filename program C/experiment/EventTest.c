@@ -220,7 +220,16 @@ int main(int argc, char** argv) {
                                     &bufferSwitches[i], k);
               assert(pickUp >= 0 && pickUp < k && pickUp != portID);
 
-              
+              generateEventE = 0; generateEventF = 0; 
+              generateEventH = 0; generateEventH_HOST = 0;
+              int H_HOST = 
+                ((allNodes[i + numOfHosts].type == EDGE_SWITCH && 
+                    pickUp < (k/2 - 1)
+                    ) ?
+                    1 : 0);
+              int result = actionE(pickUp, portID, 
+                                    &bufferSwitches[i]);
+
               #pragma endregion
             }
         }
