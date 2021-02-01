@@ -321,7 +321,7 @@ void update(int portENB, int portEXB,
             min = max;
             max = 0;
         }
-        if(max == portENB){
+        else if(max == portENB){
             max = 0;
         }
     }
@@ -343,7 +343,7 @@ void update(int portENB, int portEXB,
                 }
             }
         }
-        if(max == portENB){
+        else if(max == portENB){
             max = portENB - 1;
             for(i = max; i >= min; i--){
                 if(bufferSwitch->requestedTimeOfENB[i] 
