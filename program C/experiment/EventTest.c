@@ -206,6 +206,7 @@ int main(int argc, char** argv) {
                 }
               }
               #pragma endregion
+              assert(allNodes[idPrevHost].links[0].pkt->id == -1);
             }
             else if(type == E){
               #pragma region action of Event type E
