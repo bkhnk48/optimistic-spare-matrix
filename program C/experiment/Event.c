@@ -28,6 +28,12 @@ int actionD(int portENB, //int *generateEventE,
                 unsigned long currentTime
                 );
 
+void changeForRemove(int *firstLastBuffer);
+
+void changeForInsert(int *firstLastBuffer);
+
+int countEmptySlots(int first, int last);
+
 int actionA(int T, 
                 unsigned long currentTime,
                 BufferHost* bufferHost
@@ -176,7 +182,6 @@ int receivePacket(/*enum StatesOfENB *stateENB,
         pkt->currIP = -1;
         pkt->state = P_NULL;
         if(i == first){
-            //*requestedTime = currentTime;
             bufferSwitch->requestedTimeOfENB[portID] = currentTime;
         }
         bufferSwitch->firstLastENBs[portID][1] = i;
@@ -301,8 +306,8 @@ int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
     }
     if(lastEXB == 0 && firstEXB == 0)
         result |= 2;//will generate event F
-    changeForRemove(bufferSwitch->firstLastENBs);
-    changeForInsert(bufferSwitch->firstLastEXBs);
+    changeForRemove(bufferSwitch->firstLastENBs[portENB]);
+    changeForInsert(bufferSwitch->firstLastEXBs[portEXB]);
     return result;
 }
 
