@@ -177,10 +177,9 @@ int main(int argc, char** argv) {
               if(posInENB == bufferSwitches[i].firstLastENBs[portID][0]){
               //Packet is ahead of all other ones on ENB
                 assert(bufferSwitches[i].requestedTimeOfENB[portID] == currentTime);
-                int first = posInENB;
-                int nextIP = next(ENB[first].srcIP, 
+                int nextIP = next(ENB[posInENB].srcIP, 
                                   allNodes[i + numOfHosts].ipv4,
-                                    ENB[first].dstIP,
+                                    ENB[posInENB].dstIP,
                                     k, &(tablesOfSwitches->tables[i])
                                   );
                   
@@ -224,6 +223,24 @@ int main(int argc, char** argv) {
                     ) ?
                     1 : 0);
               move(pickUp, portID, &bufferSwitches[i]);
+
+              //Shift packet
+              Packet *ENB = bufferSwitches[i].ENB[pickUp];
+              int posInENB = bufferSwitches[i].firstLastENBs[pickUp][0];
+              int nextIP = next(ENB[posInENB].srcIP, 
+                                  allNodes[i + numOfHosts].ipv4,
+                                    ENB[posInENB].dstIP,
+                                    k, &(tablesOfSwitches->tables[i])
+                                  );
+                  
+              int nextEXB = getEXB_ID(nextIP, 
+                              allNodes[i + numOfHosts].type, k);
+              //this func has two params: 
+              // + nextEXB: the port ID of the next EXB
+              // + registeredEXB[portID]: the array's element to store the nextEXB
+              //additional info: portID - ID of ENB in which outgoing packet 
+              signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUp]);
+              
 
               #pragma endregion
             }
