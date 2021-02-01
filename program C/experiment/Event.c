@@ -285,6 +285,7 @@ int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
 
     if(count > 1)
         result |= 1;
+    changeForRemove(bufferSwitch->firstLastENBs);
     return result;
 }
 
