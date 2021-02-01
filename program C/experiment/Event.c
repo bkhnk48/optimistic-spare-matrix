@@ -175,7 +175,7 @@ int receivePacket(/*enum StatesOfENB *stateENB,
         pkt->dstIP = -1;
         pkt->currIP = -1;
         pkt->state = P_NULL;
-        if(i == 0){
+        if(i == first){
             //*requestedTime = currentTime;
             bufferSwitch->requestedTimeOfENB[portID] = currentTime;
         }
