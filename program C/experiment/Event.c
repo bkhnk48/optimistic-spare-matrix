@@ -367,7 +367,8 @@ void update(int portENB, int portEXB,
     bufferSwitch->EXB[portEXB][newLast].id = result;
 }
 
-int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
+int actionE(int portENB, int portEXB, 
+                BufferSwitch *bufferSwitch, Link *link){
     int result = 0;
     /*
     *The variable result will contain several bit to represent:
@@ -376,8 +377,19 @@ int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
     */
     int firstEXB = bufferSwitch->firstLastEXBs[portEXB][0];
     int lastEXB = bufferSwitch->firstLastEXBs[portEXB][1];
-    
-
+    int nextLast = (lastEXB + 1) % BUFFER_SIZE;
+    unsigned long id = bufferSwitch->EXB[portEXB][nextLast].id;
+    if(id != -1){
+        int count = getCount(id);
+        if(count >= 1)
+            result |= 1;//will create event E
+    }
+    if(bufferSwitch->countNextENB[portEXB] > 0
+        && link->pkt->id == -1
+        ){
+        result |= 2;
+    }
+    return result;
 }
 
 
