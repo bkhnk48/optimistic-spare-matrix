@@ -260,7 +260,50 @@ int actionD(int portENB, //int *generateEventE,
 }
 
 
+int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
+    int result = 0;
+    //The variable result will contain several bit to represent:
+    //(i)   generateEventE at bit 0
+    //(ii)  generateEventF at bit 1
+    //(iii) generateEventH/H_HOST at bit 2: 0 means H, 1 means H_HOST
+    int firstEXB = bufferSwitch->firstLastEXBs[portEXB][0];
+    int lastEXB = bufferSwitch->firstLastEXBs[portEXB][1];
 
+    int firstENB = bufferSwitch->firstLastENBs[portENB][0];
+
+    lastEXB = (lastEXB + 1) % BUFFER_SIZE;
+    unsigned long temp = bufferSwitch->EXB[portEXB][lastEXB].id;
+    unsigned long requestedTime = bufferSwitch->EXB[portEXB][lastEXB].requestedTime;
+    int count = getCount(temp);
+    bufferSwitch->EXB[portEXB][lastEXB].id = bufferSwitch->ENB[portENB][firstENB].id;
+    bufferSwitch->EXB[portEXB][lastEXB].srcIP = bufferSwitch->ENB[portENB][firstENB].srcIP;
+    bufferSwitch->EXB[portEXB][lastEXB].dstIP = bufferSwitch->ENB[portENB][firstENB].dstIP;
+    bufferSwitch->EXB[portEXB][lastEXB].requestedTime 
+                = bufferSwitch->ENB[portENB][firstENB].generatedTime;
+    bufferSwitch->EXB[portEXB][lastEXB].state = P5;
+
+    if(count > 1)
+        result |= 1;
+    return result;
+}
+
+void changeForRemove(int *firstLastBuffer){
+    int first = firstLastBuffer[0];
+    int last = firstLastBuffer[1];
+    if(first == last){
+        *firstLastBuffer = 0;
+        firstLastBuffer[1] = -1;
+    }
+    else{
+        first++;
+        first %= BUFFER_SIZE;
+        *firstLastBuffer = first;
+    }
+}
+
+void changeForInsert(int *firstLastBuffer){
+    firstLastBuffer[1] = (firstLastBuffer[1] + 1) % BUFFER_SIZE;
+}
 
 void signEXB_ID(int EXB_ID, int *registeredEXB){
     *registeredEXB = EXB_ID;
