@@ -266,8 +266,6 @@ int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
      *The variable result will contain several bit to represent:
      *(i)   generateEventE at bit 0
      *(ii)  generateEventF at bit 1
-     *(iii) generateEventH/H_HOST at bit 2: 
-     *                         0 means H, 1 means H_HOST
     */
     int firstEXB = bufferSwitch->firstLastEXBs[portEXB][0];
     int lastEXB = bufferSwitch->firstLastEXBs[portEXB][1];
