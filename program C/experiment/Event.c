@@ -275,7 +275,10 @@ int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
     lastEXB = (lastEXB + 1) % BUFFER_SIZE;
     unsigned long temp = bufferSwitch->EXB[portEXB][lastEXB].id;
     unsigned long requestedTime = bufferSwitch->EXB[portEXB][lastEXB].requestedTime;
-    int count = getCount(temp);
+    int numOngoingE = getCount(temp);//number of ongoing event E
+    int min = getMin(temp);
+    int max = getMax(temp);
+
     bufferSwitch->EXB[portEXB][lastEXB].id = bufferSwitch->ENB[portENB][firstENB].id;
     bufferSwitch->ENB[portENB][firstENB].id = -1;
     bufferSwitch->EXB[portEXB][lastEXB].srcIP = bufferSwitch->ENB[portENB][firstENB].srcIP;
@@ -288,9 +291,14 @@ int actionE(int portENB, int portEXB, BufferSwitch *bufferSwitch){
     bufferSwitch->EXB[portEXB][lastEXB].state = P5;
     bufferSwitch->ENB[portENB][firstENB].state = P_NULL;
 
-    if(count > 1)
+    if(numOngoingE > 1){
         result |= 1;
+
+    }
+    if(lastEXB == 0 && firstEXB == 0)
+        result |= 2;//will generate event F
     changeForRemove(bufferSwitch->firstLastENBs);
+    changeForInsert(bufferSwitch->firstLastEXBs);
     return result;
 }
 
