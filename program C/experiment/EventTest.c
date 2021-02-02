@@ -214,25 +214,25 @@ int main(int argc, char** argv) {
               //assert(portID == k/2 - 1 || (portID == 0));
               int pickUpENB = chooseENB_ID(portID, 
                                     &bufferSwitches[i], k);
-              assert(pickUp >= 0 && pickUp < k && pickUp != portID);
+              assert(pickUpENB >= 0 && pickUpENB < k && pickUpENB != portID);
 
               generateEventE = 0; generateEventF = 0; 
               generateEventH = 0; generateEventH_HOST = 0;
               int H_HOST = 
                 ((allNodes[i + numOfHosts].type == EDGE_SWITCH && 
-                    pickUp < (k/2 - 1)
+                    pickUpENB < (k/2 - 1)
                     ) ?
                     1 : 0);
               //number of empty slots in ENB b4 moving
-              int preEmptyInENB = countEmptySlots(bufferSwitches[i].firstLastENBs[pickUp][0]
-                                                  , bufferSwitches[i].firstLastENBs[pickUp][1]);
+              int preEmptyInENB = countEmptySlots(bufferSwitches[i].firstLastENBs[pickUpENB][0]
+                                                  , bufferSwitches[i].firstLastENBs[pickUpENB][1]);
               //number of empty slots in EXB b4 moving                          
               int preEmptyInEXB = countEmptySlots(bufferSwitches[i].firstLastEXBs[portID][0]
                                                   , bufferSwitches[i].firstLastEXBs[portID][1]);
-              move(pickUp, portID, &bufferSwitches[i]);
+              move(pickUpENB, portID, &bufferSwitches[i]);
               //number of empty slots in ENB after moving
-              int postEmptyInENB = countEmptySlots(bufferSwitches[i].firstLastENBs[pickUp][0]
-                                                  , bufferSwitches[i].firstLastENBs[pickUp][1]);
+              int postEmptyInENB = countEmptySlots(bufferSwitches[i].firstLastENBs[pickUpENB][0]
+                                                  , bufferSwitches[i].firstLastENBs[pickUpENB][1]);
               //number of empty slots in EXB after moving                          
               int postEmptyInEXB = countEmptySlots(bufferSwitches[i].firstLastEXBs[portID][0]
                                                   , bufferSwitches[i].firstLastEXBs[portID][1]);
@@ -240,9 +240,9 @@ int main(int argc, char** argv) {
               assert(preEmptyInEXB == postEmptyInEXB + 1);
 
               #pragma region Shift packet in ENB
-              Packet *ENB = bufferSwitches[i].ENB[pickUp];
-              int posInENB = bufferSwitches[i].firstLastENBs[pickUp][0];
-              printf("port ENB = %d ", pickUp);
+              Packet *ENB = bufferSwitches[i].ENB[pickUpENB];
+              int posInENB = bufferSwitches[i].firstLastENBs[pickUpENB][0];
+              printf("port ENB = %d ", pickUpENB);
               //assert(ENB[posInENB].srcIP != -1);
               printf("has at least one packet inside "); 
               printf(" src = %d dst = %d, id = %ld, generatedTime = %ld\n", 
@@ -263,10 +263,10 @@ int main(int argc, char** argv) {
               // + nextEXB: the port ID of the next EXB
               // + registeredEXB[portID]: the array's element to store the nextEXB
               //additional info: portID - ID of ENB in which outgoing packet 
-              signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUp]);
+              signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
               #pragma endregion
 
-              int generatedEF = actionE(pickUp, portID, &bufferSwitches[i],
+              int generatedEF = actionE(pickUpENB, portID, &bufferSwitches[i],
                     &allNodes[i + numOfHosts].links[portID]
                   );
               generateEventE = generatedEF & 1;
