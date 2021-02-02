@@ -219,7 +219,36 @@ int main(int argc, char** argv) {
 
               generateEventE = 0; generateEventF = 0; 
               generateEventH = 0; generateEventH_HOST = 0;
+              int H_HOST = 
+                ((allNodes[i + numOfHosts].type == EDGE_SWITCH && 
+                    pickUp < (k/2 - 1)
+                    ) ?
+                    1 : 0);
               
+              move(pickUp, portID, &bufferSwitches[i]);
+
+              #pragma region Shift packet in ENB
+              Packet *ENB = bufferSwitches[i].ENB[pickUp];
+              int posInENB = bufferSwitches[i].firstLastENBs[pickUp][0];
+              int nextIP = next(ENB[posInENB].srcIP, 
+                                  allNodes[i + numOfHosts].ipv4,
+                                    ENB[posInENB].dstIP,
+                                    k, &(tablesOfSwitches->tables[i])
+                                  );
+                  
+              int nextEXB = getEXB_ID(nextIP, 
+                              allNodes[i + numOfHosts].type, k);
+              //this func has two params: 
+              // + nextEXB: the port ID of the next EXB
+              // + registeredEXB[portID]: the array's element to store the nextEXB
+              //additional info: portID - ID of ENB in which outgoing packet 
+              signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUp]);
+              #pragma endregion
+
+              actionE(pickUp, portID, &bufferSwitches[i],
+                    &allNodes[i + numOfHosts].links[portID]
+                  );
+
               #pragma endregion
             }
         }
