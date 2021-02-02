@@ -168,21 +168,21 @@ int main(int argc, char** argv) {
               #pragma region action of Event type D
               int portID = (data[first] >> 16) & MASK_INT;
               Packet *ENB = bufferSwitches[i].ENB[portID];
+            
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
-              //printf("Before receive state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
+            
               int posInENB = receivePacket(portID,
-                                            &bufferSwitches[i],
-                                            currentTime,
-                                            pkt);
-              //printf("AFTER that state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
+                                          &bufferSwitches[i],
+                                          currentTime,
+                                          pkt);
+              
               if(posInENB == bufferSwitches[i].firstLastENBs[portID][0]){
               //Packet is ahead of all other ones on ENB
-                
-                int first = posInENB;
-                int nextIP = next(ENB[first].srcIP, 
+              
+                int nextIP = next(ENB[posInENB].srcIP, 
                                   allNodes[i + numOfHosts].ipv4,
-                                    ENB[first].dstIP,
+                                    ENB[posInENB].dstIP,
                                     k, &(tablesOfSwitches->tables[i])
                                   );
                   
