@@ -256,19 +256,19 @@ int main(int argc, char** argv) {
                   && ENB[posInENB].id != -1
                   && ENB[posInENB].generatedTime != -1
                   ){
-                int nextIP = next(ENB[posInENB].srcIP, 
+                  int nextIP = next(ENB[posInENB].srcIP, 
                                     allNodes[i + numOfHosts].ipv4,
                                       ENB[posInENB].dstIP,
                                       k, &(tablesOfSwitches->tables[i])
                                     );
                     
-                int nextEXB = getEXB_ID(nextIP, 
+                  int nextEXB = getEXB_ID(nextIP, 
                                 allNodes[i + numOfHosts].type, k);
-                //this func has two params: 
-                // + nextEXB: the port ID of the next EXB
-                // + registeredEXB[portID]: the array's element to store the nextEXB
-                //additional info: portID - ID of ENB in which outgoing packet 
-                signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
+                  //this func has two params: 
+                  // + nextEXB: the port ID of the next EXB
+                  // + registeredEXB[portID]: the array's element to store the nextEXB
+                  //additional info: portID - ID of ENB in which outgoing packet 
+                  signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
               }
               #pragma endregion
 
