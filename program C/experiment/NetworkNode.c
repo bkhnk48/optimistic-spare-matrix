@@ -80,6 +80,7 @@ typedef struct _networkNode{
   int ipv4;
   enum TypesOfNode type;
   Link *links;
+  unsigned long generatedPackets;
 } NetworkNode;
 
 typedef struct _bufferHost{
