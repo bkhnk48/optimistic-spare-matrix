@@ -223,7 +223,21 @@ int main(int argc, char** argv) {
                     pickUp < (k/2 - 1)
                     ) ?
                     1 : 0);
+              //number of empty slots in ENB b4 moving
+              int preEmptyInENB = countEmptySlots(bufferSwitches[i].firstLastENBs[pickUp][0]
+                                                  , bufferSwitches[i].firstLastENBs[pickUp][1]);
+              //number of empty slots in EXB b4 moving                          
+              int preEmptyInEXB = countEmptySlots(bufferSwitches[i].firstLastEXBs[portID][0]
+                                                  , bufferSwitches[i].firstLastEXBs[portID][1]);
               move(pickUp, portID, &bufferSwitches[i]);
+              //number of empty slots in ENB after moving
+              int postEmptyInENB = countEmptySlots(bufferSwitches[i].firstLastENBs[pickUp][0]
+                                                  , bufferSwitches[i].firstLastENBs[pickUp][1]);
+              //number of empty slots in EXB after moving                          
+              int postEmptyInEXB = countEmptySlots(bufferSwitches[i].firstLastEXBs[portID][0]
+                                                  , bufferSwitches[i].firstLastEXBs[portID][1]);
+              assert(preEmptyInENB == postEmptyInENB - 1);
+              assert(preEmptyInEXB == postEmptyInEXB + 1);
 
               #pragma region Shift packet in ENB
               Packet *ENB = bufferSwitches[i].ENB[pickUp];
