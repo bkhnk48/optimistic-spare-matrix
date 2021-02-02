@@ -215,37 +215,43 @@ int main(int argc, char** argv) {
             else if(type == E){
               #pragma region action of Event type E
               int portID = (data[first] >> 16) & MASK_INT;
-              int pickUp = chooseENB_ID(portID, &bufferSwitches[i], k);
+              int pickUpENB = chooseENB_ID(portID, &bufferSwitches[i], k);
 
               generateEventE = 0; generateEventF = 0; 
               generateEventH = 0; generateEventH_HOST = 0;
               int H_HOST = 
                 ((allNodes[i + numOfHosts].type == EDGE_SWITCH && 
-                    pickUp < (k/2 - 1)
+                    pickUpENB < (k/2 - 1)
                     ) ?
                     1 : 0);
               
-              move(pickUp, portID, &bufferSwitches[i]);
+              move(pickUpENB, portID, &bufferSwitches[i]);
 
               #pragma region Shift packet in ENB
-              Packet *ENB = bufferSwitches[i].ENB[pickUp];
-              int posInENB = bufferSwitches[i].firstLastENBs[pickUp][0];
-              int nextIP = next(ENB[posInENB].srcIP, 
-                                  allNodes[i + numOfHosts].ipv4,
-                                    ENB[posInENB].dstIP,
-                                    k, &(tablesOfSwitches->tables[i])
-                                  );
-                  
-              int nextEXB = getEXB_ID(nextIP, 
-                              allNodes[i + numOfHosts].type, k);
-              //this func has two params: 
-              // + nextEXB: the port ID of the next EXB
-              // + registeredEXB[portID]: the array's element to store the nextEXB
-              //additional info: portID - ID of ENB in which outgoing packet 
-              signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUp]);
+              Packet *ENB = bufferSwitches[i].ENB[pickUpENB];
+              int posInENB = bufferSwitches[i].firstLastENBs[pickUpENB][0];
+              if(ENB[posInENB].srcIP != -1
+                  && ENB[posInENB].dstIP != -1
+                  && ENB[posInENB].id != -1
+                  && ENB[posInENB].generatedTime != -1
+                  ){
+                  int nextIP = next(ENB[posInENB].srcIP, 
+                                    allNodes[i + numOfHosts].ipv4,
+                                      ENB[posInENB].dstIP,
+                                      k, &(tablesOfSwitches->tables[i])
+                                    );
+                    
+                  int nextEXB = getEXB_ID(nextIP, 
+                                allNodes[i + numOfHosts].type, k);
+                  //this func has two params: 
+                  // + nextEXB: the port ID of the next EXB
+                  // + registeredEXB[portID]: the array's element to store the nextEXB
+                  //additional info: portID - ID of ENB in which outgoing packet 
+                  signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
+              }
               #pragma endregion
 
-              int generatedEF = actionE(pickUp, portID, &bufferSwitches[i],
+              int generatedEF = actionE(pickUpENB, portID, &bufferSwitches[i],
                     &allNodes[i + numOfHosts].links[portID]
                   );
               generateEventE = generatedEF & 1;
