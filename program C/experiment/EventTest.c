@@ -212,7 +212,7 @@ int main(int argc, char** argv) {
               #pragma region action of Event type E
               int portID = (data[first] >> 16) & MASK_INT;
               //assert(portID == k/2 - 1 || (portID == 0));
-              int pickUp = chooseENB_ID(portID, 
+              int pickUpENB = chooseENB_ID(portID, 
                                     &bufferSwitches[i], k);
               assert(pickUp >= 0 && pickUp < k && pickUp != portID);
 
@@ -242,6 +242,15 @@ int main(int argc, char** argv) {
               #pragma region Shift packet in ENB
               Packet *ENB = bufferSwitches[i].ENB[pickUp];
               int posInENB = bufferSwitches[i].firstLastENBs[pickUp][0];
+              printf("port ENB = %d ", pickUp);
+              //assert(ENB[posInENB].srcIP != -1);
+              printf("has at least one packet inside "); 
+              printf(" src = %d dst = %d, id = %ld, generatedTime = %ld\n", 
+                      ENB[posInENB].srcIP,
+                      ENB[posInENB].dstIP,
+                      ENB[posInENB].id,
+                      ENB[posInENB].generatedTime
+                      );
               int nextIP = next(ENB[posInENB].srcIP, 
                                   allNodes[i + numOfHosts].ipv4,
                                     ENB[posInENB].dstIP,
@@ -257,9 +266,19 @@ int main(int argc, char** argv) {
               signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUp]);
               #pragma endregion
 
-              actionE(pickUp, portID, &bufferSwitches[i],
+              int generatedEF = actionE(pickUp, portID, &bufferSwitches[i],
                     &allNodes[i + numOfHosts].links[portID]
                   );
+              generateEventE = generatedEF & 1;
+              generateEventF = (generatedEF & 2) >> 1;
+              
+              if(generateEventE){
+                  
+                idNode = hash(i, EDGE_SWITCH, portID, E, k);
+                add(E, i, portID, currentTime + SWITCH_CYCLE
+                              , &root, idNode
+                        );
+              }
 
               #pragma endregion
             }
