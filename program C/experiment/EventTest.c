@@ -114,16 +114,15 @@ int main(int argc, char** argv) {
             #pragma region action of Event type A
             if(type == A)
             {
-              if(i == 0)
-                printf("Host %ld already creates %d packets\n", i, ++cPkt);
-                add(A, i, 0, currentTime + T, &root, first
-                        );
-                generateEventB = actionA(T, currentTime, &bufferHosts[i]);
-                if(generateEventB){
-                  add(B, i, 0, currentTime +  defaultBias*13
-                              , &root, first + 1
-                        );  
-                }
+              
+              add(A, i, 0, currentTime + T, &root, first
+                      );
+              generateEventB = actionA(T, currentTime, &bufferHosts[i]);
+              if(generateEventB){
+                add(B, i, 0, currentTime +  defaultBias*13
+                            , &root, first + 1
+                      );  
+              }
             }
             #pragma endregion 
             
