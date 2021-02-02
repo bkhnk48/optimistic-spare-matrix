@@ -211,7 +211,7 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
                   getIndexOfSwitch(
                       getNeighborIP(currIP, HOST, 0, k), k
                     );
-    //networkNodes[i].links[0].currIndex = i;
+    networkNodes[i].generatedPackets = 0;
   }
   
   for(i = numOfHosts; i < numOfHosts + numOfSwitches - (k*k/4); i++){
@@ -264,6 +264,8 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
         networkNodes[i].links[j].nextPort = ((currIP >> 8) & 255) - k/2;
       }
     }
+
+    networkNodes[i].generatedPackets = 0;
   }
   
   for(i = numOfHosts + numOfSwitches - (k*k/4); 
@@ -289,6 +291,8 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
               );
       //networkNodes[i].links[j].currIndex = i;
     }
+
+    networkNodes[i].generatedPackets = 0;
   }
   
   return networkNodes;
