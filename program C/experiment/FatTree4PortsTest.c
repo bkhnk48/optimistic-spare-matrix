@@ -245,9 +245,19 @@ int main(int argc, char** argv) {
               signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUp]);
               #pragma endregion
 
-              actionE(pickUp, portID, &bufferSwitches[i],
+              int generatedEF = actionE(pickUp, portID, &bufferSwitches[i],
                     &allNodes[i + numOfHosts].links[portID]
                   );
+              generateEventE = generatedEF & 1;
+              generateEventF = (generatedEF & 2) >> 1;
+              
+              if(generateEventE){
+                  
+                idNode = hash(i, EDGE_SWITCH, portID, E, k);
+                add(E, i, portID, currentTime + SWITCH_CYCLE
+                              , &root, idNode
+                        );
+              }
 
               #pragma endregion
             }
