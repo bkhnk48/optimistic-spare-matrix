@@ -377,13 +377,27 @@ int actionE(int portENB, int portEXB,
     */
     int firstEXB = bufferSwitch->firstLastEXBs[portEXB][0];
     int lastEXB = bufferSwitch->firstLastEXBs[portEXB][1];
-    int nextLast = (lastEXB + 1) % BUFFER_SIZE;
-    unsigned long id = bufferSwitch->EXB[portEXB][nextLast].id;
+    int nextLastEXB = (lastEXB + 1) % BUFFER_SIZE;
+
+    int firstENB = bufferSwitch->firstLastENBs[portENB][0];
+
+    unsigned long id = bufferSwitch->EXB[portEXB][nextLastEXB].id;
     if(id != -1){
         int count = getCount(id);
-        if(count >= 1)
+        if(count >= 1){
             result |= 1;//will create event E
+            bufferSwitch->registeredEXBs[nextLastEXB] = 0;
+        }
     }
+
+    if((result & 1) == 0){
+    //if there is no packet which has the same requested time with moved one
+        if(bufferSwitch->ENB[portENB][firstENB].srcIP != -1)
+        {
+            bufferSwitch->registeredEXBs[nextLastEXB] = 0;
+        }
+    }
+
     if(bufferSwitch->countNextENB[portEXB] > 0
         && link->pkt->id == -1
         ){
