@@ -114,7 +114,7 @@ int main(int argc, char** argv) {
             #pragma region action of Event type A
             if(type == A)
             {
-              
+              allNodes[i].generatedPackets++;
               add(A, i, 0, currentTime + T, &root, first
                       );
               generateEventB = actionA(T, currentTime, &bufferHosts[i]);
