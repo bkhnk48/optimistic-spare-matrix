@@ -16,8 +16,8 @@ int main(int argc, char** argv) {
     int k = 8;
     int PACKET_SIZE = 12*1000; //12KB
     int SWITCH_CYCLE = 100;
-    int packets_per_sec = 1000;//each sec generated 1000 packets
-    int T = 1000000;
+    //int packets_per_sec = 1000;//each sec generated 1000 packets
+    int T = 10000;
     int BANDWIDTH_HOST = 12*1000*1000;//12MByte/s
     int loadingTime = BANDWIDTH_HOST / PACKET_SIZE + 13;
 
@@ -88,6 +88,8 @@ int main(int argc, char** argv) {
                   );
     }
 
+    int cPkt = 0;
+
     removeFirst(&first, &root//, arr
                   );
 
@@ -112,6 +114,8 @@ int main(int argc, char** argv) {
             #pragma region action of Event type A
             if(type == A)
             {
+              if(i == 0)
+                printf("Host %ld already creates %d packets\n", i, ++cPkt);
                 add(A, i, 0, currentTime + T, &root, first
                         );
                 generateEventB = actionA(T, currentTime, &bufferHosts[i]);
@@ -170,8 +174,14 @@ int main(int argc, char** argv) {
                                             &bufferSwitches[i],
                                             currentTime,
                                             pkt);
+              
               int last = bufferSwitches[i].firstLastENBs[portID][1];
               assert(last == (preLast + 1) % BUFFER_SIZE);
+              printf("Switch %ld has ENB id = %d along with %d pkt(s)\n"
+                      , i, portID, 
+                          BUFFER_SIZE - 
+                                countEmptySlots(bufferSwitches[i].firstLastENBs[portID][0], last
+                                        ));
 
               //printf("AFTER that state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
               if(posInENB == bufferSwitches[i].firstLastENBs[portID][0]){
