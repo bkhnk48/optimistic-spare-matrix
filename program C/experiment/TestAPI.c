@@ -21,7 +21,7 @@ unsigned long getCount(unsigned long first, unsigned long last){
     return result;
 }
 
-unsigned long getPacketsInHost(unsigned long idHost, BufferHost *buffHost){
+unsigned long getPacketsInSource(BufferHost *buffHost){
     unsigned long count = 0;
     unsigned long countSQ = 
             getCount(buffHost->firstSQ, buffHost->lastSQ);
@@ -30,6 +30,26 @@ unsigned long getPacketsInHost(unsigned long idHost, BufferHost *buffHost){
             getCount(buffHost->firstEXB, buffHost->lastEXB);
     
     count = countEXB + countSQ;
+    return count;
+}
+
+unsigned long getPacketsInSwitch(int ipOfHost, BufferSwitch *buffSwitch, int k){
+    unsigned long count = 0;
+    int i = 0, j = 0;
+    for(i = 0; i < k; i++){
+        for(j = 0; j < BUFFER_SIZE; j++){
+            if(buffSwitch->ENB[i][j].srcIP == ipOfHost)
+                count++;
+        }
+    }
+
+    for(i = 0; i < k; i++){
+        for(j = 0; j < BUFFER_SIZE; j++){
+            if(buffSwitch->EXB[i][j].srcIP == ipOfHost)
+                count++;
+        }
+    }
+
     return count;
 }
 
