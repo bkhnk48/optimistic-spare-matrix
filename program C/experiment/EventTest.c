@@ -238,6 +238,8 @@ int main(int argc, char** argv) {
                                                   , bufferSwitches[i].firstLastEXBs[portID][1]);
               assert(preEmptyInENB == postEmptyInENB - 1);
               assert(preEmptyInEXB == postEmptyInEXB + 1);
+              //printf("In switch %ld, EXB %d has %d pkt(s) inside, which is moved from ENB %d at %ld\n"
+              //      , i, portID, BUFFER_SIZE - postEmptyInEXB, pickUpENB, currentTime);
 
               #pragma region Shift packet in ENB
               Packet *ENB = bufferSwitches[i].ENB[pickUpENB];
@@ -271,7 +273,9 @@ int main(int argc, char** argv) {
                   signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
               }
               #pragma endregion
-
+              if(postEmptyInEXB == 0){
+                printf("FULL EXB %d\t", portID);
+              }
               int generatedEF = actionE(pickUpENB, portID, &bufferSwitches[i],
                     &allNodes[i + numOfHosts].links[portID]
                   );
@@ -279,7 +283,8 @@ int main(int argc, char** argv) {
               generateEventF = (generatedEF & 2) >> 1;
               
               if(generateEventE){
-                  
+                printf("In switch %ld, EXB %d has %d pkt(s) inside, could receive one more pkt\n"
+                      , i, portID, BUFFER_SIZE - postEmptyInEXB);  
                 idNode = hash(i, EDGE_SWITCH, portID, E, k);
                 add(E, i, portID, currentTime + SWITCH_CYCLE
                               , &root, idNode
