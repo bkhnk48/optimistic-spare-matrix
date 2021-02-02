@@ -80,7 +80,9 @@ int main(int argc, char** argv) {
     int nextIndex;
     int nextPort = 0;
     int generateEventB, generateEventC, generateEventD;
-    int generateEventE;
+    int generateEventE, generateEventF, generateEventH;
+    int generateEventH_HOST;
+    int generateEventG;
     int idNode = 0;
     //char* p = malloc(1 * 1024 * 1024 * 1024);
     timing(&wc1, &cpuT);
@@ -214,6 +216,10 @@ int main(int argc, char** argv) {
               #pragma region action of Event type E
               int portID = (data[first] >> 16) & MASK_INT;
               int pickUp = chooseENB_ID(portID, &bufferSwitches[i], k);
+
+              generateEventE = 0; generateEventF = 0; 
+              generateEventH = 0; generateEventH_HOST = 0;
+              
               #pragma endregion
             }
         }
