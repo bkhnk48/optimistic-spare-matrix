@@ -338,14 +338,15 @@ int main(int argc, char** argv) {
             }
             else if(type == F){
               #pragma region action of Event type F
-              /*int portID = (data[first] >> 16) & MASK_INT;
+              int portID = (data[first] >> 16) & MASK_INT;
               nextIndex = allNodes[i].links[portID].nextIndex;
               nextPort = allNodes[i].links[portID].nextPort;
               generateEventE = 0;
-              generateEventD = actionF(&bufferHosts[i], 
+              generateEventD = actionF(&bufferSwitches[i], 
+                              portID,
                               &allNodes[i + numOfHosts].links[portID], 
-                              &generateEventE,
-                              getIPv4OfHost(pairs[i], k), T
+                              &generateEventE//,
+                              //getIPv4OfHost(pairs[i], k), T
                               );
               if(generateEventB)
                 add(B, i, 0, currentTime +  defaultBias*13
@@ -356,7 +357,7 @@ int main(int argc, char** argv) {
                 add(D, nextIndex, nextPort, currentTime + loadingTime
                               , &root, idNode
                         );
-              }*/
+              }
               #pragma endregion
             }
         }
