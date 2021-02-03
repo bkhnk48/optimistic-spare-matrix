@@ -117,13 +117,15 @@ int actionC(BufferHost *bufferHost, Link *link,
             bufferHost->firstEXB = -1;
         }
         else{
-            isFull = (bufferHost->lastEXB - bufferHost->firstEXB + 1);
-            packetID = bufferHost->lastEXB;
+            isFull = ((bufferHost->lastEXB - bufferHost->firstEXB + 1) == BUFFER_SIZE);
+            packetID = bufferHost->firstEXB;
             if(bufferHost->lastEXB == bufferHost->firstEXB + 1){
+                bufferHost->firstEXB += 1;
                 bufferHost->lastEXB = -1;
             }
             else{
-                bufferHost->lastEXB--;
+                bufferHost->firstEXB++;
+                //bufferHost->lastEXB;
             }
         }
     }
