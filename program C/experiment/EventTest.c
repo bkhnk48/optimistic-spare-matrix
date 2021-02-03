@@ -6,6 +6,7 @@
 #include "MergeSplay.c"
 #include "ControlFlow.c"
 #include "timing.c"
+#include "TestAPI.c"
 #include <limits.h>
 #include <locale.h>
 
@@ -312,5 +313,10 @@ int main(int argc, char** argv) {
         ongoingTime = currentTime;
     }
     printf("\n\nFINISH !!!!!!!!!!!! ^_^....\n");
+
+    unsigned long count1 = getPacketsInSource(&bufferHosts[0]);
+    unsigned long count2 = getPacketsInSwitch(allNodes[0].ipv4, &bufferSwitches[0], k);
+    unsigned long count3 = (allNodes[0].links[0].pkt->srcIP != -1) ? 1 : 0;
+    assert(allNodes[0].generatedPackets == count1 + count2 + count3);
     return 0;
 }
