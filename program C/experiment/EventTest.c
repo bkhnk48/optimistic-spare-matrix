@@ -307,7 +307,8 @@ int main(int argc, char** argv) {
     }
     printf("\n\nFINISH !!!!!!!!!!!! ^_^....\n");
 
-    checkGeneratedPackets(allNodes, bufferHosts, bufferSwitches, numOfHosts, 5*k*k/4, k);
+    checkGeneratedPackets(allNodes, bufferHosts, 
+                          bufferSwitches, numOfHosts, 5*k*k/4, k);
     
     return 0;
 }
