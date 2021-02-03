@@ -1,11 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "NetworkNode.c"
+#include <assert.h>
 
 #ifndef _TEST_API_
 #define _TEST_API_
 
-unsigned long getCount(unsigned long first, unsigned long last){
+unsigned long getCountFirstLast(unsigned long first, unsigned long last){
     int result = 0;
     if(first == -1){
         result = 0;
@@ -15,7 +16,7 @@ unsigned long getCount(unsigned long first, unsigned long last){
             result = 1;
         }
         else{
-            result = first - last + 1;
+            result = last - first + 1;
         }
     }
     return result;
@@ -24,10 +25,10 @@ unsigned long getCount(unsigned long first, unsigned long last){
 unsigned long getPacketsInSource(BufferHost *buffHost){
     unsigned long count = 0;
     unsigned long countSQ = 
-            getCount(buffHost->firstSQ, buffHost->lastSQ);
+            getCountFirstLast(buffHost->firstSQ, buffHost->lastSQ);
     
     unsigned long countEXB = 
-            getCount(buffHost->firstEXB, buffHost->lastEXB);
+            getCountFirstLast(buffHost->firstEXB, buffHost->lastEXB);
     
     count = countEXB + countSQ;
     return count;
@@ -52,5 +53,6 @@ unsigned long getPacketsInSwitch(int ipOfHost, BufferSwitch *buffSwitch, int k){
 
     return count;
 }
+
 
 #endif
