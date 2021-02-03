@@ -210,7 +210,7 @@ int main(int argc, char** argv) {
                 checkENB_EXB(&bufferSwitches[i], k);
                 if(generateEventE){
                   
-                  idNode = hash(i, EDGE_SWITCH, nextEXB, E, k);
+                  idNode = hash(i, allNodes[i + numOfHosts].type, nextEXB, E, k);
                   add(E, i, nextEXB, currentTime + SWITCH_CYCLE
                               , &root, idNode
                         );
@@ -278,7 +278,8 @@ int main(int argc, char** argv) {
               }
               #pragma endregion
               
-              int generatedEF = actionE(pickUpENB, portID, &bufferSwitches[i],
+              int generatedEF = actionE(pickUpENB, portID, 
+                    &bufferSwitches[i],
                     &allNodes[i + numOfHosts].links[portID]
                   );
               
@@ -288,8 +289,17 @@ int main(int argc, char** argv) {
               
               if(generateEventE){
                 
-                idNode = hash(i, EDGE_SWITCH, portID, E, k);
+                idNode = hash(i, allNodes[i + numOfHosts].type, 
+                                    portID, E, k);
                 add(E, i, portID, currentTime + SWITCH_CYCLE
+                              , &root, idNode
+                        );
+              }
+
+              if(generateEventF){
+                idNode = hash(i, allNodes[i + numOfHosts].type, 
+                                    portID, F, k);
+                add(F, i, portID, currentTime + SWITCH_CYCLE
                               , &root, idNode
                         );
               }
