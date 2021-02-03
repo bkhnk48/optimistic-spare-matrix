@@ -229,7 +229,7 @@ int main(int argc, char** argv) {
 
               generateEventE = 0; generateEventF = 0; 
               generateEventH = 0; generateEventH_HOST = 0;
-              int H_HOST = 
+              int H_IS_HOST = 
                 ((allNodes[i + numOfHosts].type == EDGE_SWITCH && 
                     pickUpENB < (k/2 - 1)
                     ) ?
@@ -304,10 +304,44 @@ int main(int argc, char** argv) {
                         );
               }
 
+              int idPrev = allNodes[i + numOfHosts].
+                                  links[pickUpENB].nextIndex;
+              int idNode = 0;
+              if(H_IS_HOST){
+                idNode = hash(idPrev, HOST, 0, H_HOST, k);
+                add(H_HOST, idPrev, 0, currentTime + 1, &root, idNode);
+              }
+              else{
+                //generate event H
+              }
+
               #pragma endregion
             }
-            else if(type == F){
+            else if(type == H_HOST){
 
+            }
+            else if(type == F){
+              #pragma region action of Event type F
+              /*int portID = (data[first] >> 16) & MASK_INT;
+              nextIndex = allNodes[i].links[portID].nextIndex;
+              nextPort = allNodes[i].links[portID].nextPort;
+              generateEventE = 0;
+              generateEventD = actionF(&bufferHosts[i], 
+                              &allNodes[i + numOfHosts].links[portID], 
+                              &generateEventE,
+                              getIPv4OfHost(pairs[i], k), T
+                              );
+              if(generateEventB)
+                add(B, i, 0, currentTime +  defaultBias*13
+                              , &root, first - 1 
+                        ); 
+              if(generateEventD){
+                idNode = hash(nextIndex, EDGE_SWITCH, nextPort, D, k);
+                add(D, nextIndex, nextPort, currentTime + loadingTime
+                              , &root, idNode
+                        );
+              }*/
+              #pragma endregion
             }
         }
         ongoingTime = -1;
