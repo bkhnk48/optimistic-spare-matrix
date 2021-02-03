@@ -183,10 +183,12 @@ int receivePacket(/*enum StatesOfENB *stateENB,
         
         bufferSwitch->ENB[portID][i].dstIP = pkt->dstIP;
         bufferSwitch->ENB[portID][i].state = P4;
+        bufferSwitch->ENB[portID][i].generatedTime = pkt->generatedTime;
         //pkt->srcIP = -1;
         pkt->dstIP = -1;
         pkt->currIP = -1;
         pkt->state = P_NULL;
+        pkt->generatedTime = -1;
         if(i == first){
             bufferSwitch->requestedTimeOfENB[portID] = currentTime;
         }
@@ -408,6 +410,31 @@ int actionE(int portENB, int portEXB,
     return result;
 }
 
+int actionH_HOST(BufferHost *bufferHost, Packet *pktInLink
+                    //, int *generateEventB
+                ){
+    int generateEventC = 0;
+    //*generateEventB = 0;
+    int wasFull = bufferHost->countNextENB == 0;
+    bufferHost->countNextENB++;
+    if(wasFull){
+        if(bufferHost->firstEXB != -1
+            && pktInLink->dstIP == -1
+                ){
+            generateEventC = 1;
+        }
+        else{
+            printf("First EXB %ld and in link %d\n"
+                    , bufferHost->firstEXB, pktInLink->dstIP
+                    );
+        }
+    }
+    else{
+        printf("count empty in ENB %d\n", bufferHost->countNextENB - 1);
+    }
+
+    return generateEventC;
+}
 
 void changeForRemove(int *firstLastBuffer){
     int first = firstLastBuffer[0];
