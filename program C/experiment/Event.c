@@ -431,9 +431,9 @@ int actionH_HOST(BufferHost *bufferHost, Packet *pktInLink
                     );
         }
     }
-    else{
-        printf("count empty in ENB %d\n", bufferHost->countNextENB - 1);
-    }
+    //else{
+    //    printf("count empty in ENB %d\n", bufferHost->countNextENB - 1);
+    //}
 
     return generateEventC;
 }
