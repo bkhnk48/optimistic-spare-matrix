@@ -54,5 +54,24 @@ unsigned long getPacketsInSwitch(int ipOfHost, BufferSwitch *buffSwitch, int k){
     return count;
 }
 
+void checkENB_EXB(BufferSwitch *buffSwitch, int k){
+    int i = 0, j = 0;
+    for(i = 0; i < k; i++){
+        for(j = 0; j < BUFFER_SIZE; j++){
+            if(buffSwitch->ENB[i][j].dstIP != -1){
+                assert(buffSwitch->ENB[i][j].srcIP != -1);
+                assert(buffSwitch->ENB[i][j].id != -1);
+            }
+        }
+    }
 
+    for(i = 0; i < k; i++){
+        for(j = 0; j < BUFFER_SIZE; j++){
+            if(buffSwitch->EXB[i][j].dstIP != -1){
+                assert(buffSwitch->EXB[i][j].srcIP != -1);
+                assert(buffSwitch->EXB[i][j].id != -1);
+            }
+        }
+    }
+}
 #endif
