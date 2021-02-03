@@ -159,7 +159,7 @@ int main(int argc, char** argv) {
                               , &root, idNode
                         );
               }
-            #pragma endregion
+              #pragma endregion
             }
             else if(type == D){
               #pragma region action of Event type D
@@ -305,6 +305,9 @@ int main(int argc, char** argv) {
               }
 
               #pragma endregion
+            }
+            else if(type == F){
+
             }
         }
         ongoingTime = -1;
