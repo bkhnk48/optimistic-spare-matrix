@@ -412,6 +412,38 @@ int actionE(int portENB, int portEXB,
     return result;
 }
 
+int actionF(BufferSwitch *bufferSwitch, 
+                int portID, 
+                Link *link, 
+                int *generateEventE){
+    int pktID = -1;
+    int generateEventD = 0;
+    int first = bufferSwitch->firstLastEXBs[portID][0];
+    int last = bufferSwitch->firstLastEXBs[portID][1];
+    int emptySlots = countEmptySlots(first, last);
+    if(emptySlots < BUFFER_SIZE){
+        StoredPacket pkt = bufferSwitch->EXB[portID][first];
+        link->pkt->id = pkt.id;
+        link->pkt->srcIP = pkt.srcIP;
+        link->pkt->dstIP = pkt.dstIP;
+        link->pkt->generatedTime = pkt.requestedTime;
+        link->pkt->state = P3;//the packet is moved in a unidirectional way.
+
+        pkt.id = -1;
+        pkt.srcIP = -1;
+        pkt.dstIP = -1;
+        pkt.requestedTime = -1;
+        pkt.state = P_NULL;
+        generateEventD = 1;
+
+        changeForRemove(bufferSwitch->firstLastEXBs[portID]);
+        int wasFull = emptySlots == 0;
+        if(wasFull)
+            *generateEventE = 0;
+    }
+    return generateEventD;
+}
+
 int actionH_HOST(BufferHost *bufferHost, Packet *pktInLink
                     //, int *generateEventB
                 ){
