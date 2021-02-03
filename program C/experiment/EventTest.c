@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
     }
 
     int cPkt = 0;
-
+    
     removeFirst(&first, &root//, arr
                   );
 
@@ -168,9 +168,7 @@ int main(int argc, char** argv) {
               
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
-              if(pkt->srcIP == 167772162 && pkt->id == 1){
-                printf("DEBUG RIGHT NOW %ld\n", pkt->generatedTime);
-              }
+              
               int preLast = bufferSwitches[i].firstLastENBs[portID][1];
              
               int posInENB = receivePacket(portID,
@@ -334,7 +332,6 @@ int main(int argc, char** argv) {
               assert(bufferHosts[i].countNextENB == countEmptySlots(firstENB, lastENB));
 
               if(generateEventC)
-                printf("generate C\n");
                 add(C, i, 0, currentTime +  defaultBias*33
                               , &root, first + 1
                             );
