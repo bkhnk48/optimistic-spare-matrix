@@ -103,7 +103,8 @@ int actionB(BufferHost *bufferHost, Packet *pktInLink//, Packet *connectedENB
     return generateEventC;
 }
 
-int actionC(BufferHost *bufferHost, Link *link, int *generateEventB,
+int actionC(BufferHost *bufferHost, Link *link, 
+                int *generateEventB,
                 int dstIP, int T
                 ){
     int packetID = -1;
@@ -153,6 +154,7 @@ int receivePacket(/*enum StatesOfENB *stateENB,
                     int portID,
                     BufferSwitch *bufferSwitch,
                     unsigned long currentTime,
+                    //enum TypesOfNode typeOfNode,
                     Packet *pkt){
     /* This func returns 1 means the event E will be generated
      * otherwise, no new event E will occur.
