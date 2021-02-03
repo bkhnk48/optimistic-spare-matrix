@@ -181,7 +181,7 @@ int receivePacket(/*enum StatesOfENB *stateENB,
         
         bufferSwitch->ENB[portID][i].dstIP = pkt->dstIP;
         bufferSwitch->ENB[portID][i].state = P4;
-        pkt->srcIP = -1;
+        //pkt->srcIP = -1;
         pkt->dstIP = -1;
         pkt->currIP = -1;
         pkt->state = P_NULL;
