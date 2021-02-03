@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     int PACKET_SIZE = 12*1000; //12KB
     int SWITCH_CYCLE = 100;
     //int packets_per_sec = 1000;//each sec generated 1000 packets
-    int T = 10000;
+    int T = 1000;
     int BANDWIDTH_HOST = 12*1000*1000;//12MByte/s
     int loadingTime = BANDWIDTH_HOST / PACKET_SIZE + 13;
 
@@ -168,7 +168,9 @@ int main(int argc, char** argv) {
               
               int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
               Packet *pkt = allNodes[idPrevHost].links[0].pkt;
-              
+              if(pkt->srcIP == 167772162 && pkt->id == 1){
+                printf("DEBUG RIGHT NOW %ld\n", pkt->generatedTime);
+              }
               int preLast = bufferSwitches[i].firstLastENBs[portID][1];
              
               int posInENB = receivePacket(portID,
@@ -318,7 +320,24 @@ int main(int argc, char** argv) {
               #pragma endregion
             }
             else if(type == H_HOST){
+              //generateEventB = 0;
+              int tempCount = bufferHosts[i].countNextENB;
+              generateEventC = actionH_HOST(&bufferHosts[i],
+                                        allNodes[i].links[0].pkt
+                                        //, &generateEventB
+                                        );
+              assert(bufferHosts[i].countNextENB == tempCount + 1);
+              int nextNode = allNodes[i].links[0].nextIndex;
+              int nextPort = allNodes[i].links[0].nextPort;
+              int firstENB = bufferSwitches[nextNode].firstLastENBs[nextPort][0];
+              int lastENB = bufferSwitches[nextNode].firstLastENBs[nextPort][1];
+              assert(bufferHosts[i].countNextENB == countEmptySlots(firstENB, lastENB));
 
+              if(generateEventC)
+                printf("generate C\n");
+                add(C, i, 0, currentTime +  defaultBias*33
+                              , &root, first + 1
+                            );
             }
             else if(type == F){
               #pragma region action of Event type F
