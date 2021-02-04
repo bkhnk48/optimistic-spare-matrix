@@ -78,13 +78,14 @@ int main(int argc, char** argv) {
     int generateEventH_HOST;
     int generateEventG;
     int idNode = 0;
+    //int delta = 0;
 
     root = UINT_MAX;
 
     for(i = 0; i < k/2; i++)//Only test first k/2 hosts
     {
       idNode = hash(i, HOST, 0, A, k);
-      add(0, i, 0, 0, &root//, arr
+      add(A, i, 0, 0, &root//, arr
                     , idNode
                   );
     }
@@ -101,6 +102,9 @@ int main(int argc, char** argv) {
         if(ongoingTime == currentTime)
         {
             count++;
+            if(currentTime == 2226){
+              printf("debug first = %d root=%d\n", first, root);
+            }
          
             #pragma region get value from data array
             int type = data[first] & 65535;//type of event
@@ -166,8 +170,21 @@ int main(int argc, char** argv) {
               int portID = (data[first] >> 16) & MASK_INT;
               Packet *ENB = bufferSwitches[i].ENB[portID];
               
-              int idPrevHost = allNodes[i + numOfHosts].links[portID].nextIndex;
-              Packet *pkt = allNodes[idPrevHost].links[0].pkt;
+              int idPrev = allNodes[i + numOfHosts].links[portID].nextIndex;
+              printf("current idPrev = %d, neighbor %ld, portID of neighbor %d ", idPrev, 
+                        i + numOfHosts, portID);
+              int idPrevPort = allNodes[i + numOfHosts].links[portID].nextPort;
+              idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH
+                          && idPrevPort < k/2
+                             ?
+                            0 : numOfHosts
+                            );
+              printf("Its neighbor type = %d, node has id = %d at port %d\n", 
+                      allNodes[i + numOfHosts].type, idPrev, idPrevPort);
+              Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
+
+              assert(pkt->srcIP != -1 && pkt->dstIP != -1 
+                          && pkt->generatedTime != -1);
               
               int preLast = bufferSwitches[i].firstLastENBs[portID][1];
              
@@ -217,7 +234,7 @@ int main(int argc, char** argv) {
                 }
               }
               #pragma endregion
-              assert(allNodes[idPrevHost].links[0].pkt->id == -1);
+              assert(allNodes[idPrev].links[0].pkt->id == -1);
             }
             else if(type == E){
               #pragma region action of Event type E
@@ -299,6 +316,7 @@ int main(int argc, char** argv) {
               if(generateEventF){
                 idNode = hash(i, allNodes[i + numOfHosts].type, 
                                     portID, F, k);
+                printf("prepare event F at portID = %d\n", portID);
                 add(F, i, portID, currentTime + SWITCH_CYCLE
                               , &root, idNode
                         );
@@ -333,16 +351,19 @@ int main(int argc, char** argv) {
 
               if(generateEventC)
                 add(C, i, 0, currentTime +  defaultBias*33
-                              , &root, first + 1
+                              , &root, first - 1
                             );
             }
             else if(type == F){
               #pragma region action of Event type F
               int portID = (data[first] >> 16) & MASK_INT;
-              nextIndex = allNodes[i].links[portID].nextIndex;
-              nextPort = allNodes[i].links[portID].nextPort;
+              nextIndex = allNodes[i + numOfHosts].links[portID].nextIndex;
+              printf("from switch (i + #Hosts) = %ld through portID = %d, next index of event F %d\n", 
+                        i + numOfHosts, portID, nextIndex);
+              nextPort = allNodes[i + numOfHosts].links[portID].nextPort;
               generateEventE = 0;
-              generateEventD = actionF(&bufferSwitches[i], 
+              nextIP = getNeighborIP(allNodes[i + numOfHosts].ipv4, allNodes[i + numOfHosts].type, portID, k);
+              int generateEventD_OR_G = actionF(&bufferSwitches[i], 
                               portID,
                               &allNodes[i + numOfHosts].links[portID], 
                               &generateEventE//,
@@ -352,9 +373,12 @@ int main(int argc, char** argv) {
                 add(B, i, 0, currentTime +  defaultBias*13
                               , &root, first - 1 
                         ); 
-              if(generateEventD){
-                idNode = hash(nextIndex, EDGE_SWITCH, nextPort, D, k);
-                add(D, nextIndex, nextPort, currentTime + loadingTime
+              if(generateEventD_OR_G){
+                enum TypesOfNode tempNode = typeOfNode(nextIP, k);
+                enum TypesOfEvent tempEvent = (tempNode == HOST) ? G : D;
+                nextIndex += ((tempNode == HOST) ? 0 : numOfHosts);
+                idNode = hash(nextIndex, tempNode, nextPort, tempEvent, k);
+                add(tempEvent, nextIndex, nextPort, currentTime + loadingTime
                               , &root, idNode
                         );
               }
@@ -364,10 +388,14 @@ int main(int argc, char** argv) {
         ongoingTime = -1;
         removeFirst(&first, &root//, arr
                );
-      
-        currentTime = ((unsigned long)arr[first][0] << 32)
+        if(first != UINT_MAX){
+          currentTime = ((unsigned long)arr[first][0] << 32)
                                   + arr[first][1];
-        ongoingTime = currentTime;
+          ongoingTime = currentTime;
+        }
+        else{
+          ongoingTime = -1;
+        }
     }
     printf("\n\nFINISH !!!!!!!!!!!! ^_^....\n");
 
