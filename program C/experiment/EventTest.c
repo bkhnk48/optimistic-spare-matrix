@@ -369,10 +369,10 @@ int main(int argc, char** argv) {
                               &generateEventE//,
                               //getIPv4OfHost(pairs[i], k), T
                               );
-              if(generateEventB)
-                add(B, i, 0, currentTime +  defaultBias*13
-                              , &root, first - 1 
-                        ); 
+              //if(generateEventE)
+              //  add(E, i, 0, currentTime +  defaultBias*13
+              //                , &root, first - 1 
+              //          ); 
               if(generateEventD_OR_G){
                 enum TypesOfNode tempNode = typeOfNode(nextIP, k);
                 enum TypesOfEvent tempEvent = (tempNode == HOST) ? G : D;
