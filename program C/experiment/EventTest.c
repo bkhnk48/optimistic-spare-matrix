@@ -338,7 +338,9 @@ int main(int argc, char **argv)
         if (generateEventC)
           add(C, i, 0, currentTime + defaultBias * 33, &root, first - 1);
       }
-      else if (type == F && type != F)
+      else if (type == F 
+                //&& type != F
+                )
       {
         #pragma region action of Event type F
         int portID = (data[first] >> 16) & MASK_INT;
