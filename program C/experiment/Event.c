@@ -216,7 +216,7 @@ int actionD(int portENB, //int *generateEventE,
     int i = 0;
     int couldSendPacket = 0;
     //int first = firstLastEXB[0];
-    int last = bufferSwitch->firstLastEXB[portEXB][1];
+    int last = bufferSwitch->firstLastEXBs[portEXB][1];
     //if(*stateEXB == X01 || *stateEXB == X00){
     if(bufferSwitch->stsEXBs[portEXB] == X01 || 
             bufferSwitch->stsEXBs[portEXB] == X00){
