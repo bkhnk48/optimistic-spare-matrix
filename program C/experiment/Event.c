@@ -264,20 +264,20 @@ int actionD(int portENB, //int *generateEventE,
             }
             if(generateEventE || couldSendPacket){
                 //EXB[i].id = portENB;
-                EXB[i].id = increase(EXB[i].id, portENB);
-                if(EXB[i].srcIP != -1){
-                    EXB[i].srcIP = -1;
-                    EXB[i].dstIP = -1;
+                bufferSwitch->EXB[portEXB][i].id = increase(bufferSwitch->EXB[portEXB][i].id, portENB);
+                if(bufferSwitch->EXB[portEXB][i].srcIP != -1){
+                    bufferSwitch->EXB[portEXB][i].srcIP = -1;
+                    bufferSwitch->EXB[portEXB][i].dstIP = -1;
                 }
-                if(EXB[i].state != P_NULL)
-                    EXB[i].state = P_NULL;
-                if(EXB[i].requestedTime != currentTime)
-                    EXB[i].requestedTime = currentTime;
+                if(bufferSwitch->EXB[portEXB][i].state != P_NULL)
+                    bufferSwitch->EXB[portEXB][i].state = P_NULL;
+                if(bufferSwitch->requestedTimeToEXB[portEXB] != currentTime)
+                    bufferSwitch->requestedTimeToEXB[portEXB] = currentTime;
             }
             
         }
         else
-            *stateEXB = (*stateEXB == X01) ? X11 : X10;
+            bufferSwitch->stsEXBs[portEXB] = (bufferSwitch->stsEXBs[portEXB] == X01) ? X11 : X10;
     }
     return generateEventE;
 }
