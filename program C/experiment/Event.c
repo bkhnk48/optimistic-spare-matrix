@@ -237,7 +237,9 @@ int actionD(int portENB, //int *generateEventE,
         }
         /*}*/
         if(couldSendPacket){
-            if(EXB[i].id == -1){//o thu (i) cua EXB thuc su trong
+            //if(EXB[i].id == -1)
+            if(bufferSwitch->EXB[portEXB][i].id == -1){
+                //slot thu (i) cua EXB thuc su trong
                 generateEventE = 1;//tao event E
             }
             else {//neu o thu (i) do dang danh cho 1 packet nao do
