@@ -440,7 +440,7 @@ int actionF(BufferSwitch *bufferSwitch,
         pkt.id = -1;
         pkt.srcIP = -1;
         pkt.dstIP = -1;
-        pkt.requestedTime = -1;
+        pkt.generatedTime = -1;
         pkt.state = P_NULL;
         generateEventD = 1;
 
