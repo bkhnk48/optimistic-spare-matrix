@@ -457,6 +457,7 @@ int actionF(BufferSwitch *bufferSwitch,
             if(bufferSwitch->EXB[portID][first + 1].id != -1){
                 bufferSwitch->EXB[portID][first].id = 
                     bufferSwitch->EXB[portID][first + 1].id;
+                bufferSwitch->EXB[portID][first + 1].id = -1;
             }
         }
         int wasFull = emptySlots == 0;
