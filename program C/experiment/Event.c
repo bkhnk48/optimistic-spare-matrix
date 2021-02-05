@@ -451,6 +451,8 @@ int actionF(BufferSwitch *bufferSwitch,
         if(bufferSwitch->firstLastEXBs[portID][0] == 0
             && bufferSwitch->firstLastEXBs[portID][1] == -1){
             //It means EXB[portID] is empty - has no packet
+            //Therefore, we should move the id of next slot to
+            //the first (index = 0)
             first = bufferSwitch->firstLastEXBs[portID][0];
             if(bufferSwitch->EXB[portID][first + 1].id != -1){
                 bufferSwitch->EXB[portID][first].id = 
