@@ -226,10 +226,11 @@ int actionD(int portENB, //int *generateEventE,
         else{
             i = (last + 1) % BUFFER_SIZE;
         }
-        /*for(i = 0; i < BUFFER_SIZE; i++){*/
-        if(EXB[i].srcIP == -1 && 
-                EXB[i].dstIP == -1
-                //&& EXB[i].id == -1
+        if(
+            //EXB[i].srcIP == -1 && 
+            //    EXB[i].dstIP == -1
+            bufferSwitch->EXB[portEXB][i].srcIP == -1 &&
+                bufferSwitch->EXB[portEXB][i].dstIP == -1
                 ){
             couldSendPacket = 1;
             //found empty slot in EXB
