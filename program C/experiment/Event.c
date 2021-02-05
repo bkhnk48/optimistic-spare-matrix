@@ -434,7 +434,7 @@ int actionF(BufferSwitch *bufferSwitch,
         link->pkt->id = pkt.id;
         link->pkt->srcIP = pkt.srcIP;
         link->pkt->dstIP = pkt.dstIP;
-        link->pkt->generatedTime = pkt.requestedTime;
+        link->pkt->generatedTime = pkt.generatedTime;
         link->pkt->state = P3;//the packet is moved in a unidirectional way.
 
         pkt.id = -1;
