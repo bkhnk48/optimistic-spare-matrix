@@ -103,10 +103,6 @@ int main(int argc, char **argv)
     if (ongoingTime == currentTime)
     {
       count++;
-      if (currentTime == 2226)
-      {
-        printf("debug first = %d root=%d\n", first, root);
-      }
 
       #pragma region get value from data array
       int type = data[first] & 65535; //type of event
@@ -167,14 +163,12 @@ int main(int argc, char **argv)
         Packet *ENB = bufferSwitches[i].ENB[portID];
 
         int idPrev = allNodes[i + numOfHosts].links[portID].nextIndex;
-        printf("current idPrev = %d, neighbor %ld, portID of neighbor %d ", idPrev,
-               i + numOfHosts, portID);
+        
         int idPrevPort = allNodes[i + numOfHosts].links[portID].nextPort;
         idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && idPrevPort < k / 2
                        ? 0
                        : numOfHosts);
-        printf("Its neighbor type = %d, node has id = %d at port %d\n",
-               allNodes[i + numOfHosts].type, idPrev, idPrevPort);
+        
         Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
 
         assert(pkt->srcIP != -1 && pkt->dstIP != -1 && pkt->generatedTime != -1);
@@ -185,14 +179,11 @@ int main(int argc, char **argv)
                                      &bufferSwitches[i],
                                      currentTime,
                                      pkt);
-        //printf("type == D, receivePacket i = %ld, time = %ld\n"
-        //        , i, currentTime);
 
         checkENB_EXB(&bufferSwitches[i], k);
         int last = bufferSwitches[i].firstLastENBs[portID][1];
         assert(last == (preLast + 1) % BUFFER_SIZE);
 
-        //printf("AFTER that state of ENB %d\n", bufferSwitches[i].stsENBs[portID]);
         if (posInENB == bufferSwitches[i].firstLastENBs[portID][0])
         {
           //Packet is ahead of all other ones on ENB
@@ -230,10 +221,8 @@ int main(int argc, char **argv)
       {
         #pragma region action of Event type E
         int portID = (data[first] >> 16) & MASK_INT;
-        //assert(portID == k/2 - 1 || (portID == 0));
         int pickUpENB = chooseENB_ID(portID,
                                      &bufferSwitches[i], k);
-        printf("currTime %ld pickUpENB %d switch %ld portID %d\n", currentTime, pickUpENB, i, portID);
         assert(pickUpENB >= 0 && pickUpENB < k && pickUpENB != portID);
 
         generateEventE = 0;
@@ -301,7 +290,6 @@ int main(int argc, char **argv)
         {
           idNode = hash(i, allNodes[i + numOfHosts].type,
                         portID, F, k);
-          printf("prepare event F at portID = %d\n", portID);
           add(F, i, portID, currentTime + SWITCH_CYCLE, &root, idNode);
         }
 
@@ -337,15 +325,12 @@ int main(int argc, char **argv)
         if (generateEventC)
           add(C, i, 0, currentTime + defaultBias * 33, &root, first - 1);
       }
-      else if (type == F 
-                //&& type != F
-                )
+      else if (type == F)
       {
         #pragma region action of Event type F
         int portID = (data[first] >> 16) & MASK_INT;
         nextIndex = allNodes[i + numOfHosts].links[portID].nextIndex;
-        printf("from switch (i + #Hosts) = %ld through portID = %d, next index of event F %d\n",
-              i + numOfHosts, portID, nextIndex);
+        
         nextPort = allNodes[i + numOfHosts].links[portID].nextPort;
         generateEventE = 0;
         nextIP = getNeighborIP(allNodes[i + numOfHosts].ipv4, allNodes[i + numOfHosts].type, portID, k);
