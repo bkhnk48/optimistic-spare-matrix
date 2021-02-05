@@ -26,7 +26,7 @@ int actionD(int portENB, //int *generateEventE,
                 //StoredPacket *EXB,
                 //enum StatesOfEXB *stateEXB,
                 BufferSwitch *bufferSwitch,
-                int last,
+                //int last,
                 unsigned long currentTime
                 );
 
@@ -208,7 +208,7 @@ int actionD(int portENB, //int *generateEventE,
                 //StoredPacket *EXB,
                 //enum StatesOfEXB *stateEXB,
                 BufferSwitch *bufferSwitch,
-                int last,
+                //int last,
                 unsigned long currentTime
                 ){
     
@@ -216,9 +216,10 @@ int actionD(int portENB, //int *generateEventE,
     int i = 0;
     int couldSendPacket = 0;
     //int first = firstLastEXB[0];
-    //int last = firstLastEXB[1];
+    int last = bufferSwitch->firstLastEXB[portEXB][1];
     //if(*stateEXB == X01 || *stateEXB == X00){
-    if(bufferSwitch->stsEXBs[portEXB] == X01 || *stateEXB == X00){
+    if(bufferSwitch->stsEXBs[portEXB] == X01 || 
+            bufferSwitch->stsEXBs[portEXB] == X00){
         //EXB is not full
         if(last == -1)//empty EXB
             i = 0;
