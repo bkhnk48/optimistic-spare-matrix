@@ -79,17 +79,17 @@ int main(int argc, char **argv)
   int generateEventE, generateEventF, generateEventH;
   int generateEventH_HOST;
   int generateEventG;
-  int idNode = 0;
+  int idNodeInTree = 0;
   //int delta = 0;
 
   root = UINT_MAX;
 
   for (i = 0; i < k / 2; i++) //Only test first k/2 hosts
   {
-    idNode = hash(i, HOST, 0, A, k);
+    idNodeInTree = hash(i, HOST, 0, A, k);
     add(A, i, 0, 0, &root //, arr
         ,
-        idNode);
+        idNodeInTree);
   }
 
   int cPkt = 0;
@@ -151,8 +151,8 @@ int main(int argc, char **argv)
           add(B, i, 0, currentTime + defaultBias * 13, &root, first - 1);
         if (generateEventD)
         {
-          idNode = hash(nextIndex, EDGE_SWITCH, nextPort, D, k);
-          add(D, nextIndex, nextPort, currentTime + loadingTime, &root, idNode);
+          idNodeInTree = hash(nextIndex, EDGE_SWITCH, nextPort, D, k);
+          add(D, nextIndex, nextPort, currentTime + loadingTime, &root, idNodeInTree);
         }
         #pragma endregion
       }
@@ -210,8 +210,8 @@ int main(int argc, char **argv)
           if (generateEventE)
           {
 
-            idNode = hash(i, allNodes[i + numOfHosts].type, nextEXB, E, k);
-            add(E, i, nextEXB, currentTime + SWITCH_CYCLE, &root, idNode);
+            idNodeInTree = hash(i, allNodes[i + numOfHosts].type, nextEXB, E, k);
+            add(E, i, nextEXB, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
           }
         }
         #pragma endregion
@@ -281,24 +281,24 @@ int main(int argc, char **argv)
         if (generateEventE)
         {
 
-          idNode = hash(i, allNodes[i + numOfHosts].type,
+          idNodeInTree = hash(i, allNodes[i + numOfHosts].type,
                         portID, E, k);
-          add(E, i, portID, currentTime + SWITCH_CYCLE, &root, idNode);
+          add(E, i, portID, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
         }
 
         if (generateEventF)
         {
-          idNode = hash(i, allNodes[i + numOfHosts].type,
+          idNodeInTree = hash(i, allNodes[i + numOfHosts].type,
                         portID, F, k);
-          add(F, i, portID, currentTime + SWITCH_CYCLE, &root, idNode);
+          add(F, i, portID, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
         }
 
         int idPrev = allNodes[i + numOfHosts].links[pickUpENB].nextIndex;
-        int idNode = 0;
+        idNodeInTree = 0;
         if (H_IS_HOST)
         {
-          idNode = hash(idPrev, HOST, 0, H_HOST, k);
-          add(H_HOST, idPrev, 0, currentTime + 1, &root, idNode);
+          idNodeInTree = hash(idPrev, HOST, 0, H_HOST, k);
+          add(H_HOST, idPrev, 0, currentTime + 1, &root, idNodeInTree);
         }
         else
         {
@@ -349,15 +349,15 @@ int main(int argc, char **argv)
           enum TypesOfNode tempNode = typeOfNode(nextIP, k);
           enum TypesOfEvent tempEvent = (tempNode == HOST) ? G : D;
           nextIndex += ((tempNode == HOST) ? 0 : numOfHosts);
-          idNode = hash(nextIndex, tempNode, nextPort, tempEvent, k);
-          add(tempEvent, nextIndex, nextPort, currentTime + loadingTime, &root, idNode);
+          idNodeInTree = hash(nextIndex, tempNode, nextPort, tempEvent, k);
+          add(tempEvent, nextIndex, nextPort, currentTime + loadingTime, &root, idNodeInTree);
         }
         #pragma endregion
       }
       else if (type == G)
       {
         #pragma region action of Event type G
-        
+
         #pragma endregion
       }
     }
