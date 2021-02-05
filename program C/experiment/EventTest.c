@@ -354,6 +354,12 @@ int main(int argc, char **argv)
         }
         #pragma endregion
       }
+      else if (type == G)
+      {
+        #pragma region action of Event type G
+        
+        #pragma endregion
+      }
     }
     ongoingTime = -1;
     removeFirst(&first, &root //, arr
