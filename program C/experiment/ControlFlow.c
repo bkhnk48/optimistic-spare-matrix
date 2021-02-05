@@ -28,7 +28,7 @@ int chooseENB_ID(int EXB_ID, BufferSwitch *bufferSwitch, int k){
     if(count > 2){
         for(m = min; m <= max; m++){
             if(bufferSwitch->requestedTimeOfENB[m] 
-                    == bufferSwitch->EXB[EXB_ID][j].requestedTime
+                    == bufferSwitch->requestedTimeToEXB[EXB_ID]
                 && 
                     bufferSwitch->registeredEXBs[m]
                     == EXB_ID
