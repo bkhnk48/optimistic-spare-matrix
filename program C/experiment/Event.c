@@ -303,7 +303,7 @@ void move(int portENB, int portEXB, BufferSwitch *bufferSwitch){
     bufferSwitch->EXB[portEXB][lastEXB].dstIP = 
                     bufferSwitch->ENB[portENB][firstENB].dstIP;
     bufferSwitch->ENB[portENB][firstENB].dstIP = -1;
-    bufferSwitch->EXB[portEXB][lastEXB].requestedTime 
+    bufferSwitch->EXB[portEXB][lastEXB].generatedTime 
                 = bufferSwitch->ENB[portENB][firstENB].generatedTime;
     bufferSwitch->ENB[portENB][firstENB].generatedTime = -1;
     bufferSwitch->EXB[portEXB][lastEXB].state = P5;
@@ -361,7 +361,7 @@ void update(int portENB, int portEXB,
             max = portENB - 1;
             for(i = max; i >= min; i--){
                 if(bufferSwitch->requestedTimeOfENB[i] 
-                    == bufferSwitch->EXB[portEXB][last].requestedTime
+                    == bufferSwitch->requestedTimeToEXB[portEXB]
                 && 
                     bufferSwitch->registeredEXBs[i]
                     == portEXB
