@@ -10,16 +10,16 @@ int chooseENB_ID(int EXB_ID, BufferSwitch *bufferSwitch, int k){
     int found = 0;
     int j = bufferSwitch->firstLastEXBs[EXB_ID][1];
     j = (j == -1) ? 0 : ((j + 1) % BUFFER_SIZE);
-    if(EXB[j].dstIP == -1 
-        && EXB[j].srcIP == -1 
-        && EXB[j].id != -1){
+    if(bufferSwitch->EXB[EXB_ID][j].dstIP == -1 
+        && bufferSwitch->EXB[EXB_ID][j].srcIP == -1 
+        && bufferSwitch->EXB[EXB_ID][j].id != -1){
         found = 1;
     }
     if(found == 0)
         return -1;
-    int count = getCount(EXB[j].id);
-    int min = getMin(EXB[j].id);
-    int max = getMax(EXB[j].id);
+    int count = getCount(bufferSwitch->EXB[EXB_ID][j].id);
+    int min = getMin(bufferSwitch->EXB[EXB_ID][j].id);
+    int max = getMax(bufferSwitch->EXB[EXB_ID][j].id);
 
     int m = min;
     unsigned long soonestPkt = 
@@ -28,7 +28,7 @@ int chooseENB_ID(int EXB_ID, BufferSwitch *bufferSwitch, int k){
     if(count > 2){
         for(m = min; m <= max; m++){
             if(bufferSwitch->requestedTimeOfENB[m] 
-                    == EXB[j].requestedTime
+                    == bufferSwitch->EXB[EXB_ID][j].requestedTime
                 && 
                     bufferSwitch->registeredEXBs[m]
                     == EXB_ID
