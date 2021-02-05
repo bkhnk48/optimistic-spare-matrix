@@ -292,7 +292,7 @@ void move(int portENB, int portEXB, BufferSwitch *bufferSwitch){
 
     lastEXB = (lastEXB + 1) % BUFFER_SIZE;
     unsigned long temp = bufferSwitch->EXB[portEXB][lastEXB].id;
-    unsigned long requestedTime = bufferSwitch->EXB[portEXB][lastEXB].requestedTime;
+    unsigned long requestedTime = bufferSwitch->requestedTimeToEXB[portEXB];
     
 
     bufferSwitch->EXB[portEXB][lastEXB].id = bufferSwitch->ENB[portENB][firstENB].id;
