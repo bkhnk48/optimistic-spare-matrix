@@ -22,8 +22,9 @@ enum TypesOfEvent
 enum Side{LEFT, RIGHT};
 
 int actionD(int portENB, //int *generateEventE,
-                StoredPacket *EXB,
-                enum StatesOfEXB *stateEXB,
+                //StoredPacket *EXB,
+                //enum StatesOfEXB *stateEXB,
+                BufferSwitch *bufferSwitch,
                 int last,
                 unsigned long currentTime
                 );
@@ -202,8 +203,9 @@ int receivePacket(/*enum StatesOfENB *stateENB,
 }
 
 int actionD(int portENB, //int *generateEventE,
-                StoredPacket *EXB,
-                enum StatesOfEXB *stateEXB,
+                //StoredPacket *EXB,
+                //enum StatesOfEXB *stateEXB,
+                BufferSwitch *bufferSwitch,
                 int last,
                 unsigned long currentTime
                 ){
@@ -338,7 +340,7 @@ void update(int portENB, int portEXB,
             min = portENB + 1;
             for(i = min; i <= max; i++){
                 if(bufferSwitch->requestedTimeOfENB[i] 
-                    == bufferSwitch->EXB[portEXB][last].requestedTime
+                    == bufferSwitch->requestedTimeToEXB[portEXB]
                 && 
                     bufferSwitch->registeredEXBs[i]
                     == portEXB
