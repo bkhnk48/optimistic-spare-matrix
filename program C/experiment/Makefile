@@ -25,7 +25,7 @@ serial:
 	gcc -ggdb3 -O0 -std=c99 -Wall -Wextra -pedantic -o main.out main.c
 	gcc -pg -g -c TestAPI.c
 	gcc FatTreeTest.c -g -o ftg.o
-	gcc FatTree4PortsTest.c -g -o f4t.o -lm
+#gcc FatTree4PortsTest.c -g -o f4t.o -lm
 	gcc EventTest.c -g -o e.o -lm
 n:
 	gcc -c ShiftBits.c
