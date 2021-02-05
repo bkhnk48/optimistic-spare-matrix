@@ -62,7 +62,8 @@ typedef struct _storedPacket{
     unsigned long id;
     int srcIP;
     int dstIP;
-    unsigned long requestedTime;
+    unsigned long generatedTime;
+
     enum StatesOfPkt state;
 }StoredPacket;
 
