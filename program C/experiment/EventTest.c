@@ -211,9 +211,8 @@ int main(int argc, char **argv)
           signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[portID]);
 
           generateEventE = actionD(portID,
-                                   bufferSwitches[i].EXB[nextEXB],
-                                   &bufferSwitches[i].stsEXBs[nextEXB],
-                                   bufferSwitches[i].firstLastEXBs[nextEXB][1],
+                                   nextEXB,
+                                   &bufferSwitches[i],
                                    currentTime);
 
           checkENB_EXB(&bufferSwitches[i], k);
