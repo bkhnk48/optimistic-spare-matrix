@@ -237,7 +237,6 @@ int actionD(int portENB, //int *generateEventE,
         }
         /*}*/
         if(couldSendPacket){
-            //int j = i - 1;//Kiem tra goi tin o truoc o trong
             if(EXB[i].id == -1){//o thu (i) cua EXB thuc su trong
                 generateEventE = 1;//tao event E
             }
