@@ -22,6 +22,7 @@ enum TypesOfEvent
 enum Side{LEFT, RIGHT};
 
 int actionD(int portENB, //int *generateEventE,
+                int portEXB,
                 //StoredPacket *EXB,
                 //enum StatesOfEXB *stateEXB,
                 BufferSwitch *bufferSwitch,
@@ -203,6 +204,7 @@ int receivePacket(/*enum StatesOfENB *stateENB,
 }
 
 int actionD(int portENB, //int *generateEventE,
+                int portEXB,
                 //StoredPacket *EXB,
                 //enum StatesOfEXB *stateEXB,
                 BufferSwitch *bufferSwitch,
@@ -215,7 +217,8 @@ int actionD(int portENB, //int *generateEventE,
     int couldSendPacket = 0;
     //int first = firstLastEXB[0];
     //int last = firstLastEXB[1];
-    if(*stateEXB == X01 || *stateEXB == X00){
+    //if(*stateEXB == X01 || *stateEXB == X00){
+    if(bufferSwitch->stsEXBs[portEXB] == X01 || *stateEXB == X00){
         //EXB is not full
         if(last == -1)//empty EXB
             i = 0;
