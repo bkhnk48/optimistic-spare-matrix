@@ -6,7 +6,7 @@
 #ifndef _CONTROL_FLOW_
 #define _CONTROL_FLOW_
 int chooseENB_ID(int EXB_ID, BufferSwitch *bufferSwitch, int k){
-    StoredPacket *EXB = bufferSwitch->EXB[EXB_ID];
+    //StoredPacket *EXB = bufferSwitch->EXB[EXB_ID];
     int found = 0;
     int j = bufferSwitch->firstLastEXBs[EXB_ID][1];
     j = (j == -1) ? 0 : ((j + 1) % BUFFER_SIZE);
