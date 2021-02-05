@@ -103,7 +103,7 @@ typedef struct _bufferSwitch{
     enum StatesOfENB *stsENBs;//Luu tru trang thai cua k cai ENB
     enum StatesOfEXB *stsEXBs;//Luu tru trang thai cua k cai EXB
     unsigned long *requestedTimeOfENB;//Luu tru thoi diem goi tin den duoc phan dau cua k cai ENB
-    unsigned long *requestedTimeOfEXB;//Luu tru thoi diem goi tin yeu cau chuyen sang EXB
+    unsigned long *requestedTimeToEXB;//Luu tru thoi diem goi tin yeu cau chuyen sang EXB
     int *registeredEXBs;//Luu tru thoi diem goi tin chuan bi chuyen sang k cai EXB
     int **firstLastENBs;//Luu tru vi tri dau va cuoi cua goi tin trong buffer tai k cai ENB
     int **firstLastEXBs;//Luu tru vi tri dau va cuoi cua goi tin trong buffer tai k cai EXB
@@ -153,7 +153,7 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
                 temp2[j][buff].dstIP = -1;
                 //temp2[j][buff].currIP = -1;
                 temp2[j][buff].state = P_NULL;
-                temp2[j][buff].requestedTime = 0;
+                temp2[j][buff].generatedTime = 0;
             }
         }
         bufferSwitches[i].EXB = temp2;
@@ -177,9 +177,9 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
             bufferSwitches[i].requestedTimeOfENB[j] = 0;
         }
 
-        bufferSwitches[i].requestedTimeOfEXB = malloc(k*sizeof(unsigned long));
+        bufferSwitches[i].requestedTimeToEXB = malloc(k*sizeof(unsigned long));
         for(j = 0; j < k; j++){
-            bufferSwitches[i].requestedTimeOfExB[j] = 0;
+            bufferSwitches[i].requestedTimeToEXB[j] = 0;
         }
 
         bufferSwitches[i].registeredEXBs = malloc(k*sizeof(int));
