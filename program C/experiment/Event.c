@@ -244,12 +244,12 @@ int actionD(int portENB, //int *generateEventE,
             }
             else {//neu o thu (i) do dang danh cho 1 packet nao do
                 
-                if((EXB[i].requestedTime < currentTime 
-                    && EXB[i].requestedTime == 0//Gia tri 0 nay de reset, bao rang EXB nay chua co
+                if((bufferSwitch->requestedTimeToEXB[portEXB] < currentTime 
+                    && bufferSwitch->requestedTimeToEXB[portEXB] == 0//Gia tri 0 nay de reset, bao rang EXB nay chua co
                     //nhan duoc yeu cau gui goi tin tu ENB sang
-                    ) || EXB[i].requestedTime == currentTime 
+                    ) || bufferSwitch->requestedTimeToEXB[portEXB] == currentTime 
                     ){
-                    generateEventE = (EXB[i].requestedTime != currentTime);
+                    generateEventE = (bufferSwitch->requestedTimeToEXB[portEXB] != currentTime);
                         //(BUFFER_SIZE - 1 >= i + getCount(EXB[i].id) + 1);
                     couldSendPacket = 1;
                 }
