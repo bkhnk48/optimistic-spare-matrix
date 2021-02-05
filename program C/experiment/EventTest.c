@@ -22,6 +22,9 @@ int main(int argc, char **argv)
   int T = 1000;
   int BANDWIDTH_HOST = 12 * 1000 * 1000; //12MByte/s
   int loadingTime = BANDWIDTH_HOST / PACKET_SIZE + 13;
+  unsigned long **receivedPkts = NULL;
+  int STEP = 100;
+  
 
   if (argc >= 2)
   {
@@ -35,6 +38,7 @@ int main(int argc, char **argv)
   unsigned long currentTime = 0;
   int numOfHosts = k * k * k / 4;
   unsigned long endTime = defaultSec * ((unsigned long)(1000 * 1000));
+  unsigned long STEP_TIME = endTime / STEP;
 
   unsigned long i, j;
   unsigned int N, root = UINT_MAX;
@@ -60,6 +64,15 @@ int main(int argc, char **argv)
     else
       pairs[i] = 0;
   }
+
+  receivedPkts = malloc(sizeof * receivedPkts * numOfHosts);
+  for (i = 0; i < numOfHosts; i++){
+    receivedPkts[i] = malloc(sizeof * receivedPkts[i] * (STEP + 1));
+    for(j = 0; j < STEP + 1; j++){
+      receivedPkts[i][j] = 0;
+    }
+  }
+
 
   Tables *tablesOfSwitches = malloc(sizeof(Tables));
   buildTables(tablesOfSwitches, k);
