@@ -372,7 +372,6 @@ int main(int argc, char **argv)
         j = currentTime / STEP_TIME;
         int nextNode = allNodes[i].links[0].nextIndex;
         int nextPort = allNodes[i].links[0].nextPort;
-        printf("%ld %ld %ld %ld\n", i, j, currentTime, STEP_TIME);
         //int srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
         actionG(&bufferHosts[i], &receivedPkts[i][j],
                 allNodes[nextNode + numOfHosts].links[nextPort].pkt);
