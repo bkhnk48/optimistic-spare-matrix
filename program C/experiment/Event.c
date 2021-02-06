@@ -504,18 +504,30 @@ void actionG(BufferHost *buffHost, unsigned long *count, Packet *packet){
     }
     else{
         Sender *temp = buffHost->receivedPkts;
-        while(temp != NULL){
+        //Sender *prev = NULL;
+        int found = 0;
+        while(temp != NULL && !found){
             if(temp->srcIP == packet->srcIP){
                 if(temp->offset == ULONG_MAX){
                     temp->segment++;
                     temp->offset = 0;
-                    break;
                 }
                 temp->offset += 1;
+                found = 1;
             }
             else{
                 temp = temp->next;
+                //prev = temp;
             }
+        }
+
+        if(!found){
+            temp = malloc(sizeof(Sender));
+            temp->srcIP = packet->srcIP;
+            temp->segment = 0;
+            temp->offset = 1;
+            temp->next = buffHost->receivedPkts;
+            buffHost->receivedPkts = temp;
         }
     }
     packet->id = -1;
