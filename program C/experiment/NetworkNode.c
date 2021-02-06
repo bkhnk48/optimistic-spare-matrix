@@ -83,6 +83,13 @@ typedef struct _networkNode{
   unsigned long generatedPackets;
 } NetworkNode;
 
+typedef struct _sender{
+    int srcIP;
+    unsigned long offset;
+    unsigned long segment;
+    struct _sender *next;
+} Sender;
+
 typedef struct _bufferHost{
     int indexInGroup;
     int countNextENB;
@@ -91,6 +98,7 @@ typedef struct _bufferHost{
     unsigned long lastSQ;
     unsigned long firstEXB;  
     unsigned long lastEXB;
+    Sender *receivedPkts;
 } BufferHost;
 
 typedef struct _bufferSwitch{
@@ -120,6 +128,7 @@ BufferHost *initBufferHosts(int numOfHosts){
         bufferHosts[i].firstEXB = -1;
         bufferHosts[i].lastEXB = -1;
         bufferHosts[i].countNextENB = BUFFER_SIZE;
+        bufferHosts[i].receivedPkts = NULL;
     }
     return bufferHosts;
 }
