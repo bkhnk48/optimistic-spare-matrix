@@ -116,8 +116,6 @@ int main(int argc, char **argv)
     if (ongoingTime == currentTime)
     {
       count++;
-      if (currentTime == 7213)
-        printf("DEBUG\n");
       #pragma region get value from data array
       int type = data[first] & 65535; //type of event
       i = data[first] >> 32;          //idElementInGroup
@@ -223,7 +221,6 @@ int main(int argc, char **argv)
           checkENB_EXB(&bufferSwitches[i], k);
           if (generateEventE)
           {
-
             idNodeInTree = hash(i, allNodes[i + numOfHosts].type, nextEXB, E, k);
             add(E, i, nextEXB, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
           }
@@ -235,11 +232,9 @@ int main(int argc, char **argv)
       {
         #pragma region action of Event type E
         int portID = (data[first] >> 16) & MASK_INT;
-        if (currentTime == 7213 && portID == 3 && i == 0)
-          printf("DEBUG\n");
+        
         int pickUpENB = chooseENB_ID(portID,
                                      &bufferSwitches[i], k);
-        printf("PickUp = %d in switch %ld at port %d time %ld\n", pickUpENB, i, portID, currentTime);
         assert(pickUpENB >= 0 && pickUpENB < k && pickUpENB != portID);
 
         generateEventE = 0;
@@ -287,7 +282,7 @@ int main(int argc, char **argv)
           signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
         }
         #pragma endregion
-
+        
         int generatedEF = actionE(pickUpENB, portID,
                                   &bufferSwitches[i],
                                   &allNodes[i + numOfHosts].links[portID]);
@@ -298,7 +293,6 @@ int main(int argc, char **argv)
 
         if (generateEventE)
         {
-
           idNodeInTree = hash(i, allNodes[i + numOfHosts].type,
                               portID, E, k);
           add(E, i, portID, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
