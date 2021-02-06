@@ -116,7 +116,8 @@ int main(int argc, char **argv)
     if (ongoingTime == currentTime)
     {
       count++;
-
+      if (currentTime == 7213)
+        printf("DEBUG\n");
       #pragma region get value from data array
       int type = data[first] & 65535; //type of event
       i = data[first] >> 32;          //idElementInGroup
@@ -234,8 +235,11 @@ int main(int argc, char **argv)
       {
         #pragma region action of Event type E
         int portID = (data[first] >> 16) & MASK_INT;
+        if (currentTime == 7213 && portID == 3 && i == 0)
+          printf("DEBUG\n");
         int pickUpENB = chooseENB_ID(portID,
                                      &bufferSwitches[i], k);
+        printf("PickUp = %d in switch %ld at port %d time %ld\n", pickUpENB, i, portID, currentTime);
         assert(pickUpENB >= 0 && pickUpENB < k && pickUpENB != portID);
 
         generateEventE = 0;
@@ -250,8 +254,9 @@ int main(int argc, char **argv)
         //number of empty slots in ENB b4 moving
         int preEmptyInENB = countEmptySlots(bufferSwitches[i].firstLastENBs[pickUpENB][0], bufferSwitches[i].firstLastENBs[pickUpENB][1]);
         //number of empty slots in EXB b4 moving
-        int preEmptyInEXB = countEmptySlots(bufferSwitches[i].firstLastEXBs[portID][0], bufferSwitches[i].firstLastEXBs[portID][1]);
-
+        int preEmptyInEXB = 0;
+        preEmptyInEXB = countEmptySlots(bufferSwitches[i].firstLastEXBs[portID][0], bufferSwitches[i].firstLastEXBs[portID][1]);
+        
         move(pickUpENB, portID, &bufferSwitches[i]);
 
         checkENB_EXB(&bufferSwitches[i], k);
@@ -373,10 +378,11 @@ int main(int argc, char **argv)
         j = currentTime / STEP_TIME;
         int nextNode = allNodes[i].links[0].nextIndex;
         int nextPort = allNodes[i].links[0].nextPort;
+        printf("%ld %ld %ld %ld\n", i, j, currentTime, STEP_TIME);
         //int srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
-        actionG(&bufferHosts[i], &receivedPkts[i][j], 
-                  allNodes[nextNode + numOfHosts].links[nextPort].pkt);
-        assert(allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP == -1);          
+        actionG(&bufferHosts[i], &receivedPkts[i][j],
+                allNodes[nextNode + numOfHosts].links[nextPort].pkt);
+        //assert(allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP == -1);
         #pragma endregion
       }
     }
