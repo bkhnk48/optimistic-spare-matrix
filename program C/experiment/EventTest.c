@@ -7,8 +7,10 @@
 #include "ControlFlow.c"
 #include "timing.c"
 #include "TestAPI.c"
+#include "Throughput.c"
 #include <limits.h>
 #include <locale.h>
+
 
 int main(int argc, char **argv)
 {
@@ -100,7 +102,7 @@ int main(int argc, char **argv)
 
   root = UINT_MAX;
 
-  for (i = k/2 - 1; i < k / 2; i++) //Only test first k/2 hosts
+  for (i = 0; i < k / 2; i++) //Only test first k/2 hosts
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
     add(A, i, 0, 0, &root //, arr
