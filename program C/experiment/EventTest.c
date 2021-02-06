@@ -24,7 +24,6 @@ int main(int argc, char **argv)
   int loadingTime = BANDWIDTH_HOST / PACKET_SIZE + 13;
   unsigned long **receivedPkts = NULL;
   int STEP = 100;
-  
 
   if (argc >= 2)
   {
@@ -65,14 +64,15 @@ int main(int argc, char **argv)
       pairs[i] = 0;
   }
 
-  receivedPkts = malloc(sizeof * receivedPkts * numOfHosts);
-  for (i = 0; i < numOfHosts; i++){
-    receivedPkts[i] = malloc(sizeof * receivedPkts[i] * (STEP + 1));
-    for(j = 0; j < STEP + 1; j++){
+  receivedPkts = malloc(sizeof *receivedPkts * numOfHosts);
+  for (i = 0; i < numOfHosts; i++)
+  {
+    receivedPkts[i] = malloc(sizeof *receivedPkts[i] * (STEP + 1));
+    for (j = 0; j < STEP + 1; j++)
+    {
       receivedPkts[i][j] = 0;
     }
   }
-
 
   Tables *tablesOfSwitches = malloc(sizeof(Tables));
   buildTables(tablesOfSwitches, k);
@@ -176,12 +176,12 @@ int main(int argc, char **argv)
         Packet *ENB = bufferSwitches[i].ENB[portID];
 
         int idPrev = allNodes[i + numOfHosts].links[portID].nextIndex;
-        
+
         int idPrevPort = allNodes[i + numOfHosts].links[portID].nextPort;
         idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && idPrevPort < k / 2
                        ? 0
                        : numOfHosts);
-        
+
         Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
 
         assert(pkt->srcIP != -1 && pkt->dstIP != -1 && pkt->generatedTime != -1);
@@ -295,14 +295,14 @@ int main(int argc, char **argv)
         {
 
           idNodeInTree = hash(i, allNodes[i + numOfHosts].type,
-                        portID, E, k);
+                              portID, E, k);
           add(E, i, portID, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
         }
 
         if (generateEventF)
         {
           idNodeInTree = hash(i, allNodes[i + numOfHosts].type,
-                        portID, F, k);
+                              portID, F, k);
           add(F, i, portID, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
         }
 
@@ -343,7 +343,7 @@ int main(int argc, char **argv)
         #pragma region action of Event type F
         int portID = (data[first] >> 16) & MASK_INT;
         nextIndex = allNodes[i + numOfHosts].links[portID].nextIndex;
-        
+
         nextPort = allNodes[i + numOfHosts].links[portID].nextPort;
         generateEventE = 0;
         nextIP = getNeighborIP(allNodes[i + numOfHosts].ipv4, allNodes[i + numOfHosts].type, portID, k);
@@ -370,7 +370,13 @@ int main(int argc, char **argv)
       else if (type == G)
       {
         #pragma region action of Event type G
-
+        j = currentTime / STEP_TIME;
+        int nextNode = allNodes[i].links[0].nextIndex;
+        int nextPort = allNodes[i].links[0].nextPort;
+        //int srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
+        actionG(&bufferHosts[i], &receivedPkts[i][j], 
+                  allNodes[nextNode + numOfHosts].links[nextPort].pkt);
+        assert(allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP == -1);          
         #pragma endregion
       }
     }
