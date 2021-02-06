@@ -14,6 +14,12 @@ void calculateThroughput(unsigned long **receivedPackets, int PACKET_SIZE, int S
          counter[j] += receivedPackets[i][j];
       }
    }
+
+   for(i = 0; i < STEP; i++){
+      printf("|%ld", counter[i]);
+   }
+   printf("\n");
+
    for(i = 0; i < STEP; i++){
       thpt[i] = (double)counter[i]*PACKET_SIZE*100/BANDWIDTH_HOST;
       printf("|%lf", thpt[i]);
