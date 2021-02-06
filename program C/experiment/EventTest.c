@@ -180,7 +180,7 @@ int main(int argc, char **argv)
         int idPrev = allNodes[i + numOfHosts].links[portID].nextIndex;
 
         int idPrevPort = allNodes[i + numOfHosts].links[portID].nextPort;
-        idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && idPrevPort < k / 2
+        idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && portID < k / 2
                        ? 0
                        : numOfHosts);
 
