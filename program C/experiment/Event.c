@@ -493,6 +493,37 @@ int actionH_HOST(BufferHost *bufferHost, Packet *pktInLink
     return generateEventC;
 }
 
+void actionG(BufferHost *buffHost, unsigned long *count, Packet *packet){
+    *count += 1;
+    if(buffHost->receivedPkts == NULL){
+        buffHost->receivedPkts = malloc(sizeof(Sender));
+        buffHost->receivedPkts->srcIP = packet->srcIP;
+        buffHost->receivedPkts->segment = 0;
+        buffHost->receivedPkts->offset = 1;
+        buffHost->receivedPkts->next = NULL;
+    }
+    else{
+        Sender *temp = buffHost->receivedPkts;
+        while(temp != NULL){
+            if(temp->srcIP == packet->srcIP){
+                if(temp->offset == ULONG_MAX){
+                    temp->segment++;
+                    temp->offset = 0;
+                    break;
+                }
+                temp->offset += 1;
+            }
+            else{
+                temp = temp->next;
+            }
+        }
+    }
+    packet->id = -1;
+    packet->srcIP = -1;
+    packet->dstIP = -1;
+    packet->generatedTime = -1;
+    packet->state = P_NULL;
+}
 void changeForRemove(int *firstLastBuffer){
     int first = firstLastBuffer[0];
     int last = firstLastBuffer[1];
