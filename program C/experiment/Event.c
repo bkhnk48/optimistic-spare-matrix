@@ -398,7 +398,8 @@ int actionE(int portENB, int portEXB,
     unsigned long id = bufferSwitch->EXB[portEXB][nextLastEXB].id;
     if(id != -1){
         int count = getCount(id);
-        if(count >= 1){
+        int emptySlots = countEmptySlots(firstEXB, lastEXB);
+        if(count >= 1 && emptySlots > 0){
             result |= 1;//will create event E
             //bufferSwitch->registeredEXBs[nextLastEXB] = 0;
             bufferSwitch->requestedTimeToEXB[portEXB] = 0;
