@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "NetworkNode.c"
 #include <assert.h>
+#include <limits.h>
 
 #ifndef _TEST_API_
 #define _TEST_API_
@@ -90,14 +91,16 @@ void assertPackets(NetworkNode *allNodes,
     * this func has not yet counted received packets in destination(s)
     */                        
     int i = 0, j = 0, l = 0;
-    unsigned long allGeneratedPackets = 0;
-    unsigned long pktsInHost = 0;
-    unsigned long pktsInSwitches = 0;
-    unsigned long pktsInLinks = 0;
+    double allGeneratedPackets = 0;
+    double pktsInHost = 0;
+    double pktsInSwitches = 0;
+    double pktsInLinks = 0;
+    double pktsInDest = 0;
     for(i = 0; i < numOfHosts; i++){
         allGeneratedPackets = allNodes[i].generatedPackets;
         pktsInHost = getPacketsInSource(&buffHosts[i]);
         pktsInSwitches = 0;
+        pktsInDest = 0;
         pktsInLinks = (allNodes[i].links[0].pkt->dstIP != -1) ? 1 : 0; 
         for(j = 0; j < numOfSwitches; j++){
             pktsInSwitches += getPacketsInSwitch(allNodes[i].ipv4
@@ -109,9 +112,21 @@ void assertPackets(NetworkNode *allNodes,
                         ) ? 1 : 0;
             }
         }
-        //printf("validated %d: %ld = %ld + %ld + %ld\n",
-        //         i, allGeneratedPackets, pktsInHost, pktsInLinks, pktsInSwitches);
-        assert(allGeneratedPackets == pktsInHost + pktsInLinks + pktsInSwitches);
+        
+        for(j = 0; j < numOfHosts; j++){
+            if(j != i){
+                Sender *temp = buffHosts[j].receivedPkts;
+                while(temp != NULL){
+                    if(temp->srcIP == allNodes[i].ipv4){
+                        pktsInDest += temp->offset + temp->segment*ULONG_MAX;
+                    }
+                    temp = temp->next;
+                }
+            }
+        }
+        //printf("validated %d: %lf = %lf + %lf + %lf + %lf\n",
+        //         i, allGeneratedPackets, pktsInHost, pktsInLinks, pktsInSwitches, pktsInDest);
+        assert(allGeneratedPackets == pktsInHost + pktsInLinks + pktsInSwitches + pktsInDest);
         
     }                            
 }
