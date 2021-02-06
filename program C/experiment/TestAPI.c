@@ -75,7 +75,7 @@ void checkENB_EXB(BufferSwitch *buffSwitch, int k){
     }
 }
 
-void checkGeneratedPackets(NetworkNode *allNodes, 
+void assertPackets(NetworkNode *allNodes, 
                             BufferHost *buffHosts,
                             BufferSwitch *buffSwitches,
                             int numOfHosts,
