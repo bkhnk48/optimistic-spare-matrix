@@ -557,6 +557,9 @@ void changeForInsert(int *firstLastBuffer){
 int countEmptySlots(int first, int last){
     if(first == 0 && last == -1)
         return BUFFER_SIZE;
+    if(last < first){
+        last += BUFFER_SIZE;
+    }
     return (BUFFER_SIZE - (last - first + 1));
 }
 
