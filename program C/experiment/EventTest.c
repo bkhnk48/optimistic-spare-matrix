@@ -15,7 +15,7 @@ int main(int argc, char **argv)
   unsigned int first = UINT_MAX;
   int defaultSec = 1;
   int defaultBias = 0;
-  int k = 8;
+  int k = 4;
   int PACKET_SIZE = 12 * 1000; //12KB
   int SWITCH_CYCLE = 100;
   //int packets_per_sec = 1000;//each sec generated 1000 packets
@@ -46,8 +46,8 @@ int main(int argc, char **argv)
   data = malloc((6 * k * k * k) * sizeof(unsigned long));
   for (i = 0; i < 6 * k * k * k; i++)
   {
-    arr[i] = malloc(sizeof *arr[i] * 5);
-    for (j = 0; j < 5; j++)
+    arr[i] = malloc(sizeof *arr[i] * BUFFER_SIZE);
+    for (j = 0; j < BUFFER_SIZE; j++)
     {
       arr[i][j] = UINT_MAX;
     }
@@ -58,10 +58,13 @@ int main(int argc, char **argv)
   pairs = malloc((k * k * k / 4) * sizeof(int));
   for (i = 0; i < numOfHosts; i++)
   {
-    if ((i + 1) % (k / 2) != 0)
-      pairs[i] = (i / (k / 2) + 1) * (k / 2) - 1;
-    else
-      pairs[i] = 0;
+    //if ((i + 1) % (k / 2) != 0)
+    //  pairs[i] = (i / (k / 2) + 1) * (k / 2) - 1;
+    //else
+    //  pairs[i] = 0;
+    int pod = i / (k*k/4);
+    pairs[i] = ((i % (k*k/4)) + 1)%(k*k/4) + pod*(k*k/4);
+    //printf("host %ld sends to %d\n", i, pairs[i]);
   }
 
   receivedPkts = malloc(sizeof *receivedPkts * numOfHosts);
@@ -97,7 +100,7 @@ int main(int argc, char **argv)
 
   root = UINT_MAX;
 
-  for (i = 0; i < k / 2; i++) //Only test first k/2 hosts
+  for (i = k/2 - 1; i < k / 2; i++) //Only test first k/2 hosts
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
     add(A, i, 0, 0, &root //, arr
@@ -360,7 +363,11 @@ int main(int argc, char **argv)
         {
           enum TypesOfNode tempNode = typeOfNode(nextIP, k);
           enum TypesOfEvent tempEvent = (tempNode == HOST) ? G : D;
-          nextIndex += ((tempNode == HOST) ? 0 : numOfHosts);
+          Packet *pkt = allNodes[i + numOfHosts].links[portID].pkt;
+                                          
+          assert(pkt->srcIP != -1 && pkt->dstIP != -1 && pkt->generatedTime != -1);
+
+          //nextIndex += ((tempNode == HOST) ? 0 : numOfHosts);
           idNodeInTree = hash(nextIndex, tempNode, nextPort, tempEvent, k);
           add(tempEvent, nextIndex, nextPort, currentTime + loadingTime, &root, idNodeInTree);
         }
@@ -375,7 +382,7 @@ int main(int argc, char **argv)
         //int srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
         actionG(&bufferHosts[i], &receivedPkts[i][j],
                 allNodes[nextNode + numOfHosts].links[nextPort].pkt);
-        //assert(allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP == -1);
+        assert(allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP == -1);
         #pragma endregion
       }
     }
