@@ -408,7 +408,7 @@ int main(int argc, char **argv)
   }
   printf("\n\nFINISH !!!!!!!!!!!! ^_^....\n");
 
-  calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, BANDWIDTH_HOST);
+  calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, (double)BANDWIDTH_HOST*STEP_TIME/1000000);
   assertPackets(allNodes, bufferHosts,
                         bufferSwitches, numOfHosts, 5 * k * k / 4, k);
 
