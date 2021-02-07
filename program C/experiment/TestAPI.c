@@ -77,7 +77,8 @@ void checkENB_EXB(BufferSwitch *buffSwitch, int k){
     }
 }
 
-void assertPackets(NetworkNode *allNodes, 
+void assertPackets(unsigned long total, 
+                        NetworkNode *allNodes, 
                             BufferHost *buffHosts,
                             BufferSwitch *buffSwitches,
                             int numOfHosts,
@@ -125,10 +126,12 @@ void assertPackets(NetworkNode *allNodes,
                 }
             }
         }
-        //printf("validated %d: %lf = %lf + %lf + %lf + %lf\n",
-        //         i, allGeneratedPackets, pktsInHost, pktsInLinks, pktsInSwitches, pktsInDest);
+        total -= pktsInDest;
+        printf("validated %d: %lf = %lf + %lf + %lf + %lf\n",
+                 i, allGeneratedPackets, pktsInHost, pktsInLinks, pktsInSwitches, pktsInDest);
         assert(allGeneratedPackets == pktsInHost + pktsInLinks + pktsInSwitches + pktsInDest);
         
-    }                            
+    } 
+    assert(total == 0);                           
 }
 #endif
