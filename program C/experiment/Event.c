@@ -78,12 +78,15 @@ int actionB(BufferHost *bufferHost, Packet *pktInLink//, Packet *connectedENB
             bufferHost->firstSQ = -1;
         }
         else{
-            packetID = bufferHost->lastSQ;
+            //packetID = bufferHost->lastSQ;
+            packetID = bufferHost->firstSQ;
             if(bufferHost->lastSQ == bufferHost->firstSQ + 1){
                 bufferHost->lastSQ = -1;
+                bufferHost->firstSQ++; 
             }
             else{
-                bufferHost->lastSQ--;
+                //bufferHost->lastSQ--;
+                bufferHost->firstSQ++;
             }
         }
     }
@@ -129,6 +132,8 @@ int actionC(BufferHost *bufferHost, Link *link,
                 bufferHost->firstEXB++;
                 //bufferHost->lastEXB;
             }
+            if(isFull)
+                printf("DEBUG\n");
         }
     }
 
