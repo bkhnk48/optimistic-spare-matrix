@@ -341,8 +341,9 @@ int main(int argc, char **argv)
         assert(availPktInLink + bufferHosts[i].countNextENB == countEmptySlots(firstENB, lastENB)
                 );
 
-        if (generateEventC)
+        if (generateEventC){
           add(C, i, 0, currentTime + defaultBias * 33, &root, first - 1);
+        }
       }
       else if (type == F)
       {
