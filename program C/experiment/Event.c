@@ -537,6 +537,22 @@ void actionG(BufferHost *buffHost, unsigned long *count, Packet *packet){
     packet->generatedTime = -1;
     packet->state = P_NULL;
 }
+
+int actionH(BufferSwitch *buffSwitch, int type, int portID, Packet *pktInLink, int k){
+    //return value is the value of variable: generateEventF
+    if(type != EDGE_SWITCH || portID >= k/2){
+        buffSwitch->countNextENB[portID]++;
+    }
+    if(countEmptySlots(buffSwitch->firstLastEXBs[portID][0],
+                        buffSwitch->firstLastEXBs[portID][1])
+            < BUFFER_SIZE
+                ){
+        return (pktInLink->id == -1);
+    }
+    else
+        return 0;
+}
+
 void changeForRemove(int *firstLastBuffer){
     int first = firstLastBuffer[0];
     int last = firstLastBuffer[1];
