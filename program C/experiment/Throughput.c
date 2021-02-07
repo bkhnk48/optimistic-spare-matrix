@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void calculateThroughput(unsigned long **receivedPackets, int PACKET_SIZE, int STEP, int numOfHosts, int BANDWIDTH_HOST){
+void calculateThroughput(unsigned long **receivedPackets, int PACKET_SIZE, int STEP, int numOfHosts, double INTERVAL_BANDWIDTH){
    int i, j;
    double *thpt = malloc(STEP * sizeof(double));
    unsigned long *counter = malloc(STEP * sizeof(unsigned long));
@@ -21,8 +21,8 @@ void calculateThroughput(unsigned long **receivedPackets, int PACKET_SIZE, int S
    printf("\n");
 
    for(i = 0; i < STEP; i++){
-      thpt[i] = (double)counter[i]*PACKET_SIZE*100/BANDWIDTH_HOST;
-      printf("|%lf", thpt[i]);
+      thpt[i] = counter[i]*PACKET_SIZE*100/INTERVAL_BANDWIDTH;
+      printf("|%.0lf%%", thpt[i]);
    }
    printf("\n");
    free(thpt);
