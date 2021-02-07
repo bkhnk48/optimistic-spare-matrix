@@ -405,6 +405,9 @@ int main(int argc, char **argv)
         int portID = (data[first] >> 16) & MASK_INT;
         generateEventF = actionH(&bufferSwitches[i], allNodes[i + numOfHosts].type, portID, 
                                     allNodes[i + numOfHosts].links[portID].pkt, k);
+        if(generateEventF){
+          add(F, i, portID, currentTime, &root, first - 1);
+        }
       }
     }
     
