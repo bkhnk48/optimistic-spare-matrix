@@ -31,6 +31,7 @@ unsigned long getPacketsInSource(BufferHost *buffHost){
     unsigned long countEXB = 
             getCountFirstLast(buffHost->firstEXB, buffHost->lastEXB);
     
+    //printf("EXB has %ld, SQ has %ld ", countEXB, countSQ);
     count = countEXB + countSQ;
     return count;
 }
@@ -124,8 +125,8 @@ void assertPackets(NetworkNode *allNodes,
                 }
             }
         }
-        printf("validated %d: %lf = %lf + %lf + %lf + %lf\n",
-                 i, allGeneratedPackets, pktsInHost, pktsInLinks, pktsInSwitches, pktsInDest);
+        //printf("validated %d: %lf = %lf + %lf + %lf + %lf\n",
+        //         i, allGeneratedPackets, pktsInHost, pktsInLinks, pktsInSwitches, pktsInDest);
         assert(allGeneratedPackets == pktsInHost + pktsInLinks + pktsInSwitches + pktsInDest);
         
     }                            
