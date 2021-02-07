@@ -396,7 +396,7 @@ int main(int argc, char **argv)
         assert(j >= 0 && j < 100);
         idNodeInTree = hash(nextNode, EDGE_SWITCH, nextPort, H, k);
         add(H, nextNode, nextPort,currentTime + 1, &root, idNodeInTree);
-        if(j == 37)
+        if(j == 56)
           printf("currT %ld\n", currentTime);
         #pragma endregion
       }
