@@ -394,11 +394,18 @@ int main(int argc, char **argv)
                 allNodes[nextNode + numOfHosts].links[nextPort].pkt);
         assert(allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP == -1);
         assert(j >= 0 && j < 100);
+        idNodeInTree = hash(nextNode, EDGE_SWITCH, nextPort, H, k);
+        add(H, nextNode, nextPort,currentTime + 1, &root, idNodeInTree);
         if(j == 37)
           printf("currT %ld\n", currentTime);
         #pragma endregion
       }
-      
+      else if (type == H)
+      {
+        int portID = (data[first] >> 16) & MASK_INT;
+        generateEventF = actionH(&bufferSwitches[i], allNodes[i + numOfHosts].type, portID, 
+                                    allNodes[i + numOfHosts].links[portID].pkt, k);
+      }
     }
     
     ongoingTime = -1;
