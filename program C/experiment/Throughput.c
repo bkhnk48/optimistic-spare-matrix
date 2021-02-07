@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void calculateThroughput(unsigned long **receivedPackets, int PACKET_SIZE, int STEP, int numOfHosts, double INTERVAL_BANDWIDTH){
+unsigned long calculateThroughput(unsigned long **receivedPackets, int PACKET_SIZE, int STEP, int numOfHosts, double INTERVAL_BANDWIDTH){
    int i, j;
+   unsigned long total = 0;
    double *thpt = malloc(STEP * sizeof(double));
    unsigned long *counter = malloc(STEP * sizeof(unsigned long));
    for(i = 0; i < STEP; i++){
@@ -17,6 +18,7 @@ void calculateThroughput(unsigned long **receivedPackets, int PACKET_SIZE, int S
 
    for(i = 0; i < STEP; i++){
       printf("|%ld", counter[i]);
+      total += counter[i];
    }
    printf("\n");
 
@@ -27,4 +29,5 @@ void calculateThroughput(unsigned long **receivedPackets, int PACKET_SIZE, int S
    printf("\n");
    free(thpt);
    free(counter);
+   return total;
 }
