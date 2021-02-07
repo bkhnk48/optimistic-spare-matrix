@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 
   root = UINT_MAX;
 
-  for (i = 0; i < k / 2; i++) //Only test first k/2 hosts
+  for (i = 0; i < 1; i++) //Only test first k/2 hosts
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
     add(A, i, 0, 0, &root //, arr
@@ -147,7 +147,6 @@ int main(int argc, char **argv)
       #pragma region action of Event type B
       else if (type == B)
       {
-
         generateEventC = actionB(&bufferHosts[i],
                                  allNodes[i].links[0].pkt);
         if (generateEventC)
@@ -327,17 +326,20 @@ int main(int argc, char **argv)
       else if (type == H_HOST)
       {
         //generateEventB = 0;
+        int nextNode = allNodes[i].links[0].nextIndex;
+        int nextPort = allNodes[i].links[0].nextPort;
         int tempCount = bufferHosts[i].countNextENB;
         generateEventC = actionH_HOST(&bufferHosts[i],
                                       allNodes[i].links[0].pkt
                                       //, &generateEventB
         );
         assert(bufferHosts[i].countNextENB == tempCount + 1);
-        int nextNode = allNodes[i].links[0].nextIndex;
-        int nextPort = allNodes[i].links[0].nextPort;
+        
         int firstENB = bufferSwitches[nextNode].firstLastENBs[nextPort][0];
         int lastENB = bufferSwitches[nextNode].firstLastENBs[nextPort][1];
-        assert(bufferHosts[i].countNextENB == countEmptySlots(firstENB, lastENB));
+        int availPktInLink = (allNodes[i].links[0].pkt->id != -1 ? 1 : 0);
+        assert(availPktInLink + bufferHosts[i].countNextENB == countEmptySlots(firstENB, lastENB)
+                );
 
         if (generateEventC)
           add(C, i, 0, currentTime + defaultBias * 33, &root, first - 1);
@@ -387,7 +389,9 @@ int main(int argc, char **argv)
         assert(allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP == -1);
         #pragma endregion
       }
+      
     }
+    
     ongoingTime = -1;
     removeFirst(&first, &root //, arr
     );
