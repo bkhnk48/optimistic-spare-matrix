@@ -19,11 +19,12 @@ int main(int argc, char **argv)
   int defaultBias = 0;
   int k = 4;
   int PACKET_SIZE = 12 * 1000; //12KB
-  int SWITCH_CYCLE = 100;
+  int SWITCH_CYCLE = 10;
   //int packets_per_sec = 1000;//each sec generated 1000 packets
   int T = 1000;
   int BANDWIDTH_HOST = 12 * 1000 * 1000; //12MByte/s
-  int loadingTime = BANDWIDTH_HOST / PACKET_SIZE + 13;
+  int loadingTime = BANDWIDTH_HOST / PACKET_SIZE ;//+ 13;
+  //printf("Loading time %d\n", loadingTime);
   unsigned long **receivedPkts = NULL;
   int STEP = 100;
 
@@ -66,7 +67,7 @@ int main(int argc, char **argv)
     //  pairs[i] = 0;
     int pod = i / (k*k/4);
     pairs[i] = ((i % (k*k/4)) + 1)%(k*k/4) + pod*(k*k/4);
-    //printf("host %ld sends to %d\n", i, pairs[i]);
+    printf("host %ld sends to %d\n", i, pairs[i]);
   }
 
   receivedPkts = malloc(sizeof *receivedPkts * numOfHosts);
@@ -98,6 +99,7 @@ int main(int argc, char **argv)
   int generateEventH_HOST;
   int generateEventG;
   int idNodeInTree = 0;
+  int numOfFlows = 0;
   //int delta = 0;
 
   root = UINT_MAX;
@@ -108,6 +110,7 @@ int main(int argc, char **argv)
     add(A, i, 0, 0, &root //, arr
         ,
         idNodeInTree);
+    numOfFlows++;
   }
 
   int cPkt = 0;
@@ -120,6 +123,8 @@ int main(int argc, char **argv)
   {
     if (ongoingTime == currentTime)
     {
+      if(currentTime == 370000)
+        printf("DEBUG\n");
       count++;
       #pragma region get value from data array
       int type = data[first] & 65535; //type of event
@@ -389,6 +394,8 @@ int main(int argc, char **argv)
                 allNodes[nextNode + numOfHosts].links[nextPort].pkt);
         assert(allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP == -1);
         assert(j >= 0 && j < 100);
+        if(j == 37)
+          printf("currT %ld\n", currentTime);
         #pragma endregion
       }
       
@@ -409,7 +416,7 @@ int main(int argc, char **argv)
   }
   printf("\n\nFINISH !!!!!!!!!!!! ^_^....\n");
 
-  unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, (double)BANDWIDTH_HOST*STEP_TIME/1000000);
+  unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000);
   assertPackets(total, allNodes, bufferHosts,
                         bufferSwitches, numOfHosts, 5 * k * k / 4, k);
 
