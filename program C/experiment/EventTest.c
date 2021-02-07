@@ -388,6 +388,7 @@ int main(int argc, char **argv)
         actionG(&bufferHosts[i], &receivedPkts[i][j],
                 allNodes[nextNode + numOfHosts].links[nextPort].pkt);
         assert(allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP == -1);
+        assert(j >= 0 && j < 100);
         #pragma endregion
       }
       
@@ -408,8 +409,8 @@ int main(int argc, char **argv)
   }
   printf("\n\nFINISH !!!!!!!!!!!! ^_^....\n");
 
-  calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, (double)BANDWIDTH_HOST*STEP_TIME/1000000);
-  assertPackets(allNodes, bufferHosts,
+  unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, (double)BANDWIDTH_HOST*STEP_TIME/1000000);
+  assertPackets(total, allNodes, bufferHosts,
                         bufferSwitches, numOfHosts, 5 * k * k / 4, k);
 
   return 0;
