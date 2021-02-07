@@ -97,12 +97,10 @@ int actionB(BufferHost *bufferHost, Packet *pktInLink//, Packet *connectedENB
     }
     #pragma endregion 
     
-    generateEventC = (pktInLink->id == -1);
-    if(generateEventC){
+    generateEventC = (pktInLink->id == -1) &&
         //Check buffer of next switch
-        generateEventC = //(connectedENB[BUFFER_SIZE - 1].id == -1);
-                        bufferHost->countNextENB > 0;
-    }
+                        (bufferHost->countNextENB > 0);
+    
     return generateEventC;
 }
 
