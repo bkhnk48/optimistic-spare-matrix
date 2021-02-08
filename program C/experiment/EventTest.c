@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     //  pairs[i] = 0;
     int pod = i / (k*k/4);
     pairs[i] = ((i % (k*k/4)) + 1)%(k*k/4) + pod*(k*k/4);
-    printf("host %ld sends to %d\n", i, pairs[i]);
+    //printf("host %ld sends to %d\n", i, pairs[i]);
   }
 
   receivedPkts = malloc(sizeof *receivedPkts * numOfHosts);
@@ -100,8 +100,7 @@ int main(int argc, char **argv)
   int generateEventG;
   int idNodeInTree = 0;
   int numOfFlows = 0;
-  //int delta = 0;
-
+  
   root = UINT_MAX;
 
   for (i = 0; i < 1; i++) //Only test first k/2 hosts
@@ -123,8 +122,6 @@ int main(int argc, char **argv)
   {
     if (ongoingTime == currentTime)
     {
-      if(currentTime == 370000)
-        printf("DEBUG\n");
       count++;
       #pragma region get value from data array
       int type = data[first] & 65535; //type of event
@@ -334,6 +331,7 @@ int main(int argc, char **argv)
         int nextNode = allNodes[i].links[0].nextIndex;
         int nextPort = allNodes[i].links[0].nextPort;
         int tempCount = bufferHosts[i].countNextENB;
+        
         generateEventC = actionH_HOST(&bufferHosts[i],
                                       allNodes[i].links[0].pkt
                                       //, &generateEventB
@@ -347,7 +345,10 @@ int main(int argc, char **argv)
                 );
 
         if (generateEventC){
-          add(C, i, 0, currentTime + defaultBias * 33, &root, first - 1);
+          if(arr[first - 1][2] == UINT_MAX 
+                && arr[first - 1][3] == UINT_MAX 
+                && arr[first - 1][4] == UINT_MAX)
+            add(C, i, 0, currentTime + defaultBias * 33, &root, first - 1);
         }
       }
       else if (type == F)
@@ -387,6 +388,7 @@ int main(int argc, char **argv)
       {
         #pragma region action of Event type G
         j = currentTime / STEP_TIME;
+        
         int nextNode = allNodes[i].links[0].nextIndex;
         int nextPort = allNodes[i].links[0].nextPort;
         //int srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
@@ -396,8 +398,7 @@ int main(int argc, char **argv)
         assert(j >= 0 && j < 100);
         idNodeInTree = hash(nextNode, EDGE_SWITCH, nextPort, H, k);
         add(H, nextNode, nextPort,currentTime + 1, &root, idNodeInTree);
-        if(j == 56)
-          printf("currT %ld\n", currentTime);
+        
         #pragma endregion
       }
       else if (type == H)
@@ -406,7 +407,12 @@ int main(int argc, char **argv)
         generateEventF = actionH(&bufferSwitches[i], allNodes[i + numOfHosts].type, portID, 
                                     allNodes[i + numOfHosts].links[portID].pkt, k);
         if(generateEventF){
-          add(F, i, portID, currentTime, &root, first - 1);
+          //idNodeInTree = hash(i, allNodes[i + numOfHosts].type, portID, F, k);
+          if(arr[first - 1][2] == UINT_MAX 
+                && arr[first - 1][3] == UINT_MAX 
+                && arr[first - 1][4] == UINT_MAX){
+            add(F, i, portID, currentTime, &root, first - 1);
+          }
         }
       }
     }
@@ -424,7 +430,7 @@ int main(int argc, char **argv)
       ongoingTime = -1;
     }
   }
-  printf("\n\nFINISH !!!!!!!!!!!! ^_^....\n");
+  printf("\n\nFINISH!!!!!!!!!!!! ^_^....\n");
 
   unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000);
   assertPackets(total, allNodes, bufferHosts,
