@@ -293,7 +293,6 @@ void move(int portENB, int portEXB, BufferSwitch *bufferSwitch){
     unsigned long temp = bufferSwitch->EXB[portEXB][lastEXB].id;
     unsigned long requestedTime = bufferSwitch->requestedTimeToEXB[portEXB];
     
-
     bufferSwitch->EXB[portEXB][lastEXB].id = bufferSwitch->ENB[portENB][firstENB].id;
     bufferSwitch->ENB[portENB][firstENB].id = -1;
     bufferSwitch->EXB[portEXB][lastEXB].srcIP = 
@@ -461,8 +460,9 @@ int actionF(BufferSwitch *bufferSwitch,
             }
         }
         int wasFull = emptySlots == 0;
-        if(wasFull)
-            *generateEventE = 0;
+        if(wasFull){
+            *generateEventE = 1;
+        }
     }
     return generateEventD;
 }
@@ -481,14 +481,11 @@ int actionH_HOST(BufferHost *bufferHost, Packet *pktInLink
             generateEventC = 1;
         }
         else{
-            printf("First EXB %ld and in link %d\n"
-                    , bufferHost->firstEXB, pktInLink->dstIP
-                    );
+            //might be re-written in the future
         }
     }
     else{
         generateEventC = (pktInLink->id == -1) && (bufferHost->firstEXB != -1);
-    //    printf("count empty in ENB %d\n", bufferHost->countNextENB - 1);
     }
 
     return generateEventC;
