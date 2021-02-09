@@ -232,7 +232,7 @@ int main(int argc, char **argv)
           }
         }
         #pragma endregion
-        assert(allNodes[idPrev].links[0].pkt->id == -1);
+        assert(allNodes[idPrev].links[idPrevPort].pkt->id == -1);
       }
       else if (type == E)
       {
