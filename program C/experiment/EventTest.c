@@ -65,10 +65,10 @@ int main(int argc, char **argv)
     //  pairs[i] = (i / (k / 2) + 1) * (k / 2) - 1;
     //else
     //  pairs[i] = 0;
-    //int pod = i / (k*k/4);
-    pairs[i] = (i + k*k/4) % numOfHosts;
-    //((i % (k*k/4)) + 1)%(k*k/4) + pod*(k*k/4);
-    //printf("host %ld sends to %d\n", i, pairs[i]);
+    int pod = i / (k*k/4);
+    pairs[i] = //(i + k*k/4) % numOfHosts;
+    ((i % (k*k/4)) + 1)%(k*k/4) + pod*(k*k/4);
+    printf("host %ld sends to %d\n", i, pairs[i]);
   }
 
   receivedPkts = malloc(sizeof *receivedPkts * numOfHosts);
@@ -104,7 +104,7 @@ int main(int argc, char **argv)
   
   root = UINT_MAX;
 
-  for (i = 0; i < 1; i++) //Only test first k/2 hosts
+  for (i = 0; i < k*k/4; i++) //Only test first hosts in pod
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
     add(A, i, 0, 0, &root //, arr
