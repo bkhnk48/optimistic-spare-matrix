@@ -261,7 +261,8 @@ NetworkNode *initNetworkNodes(int numOfHosts, int numOfSwitches, int k){
         networkNodes[i].links[j].nextPort = (currIP >> 8) & 255;
       }
       for(j = k/2; j < k; j++){
-        networkNodes[i].links[j].nextPort = ((currIP >> 8) & 255) - k/2;
+        networkNodes[i].links[j].nextPort = //((currIP >> 8) & 255) - k/2;
+                                            (currIP >> 16) & 255;
       }
     }
 
