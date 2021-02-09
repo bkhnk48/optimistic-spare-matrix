@@ -103,7 +103,7 @@ int main(int argc, char **argv)
   
   root = UINT_MAX;
 
-  for (i = 0; i < 1; i++) //Only test first k/2 hosts
+  for (i = 1; i < 2; i++) //Only test first k/2 hosts
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
     add(A, i, 0, 0, &root //, arr
@@ -249,7 +249,7 @@ int main(int argc, char **argv)
         generateEventH_HOST = 0;
         int H_IS_HOST =
             ((allNodes[i + numOfHosts].type == EDGE_SWITCH &&
-              pickUpENB < (k / 2 - 1))
+              pickUpENB <= (k / 2 - 1))
                  ? 1
                  : 0);
         //number of empty slots in ENB b4 moving
@@ -259,7 +259,7 @@ int main(int argc, char **argv)
         preEmptyInEXB = countEmptySlots(bufferSwitches[i].firstLastEXBs[portID][0], bufferSwitches[i].firstLastEXBs[portID][1]);
         
         move(pickUpENB, portID, &bufferSwitches[i]);
-
+        
         checkENB_EXB(&bufferSwitches[i], k);
         //number of empty slots in ENB after moving
         int postEmptyInENB = countEmptySlots(bufferSwitches[i].firstLastENBs[pickUpENB][0], bufferSwitches[i].firstLastENBs[pickUpENB][1]);
@@ -321,6 +321,13 @@ int main(int argc, char **argv)
         else
         {
           //generate event H
+          //printf("THU LAM GI XEM SAO\n");
+          int idPrePort = allNodes[i + numOfHosts].links[pickUpENB].nextPort;
+          idNodeInTree = hash(idPrev, allNodes[idPrev + numOfHosts].type, 
+                                  idPrePort,
+                                  H, k
+                                );
+          add(H, idPrev, idPrePort, currentTime + 1, &root, idNodeInTree);
         }
 
         #pragma endregion
@@ -363,7 +370,9 @@ int main(int argc, char **argv)
                                           &generateEventE //,
                                                           //getIPv4OfHost(pairs[i], k), T
         );
-        //if(generateEventE)
+        if(generateEventE){
+          printf("Su kien E xay ra tren switch %ld, portID = UNKNOWN\n", i);
+        }
         //  add(E, i, 0, currentTime +  defaultBias*13
         //                , &root, first - 1
         //          );
