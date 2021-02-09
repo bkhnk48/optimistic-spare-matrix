@@ -65,8 +65,9 @@ int main(int argc, char **argv)
     //  pairs[i] = (i / (k / 2) + 1) * (k / 2) - 1;
     //else
     //  pairs[i] = 0;
-    int pod = i / (k*k/4);
-    pairs[i] = ((i % (k*k/4)) + 1)%(k*k/4) + pod*(k*k/4);
+    //int pod = i / (k*k/4);
+    pairs[i] = (i + k*k/4) % numOfHosts;
+    //((i % (k*k/4)) + 1)%(k*k/4) + pod*(k*k/4);
     //printf("host %ld sends to %d\n", i, pairs[i]);
   }
 
@@ -103,7 +104,7 @@ int main(int argc, char **argv)
   
   root = UINT_MAX;
 
-  for (i = 0; i < k/2; i++) //Only test first k/2 hosts
+  for (i = 0; i < 1; i++) //Only test first k/2 hosts
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
     add(A, i, 0, 0, &root //, arr
@@ -188,7 +189,6 @@ int main(int argc, char **argv)
                        : numOfHosts);
 
         Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
-        
         assert(pkt->srcIP != -1 && pkt->dstIP != -1 && pkt->generatedTime != -1);
 
         int preLast = bufferSwitches[i].firstLastENBs[portID][1];
@@ -386,7 +386,6 @@ int main(int argc, char **argv)
           enum TypesOfNode tempNode = typeOfNode(nextIP, k);
           enum TypesOfEvent tempEvent = (tempNode == HOST) ? G : D;
           Packet *pkt = allNodes[i + numOfHosts].links[portID].pkt;
-                                          
           assert(pkt->srcIP != -1 && pkt->dstIP != -1 && pkt->generatedTime != -1);
 
           //nextIndex += ((tempNode == HOST) ? 0 : numOfHosts);
