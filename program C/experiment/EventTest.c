@@ -188,7 +188,7 @@ int main(int argc, char **argv)
                        : numOfHosts);
 
         Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
-
+        
         assert(pkt->srcIP != -1 && pkt->dstIP != -1 && pkt->generatedTime != -1);
 
         int preLast = bufferSwitches[i].firstLastENBs[portID][1];
@@ -239,8 +239,7 @@ int main(int argc, char **argv)
         #pragma region action of Event type E
         int portID = (data[first] >> 16) & MASK_INT;
         
-        int pickUpENB = chooseENB_ID(portID,
-                                     &bufferSwitches[i], k);
+        int pickUpENB = chooseENB_ID(portID, &bufferSwitches[i], k);
         assert(pickUpENB >= 0 && pickUpENB < k && pickUpENB != portID);
 
         generateEventE = 0;
@@ -321,7 +320,6 @@ int main(int argc, char **argv)
         else
         {
           //generate event H
-          //printf("THU LAM GI XEM SAO\n");
           int idPrePort = allNodes[i + numOfHosts].links[pickUpENB].nextPort;
           idNodeInTree = hash(idPrev, allNodes[idPrev + numOfHosts].type, 
                                   idPrePort,
@@ -371,7 +369,16 @@ int main(int argc, char **argv)
                                                           //getIPv4OfHost(pairs[i], k), T
         );
         if(generateEventE){
-          printf("Su kien E xay ra tren switch %ld, portID = UNKNOWN\n", i);
+          //printf("Su kien E xay ra tren switch %ld, portID = UNKNOWN, time %ld\n", i, currentTime);
+          int pickUpENB = findENB_ID(portID, &bufferSwitches[i], currentTime, k);
+          if(pickUpENB >= 0 && pickUpENB < k && pickUpENB != portID){
+            idNodeInTree = hash(i, allNodes[i + numOfHosts].type,
+                              portID, E, k);
+            if(idNodeInTree != first - 1){
+              printf("khong thua\n");
+            }
+            add(E, i, portID, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
+          }
         }
         //  add(E, i, 0, currentTime +  defaultBias*13
         //                , &root, first - 1
