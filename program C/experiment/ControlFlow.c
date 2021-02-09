@@ -57,4 +57,72 @@ int chooseENB_ID(int EXB_ID, BufferSwitch *bufferSwitch, int k){
         return -1;
     return pickUp;          
 }
+
+int findENB_ID(int EXB_ID, BufferSwitch *bufferSwitch, unsigned long currentTime, int k){
+    int found = 0;
+    int j = bufferSwitch->firstLastEXBs[EXB_ID][1];
+    j = (j == -1) ? 0 : ((j + 1) % BUFFER_SIZE);
+    
+    int m;
+    int firstENB ;
+    unsigned long soonestPkt = ULONG_MAX;
+    int pickUp = -1;
+    unsigned short count = 0;
+    for(m = 0; m <= k - 1; m++){
+        if(bufferSwitch->requestedTimeOfENB[m] 
+                <= currentTime
+            && 
+                bufferSwitch->registeredEXBs[m]
+                == EXB_ID
+            && m != EXB_ID
+                )
+        {
+            firstENB = bufferSwitch->firstLastENBs[m][0];
+            if(bufferSwitch->ENB[m][firstENB].id != -1 &&
+                soonestPkt > 
+                    bufferSwitch->ENB[m][firstENB].generatedTime){
+                soonestPkt = 
+                    bufferSwitch->ENB[m][firstENB].generatedTime;
+                pickUp = m;
+            } 
+            //countRequestedTime++;
+        }
+    }
+    int min = pickUp;
+    int max = pickUp;
+    if(pickUp < k && pickUp >= 0 && pickUp != EXB_ID){
+        if(bufferSwitch->requestedTimeToEXB[EXB_ID] != currentTime)
+                    bufferSwitch->requestedTimeToEXB[EXB_ID] = currentTime;
+        for(m = 0; m <= k - 1; m++){
+            if(bufferSwitch->requestedTimeOfENB[m] 
+                <= currentTime
+            && 
+                bufferSwitch->registeredEXBs[m]
+                == EXB_ID
+            && m != EXB_ID
+                )
+            {
+                firstENB = bufferSwitch->firstLastENBs[m][0];
+                if(soonestPkt == bufferSwitch->ENB[m][firstENB].generatedTime
+                    && bufferSwitch->ENB[m][firstENB].id != -1
+                    ){
+                    count++;
+                    min = (min < m) ? m : min;
+                    max = (max < m) ? m : max;
+                }
+            }
+        }
+        if(count == 1){
+            max = 0;
+        }
+        unsigned long result = 0;
+        result |= count;
+        result |= (min << 16);
+        result |= ((unsigned long)max << 32);
+        bufferSwitch->EXB[EXB_ID][j].id = result;
+    }
+    
+    return pickUp;          
+}
+
 #endif
