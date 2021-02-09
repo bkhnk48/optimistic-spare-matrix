@@ -103,7 +103,7 @@ int main(int argc, char **argv)
   
   root = UINT_MAX;
 
-  for (i = 1; i < 2; i++) //Only test first k/2 hosts
+  for (i = 0; i < k/2; i++) //Only test first k/2 hosts
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
     add(A, i, 0, 0, &root //, arr
@@ -372,11 +372,9 @@ int main(int argc, char **argv)
           //printf("Su kien E xay ra tren switch %ld, portID = UNKNOWN, time %ld\n", i, currentTime);
           int pickUpENB = findENB_ID(portID, &bufferSwitches[i], currentTime, k);
           if(pickUpENB >= 0 && pickUpENB < k && pickUpENB != portID){
-            idNodeInTree = hash(i, allNodes[i + numOfHosts].type,
-                              portID, E, k);
-            if(idNodeInTree != first - 1){
-              printf("khong thua\n");
-            }
+            idNodeInTree = first - 1;
+              //hash(i, allNodes[i + numOfHosts].type, portID, E, k);
+            //I believe the return value of hash in this case is (first - 1)
             add(E, i, portID, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
           }
         }
