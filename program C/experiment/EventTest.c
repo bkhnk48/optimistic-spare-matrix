@@ -45,9 +45,9 @@ int main(int argc, char **argv)
   unsigned long i, j;
   unsigned int N, root = UINT_MAX;
 
-  arr = malloc(sizeof *arr * (6 * k * k * k));
-  data = malloc((6 * k * k * k) * sizeof(unsigned long));
-  for (i = 0; i < 6 * k * k * k; i++)
+  arr = malloc(sizeof *arr * (25 * k * k * k/4));
+  data = malloc((25 * k * k * k/4) * sizeof(unsigned long));
+  for (i = 0; i < 25 * k * k * k/4; i++)
   {
     arr[i] = malloc(sizeof *arr[i] * BUFFER_SIZE);
     for (j = 0; j < BUFFER_SIZE; j++)
@@ -140,8 +140,7 @@ int main(int argc, char **argv)
         allNodes[i].generatedPackets++;
         add(A, i, 0, currentTime + T, &root, first);
         generateEventB = actionA(T, currentTime, &bufferHosts[i]);
-        if (generateEventB)
-        {
+        if (generateEventB){
           add(B, i, 0, currentTime + defaultBias * 13, &root, first + 1);
         }
       }
