@@ -173,7 +173,7 @@ void testNeighbors(int k){
 }
 
 void testHash(int k){
-  int size = 6*k*k*k;
+  int size = 25*k*k*k/4;
   int **arr = malloc(sizeof * arr * size);
   int i, j, ev, port;
   for(i = 0; i < size; i++){
@@ -187,7 +187,7 @@ void testHash(int k){
   int numOfSwitches = 5*k*k/4;
   int index = 0;
   int eventsOfHost[5] = {A, B, C, H_HOST, G};
-  int eventsDEF[3] = {D, E, F};
+  //int eventsDEF[3] = {D, E, F, H};
   int eventsDEFH[4] = {D, E, F, H};
   for(i = 0; i < numOfHosts + numOfSwitches; i++){
     if(i < numOfHosts){
@@ -207,14 +207,14 @@ void testHash(int k){
       int type = (i - numOfHosts) % k;
       if(type < k/2){
         for(j = 0; j < k/2; j++){
-          for(ev = 0; ev < 3; ev ++){
+          for(ev = 0; ev < 4; ev ++){
             index = hash(i - numOfHosts, EDGE_SWITCH, j, 
-                          eventsDEF[ev],
+                          eventsDEFH[ev],
                           k);
             arr[index][0] = i - numOfHosts;
             arr[index][1] = EDGE_SWITCH; //type of Node
             arr[index][2] = j; //port ID
-            arr[index][3] = eventsDEF[ev]; //type of Event
+            arr[index][3] = eventsDEFH[ev]; //type of Event
           }
         }
         for(j = k/2; j < k; j++){
@@ -281,7 +281,7 @@ void testHash(int k){
         countEdge++;
         currEdge = arr[i][0];
         if(countEdge > 1){
-          assert(countEventOfEdge == 7*k/2);
+          assert(countEventOfEdge == 8*k/2);
           assert(countPortOfEdge == k);
         }
         countEventOfEdge = 1;
@@ -329,7 +329,7 @@ void testHash(int k){
   assert(countEdge == k*k/2);
   assert(countAgg == k*k/2);
 
-  assert(countEdge * 7*k/2 + countAgg * 4 * k 
+  assert(countEdge * 8*k/2 + countAgg * 4 * k 
             == maxIndex - minIndex + 1);
 
   minIndex = hash(k*k, CORE_SWITCH, 0, D, k);
