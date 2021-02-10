@@ -294,8 +294,6 @@ void move(int portENB, int portEXB, BufferSwitch *bufferSwitch){
     unsigned long requestedTime = bufferSwitch->requestedTimeToEXB[portEXB];
     
     bufferSwitch->EXB[portEXB][lastEXB].id = bufferSwitch->ENB[portENB][firstENB].id;
-    if(bufferSwitch->EXB[portEXB][lastEXB].id == 6 && bufferSwitch->indexInGroup == 0)
-        printf("DEBUG\n");
     bufferSwitch->ENB[portENB][firstENB].id = -1;
     bufferSwitch->EXB[portEXB][lastEXB].srcIP = 
                     bufferSwitch->ENB[portENB][firstENB].srcIP;
