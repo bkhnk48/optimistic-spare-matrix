@@ -113,8 +113,6 @@ int main(int argc, char **argv)
     numOfFlows++;
   }
 
-  int cPkt = 0;
-
   removeFirst(&first, &root //, arr
   );
 
@@ -170,8 +168,6 @@ int main(int argc, char **argv)
         if (generateEventD)
         {
           idNodeInTree = hash(nextIndex, EDGE_SWITCH, nextPort, D, k);
-          if(nextIndex == 0 && nextPort == 2)
-            printf("idNodeInTree = %d\n", idNodeInTree);
           add(D, nextIndex, nextPort, currentTime + loadingTime, &root, idNodeInTree);
         }
         #pragma endregion
@@ -370,7 +366,6 @@ int main(int argc, char **argv)
                                                           //getIPv4OfHost(pairs[i], k), T
         );
         if(generateEventE){
-          //printf("Su kien E xay ra tren switch %ld, portID = UNKNOWN, time %ld\n", i, currentTime);
           int pickUpENB = findENB_ID(portID, &bufferSwitches[i], currentTime, k);
           if(pickUpENB >= 0 && pickUpENB < k && pickUpENB != portID){
             idNodeInTree = first - 1;
@@ -379,9 +374,7 @@ int main(int argc, char **argv)
             add(E, i, portID, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
           }
         }
-        //  add(E, i, 0, currentTime +  defaultBias*13
-        //                , &root, first - 1
-        //          );
+        
         if (generateEventD_OR_G)
         {
           enum TypesOfNode tempNode = typeOfNode(nextIP, k);
@@ -389,13 +382,8 @@ int main(int argc, char **argv)
           Packet *pkt = allNodes[i + numOfHosts].links[portID].pkt;
           assert(pkt->srcIP != -1 && pkt->dstIP != -1 && pkt->generatedTime != -1);
 
-          //nextIndex += ((tempNode == HOST) ? 0 : numOfHosts);
           idNodeInTree = hash(nextIndex, tempNode, nextPort, tempEvent, k);
-          /*if(tempEvent == D){
-            if(nextIndex == 0 && nextPort == 2)
-              printf("At F idNodeInTree = %d currentTime %ld \n", idNodeInTree, currentTime);
-              idNodeInTree = hash(nextIndex, tempNode, nextPort, tempEvent, k);
-          }*/
+          
           add(tempEvent, nextIndex, nextPort, currentTime + loadingTime, &root, idNodeInTree);
         }
         #pragma endregion
@@ -406,16 +394,12 @@ int main(int argc, char **argv)
         j = currentTime / STEP_TIME;
         int nextNode = allNodes[i].links[0].nextIndex;
         int nextPort = allNodes[i].links[0].nextPort;
-        if(i == 1 && nextNode == 0 && allNodes[nextNode + numOfHosts].links[nextPort].pkt->id == 5)
-          printf("DEBUG\n");
         //int srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
         actionG(&bufferHosts[i], &receivedPkts[i][j],
                 allNodes[nextNode + numOfHosts].links[nextPort].pkt);
         assert(allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP == -1);
         assert(j >= 0 && j < 100);
         idNodeInTree = hash(nextNode, EDGE_SWITCH, nextPort, H, k);
-        if(nextNode == 0 && nextPort == 1)
-          printf("At H type, idNodeInTree %d nextNode = 0, nextPort = 1\n", idNodeInTree);
         add(H, nextNode, nextPort,currentTime + 1, &root, idNodeInTree);
         
         #pragma endregion
