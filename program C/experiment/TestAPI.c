@@ -129,8 +129,8 @@ void assertPackets(unsigned long total,
             }
         }
         total -= pktsInDest;
-        printf("validated %d: %lf = %lf + %lf + %lf + %lf\n",
-                 i, allGeneratedPackets, pktsInHost, pktsInLinks, pktsInSwitches, pktsInDest);
+        //printf("validated %d: %lf = %lf + %lf + %lf + %lf\n",
+        //         i, allGeneratedPackets, pktsInHost, pktsInLinks, pktsInSwitches, pktsInDest);
         assert(allGeneratedPackets == pktsInHost + pktsInLinks + pktsInSwitches + pktsInDest);
         
     } 
