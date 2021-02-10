@@ -528,5 +528,12 @@ int main(){
     }
   }
   testHash(k);
+
+  int h_index = hash(0, EDGE_SWITCH, 1, H, 4);
+  printf("F index at sw 0, port 1 %d\n", hash(0, EDGE_SWITCH, 1, F, 4));
+  int d_index = hash(0, EDGE_SWITCH, 2, D, 4);
+  printf("E index at sw 0, port 2 %d\n", hash(0, EDGE_SWITCH, 2, E, 4));
+  printf("h_index = %d d_index = %d\n", h_index, d_index);
+  assert(h_index != d_index);
   return 0;
 }
