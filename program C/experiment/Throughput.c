@@ -17,7 +17,7 @@ unsigned long calculateThroughput(unsigned long **receivedPackets, int PACKET_SI
    }
 
    for(i = 0; i < STEP; i++){
-      printf("|%ld", counter[i]);
+      printf("|%d)%ld", i, counter[i]);
       total += counter[i];
    }
    printf("\n");
