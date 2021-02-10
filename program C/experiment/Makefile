@@ -26,7 +26,7 @@ serial:
 	gcc -pg -g -c TestAPI.c
 	gcc -pg -g -c Throughput.c
 	gcc FatTreeTest.c -g -o ftg.o
-#gcc FatTree4PortsTest.c -g -o f4t.o -lm
+	gcc FatTree4PortsTest.c -g -o f4t.o -lm
 	gcc EventTest.c -g -o e.o -lm
 n:
 	gcc -c ShiftBits.c
