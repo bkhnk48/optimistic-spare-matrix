@@ -171,6 +171,8 @@ int main(int argc, char **argv)
         if (generateEventD)
         {
           idNodeInTree = hash(nextIndex, EDGE_SWITCH, nextPort, D, k);
+          if(nextIndex == 0 && nextPort == 2)
+            printf("idNodeInTree = %d\n", idNodeInTree);
           add(D, nextIndex, nextPort, currentTime + loadingTime, &root, idNodeInTree);
         }
         #pragma endregion
@@ -390,6 +392,11 @@ int main(int argc, char **argv)
 
           //nextIndex += ((tempNode == HOST) ? 0 : numOfHosts);
           idNodeInTree = hash(nextIndex, tempNode, nextPort, tempEvent, k);
+          /*if(tempEvent == D){
+            if(nextIndex == 0 && nextPort == 2)
+              printf("At F idNodeInTree = %d currentTime %ld \n", idNodeInTree, currentTime);
+              idNodeInTree = hash(nextIndex, tempNode, nextPort, tempEvent, k);
+          }*/
           add(tempEvent, nextIndex, nextPort, currentTime + loadingTime, &root, idNodeInTree);
         }
         #pragma endregion
@@ -398,15 +405,18 @@ int main(int argc, char **argv)
       {
         #pragma region action of Event type G
         j = currentTime / STEP_TIME;
-        
         int nextNode = allNodes[i].links[0].nextIndex;
         int nextPort = allNodes[i].links[0].nextPort;
+        if(i == 1 && nextNode == 0 && allNodes[nextNode + numOfHosts].links[nextPort].pkt->id == 5)
+          printf("DEBUG\n");
         //int srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
         actionG(&bufferHosts[i], &receivedPkts[i][j],
                 allNodes[nextNode + numOfHosts].links[nextPort].pkt);
         assert(allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP == -1);
         assert(j >= 0 && j < 100);
         idNodeInTree = hash(nextNode, EDGE_SWITCH, nextPort, H, k);
+        if(nextNode == 0 && nextPort == 1)
+          printf("At H type, idNodeInTree %d nextNode = 0, nextPort = 1\n", idNodeInTree);
         add(H, nextNode, nextPort,currentTime + 1, &root, idNodeInTree);
         
         #pragma endregion
@@ -438,8 +448,8 @@ int main(int argc, char **argv)
   printf("\n\nFINISH!!!!!!!!!!!! ^_^....\n");
 
   unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000);
-  assertPackets(total, allNodes, bufferHosts,
-                        bufferSwitches, numOfHosts, 5 * k * k / 4, k);
+  //assertPackets(total, allNodes, bufferHosts,
+  //                      bufferSwitches, numOfHosts, 5 * k * k / 4, k);
 
   return 0;
 }
