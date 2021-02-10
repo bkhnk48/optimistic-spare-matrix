@@ -42,6 +42,7 @@ unsigned long getPacketsInSwitch(int ipOfHost, BufferSwitch *buffSwitch, int k){
     for(i = 0; i < k; i++){
         for(j = 0; j < BUFFER_SIZE; j++){
             if(buffSwitch->ENB[i][j].srcIP == ipOfHost){
+                printf("ENB port %d, slot %d ", i, j);
                 count++;
             }
         }
@@ -50,6 +51,7 @@ unsigned long getPacketsInSwitch(int ipOfHost, BufferSwitch *buffSwitch, int k){
     for(i = 0; i < k; i++){
         for(j = 0; j < BUFFER_SIZE; j++){
             if(buffSwitch->EXB[i][j].srcIP == ipOfHost){
+                printf("EXB port %d, slot %d ", i, j);
                 count++;
             }
         }
@@ -107,9 +109,10 @@ void assertPackets(unsigned long total,
         pktsInDest = 0;
         pktsInLinks = (allNodes[i].links[0].pkt->dstIP != -1) ? 1 : 0; 
         for(j = 0; j < numOfSwitches; j++){
-
+            printf("switch %d ", j);
             pktsInSwitches += getPacketsInSwitch(allNodes[i].ipv4
                     , &buffSwitches[j], numOfPorts);
+            printf("\n");
             for(l = 0; l < numOfPorts; l++){
                 pktsInLinks += 
                     (allNodes[j + numOfHosts].links[l].pkt->dstIP != -1
@@ -130,8 +133,8 @@ void assertPackets(unsigned long total,
             }
         }
         total -= pktsInDest;
-        //printf("validated %d: %lf = %lf + %lf + %lf + %lf\n",
-        //         i, allGeneratedPackets, pktsInHost, pktsInLinks, pktsInSwitches, pktsInDest);
+        printf("validated %d: %lf = %lf + %lf + %lf + %lf\n",
+                 i, allGeneratedPackets, pktsInHost, pktsInLinks, pktsInSwitches, pktsInDest);
         assert(allGeneratedPackets == pktsInHost + pktsInLinks + pktsInSwitches + pktsInDest);
         
     } 
