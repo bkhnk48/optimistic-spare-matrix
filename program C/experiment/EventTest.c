@@ -104,7 +104,7 @@ int main(int argc, char **argv)
   
   root = UINT_MAX;
 
-  for (i = 0; i < k*k/4; i++) //Only test first hosts in pod
+  for (i = 0; i < numOfHosts; i++) //Only test first hosts in pod
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
     add(A, i, 0, 0, &root //, arr
@@ -431,8 +431,8 @@ int main(int argc, char **argv)
   printf("\n\nFINISH!!!!!!!!!!!! ^_^....\n");
 
   unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000);
-  //assertPackets(total, allNodes, bufferHosts,
-  //                      bufferSwitches, numOfHosts, 5 * k * k / 4, k);
+  assertPackets(total, allNodes, bufferHosts,
+                        bufferSwitches, numOfHosts, 5 * k * k / 4, k);
 
   return 0;
 }
