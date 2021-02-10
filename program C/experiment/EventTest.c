@@ -68,7 +68,7 @@ int main(int argc, char **argv)
     int pod = i / (k*k/4);
     pairs[i] = //(i + k*k/4) % numOfHosts;
     ((i % (k*k/4)) + 1)%(k*k/4) + pod*(k*k/4);
-    printf("host %ld sends to %d\n", i, pairs[i]);
+    //printf("host %ld sends to %d\n", i, pairs[i]);
   }
 
   receivedPkts = malloc(sizeof *receivedPkts * numOfHosts);
