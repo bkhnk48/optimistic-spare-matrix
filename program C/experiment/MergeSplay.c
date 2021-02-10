@@ -201,15 +201,6 @@ void add(int type, int idElementInGroup,
       //return newNode;
       *root = idNewNode;
    }
-   else{
-      if(idNewNode == 86){
-         printf("type = %ld", data[idNewNode] & 65535);
-         if((data[idNewNode] & 65535) == 5)
-            printf("(F) ");
-         printf("i = %ld portID = %ld", data[idNewNode] >> 32, (data[idNewNode] >> 16) & MASK_INT);
-         printf("\t currentTime %ld\n", endTime);
-      }
-   }
 }
 
 void splay(unsigned int e //unsigned long arr[20250][7]
