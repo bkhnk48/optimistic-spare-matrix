@@ -216,9 +216,13 @@ int actionD(int portENB, //int *generateEventE,
     int couldSendPacket = 0;
     //int first = firstLastEXB[0];
     int last = bufferSwitch->firstLastEXBs[portEXB][1];
+    int first = bufferSwitch->firstLastEXBs[portEXB][0];
     //if(*stateEXB == X01 || *stateEXB == X00){
-    if(bufferSwitch->stsEXBs[portEXB] == X01 || 
-            bufferSwitch->stsEXBs[portEXB] == X00){
+    if(//bufferSwitch->stsEXBs[portEXB] == X01 || 
+       //     bufferSwitch->stsEXBs[portEXB] == X00)
+        countEmptySlots(first, last) > 0
+        )
+       {
         //EXB is not full
         if(last == -1)//empty EXB
             i = 0;
@@ -450,6 +454,17 @@ int actionF(BufferSwitch *bufferSwitch,
         generateEventD = 1;
 
         changeForRemove(bufferSwitch->firstLastEXBs[portID]);
+        if(bufferSwitch->EXB[portID][(last + 1) % BUFFER_SIZE].id != -1
+            && bufferSwitch->EXB[portID][(last + 1) % BUFFER_SIZE].srcIP == -1){
+            int afterlast = bufferSwitch->firstLastEXBs[portID][1];
+            afterlast = (afterlast + 1) % BUFFER_SIZE;
+            bufferSwitch->EXB[portID][afterlast].id = bufferSwitch->EXB[portID][(last + 1) % BUFFER_SIZE].id;
+            bufferSwitch->EXB[portID][(last + 1) % BUFFER_SIZE].id = -1;
+            bufferSwitch->EXB[portID][afterlast].srcIP = -1;
+            bufferSwitch->EXB[portID][afterlast].dstIP = -1;
+            bufferSwitch->EXB[portID][afterlast].generatedTime = 0;
+            bufferSwitch->EXB[portID][afterlast].state = P_NULL;
+        }
         if(bufferSwitch->firstLastEXBs[portID][0] == 0
             && bufferSwitch->firstLastEXBs[portID][1] == -1){
             //It means EXB[portID] is empty - has no packet
