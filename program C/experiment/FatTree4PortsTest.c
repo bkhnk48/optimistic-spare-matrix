@@ -29,6 +29,7 @@ int main(int argc, char **argv)
   int loadingTime = BANDWIDTH_HOST / PACKET_SIZE ;//+ 13;
   unsigned long **receivedPkts = NULL;
   int STEP = 100;
+  
 
   if (argc >= 2)
   {
@@ -41,6 +42,7 @@ int main(int argc, char **argv)
 
   unsigned long currentTime = 0;
   int numOfHosts = k * k * k / 4;
+  int defaultNumOfFlows = numOfHosts;
   unsigned long endTime = defaultSec * ((unsigned long)(1000 * 1000));
   unsigned long STEP_TIME = endTime / STEP;
 
