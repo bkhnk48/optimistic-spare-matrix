@@ -123,9 +123,9 @@ int main(int argc, char **argv)
       #pragma region get value from data array
       type = data[first] & 65535; //type of event
       i = data[first] >> 32;          //idElementInGroup
-      if(i == 19 && currentTime > 605800){
-        printf("%ld\n", bufferSwitches[19].EXB[3][2].id);
-      }
+      //if(i == 19 && currentTime > 605800){
+      //  printf("%ld\n", bufferSwitches[19].EXB[3][2].id);
+      //}
       arr[first][0] = UINT_MAX;
       arr[first][1] = UINT_MAX;
       arr[first][2] = UINT_MAX;
@@ -183,15 +183,7 @@ int main(int argc, char **argv)
         idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && portID < k / 2 ? 0 : numOfHosts);
 
         Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
-        if(i == 2 && portID == 1 && pkt->id == 15 && pkt->srcIP == 167772419)
-        {
-          printf("DEBUG %ld\n", currentTime);
-          flag = 1;
-        }
-        if(i == 2 && portID == 0 && pkt->id == 1)
-        {
-          printf("DEBUG %ld\n", currentTime);
-        }
+        
         int preLast = bufferSwitches[i].firstLastENBs[portID][1];
 
         int posInENB = receivePacket(portID, &bufferSwitches[i], currentTime, pkt);
@@ -215,31 +207,25 @@ int main(int argc, char **argv)
           generateEventE = actionD(portID, nextEXB, &bufferSwitches[i], currentTime);
 
           if (generateEventE){
-            if(i == 19 && currentTime == 605926 - SWITCH_CYCLE)
-              printf("DEBUG\n");
+            //if(i == 19 && currentTime == 605926 - SWITCH_CYCLE)
+            //  printf("DEBUG\n");
             idNodeInTree = hash(i, allNodes[i + numOfHosts].type, nextEXB, E, k);
             add(E, i, nextEXB, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
           }
 
 
         }
-        if(currentTime >= 2000){
-        if( edited == 0 && flag == 1 &&
-          arr[105][2] == UINT_MAX && arr[105][3] == UINT_MAX && arr[105][4] == UINT_MAX)
-        {
-          edited = 2;
-          printf("Wrong heere at %ld i = %ld type = %d portID = %d and flag = %d\n", currentTime, i, type, portID, flag);
-        }
+        
       }
         #pragma endregion
-      }
+      //}
       else if (type == E)
       {
         #pragma region action of Event type E
         int portID = (data[first] >> 16) & MASK_INT;
         int pickUpENB = chooseENB_ID(portID, &bufferSwitches[i], k);
-        if(i == 19 && currentTime == 605926 && pickUpENB == -1)
-          printf("DEBUG-1-1-1-1--1-1\n");
+        //if(i == 19 && currentTime == 605926 && pickUpENB == -1)
+        //   printf("DEBUG-1-1-1-1--1-1\n");
         generateEventE = 0;
         generateEventF = 0;
         generateEventH = 0;
@@ -249,11 +235,11 @@ int main(int argc, char **argv)
         if(currentTime == 3041 && i == 2 && portID == 2){
           unsigned long id = bufferSwitches[i].EXB[portID][bufferSwitches[i].firstLastEXBs[portID][1]].id;
           int src = bufferSwitches[i].EXB[portID][bufferSwitches[i].firstLastEXBs[portID][1]].srcIP;
-          printf("DEBUG at E, pickUpENB %d id Of Pkt %ld from %d at %ld\n", pickUpENB, id, src, currentTime);
+          //printf("DEBUG at E, pickUpENB %d id Of Pkt %ld from %d at %ld\n", pickUpENB, id, src, currentTime);
         }
         int foundAnotherPkt = -1;
         
-        printf("i = %ld, currTime = %ld\n", i, currentTime);
+        //printf("i = %ld, currTime = %ld\n", i, currentTime);
         if(move(pickUpENB, portID, &bufferSwitches[i]) == 1){
           foundAnotherPkt = findENB_ID(portID, &bufferSwitches[i], currentTime, k);
         }
@@ -278,8 +264,8 @@ int main(int argc, char **argv)
           signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
         }
         #pragma endregion
-        if(foundAnotherPkt >= 0)
-          printf("DEBUG HERE 273\n");
+        //if(foundAnotherPkt >= 0)
+        //  printf("DEBUG HERE 273\n");
         int generatedEF = actionE(pickUpENB, portID,
                                   &bufferSwitches[i],
                                   &allNodes[i + numOfHosts].links[portID]);
@@ -288,14 +274,14 @@ int main(int argc, char **argv)
         generateEventF = (generatedEF & 2) >> 1;
         
         if (generateEventE){
-          if(i == 19 && currentTime == 605926 - SWITCH_CYCLE)
-              printf("DEBUG\n");
+          //if(i == 19 && currentTime == 605926 - SWITCH_CYCLE)
+          //    printf("DEBUG\n");
           idNodeInTree = hash(i, allNodes[i + numOfHosts].type, portID, E, k);
           add(E, i, portID, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
         }
         else{
-          if(foundAnotherPkt != -1)
-            printf("Co E nhung khong tao ra duoc event E\n");
+          //if(foundAnotherPkt != -1)
+          //  printf("Co E nhung khong tao ra duoc event E\n");
         }
 
         if (generateEventF){
@@ -340,7 +326,7 @@ int main(int argc, char **argv)
       else if (type == F)
       {
         if(i == 19 && currentTime == 605926){
-          printf("BEDUG \n");
+          //printf("BEDUG \n");
         }
         #pragma region action of Event type F
         int portID = (data[first] >> 16) & MASK_INT;
@@ -358,8 +344,8 @@ int main(int argc, char **argv)
         if(generateEventE){
           int pickUpENB = findENB_ID(portID, &bufferSwitches[i], currentTime, k);
           if(pickUpENB >= 0 && pickUpENB < k && pickUpENB != portID){
-            if(i == 19 && currentTime == 605926 - SWITCH_CYCLE)
-              printf("DEBUG\n");
+            //if(i == 19 && currentTime == 605926 - SWITCH_CYCLE)
+            //  printf("DEBUG\n");
             idNodeInTree = first - 1;
               //hash(i, allNodes[i + numOfHosts].type, portID, E, k);
             //I believe the return value of hash in this case is (first - 1)
@@ -411,14 +397,6 @@ int main(int argc, char **argv)
       currentTime = ((unsigned long)arr[first][0] << 32) + arr[first][1];
       ongoingTime = currentTime;
 
-      if(currentTime >= 2000){
-        if( edited == 0 && flag == 1 &&
-          arr[105][2] == UINT_MAX && arr[105][3] == UINT_MAX && arr[105][4] == UINT_MAX)
-        {
-          edited = 2;
-          printf("Wrong heere at %ld i = %ld type = %d and flag = %d\n", currentTime, i, type, flag);
-        }
-      }
     }
     else
     {
