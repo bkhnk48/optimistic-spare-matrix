@@ -315,6 +315,9 @@ void move(int portENB, int portEXB, BufferSwitch *bufferSwitch){
         if(count > 0){
             update(portENB, portEXB, temp, bufferSwitch);
         }
+        else if(count == 0){
+            
+        }
     }
     
 }
