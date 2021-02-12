@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-enum pairStrategy{
+enum PairStrategy{
     FORCE_TO_PAIR = 0,
     RANDOM = 1,
     STRIDE_INDEX = 2,
