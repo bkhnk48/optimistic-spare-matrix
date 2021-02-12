@@ -64,7 +64,9 @@ int main(int argc, char **argv)
   }
 
   PairPattern *pairs = NULL;
+  pairs = malloc(numOfHosts * sizeof(PairPattern)); 
   forceToPair(pairs, numOfHosts, 1);
+  printfPairs(pairs, numOfHosts);
 
   receivedPkts = malloc(sizeof *receivedPkts * numOfHosts);
   for (i = 0; i < numOfHosts; i++)
@@ -156,7 +158,7 @@ int main(int argc, char **argv)
         generateEventB = 0;
         generateEventD = actionC(&bufferHosts[i],
                                  allNodes[i].links, &generateEventB,
-                                 getIPv4OfHost(pairs[i], k), T);
+                                 getIPv4OfHost(pairs[i].dst, k), T);
         if (generateEventB)
           add(B, i, 0, currentTime + defaultBias * 13, &root, first - 1);
         if (generateEventD){
