@@ -98,6 +98,8 @@ int main(int argc, char **argv)
   int generateEventG;
   int idNodeInTree = 0;
   int numOfFlows = 0;
+  int type;
+  int edited = 0, flag = 0;
   
   root = UINT_MAX;
 
@@ -119,7 +121,7 @@ int main(int argc, char **argv)
     {
       count++;
       #pragma region get value from data array
-      int type = data[first] & 65535; //type of event
+      type = data[first] & 65535; //type of event
       i = data[first] >> 32;          //idElementInGroup
       arr[first][0] = UINT_MAX;
       arr[first][1] = UINT_MAX;
@@ -172,14 +174,21 @@ int main(int argc, char **argv)
         #pragma region action of Event type D
         int portID = (data[first] >> 16) & MASK_INT;
         Packet *ENB = bufferSwitches[i].ENB[portID];
-
         int idPrev = allNodes[i + numOfHosts].links[portID].nextIndex;
 
         int idPrevPort = allNodes[i + numOfHosts].links[portID].nextPort;
         idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && portID < k / 2 ? 0 : numOfHosts);
 
         Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
-        
+        if(i == 2 && portID == 1 && pkt->id == 1 && pkt->srcIP == 167772419)
+        {
+          printf("DEBUG %ld\n", currentTime);
+          flag = 1;
+        }
+        if(i == 2 && portID == 0 && pkt->id == 1)
+        {
+          printf("DEBUG %ld\n", currentTime);
+        }
         int preLast = bufferSwitches[i].firstLastENBs[portID][1];
 
         int posInENB = receivePacket(portID, &bufferSwitches[i], currentTime, pkt);
@@ -206,23 +215,38 @@ int main(int argc, char **argv)
             idNodeInTree = hash(i, allNodes[i + numOfHosts].type, nextEXB, E, k);
             add(E, i, nextEXB, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
           }
+
+
         }
+        if(currentTime >= 2000){
+        if( edited == 0 && flag == 1 &&
+          arr[105][2] == UINT_MAX && arr[105][3] == UINT_MAX && arr[105][4] == UINT_MAX)
+        {
+          edited = 2;
+          printf("Wrong heere at %ld i = %ld type = %d portID = %d and flag = %d\n", currentTime, i, type, portID, flag);
+        }
+      }
         #pragma endregion
       }
       else if (type == E)
       {
         #pragma region action of Event type E
         int portID = (data[first] >> 16) & MASK_INT;
-        
         int pickUpENB = chooseENB_ID(portID, &bufferSwitches[i], k);
-
         generateEventE = 0;
         generateEventF = 0;
         generateEventH = 0;
         generateEventH_HOST = 0;
         int H_IS_HOST = ((allNodes[i + numOfHosts].type == EDGE_SWITCH && pickUpENB <= (k / 2 - 1)) ? 1 : 0);
         
+        if(currentTime == 3041 && i == 2 && portID == 2){
+          unsigned long id = bufferSwitches[i].EXB[portID][bufferSwitches[i].firstLastEXBs[portID][1]].id;
+          int src = bufferSwitches[i].EXB[portID][bufferSwitches[i].firstLastEXBs[portID][1]].srcIP;
+          printf("DEBUG at E, pickUpENB %d id Of Pkt %ld from %d at %ld\n", pickUpENB, id, src, currentTime);
+        }
+
         move(pickUpENB, portID, &bufferSwitches[i]);
+        
         
         #pragma region Shift packet in ENB
         Packet *ENB = bufferSwitches[i].ENB[pickUpENB];
@@ -363,6 +387,15 @@ int main(int argc, char **argv)
     {
       currentTime = ((unsigned long)arr[first][0] << 32) + arr[first][1];
       ongoingTime = currentTime;
+
+      if(currentTime >= 2000){
+        if( edited == 0 && flag == 1 &&
+          arr[105][2] == UINT_MAX && arr[105][3] == UINT_MAX && arr[105][4] == UINT_MAX)
+        {
+          edited = 2;
+          printf("Wrong heere at %ld i = %ld type = %d and flag = %d\n", currentTime, i, type, flag);
+        }
+      }
     }
     else
     {
@@ -377,6 +410,10 @@ int main(int argc, char **argv)
   printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
   printf("================================\n");
   badness(wc2 - wc1, page_size, proc_statm);
+
+  assertPackets(total, allNodes, bufferHosts,
+                        bufferSwitches, numOfHosts, 5 * k * k / 4, k);
+
   
   return 0;
 }
