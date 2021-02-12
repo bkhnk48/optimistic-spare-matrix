@@ -282,8 +282,8 @@ int actionD(int portENB, //int *generateEventE,
 }
 
 
-void move(int portENB, int portEXB, BufferSwitch *bufferSwitch){
-    
+int move(int portENB, int portEXB, BufferSwitch *bufferSwitch){
+    int needToFindNextPkt = 0;
     int firstEXB = bufferSwitch->firstLastEXBs[portEXB][0];
     int lastEXB = bufferSwitch->firstLastEXBs[portEXB][1];
 
@@ -316,10 +316,10 @@ void move(int portENB, int portEXB, BufferSwitch *bufferSwitch){
             update(portENB, portEXB, temp, bufferSwitch);
         }
         else if(count == 0){
-            
+            needToFindNextPkt = 1;
         }
     }
-    
+    return needToFindNextPkt;
 }
 
 void update(int portENB, int portEXB, 
@@ -464,6 +464,11 @@ int actionF(BufferSwitch *bufferSwitch,
         }
         int wasFull = emptySlots == 0;
         if(wasFull){
+            if(bufferSwitch->stsEXBs[portID] == X11){
+                //printf("Gio ko full nua nhung van giu X11\n");
+                bufferSwitch->stsEXBs[portID] == X00;
+                //exit(1);
+            }
             *generateEventE = 1;
         }
     }
