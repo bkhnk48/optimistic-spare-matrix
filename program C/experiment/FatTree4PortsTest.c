@@ -8,6 +8,7 @@
 #include "timing.c"
 #include "TestAPI.c"
 #include "Throughput.c"
+#include "PairStrategies.c"
 #include <limits.h>
 #include <locale.h>
 #include <math.h>
@@ -29,6 +30,7 @@ int main(int argc, char **argv)
   int loadingTime = BANDWIDTH_HOST / PACKET_SIZE ;//+ 13;
   unsigned long **receivedPkts = NULL;
   int STEP = 100;
+
   
 
   if (argc >= 2)
