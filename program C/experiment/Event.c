@@ -454,16 +454,21 @@ int actionF(BufferSwitch *bufferSwitch,
         generateEventD = 1;
 
         changeForRemove(bufferSwitch->firstLastEXBs[portID]);
+        int afterLast = bufferSwitch->firstLastEXBs[portID][1];
         if(bufferSwitch->EXB[portID][(last + 1) % BUFFER_SIZE].id != -1
-            && bufferSwitch->EXB[portID][(last + 1) % BUFFER_SIZE].srcIP == -1){
-            int afterlast = bufferSwitch->firstLastEXBs[portID][1];
-            afterlast = (afterlast + 1) % BUFFER_SIZE;
-            bufferSwitch->EXB[portID][afterlast].id = bufferSwitch->EXB[portID][(last + 1) % BUFFER_SIZE].id;
+            && bufferSwitch->EXB[portID][(last + 1) % BUFFER_SIZE].srcIP == -1
+            && ((afterLast + 1) % BUFFER_SIZE) != ((last + 1) % BUFFER_SIZE)
+            ){
+            //printf("At switch %d\n", bufferSwitch->indexInGroup);
+            //if()
+            
+            afterLast = (afterLast + 1) % BUFFER_SIZE;
+            bufferSwitch->EXB[portID][afterLast].id = bufferSwitch->EXB[portID][(last + 1) % BUFFER_SIZE].id;
             bufferSwitch->EXB[portID][(last + 1) % BUFFER_SIZE].id = -1;
-            bufferSwitch->EXB[portID][afterlast].srcIP = -1;
-            bufferSwitch->EXB[portID][afterlast].dstIP = -1;
-            bufferSwitch->EXB[portID][afterlast].generatedTime = 0;
-            bufferSwitch->EXB[portID][afterlast].state = P_NULL;
+            bufferSwitch->EXB[portID][afterLast].srcIP = -1;
+            bufferSwitch->EXB[portID][afterLast].dstIP = -1;
+            bufferSwitch->EXB[portID][afterLast].generatedTime = 0;
+            bufferSwitch->EXB[portID][afterLast].state = P_NULL;
         }
         if(bufferSwitch->firstLastEXBs[portID][0] == 0
             && bufferSwitch->firstLastEXBs[portID][1] == -1){
