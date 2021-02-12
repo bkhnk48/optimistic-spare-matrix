@@ -14,6 +14,18 @@ typedef struct _pairPattern{
     int dst;
 } PairPattern;
 
+void printfPairs(PairPattern *pairs, const int numOfFlows){
+    int i = 0;
+    //int j = 0;
+    printf("Source vs Destination: ");
+    for(i = 0; i < numOfFlows; i++){
+        printf("%d -> %d, ", i, pairs[i].dst);
+        if(i > 0 && (i + 1) % 4 == 0){
+            printf("\n");
+            printf("Source vs Destination: ");
+        }
+    }
+}
 
 void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
     int *sources = NULL; 
@@ -22,7 +34,7 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
         exit(1);
     }
     int i;
-    pairs = malloc(numOfFlows * sizeof(PairPattern));  
+     
     for(i = 0; i < numOfFlows; i++){
         pairs[i].src = i;
         pairs[i].dst = -1;
