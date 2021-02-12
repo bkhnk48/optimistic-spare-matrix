@@ -30,7 +30,7 @@ int main(int argc, char **argv)
   int loadingTime = BANDWIDTH_HOST / PACKET_SIZE ;//+ 13;
   unsigned long **receivedPkts = NULL;
   int STEP = 100;
-
+  enum PairStrategy stragegy = FORCE_TO_PAIR;
   
 
   if (argc >= 2)
@@ -63,19 +63,8 @@ int main(int argc, char **argv)
     data[i] = 0;
   }
 
-  int *pairs = NULL;
-  pairs = malloc((k * k * k / 4) * sizeof(int));
-  for (i = 0; i < numOfHosts; i++)
-  {
-    //if ((i + 1) % (k / 2) != 0)
-    //  pairs[i] = (i / (k / 2) + 1) * (k / 2) - 1;
-    //else
-    //  pairs[i] = 0;
-    int pod = i / (k*k/4);
-    pairs[i] = //(i + k*k/4) % numOfHosts;
-    ((i % (k*k/4)) + 1)%(k*k/4) + pod*(k*k/4);
-    //printf("host %ld sends to %d\n", i, pairs[i]);
-  }
+  PairPattern *pairs = NULL;
+  forceToPair(pairs, numOfHosts, 1);
 
   receivedPkts = malloc(sizeof *receivedPkts * numOfHosts);
   for (i = 0; i < numOfHosts; i++)
