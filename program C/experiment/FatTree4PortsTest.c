@@ -27,7 +27,7 @@ int main(int argc, char **argv)
   //int packets_per_sec = 1000;//each sec generated 1000 packets
   int T = 1000;
   int BANDWIDTH_HOST = 12 * 1000 * 1000; //12MByte/s
-  int loadingTime = BANDWIDTH_HOST / PACKET_SIZE ;//+ 13;
+  unsigned long loadingTime = ((unsigned long)PACKET_SIZE * 1000*1000) / BANDWIDTH_HOST; //BANDWIDTH_HOST / PACKET_SIZE ;//+ 13;
   unsigned long **receivedPkts = NULL;
   int STEP = 100;
   enum PairStrategy stragegy = FORCE_TO_PAIR;
@@ -183,7 +183,9 @@ int main(int argc, char **argv)
         idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && portID < k / 2 ? 0 : numOfHosts);
 
         Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
-        
+        if(currentTime > 15174 && i == 3 && pkt->id == 426){
+          printf("HERER\n");
+        }
         int preLast = bufferSwitches[i].firstLastENBs[portID][1];
 
         int posInENB = receivePacket(portID, &bufferSwitches[i], currentTime, pkt);
@@ -224,8 +226,15 @@ int main(int argc, char **argv)
         #pragma region action of Event type E
         int portID = (data[first] >> 16) & MASK_INT;
         int pickUpENB = chooseENB_ID(portID, &bufferSwitches[i], k);
-        //if(i == 19 && currentTime == 605926 && pickUpENB == -1)
-        //   printf("DEBUG-1-1-1-1--1-1\n");
+        if(i == 19 && currentTime >= 905061 && pickUpENB == 0 && portID == 1){
+          int f1st = bufferSwitches[i].firstLastENBs[pickUpENB][0];
+          if(bufferSwitches[i].ENB[pickUpENB][f1st].srcIP == 167772418
+            && 
+            bufferSwitches[i].ENB[pickUpENB][f1st].id >= 452
+          ){
+            //printf("DEBUG: time = %ld, pkt id = %ld\n", currentTime, bufferSwitches[i].ENB[pickUpENB][f1st].id);
+          }
+        }
         generateEventE = 0;
         generateEventF = 0;
         generateEventH = 0;
@@ -325,15 +334,19 @@ int main(int argc, char **argv)
       }
       else if (type == F)
       {
-        if(i == 19 && currentTime == 605926){
-          //printf("BEDUG \n");
-        }
         #pragma region action of Event type F
         int portID = (data[first] >> 16) & MASK_INT;
         nextIndex = allNodes[i + numOfHosts].links[portID].nextIndex;
 
         nextPort = allNodes[i + numOfHosts].links[portID].nextPort;
-        generateEventE = 0;
+        if(i == 19 && currentTime > 0 && portID == 1){
+          int st = bufferSwitches[i].firstLastEXBs[portID][0];
+          if(st != -1 && bufferSwitches[i].EXB[portID][st].srcIP == 167772418
+              && bufferSwitches[i].EXB[portID][st].id == 452
+            ){}
+            //printf("BEDUG %ld nextIndex %d next Port %d pkt %ld\n", currentTime, nextIndex, nextPort, bufferSwitches[i].EXB[portID][st].id);
+        }
+        generateEventE = k;//pass k as parameter in the variable generateEventE
         nextIP = getNeighborIP(allNodes[i + numOfHosts].ipv4, allNodes[i + numOfHosts].type, portID, k);
         int generateEventD_OR_G = actionF(&bufferSwitches[i],
                                           portID,
