@@ -183,8 +183,8 @@ int main(int argc, char **argv)
         idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && portID < k / 2 ? 0 : numOfHosts);
 
         Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
-        if(currentTime > 15174 && i == 3 && pkt->id == 426){
-          printf("HERER\n");
+        if(currentTime > 15174 && i == 3 && pkt->id == 426 && pkt->srcIP == 167772162){
+          printf("HERER line:%d\n", __LINE__);
         }
         int preLast = bufferSwitches[i].firstLastENBs[portID][1];
 
