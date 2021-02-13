@@ -435,6 +435,8 @@ int actionF(BufferSwitch *bufferSwitch,
                 int *generateEventE){
     int pktID = -1;
     int generateEventD = 0;
+    int k = *generateEventE;
+    *generateEventE = 0;
     int first = bufferSwitch->firstLastEXBs[portID][0];
     int last = bufferSwitch->firstLastEXBs[portID][1];
     int emptySlots = countEmptySlots(first, last);
@@ -452,6 +454,8 @@ int actionF(BufferSwitch *bufferSwitch,
         bufferSwitch->EXB[portID][first].generatedTime = -1;
         bufferSwitch->EXB[portID][first].state = P_NULL;
         generateEventD = 1;
+        if(bufferSwitch->type != EDGE_SWITCH || portID >= k/2)
+            bufferSwitch->countNextENB[portID]--;
 
         changeForRemove(bufferSwitch->firstLastEXBs[portID]);
         int afterLast = bufferSwitch->firstLastEXBs[portID][1];
