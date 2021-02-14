@@ -35,6 +35,11 @@ int main(int argc, char **argv)
   int STEP = 100;
   enum PairStrategy stragegy = FORCE_TO_PAIR;
   
+  unsigned long currentTime = 0;
+  int numOfHosts = k * k * k / 4;
+  int defaultNumOfFlows = numOfHosts;
+  unsigned long endTime = defaultSec * ((unsigned long)(1000 * 1000));
+  unsigned long STEP_TIME = endTime / STEP;
 
   if (argc >= 2)
   {
@@ -45,11 +50,7 @@ int main(int argc, char **argv)
       defaultBias = atoi(argv[3]);
   }
 
-  unsigned long currentTime = 0;
-  int numOfHosts = k * k * k / 4;
-  int defaultNumOfFlows = numOfHosts;
-  unsigned long endTime = defaultSec * ((unsigned long)(1000 * 1000));
-  unsigned long STEP_TIME = endTime / STEP;
+  
 
   unsigned long i, j;
   unsigned int N, root = UINT_MAX;
@@ -68,7 +69,7 @@ int main(int argc, char **argv)
 
   PairPattern *pairs = NULL;
   pairs = malloc(numOfHosts * sizeof(PairPattern)); 
-  forceToPair(pairs, numOfHosts, 1);
+  forceToPair(pairs, numOfHosts, 2);
   printfPairs(pairs, numOfHosts);
 
   receivedPkts = malloc(sizeof *receivedPkts * numOfHosts);
