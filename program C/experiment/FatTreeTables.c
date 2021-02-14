@@ -82,7 +82,7 @@ void buildTables(Tables *tablesOfSwitches, int k){
   #pragma endregion
 }
 
-int getEXB_ID(int nextIP, int typeOfCurr, int k){
+/*int getEXB_ID(int nextIP, int typeOfCurr, int k){
   int pod = (nextIP >> 16) & 255;
   if(typeOfCurr == CORE_SWITCH){
     return pod;
@@ -108,13 +108,15 @@ int getEXB_ID(int nextIP, int typeOfCurr, int k){
   }
   return -1;
 
-}
+}*/
 
 //int next(int source, int current, int destination, int k) {
-int next(int srcIP, int currIP, int destIP, int k, 
+long next(int srcIP, int currIP, int destIP, int k, 
             RoutingTable *table
           ) {
-  int nextIP ;
+  //8 bytes cuoi luu tru dia chi IP cua next switch/host
+  //8 bytes dau tien luu tru chi so cua cong (port)
+  int nextIP;
   int podOfSrc = (srcIP >> 16) & 255;
   int podOfDst = (destIP >> 16) & 255;
   int subnetOfSrc = (srcIP >> 8) & 255;
@@ -123,19 +125,21 @@ int next(int srcIP, int currIP, int destIP, int k,
     return getNeighborIP(srcIP, HOST, 0, k);
   }
   else{
+    int suffix = destIP & 255; 
+    suffix -= 2;
     int aheadOfDst = getNeighborIP(destIP, HOST, 0, k);
     if(aheadOfDst == currIP){
-      return destIP;
+      return (((unsigned long)suffix) << 32) | destIP ;
     }
     int typeOfSwitch = typeOfNode(currIP, k);
-    int suffix = destIP & 255; 
+    
     int podOfCurr = (currIP >> 16) & 255;
-    suffix -= 2;
+    
     if(typeOfSwitch == CORE_SWITCH){
       nextIP = //tablesOfSwitches->tables[i].
                 table->prefixTable[podOfDst];
       
-      return nextIP;
+      return (((unsigned long)podOfDst) << 32) | nextIP;
     }  
     if(typeOfSwitch == AGG_SWITCH){
       
@@ -144,12 +148,12 @@ int next(int srcIP, int currIP, int destIP, int k,
         //agg se chuyen goi tin sang edge cung pod
         nextIP = //tablesOfSwitches->tables[i].
                   table->prefixTable[subnetOfDest];
-        return nextIP;
+        return (((unsigned long)subnetOfDest) << 32) | nextIP;
       }
       else{
         nextIP = //tablesOfSwitches->tables[i].
                   table->suffixTable[suffix];
-        return nextIP;
+        return (((unsigned long)(suffix + k/2)) << 32) | nextIP;
       }
     }
     if(typeOfSwitch == EDGE_SWITCH){
@@ -159,11 +163,11 @@ int next(int srcIP, int currIP, int destIP, int k,
         //If destination host is not the same subnet of edge
         //Or pod of dest is not the pod of edge    
         nextIP = table->suffixTable[suffix];
-        return nextIP;
+        return (((unsigned long)(suffix + k/2)) << 32) | nextIP;
       }
       else{
-        //Dest host is one of the neighbor of edge
-        return destIP;
+        //Dest host is one of the neighbors of edge
+        return (((unsigned long)(suffix + k/2)) << 32) | destIP;
       }
     }
   }
