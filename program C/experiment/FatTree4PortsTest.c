@@ -22,12 +22,15 @@ int main(int argc, char **argv)
   ProcStatm proc_statm;
   long page_size = sysconf(_SC_PAGESIZE);
   int k = 4;
-  int PACKET_SIZE = 12 * 1000; //12KB
+  int PACKET_SIZE = 96 * 1000; //9.6KB
   int SWITCH_CYCLE = 10;
   //int packets_per_sec = 1000;//each sec generated 1000 packets
   int T = 1000;
-  int BANDWIDTH_HOST = 12 * 1000 * 1000; //12MByte/s
-  unsigned long loadingTime = ((unsigned long)PACKET_SIZE * 1000*1000) / BANDWIDTH_HOST; //BANDWIDTH_HOST / PACKET_SIZE ;//+ 13;
+  unsigned long BANDWIDTH_HOST = (unsigned long)96 * 1000 * 1000; //96MByte/s
+  unsigned long BANDWIDTH_CORE = (unsigned long)10667 * 10 * 1000; //106.67MByte/s
+  unsigned long loadingTime1 = ((unsigned long)PACKET_SIZE * 1000*1000) / BANDWIDTH_HOST; //BANDWIDTH_HOST / PACKET_SIZE ;//+ 13;
+  unsigned long loadingTime2 = ((unsigned long)PACKET_SIZE * 1000*1000) / BANDWIDTH_CORE; //BANDWIDTH_HOST / PACKET_SIZE ;//+ 13;
+  
   unsigned long **receivedPkts = NULL;
   int STEP = 100;
   enum PairStrategy stragegy = FORCE_TO_PAIR;
@@ -123,9 +126,6 @@ int main(int argc, char **argv)
       #pragma region get value from data array
       type = data[first] & 65535; //type of event
       i = data[first] >> 32;          //idElementInGroup
-      //if(i == 19 && currentTime > 605800){
-      //  printf("%ld\n", bufferSwitches[19].EXB[3][2].id);
-      //}
       arr[first][0] = UINT_MAX;
       arr[first][1] = UINT_MAX;
       arr[first][2] = UINT_MAX;
@@ -148,8 +148,7 @@ int main(int argc, char **argv)
       #pragma region action of Event type B
       else if (type == B)
       {
-        generateEventC = actionB(&bufferHosts[i],
-                                 allNodes[i].links[0].pkt);
+        generateEventC = actionB(&bufferHosts[i], allNodes[i].links[0].pkt);
         if (generateEventC)
           add(C, i, 0, currentTime + defaultBias * 33, &root, first + 1);
       }
@@ -168,7 +167,7 @@ int main(int argc, char **argv)
           add(B, i, 0, currentTime + defaultBias * 13, &root, first - 1);
         if (generateEventD){
           idNodeInTree = hash(nextIndex, EDGE_SWITCH, nextPort, D, k);
-          add(D, nextIndex, nextPort, currentTime + loadingTime, &root, idNodeInTree);
+          add(D, nextIndex, nextPort, currentTime + loadingTime1, &root, idNodeInTree);
         }
         #pragma endregion
       }
@@ -183,10 +182,7 @@ int main(int argc, char **argv)
         idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && portID < k / 2 ? 0 : numOfHosts);
 
         Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
-        if(currentTime > 15174 && i == 3 && pkt->id == 426 && pkt->srcIP == 167772162){
-          printf("HERER line:%d\n", __LINE__);
-        }
-        int preLast = bufferSwitches[i].firstLastENBs[portID][1];
+        //int preLast = bufferSwitches[i].firstLastENBs[portID][1];
 
         int posInENB = receivePacket(portID, &bufferSwitches[i], currentTime, pkt);
 
@@ -209,8 +205,6 @@ int main(int argc, char **argv)
           generateEventE = actionD(portID, nextEXB, &bufferSwitches[i], currentTime);
 
           if (generateEventE){
-            //if(i == 19 && currentTime == 605926 - SWITCH_CYCLE)
-            //  printf("DEBUG\n");
             idNodeInTree = hash(i, allNodes[i + numOfHosts].type, nextEXB, E, k);
             add(E, i, nextEXB, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
           }
@@ -219,40 +213,22 @@ int main(int argc, char **argv)
         }
         
       }
-        #pragma endregion
-      //}
+      #pragma endregion
       else if (type == E)
       {
         #pragma region action of Event type E
         int portID = (data[first] >> 16) & MASK_INT;
         int pickUpENB = chooseENB_ID(portID, &bufferSwitches[i], k);
-        if(i == 19 && currentTime >= 905061 && pickUpENB == 0 && portID == 1){
-          int f1st = bufferSwitches[i].firstLastENBs[pickUpENB][0];
-          if(bufferSwitches[i].ENB[pickUpENB][f1st].srcIP == 167772418
-            && 
-            bufferSwitches[i].ENB[pickUpENB][f1st].id >= 452
-          ){
-            //printf("DEBUG: time = %ld, pkt id = %ld\n", currentTime, bufferSwitches[i].ENB[pickUpENB][f1st].id);
-          }
-        }
+        
         generateEventE = 0;
         generateEventF = 0;
         generateEventH = 0;
         generateEventH_HOST = 0;
         int H_IS_HOST = ((allNodes[i + numOfHosts].type == EDGE_SWITCH && pickUpENB <= (k / 2 - 1)) ? 1 : 0);
         
-        if(currentTime == 3041 && i == 2 && portID == 2){
-          unsigned long id = bufferSwitches[i].EXB[portID][bufferSwitches[i].firstLastEXBs[portID][1]].id;
-          int src = bufferSwitches[i].EXB[portID][bufferSwitches[i].firstLastEXBs[portID][1]].srcIP;
-          //printf("DEBUG at E, pickUpENB %d id Of Pkt %ld from %d at %ld\n", pickUpENB, id, src, currentTime);
-        }
-        int foundAnotherPkt = -1;
+        int shallFindNewPkt = 0;
         
-        //printf("i = %ld, currTime = %ld\n", i, currentTime);
-        if(move(pickUpENB, portID, &bufferSwitches[i]) == 1){
-          foundAnotherPkt = findENB_ID(portID, &bufferSwitches[i], currentTime, k);
-        }
-        
+        shallFindNewPkt = move(pickUpENB, portID, &bufferSwitches[i]);
         
         #pragma region Shift packet in ENB
         Packet *ENB = bufferSwitches[i].ENB[pickUpENB];
@@ -273,24 +249,18 @@ int main(int argc, char **argv)
           signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
         }
         #pragma endregion
-        //if(foundAnotherPkt >= 0)
-        //  printf("DEBUG HERE 273\n");
-        int generatedEF = actionE(pickUpENB, portID,
-                                  &bufferSwitches[i],
-                                  &allNodes[i + numOfHosts].links[portID]);
+
+        if(shallFindNewPkt){
+          findENB_ID(portID, &bufferSwitches[i], currentTime, k);
+        }
+        int generatedEF = actionE(pickUpENB, portID, &bufferSwitches[i], &allNodes[i + numOfHosts].links[portID]);
 
         generateEventE = generatedEF & 1;
         generateEventF = (generatedEF & 2) >> 1;
         
         if (generateEventE){
-          //if(i == 19 && currentTime == 605926 - SWITCH_CYCLE)
-          //    printf("DEBUG\n");
           idNodeInTree = hash(i, allNodes[i + numOfHosts].type, portID, E, k);
           add(E, i, portID, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
-        }
-        else{
-          //if(foundAnotherPkt != -1)
-          //  printf("Co E nhung khong tao ra duoc event E\n");
         }
 
         if (generateEventF){
@@ -308,10 +278,7 @@ int main(int argc, char **argv)
         {
           //generate event H
           int idPrePort = allNodes[i + numOfHosts].links[pickUpENB].nextPort;
-          idNodeInTree = hash(idPrev, allNodes[idPrev + numOfHosts].type, 
-                                  idPrePort,
-                                  H, k
-                                );
+          idNodeInTree = hash(idPrev, allNodes[idPrev + numOfHosts].type, idPrePort, H, k);
           add(H, idPrev, idPrePort, currentTime + 1, &root, idNodeInTree);
         }
 
@@ -323,10 +290,7 @@ int main(int argc, char **argv)
         int nextNode = allNodes[i].links[0].nextIndex;
         int nextPort = allNodes[i].links[0].nextPort;
         
-        generateEventC = actionH_HOST(&bufferHosts[i],
-                                      allNodes[i].links[0].pkt
-                                      //, &generateEventB
-        );
+        generateEventC = actionH_HOST(&bufferHosts[i], allNodes[i].links[0].pkt);
         
         if (generateEventC){
           add(C, i, 0, currentTime + defaultBias * 33, &root, first - 1);
@@ -339,13 +303,7 @@ int main(int argc, char **argv)
         nextIndex = allNodes[i + numOfHosts].links[portID].nextIndex;
 
         nextPort = allNodes[i + numOfHosts].links[portID].nextPort;
-        if(i == 19 && currentTime > 0 && portID == 1){
-          int st = bufferSwitches[i].firstLastEXBs[portID][0];
-          if(st != -1 && bufferSwitches[i].EXB[portID][st].srcIP == 167772418
-              && bufferSwitches[i].EXB[portID][st].id == 452
-            ){}
-            //printf("BEDUG %ld nextIndex %d next Port %d pkt %ld\n", currentTime, nextIndex, nextPort, bufferSwitches[i].EXB[portID][st].id);
-        }
+        
         generateEventE = k;//pass k as parameter in the variable generateEventE
         nextIP = getNeighborIP(allNodes[i + numOfHosts].ipv4, allNodes[i + numOfHosts].type, portID, k);
         int generateEventD_OR_G = actionF(&bufferSwitches[i],
@@ -371,6 +329,10 @@ int main(int argc, char **argv)
           enum TypesOfNode tempNode = typeOfNode(nextIP, k);
           enum TypesOfEvent tempEvent = (tempNode == HOST) ? G : D;
           
+          unsigned long loadingTime = loadingTime1;
+          if(tempEvent == D){
+            loadingTime = (bufferSwitches[i].type == CORE_SWITCH || bufferSwitches[nextIndex].type == CORE_SWITCH) ? loadingTime2 : loadingTime1;
+          }
           idNodeInTree = hash(nextIndex, tempNode, nextPort, tempEvent, k);
           add(tempEvent, nextIndex, nextPort, currentTime + loadingTime, &root, idNodeInTree);
         }
@@ -425,8 +387,8 @@ int main(int argc, char **argv)
   printf("================================\n");
   badness(wc2 - wc1, page_size, proc_statm);
 
-  assertPackets(total, allNodes, bufferHosts,
-                        bufferSwitches, numOfHosts, 5 * k * k / 4, k);
+  //assertPackets(total, allNodes, bufferHosts,
+  //                      bufferSwitches, numOfHosts, 5 * k * k / 4, k);
 
   
   return 0;
