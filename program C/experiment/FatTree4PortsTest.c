@@ -22,14 +22,14 @@ int main(int argc, char **argv)
   ProcStatm proc_statm;
   long page_size = sysconf(_SC_PAGESIZE);
   int k = 4;
-  int PACKET_SIZE = 96 * 1000; //9.6KB
+  int PACKET_SIZE = 96 * 100; //9.6KB
   int SWITCH_CYCLE = 10;
   //int packets_per_sec = 1000;//each sec generated 1000 packets
-  int T = 1000;
+  int T = 100 * 1000;
   unsigned long BANDWIDTH_HOST = (unsigned long)96 * 1000 * 1000; //96MByte/s
   unsigned long BANDWIDTH_CORE = (unsigned long)10667 * 10 * 1000; //106.67MByte/s
-  unsigned long loadingTime1 = ((unsigned long)PACKET_SIZE * 1000*1000) / BANDWIDTH_HOST; //BANDWIDTH_HOST / PACKET_SIZE ;//+ 13;
-  unsigned long loadingTime2 = ((unsigned long)PACKET_SIZE * 1000*1000) / BANDWIDTH_CORE; //BANDWIDTH_HOST / PACKET_SIZE ;//+ 13;
+  unsigned long loadingTime1 = ((unsigned long)PACKET_SIZE * 1000 * 1000 * 1000) / BANDWIDTH_HOST; //BANDWIDTH_HOST / PACKET_SIZE ;//+ 13;
+  unsigned long loadingTime2 = ((unsigned long)PACKET_SIZE * 1000 * 1000 * 1000) / BANDWIDTH_CORE; //BANDWIDTH_HOST / PACKET_SIZE ;//+ 13;
   
   unsigned long **receivedPkts = NULL;
   int STEP = 100;
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
   unsigned long currentTime = 0;
   int numOfHosts = k * k * k / 4;
   int defaultNumOfFlows = numOfHosts;
-  unsigned long endTime = defaultSec * ((unsigned long)(1000 * 1000));
+  unsigned long endTime = defaultSec * ((unsigned long)(1000 * 1000 * 1000));
   unsigned long STEP_TIME = endTime / STEP;
 
   if (argc >= 2)
@@ -345,6 +345,10 @@ int main(int argc, char **argv)
         j = currentTime / STEP_TIME;
         int nextNode = allNodes[i].links[0].nextIndex;
         int nextPort = allNodes[i].links[0].nextPort;
+        if(allNodes[nextNode + numOfHosts].links[nextPort].pkt->id == 0 && 
+            getIndexOfHost(allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP, k) == 0){
+          printf("Latency %ld\n", currentTime);
+        }
         //int srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
         actionG(&bufferHosts[i], &receivedPkts[i][j],
                 allNodes[nextNode + numOfHosts].links[nextPort].pkt);
@@ -381,7 +385,7 @@ int main(int argc, char **argv)
   }
   printf("\n\nFINISH!!!!!!!!!!!! ^_^....\n");
 
-  unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000);
+  unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000000);
 
   timing(&wc2, &cpuT);
   printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
