@@ -8,7 +8,7 @@
 typedef struct _routing_table{
   enum TypesOfNode type;
   int subPrefix;
-  int *suffixTable;
+  unsigned long *suffixTable;
   int *prefixTable;
 } RoutingTable;
 
@@ -32,10 +32,13 @@ void buildTables(Tables *tablesOfSwitches, int k){
         tablesOfSwitches->tables[i].subPrefix = 0;
         int ipv4 = getIPv4OfSwitch(i, k);
         tablesOfSwitches->tables[i].suffixTable = 
-              (int *)malloc((k/2)*sizeof(int));
+              (unsigned long *)malloc((k/2)*sizeof(unsigned long));
+        int z = (ipv4 >> 8) & 255;
         for(j = 0; j < k/2; j++){
+          int port = (j + z)%(k/2) + k/2;
           tablesOfSwitches->tables[i].suffixTable[j]
-            = getNeighborIP(ipv4, EDGE_SWITCH, j + k/2, k);//AGG SWITCH
+            = getNeighborIP(ipv4, EDGE_SWITCH, port, k);//AGG SWITCH
+          tablesOfSwitches->tables[i].suffixTable[j] |= ((unsigned long)port << 32);
         }
       }
       #pragma endregion
@@ -44,10 +47,13 @@ void buildTables(Tables *tablesOfSwitches, int k){
         tablesOfSwitches->tables[i].type = AGG_SWITCH;
         int ipv4 = getIPv4OfSwitch(i, k);
         tablesOfSwitches->tables[i].suffixTable = 
-              (int *)malloc((k/2)*sizeof(int));
+              (unsigned long *)malloc((k/2)*sizeof(unsigned long));
+        int z = (ipv4 >> 8) & 255;
         for(j = 0; j < k/2; j++){
+          int port = (j + z)%(k/2) + k/2;
           tablesOfSwitches->tables[i].suffixTable[j]
-            = getNeighborIP(ipv4, AGG_SWITCH, j + k/2, k);//CORE SWITCH
+            = getNeighborIP(ipv4, AGG_SWITCH, port, k);//CORE SWITCH
+          tablesOfSwitches->tables[i].suffixTable[j] |= ((unsigned long)port << 32);
         }
         int p = i/k;
         tablesOfSwitches->tables[i].subPrefix = (10 << 16) | (p << 8);
