@@ -93,8 +93,13 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
         sources[15] = 13;//25
     }
 
+
+
     for(i = 0; i < numOfFlows; i++){
         int src = sources[i];
         pairs[src].dst = destinations[i];
     }
+
+    free(sources);
+    free(destinations);
 }
