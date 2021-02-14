@@ -63,6 +63,16 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
     destinations[15] = 9;//17
     #pragma endregion
 
+    if(option == 0){
+        //sources = malloc(16 * sizeof(int));
+        for(i = 0; i < numOfFlows; i++){
+            //int src = sources[i];
+            pairs[i].src = i;
+            pairs[i].dst = (i + 1) % numOfFlows;
+        }
+        return;
+    }
+
     if(option == 1){
         sources = malloc(16 * sizeof(int));
         sources[0] = 2;//2
@@ -83,7 +93,6 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
         sources[15] = 13;//25
     }
 
-    
     for(i = 0; i < numOfFlows; i++){
         int src = sources[i];
         pairs[src].dst = destinations[i];
