@@ -70,6 +70,7 @@ int main(int argc, char **argv)
   PairPattern *pairs = NULL;
   pairs = malloc(numOfHosts * sizeof(PairPattern)); 
   forceToPair(pairs, numOfHosts, 2);
+    pairs[2].dst = 9;
   printfPairs(pairs, numOfHosts);
 
   receivedPkts = malloc(sizeof *receivedPkts * numOfHosts);
@@ -109,7 +110,7 @@ int main(int argc, char **argv)
 
   timing(&wc1, &cpuT);
 
-  for (i = 0; i < numOfHosts; i++) //Only test first hosts in pod
+  for (i = 0; i < 4; i++) //Only test first hosts in pod
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
     add(A, i, 0, 0, &root, idNodeInTree);
@@ -183,20 +184,20 @@ int main(int argc, char **argv)
         idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && portID < k / 2 ? 0 : numOfHosts);
 
         Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
-        //int preLast = bufferSwitches[i].firstLastENBs[portID][1];
-
+        
         int posInENB = receivePacket(portID, &bufferSwitches[i], currentTime, pkt);
 
         if (posInENB == bufferSwitches[i].firstLastENBs[portID][0])
         {
           //Packet is ahead of all other ones on ENB
-          int nextIP = next(ENB[posInENB].srcIP,
+          unsigned long portAndNextIP = next(ENB[posInENB].srcIP,
                             allNodes[i + numOfHosts].ipv4,
                             ENB[posInENB].dstIP,
                             k, &(tablesOfSwitches->tables[i]));
-
-          int nextEXB = getEXB_ID(nextIP,
-                                  allNodes[i + numOfHosts].type, k);
+          int nextIP = (int)portAndNextIP;
+          int nextEXB = (int)(portAndNextIP >> 32);
+          //int nextEXB = getEXB_ID(nextIP,
+          //                        allNodes[i + numOfHosts].type, k);
           //this func has two params:
           // + nextEXB: the port ID of the next EXB
           // + registeredEXB[portID]: the array's element to store the nextEXB
@@ -237,12 +238,13 @@ int main(int argc, char **argv)
 
         if (ENB[posInENB].srcIP != -1 && ENB[posInENB].dstIP != -1 && ENB[posInENB].id != -1 && ENB[posInENB].generatedTime != -1)
         {
-          int nextIP = next(ENB[posInENB].srcIP,
+          unsigned long portAndNextIP = next(ENB[posInENB].srcIP,
                             allNodes[i + numOfHosts].ipv4,
                             ENB[posInENB].dstIP,
                             k, &(tablesOfSwitches->tables[i]));
-
-          int nextEXB = getEXB_ID(nextIP, allNodes[i + numOfHosts].type, k);
+          int nextIP = (int)portAndNextIP;
+          int nextEXB = (int)(portAndNextIP >> 32);
+          //int nextEXB = getEXB_ID(nextIP, allNodes[i + numOfHosts].type, k);
           //this func has two params:
           // + nextEXB: the port ID of the next EXB
           // + registeredEXB[portID]: the array's element to store the nextEXB
@@ -316,8 +318,6 @@ int main(int argc, char **argv)
         if(generateEventE){
           int pickUpENB = findENB_ID(portID, &bufferSwitches[i], currentTime, k);
           if(pickUpENB >= 0 && pickUpENB < k && pickUpENB != portID){
-            //if(i == 19 && currentTime == 605926 - SWITCH_CYCLE)
-            //  printf("DEBUG\n");
             idNodeInTree = first - 1;
               //hash(i, allNodes[i + numOfHosts].type, portID, E, k);
             //I believe the return value of hash in this case is (first - 1)
@@ -345,11 +345,6 @@ int main(int argc, char **argv)
         j = currentTime / STEP_TIME;
         int nextNode = allNodes[i].links[0].nextIndex;
         int nextPort = allNodes[i].links[0].nextPort;
-        if(allNodes[nextNode + numOfHosts].links[nextPort].pkt->id == 0 && 
-            getIndexOfHost(allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP, k) == 0){
-          printf("Latency %ld\n", currentTime);
-        }
-        //int srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
         actionG(&bufferHosts[i], &receivedPkts[i][j],
                 allNodes[nextNode + numOfHosts].links[nextPort].pkt);
         
