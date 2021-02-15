@@ -91,6 +91,7 @@ void testPath(int k, Tables *tablesOfSwitches){
   int nextIP;
   RoutingTable table;
   int index;
+  unsigned long portAndNextIP;
   
   for(i = 0; i < k*k*k/4; i++){
     for(j = 0; j < k*k*k/4; j++){
@@ -105,13 +106,15 @@ void testPath(int k, Tables *tablesOfSwitches){
         #pragma region src and dst are in the same subnet
         if(subnetOfDest == subnetOfSrc && podOfDst == podOfSrc){
           count = 1;
-          nextIP = next(srcIP, srcIP, destIP, k, NULL);
+          portAndNextIP = next(srcIP, srcIP, destIP, k, NULL);
+          nextIP = (int)portAndNextIP;
           while (nextIP != destIP)
           {
             index = getIndexOfSwitch(nextIP, k);
             count--;
             table = tablesOfSwitches->tables[index];
-            nextIP = next(srcIP, nextIP, destIP, k, &table);
+            portAndNextIP = next(srcIP, nextIP, destIP, k, &table);
+            nextIP = (int)portAndNextIP;
           }
           assert(count == 0);
         }
@@ -120,13 +123,15 @@ void testPath(int k, Tables *tablesOfSwitches){
           #pragma region src and dst are in the same pod but different subnets
           count = 3;
           
-          nextIP = next(srcIP, srcIP, destIP, k, NULL);
+          portAndNextIP = next(srcIP, srcIP, destIP, k, NULL);
+          nextIP = (int)portAndNextIP;
           while (nextIP != destIP)
           {
             index = getIndexOfSwitch(nextIP, k);
             count--;
             table = tablesOfSwitches->tables[index];
-            nextIP = next(srcIP, nextIP, destIP, k, &table);
+            portAndNextIP = next(srcIP, nextIP, destIP, k, &table);
+            nextIP = (int)portAndNextIP;
           }
           assert(count == 0);
           #pragma endregion
@@ -134,17 +139,39 @@ void testPath(int k, Tables *tablesOfSwitches){
         else{
           #pragma region src and dst are in different pods
           count = 5; 
-          nextIP = next(srcIP, srcIP, destIP, k, NULL);
-          
+          portAndNextIP = next(srcIP, srcIP, destIP, k, NULL);
+          nextIP = (int)portAndNextIP;
+          if(i == 2 && j == 9)
+          {
+            //printf("DEBUG %d\n", __LINE__);
+          }
           while (nextIP != destIP)
           {
             index = getIndexOfSwitch(nextIP, k);
             count--;
+            #pragma region test the case of paper
+            if(i == 2 && j == 9)
+            {
+              if(count == 4)
+                assert(index == 1);
+              if(count == 3)
+                assert(index == 2);
+              if(count == 2)
+                assert(index == 17);
+              if(count == 1)
+                assert(index == 10);
+              if(count == 0)
+                assert(index == 8);
+            }
+            #pragma endregion 
             table = tablesOfSwitches->tables[index];
-            nextIP = next(srcIP, nextIP, destIP, k, &table);
+            portAndNextIP = next(srcIP, nextIP, destIP, k, &table);
+            nextIP = (int)portAndNextIP;
           }
           assert(count == 0);
           #pragma endregion
+
+          
         } 
         
       }
@@ -366,6 +393,78 @@ void testHash(int k){
   assert(countCore == k*k/4);
 }
 
+void testCoreInPath(Tables *tablesOfSwitches){
+  //this func has implicit variable k = 4
+  int i, j;
+  int nextIP;
+  RoutingTable table;
+  int index;
+  unsigned long portAndNextIP;
+  int **cores = NULL;
+  cores = malloc(sizeof * cores * 4);
+  for(i = 0; i < 4; i++){
+    cores[i] = malloc(sizeof * cores[i] * 7);
+    cores[i][0] = 0;
+    for(j = 1; j < 7; j++)
+      cores[i][j] = -1;
+  }
+  
+  for(i = 0; i < 16; i++){
+    int srcIP = getIPv4OfHost(i, 4);
+    int podOfSrc = (srcIP >> 16) & 255;
+    
+    for(j = 0; j < 16; j++){
+      if(i != j){
+        int count = 0;
+        int destIP = getIPv4OfHost(j, 4);
+        int podOfDst = (destIP >> 16) & 255;
+        if(podOfSrc != podOfDst){
+          int subnetOfSrc = (srcIP >> 8) & 255;
+          int subnetOfDest = (destIP >> 8) & 255;
+          portAndNextIP = next(srcIP, srcIP, destIP, 4, NULL);
+          nextIP = (int)portAndNextIP;
+          while (nextIP != destIP)
+          {
+            index = getIndexOfSwitch(nextIP, 4);
+            if(index >= 16){
+              cores[index-16][cores[index-16][0] + 1] = j;
+              cores[index-16][0]++;
+            }
+            table = tablesOfSwitches->tables[index];
+            portAndNextIP = next(srcIP, nextIP, destIP, 4, &table);
+            nextIP = (int)portAndNextIP;
+          }
+        }
+      }
+    }
+    
+    assert(cores[0][0] + cores[1][0] + cores[2][0] + cores[3][0] == 12);
+    assert(cores[0][0]*cores[1][0] == 0);
+    assert(cores[2][0]*cores[3][0] == 0);
+    assert(cores[0][0] + cores[1][0] == cores[2][0] + cores[3][0]);
+    assert(cores[0][0] == cores[2][0]);
+    assert(cores[1][0] == cores[3][0]);
+    
+    int l, k;
+
+    printf("Host %d ", i);
+    for(l = 0; l < 4; l++){
+      if(cores[l][0] > 0){
+        printf("pass core %d to reach: ", l + 16);
+        cores[l][0] = 0;
+        for(k = 1; k < 7; k++){
+          if(cores[l][k] != -1){
+            printf(", %d", cores[l][k]);
+            cores[l][k] = -1;
+          }
+        }
+      }
+      printf("\n");
+    }
+  }
+}
+
+
 int main(){
   int k = 4;
   int serverId = 0;
@@ -477,6 +576,7 @@ int main(){
   Tables *tablesOfSwitches = malloc(sizeof(Tables));
   buildTables(tablesOfSwitches, k);
   testPath(k, tablesOfSwitches);
+  testCoreInPath(tablesOfSwitches);
 
   BufferSwitch *bufferSwitches = initBufferSwitches(k*k*5/4, k);
 
