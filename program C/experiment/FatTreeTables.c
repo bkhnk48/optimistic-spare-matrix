@@ -116,7 +116,7 @@ long next(int srcIP, int currIP, int destIP, int k,
           ) {
   //8 bytes cuoi luu tru dia chi IP cua next switch/host
   //8 bytes dau tien luu tru chi so cua cong (port)
-  int nextIP;
+  unsigned long nextIP;
   int podOfSrc = (srcIP >> 16) & 255;
   int podOfDst = (destIP >> 16) & 255;
   int subnetOfSrc = (srcIP >> 8) & 255;
@@ -153,7 +153,8 @@ long next(int srcIP, int currIP, int destIP, int k,
       else{
         nextIP = //tablesOfSwitches->tables[i].
                   table->suffixTable[suffix];
-        return (((unsigned long)(suffix + k/2)) << 32) | nextIP;
+        return //(((unsigned long)(suffix + k/2)) << 32) | 
+                nextIP;
       }
     }
     if(typeOfSwitch == EDGE_SWITCH){
@@ -163,7 +164,8 @@ long next(int srcIP, int currIP, int destIP, int k,
         //If destination host is not the same subnet of edge
         //Or pod of dest is not the pod of edge    
         nextIP = table->suffixTable[suffix];
-        return (((unsigned long)(suffix + k/2)) << 32) | nextIP;
+        return //(((unsigned long)(suffix + k/2)) << 32) | 
+                nextIP;
       }
       else{
         //Dest host is one of the neighbors of edge
