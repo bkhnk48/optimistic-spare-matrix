@@ -24,7 +24,7 @@ unsigned long calculateThroughput(unsigned long **receivedPackets, int PACKET_SI
 
    for(i = 0; i < STEP; i++){
       thpt[i] = counter[i]*PACKET_SIZE*100/INTERVAL_BANDWIDTH;
-      printf("|%.0lf%%", thpt[i]);
+      printf("|%.2lf%%", thpt[i]);
    }
    printf("\n");
    free(thpt);
