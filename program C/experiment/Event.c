@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "NetworkNode.c"
 #include "ShiftBits.c"
+#include "Throughput.c"
 
 #ifndef _TYPES_OF_EVENT_
 #define _TYPES_OF_EVENT_
@@ -560,6 +561,7 @@ void actionG(BufferHost *buffHost, unsigned long *count, Packet *packet){
             buffHost->receivedPkts = temp;
         }
     }
+    
     packet->id = -1;
     packet->srcIP = -1;
     packet->dstIP = -1;
