@@ -69,8 +69,8 @@ int main(int argc, char **argv)
 
   PairPattern *pairs = NULL;
   pairs = malloc(numOfHosts * sizeof(PairPattern)); 
-  forceToPair(pairs, numOfHosts, 2);
-    pairs[2].dst = 9;
+  forceToPair(pairs, numOfHosts, 3);
+  //pairs[2].dst = 9;
   printfPairs(pairs, numOfHosts);
 
   receivedPkts = malloc(sizeof *receivedPkts * numOfHosts);
@@ -110,11 +110,24 @@ int main(int argc, char **argv)
 
   timing(&wc1, &cpuT);
 
-  for (i = 0; i < 4; i++) //Only test first hosts in pod
+  for (i = 8; i < 10; i++) //Only test first hosts in pod
   {
-    idNodeInTree = hash(i, HOST, 0, A, k);
-    add(A, i, 0, 0, &root, idNodeInTree);
-    numOfFlows++;
+    //if(i != 11 && i != 12){
+      idNodeInTree = hash(i, HOST, 0, A, k);
+      add(A, i, 0, 0, &root, idNodeInTree);
+      numOfFlows++;
+    //}
+  }
+
+  Flow *flows = malloc(numOfHosts * sizeof(Flow));
+  for(i = 0; i < numOfHosts; i++){
+    flows[i].indexOfDst = i;
+    flows[i].srcIP = -1;
+    flows[i].receivedPackets = malloc(STEP * sizeof(unsigned long));
+    for (j = 0; j < STEP; j++)
+    {
+      flows[i].receivedPackets[j] = 0;
+    }
   }
 
   removeFirst(&first, &root);
@@ -345,9 +358,13 @@ int main(int argc, char **argv)
         j = currentTime / STEP_TIME;
         int nextNode = allNodes[i].links[0].nextIndex;
         int nextPort = allNodes[i].links[0].nextPort;
+        if(flows[i].srcIP == -1)
+          flows[i].srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
+        
         actionG(&bufferHosts[i], &receivedPkts[i][j],
                 allNodes[nextNode + numOfHosts].links[nextPort].pkt);
-        
+        flows[i].receivedPackets[j]++;
+
         idNodeInTree = hash(nextNode, EDGE_SWITCH, nextPort, H, k);
         add(H, nextNode, nextPort,currentTime + 1, &root, idNodeInTree);
         
@@ -380,7 +397,17 @@ int main(int argc, char **argv)
   }
   printf("\n\nFINISH!!!!!!!!!!!! ^_^....\n");
 
-  unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000000);
+  double INTERVAL_BANDWIDTH = (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000000;
+  unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, INTERVAL_BANDWIDTH);
+  INTERVAL_BANDWIDTH /= numOfFlows;
+  for(i = 0; i < numOfHosts; i++){
+    if(flows[i].srcIP != -1){
+      printf("====================\n");
+      printf("Flow from %d(%d) to %d: \n", getIndexOfHost(flows[i].srcIP, k), flows[i].srcIP, flows[i].indexOfDst);
+      calculateFlow(flows[i].receivedPackets, PACKET_SIZE, STEP, INTERVAL_BANDWIDTH);
+      printf("\n====================\n");
+    }
+  }
 
   timing(&wc2, &cpuT);
   printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
