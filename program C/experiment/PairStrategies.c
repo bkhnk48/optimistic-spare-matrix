@@ -133,6 +133,25 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
         sources[15] = 15;//27
     }
 
+    if(option == 1000){
+        sources = malloc(16 * sizeof(int));
+        sources[0] = 0;//0->11
+        sources[1] = 14;//26->16
+        sources[2] = 5;//9->25
+        sources[3] = 7;//11->18
+        sources[4] = 1;//1->19
+        sources[5] = 3;//3->24
+        sources[6] = 11;//19->26
+        sources[7] = 9;//17->27
+        sources[8] = 10;//18->0
+        sources[9] = 12;//24->1
+        sources[10] = 6;//10->2
+        sources[11] = 13;//25->3
+        sources[12] = 2;//2->8
+        sources[13] = 8;//16->9
+        sources[14] = 15;//27->10
+        sources[15] = 4;//8->17
+    }
     for(i = 0; i < numOfFlows; i++){
         int src = sources[i];
         pairs[src].dst = destinations[i];
@@ -140,4 +159,24 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
 
     free(sources);
     free(destinations);
+}
+
+void interpodIncomming(PairPattern *pairs, const int k){
+    int *sources = NULL;
+    int *destinations = NULL;
+
+    int numOfFlows = k*k*k/4;
+    int *allHosts = NULL;
+    sources = malloc(numOfFlows * sizeof(int));
+    destinations = malloc(numOfFlows * sizeof(int));
+    allHosts = malloc(numOfFlows * sizeof(int));
+    int i, j;
+    for(i = 0; i < numOfFlows; i++){
+        sources[i] = -1;
+        destinations[i] = -1;
+        allHosts[i] = i;
+    }
+
+    
+
 }
