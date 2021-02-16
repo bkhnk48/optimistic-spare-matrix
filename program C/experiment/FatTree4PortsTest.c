@@ -105,12 +105,13 @@ int main(int argc, char **argv)
   int numOfFlows = 0;
   int type;
   int edited = 0, flag = 0;
+  int foundDiff = 0;
   
   root = UINT_MAX;
 
   timing(&wc1, &cpuT);
 
-  for (i = 8; i < 10; i++) //Only test first hosts in pod
+  for (i = 7; i < 10; i++) //Only test first hosts in pod
   {
     //if(i != 11 && i != 12){
       idNodeInTree = hash(i, HOST, 0, A, k);
@@ -348,9 +349,32 @@ int main(int argc, char **argv)
             loadingTime = (bufferSwitches[i].type == CORE_SWITCH || bufferSwitches[nextIndex].type == CORE_SWITCH) ? loadingTime2 : loadingTime1;
           }
           idNodeInTree = hash(nextIndex, tempNode, nextPort, tempEvent, k);
+          if(!foundDiff){
+            if(bufferSwitches[i].type == CORE_SWITCH){
+              foundDiff = 1;
+            }
+            printf(">>>>>>Loading time = %ld\n", loadingTime);
+          }
           add(tempEvent, nextIndex, nextPort, currentTime + loadingTime, &root, idNodeInTree);
         }
         #pragma endregion
+        if(allNodes[i + numOfHosts].links[portID].pkt->id <= 2 /*&& portID == 0*/ && currentTime <= 5*1000*1000){
+          
+          if(allNodes[i + numOfHosts].links[portID].pkt->srcIP == 167837955){
+            //foundDiff = -1;
+            if(i == 3)
+            printf("======>");
+            printf("Sw %ld ", i);
+            printf("Pkt id = %ld (gen %ld) at time %ld\n", allNodes[i + numOfHosts].links[portID].pkt->id, allNodes[i + numOfHosts].links[portID].pkt->generatedTime, currentTime);
+          }
+          else if(allNodes[i + numOfHosts].links[portID].pkt->srcIP == 167903234){
+            //foundDiff = -foundDiff;
+            if(i == 3)
+            printf("======>");
+            printf("Sw %ld ", i);
+            printf("found diff src %d (gen %ld) at curr %ld\n", allNodes[i + numOfHosts].links[portID].pkt->srcIP, allNodes[i + numOfHosts].links[portID].pkt->generatedTime, currentTime);
+          }
+        }
       }
       else if (type == G)
       {
