@@ -138,6 +138,26 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
         sources[15] = 15;//27
     }
 
+    if(option == 998){
+        sources = malloc(16 * sizeof(int));
+        sources[0] = 9;//17->11
+        sources[1] = 2;//2->16
+        sources[2] = 10;//18->25
+        sources[3] = 3;//3->18
+        sources[4] = 14;//26->19
+        sources[5] = 6;//10->24
+        sources[6] = 7;//11->26
+        sources[7] = 11;//19->27
+        sources[8] = 4;//8->0
+        sources[9] = 12;//24->1
+        sources[10] = 5;//9->2
+        sources[11] = 13;//25->3
+        sources[12] = 0;//0->8
+        sources[13] = 8;//16->9
+        sources[14] = 1;//1->10
+        sources[15] = 15;//27->17
+    }
+    
     if(option == 999){
         sources = malloc(16 * sizeof(int));
         sources[0] = 0;//0->11
