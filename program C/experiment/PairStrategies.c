@@ -138,6 +138,48 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
         sources[15] = 15;//27
     }
 
+    if(option == 996){
+        //Throughput reaches 100%
+        sources = malloc(16 * sizeof(int));
+        sources[0] = 4;//8->11//7
+        sources[1] = 10;//18->16//8
+        sources[2] = 15;//27->25//13
+        sources[3] = 8;//16->18//10
+        sources[4] = 9;//17->19//11
+        sources[5] = 14;//26->24//12
+        sources[6] = 13;//25->26//14
+        sources[7] = 12;//24->27//15
+        sources[8] = 3;//3->0//0
+        sources[9] = 2;//2->1//1
+        sources[10] = 1;//1->2//2
+        sources[11] = 0;//0->3//3
+        sources[12] = 6;//10->8//4
+        sources[13] = 7;//11->9//5
+        sources[14] = 5;//9->10//6
+        sources[15] = 11;//19->17//9
+    }
+
+    if(option == 997){
+        //Pass through only two cores: 16, 17
+        sources = malloc(16 * sizeof(int));
+        sources[0] = 11;//19->11
+        sources[1] = 12;//24->16
+        sources[2] = 2;//2->25
+        sources[3] = 13;//25->18
+        sources[4] = 15;//27->19
+        sources[5] = 1;//1->24
+        sources[6] = 0;//0->26
+        sources[7] = 3;//3->27
+        sources[8] = 4;//8->0
+        sources[9] = 6;//10->1
+        sources[10] = 5;//9->2
+        sources[11] = 7;//11->3
+        sources[12] = 8;//16->8
+        sources[13] = 10;//18->9
+        sources[14] = 9;//17->10
+        sources[15] = 14;//26->17
+    }
+    
     if(option == 998){
         sources = malloc(16 * sizeof(int));
         sources[0] = 9;//17->11
@@ -247,7 +289,7 @@ void interpodIncomming(PairPattern *pairs, const int k){
     }
 
     int delta = rand(); // % (k*k/4);
-    printf("Delta = %d\n", delta);
+    //printf("Delta = %d\n", delta);
 
     int numOfHosts = numOfFlows;
     int sizeOfPod = k*k/4;
