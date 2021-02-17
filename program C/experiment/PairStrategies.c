@@ -34,7 +34,7 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
     if(numOfFlows != 16){
         exit(1);
     }
-    int i;
+    int i, j;
      
     for(i = 0; i < numOfFlows; i++){
         pairs[i].src = i;
@@ -134,6 +134,26 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
         sources[15] = 15;//27
     }
 
+    if(option == 999){
+        sources = malloc(16 * sizeof(int));
+        sources[0] = 0;//0->11
+        sources[1] = 4;//8->16
+        sources[2] = 9;//17->25
+        sources[3] = 7;//11->18
+        sources[4] = 1;//1->19
+        sources[5] = 11;//19->24
+        sources[6] = 3;//3->26
+        sources[7] = 5;//9->27
+        sources[8] = 12;//24->0
+        sources[9] = 10;//18->1
+        sources[10] = 14;//25->2
+        sources[11] = 6;//10->3
+        sources[12] = 8;//16->8
+        sources[13] = 15;//27->9
+        sources[14] = 2;//2->10
+        sources[15] = 13;//25->17
+    }
+    
     if(option == 1000){
         sources = malloc(16 * sizeof(int));
         sources[0] = 0;//0->11
@@ -153,6 +173,14 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
         sources[14] = 15;//27->10
         sources[15] = 4;//8->17
     }
+    
+    for(i = 0; i < numOfFlows; i++){
+        for(j = i + 1; j < numOfFlows; j++){
+            if(sources[i] == sources[j])
+                exit(1);
+        }
+    }
+
     for(i = 0; i < numOfFlows; i++){
         int src = sources[i];
         pairs[src].dst = destinations[i];
