@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include <stdlib.h>
 
 enum PairStrategy{
@@ -162,6 +163,7 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
 }
 
 void interpodIncomming(PairPattern *pairs, const int k){
+    srand(time(NULL));   // Initialization, should only be called once.
     int *sources = NULL;
     int *destinations = NULL;
 
@@ -177,6 +179,14 @@ void interpodIncomming(PairPattern *pairs, const int k){
         allHosts[i] = i;
     }
 
-    
+    int delta = rand() % (k*k/4);
+
+    int numOfHosts = numOfFlows;
+    int sizeOfPod = k*k/4;
+    int currPod = 0, prePod = 0;
+    for(int i = 0; i < numOfHosts; i++) {
+        int dst = allHosts[i];
+        prePod = currPod;
+    }
 
 }
