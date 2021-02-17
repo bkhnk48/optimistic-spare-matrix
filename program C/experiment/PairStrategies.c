@@ -2,6 +2,10 @@
 #include <time.h>
 #include <stdlib.h>
 
+int contains(int *array, const int length, const int num);
+
+void addToArray(int *array, int *lastIndex, int length, int elem);
+
 enum PairStrategy{
     FORCE_TO_PAIR = 0,
     RANDOM = 1,
@@ -190,6 +194,19 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
     free(destinations);
 }
 
+void checkValid(int *sources, int * dests, const int k){
+    //int numOfCores = k*k/4;
+    int numOfHosts = k*k*k/4;
+    int i, j, realCore = 0, sizeOfPod = k*k/4;
+    for(i = 0; i < numOfHosts; i++){
+        if(sources[i] == -1 || dests[i] == -1){
+            printf("Not enough pair!\n");
+            exit(1);
+        }
+    }
+
+}
+
 void interpodIncomming(PairPattern *pairs, const int k){
     srand(time(NULL));   // Initialization, should only be called once.
     int *sources = NULL;
@@ -198,6 +215,8 @@ void interpodIncomming(PairPattern *pairs, const int k){
     int numOfFlows = k*k*k/4;
     int *allHosts = NULL;
     sources = malloc(numOfFlows * sizeof(int));
+    int lastOfSources = -1;
+    int lastOfDests = -1;
     destinations = malloc(numOfFlows * sizeof(int));
     allHosts = malloc(numOfFlows * sizeof(int));
     int i, j;
@@ -207,7 +226,8 @@ void interpodIncomming(PairPattern *pairs, const int k){
         allHosts[i] = i;
     }
 
-    int delta = rand() % (k*k/4);
+    int delta = rand(); // % (k*k/4);
+    printf("Delta = %d\n", delta);
 
     int numOfHosts = numOfFlows;
     int sizeOfPod = k*k/4;
@@ -215,6 +235,121 @@ void interpodIncomming(PairPattern *pairs, const int k){
     for(int i = 0; i < numOfHosts; i++) {
         int dst = allHosts[i];
         prePod = currPod;
+        if(contains(destinations, numOfHosts, dst) == 0){
+            int index = (i + sizeOfPod + delta) % numOfHosts;
+            if(index / sizeOfPod == prePod)
+            {
+                index = (index + sizeOfPod) % numOfHosts;
+                //if(allHosts[index] /elmOfPod == dst / elmOfPod)
+                if(index / sizeOfPod == dst / sizeOfPod)
+                {
+                    index = (index + sizeOfPod) % numOfHosts;
+                }
+            }
+            int count = 0;
+            int expectedSrc = allHosts[index];
+            int found = 0;
+            //int j =
+            while(!found && count < k)
+            {
+                if(contains(sources, numOfHosts, expectedSrc))
+                {
+                    for(int j = index + 1; j < (index/sizeOfPod + 1)*sizeOfPod; j++)
+                    {
+                        expectedSrc = allHosts[j];
+                        if(contains(sources, numOfHosts, expectedSrc) == 0
+                                    && ((expectedSrc / sizeOfPod) != (dst / sizeOfPod))
+                            )
+                        {
+                            found = 1;
+                            addToArray(sources, &lastOfSources, numOfHosts, expectedSrc);
+                            addToArray(destinations, &lastOfDests, numOfHosts, dst);
+                            if((i + 1) % sizeOfPod == 0)
+                            {
+                                currPod = (i + 1) / sizeOfPod;
+                            }
+                            else {
+                                currPod = j / sizeOfPod;
+                            }
+
+                            addToArray(sources, &lastOfSources, numOfHosts, dst);
+                            //sources.add(dst);
+                            addToArray(destinations, &lastOfDests, numOfHosts, expectedSrc);
+                            //destinations.add(expectedSrc);
+                            break;
+                        }
+                    }
+                }//endof if(contains(sources, numOfHosts, expectedSrc))
+                else{
+                    if(expectedSrc / sizeOfPod != dst / sizeOfPod)
+                    {
+                        found = 1;
+                        addToArray(sources, &lastOfSources, numOfHosts, expectedSrc);
+                        addToArray(destinations, &lastOfDests, numOfHosts, dst);
+                            
+                        addToArray(sources, &lastOfSources, numOfHosts, dst);
+                        addToArray(destinations, &lastOfDests, numOfHosts, expectedSrc);
+                            
+                        if((i + 1) % sizeOfPod == 0){
+                            currPod = (i + 1) / sizeOfPod;
+                        }
+                        else {
+                            currPod = index / sizeOfPod;
+                        }
+                        break;
+                    }
+                }
+
+                if(!found)
+                {
+                    count++;
+                    index = (index + sizeOfPod) % numOfHosts;
+                }
+            }
+            //end of while(!found && count < k)
+
+        }
+        //end of if(!destinations.contains(dst))
+        else {
+            //currPod = (i + 1) / elmOfPod;
+            currPod = i / sizeOfPod;
+        }
     }
 
+    checkValid(sources, destinations, k);
+
+    for(i = 0; i < numOfFlows; i++){
+        int src = sources[i];
+        pairs[src].dst = destinations[i];
+    }
+
+    free(sources);
+    free(destinations);
+}
+
+int contains(int *array, const int length, const int num){
+    int i = 0;
+    for(i = 0; i < length; i++){
+        if(array[i] == -1)
+            return 0;
+        else if(array[i] == num){
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void addToArray(int *array, int *lastIndex, int length, int elem){
+    if(length == *lastIndex)
+        return;
+    if(*lastIndex == -1){
+        array[0] = elem;
+        *lastIndex = 0;
+        return;
+    }
+    if(*lastIndex < length - 1){
+        array[(*lastIndex) + 1] = elem;
+        *lastIndex = *lastIndex + 1;
+        return;
+    }
 }
