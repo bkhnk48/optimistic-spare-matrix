@@ -1,8 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
+#include "FatTreeGraph.c"
+#include "FatTreeTables.c"
 #include "CalendarQueue.c"
+#include "ControlFlow.c"
 #include "timing.c"
+#include "TestAPI.c"
+#include "Throughput.c"
+#include "PairStrategies.c"
+#include <limits.h>
+#include <locale.h>
 #include <math.h>
+
 
 
 int main(int argc, char** argv) 
