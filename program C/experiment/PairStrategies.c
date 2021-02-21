@@ -266,7 +266,6 @@ void checkValid(int *sources, int * dests, const int k){
             exit(1);
         }
     }
-
 }
 
 void interpodIncomming(PairPattern *pairs, const int k){
@@ -366,6 +365,7 @@ void interpodIncomming(PairPattern *pairs, const int k){
                 {
                     count++;
                     index = (index + sizeOfPod) % numOfHosts;
+                    expectedSrc = allHosts[index];
                 }
             }
             //end of while(!found && count < k)
@@ -380,13 +380,15 @@ void interpodIncomming(PairPattern *pairs, const int k){
 
     checkValid(sources, destinations, k);
 
-    for(i = 0; i < numOfFlows; i++){
-        int src = sources[i];
+    int src;
+    for(i = 0; i < numOfHosts; i++){
+        src = sources[i];
         pairs[src].dst = destinations[i];
     }
 
     free(sources);
     free(destinations);
+    free(allHosts);
 }
 
 int contains(int *array, const int length, const int num){
@@ -402,15 +404,16 @@ int contains(int *array, const int length, const int num){
 }
 
 void addToArray(int *array, int *lastIndex, int length, int elem){
-    if(length == *lastIndex)
+    if(length == *lastIndex){
         return;
+    }
     if(*lastIndex == -1){
         array[0] = elem;
         *lastIndex = 0;
         return;
     }
-    if(*lastIndex < length - 1){
-        array[(*lastIndex) + 1] = elem;
+    if((*lastIndex < (length - 1)) && (*lastIndex >= 0)){
+        array[*lastIndex + 1] = elem;
         *lastIndex = *lastIndex + 1;
         return;
     }
