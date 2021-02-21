@@ -68,8 +68,8 @@ int main(int argc, char **argv)
 
   PairPattern *pairs = NULL;
   pairs = malloc(numOfHosts * sizeof(PairPattern)); 
-  interpodIncomming(pairs, k);
-  //forceToPair(pairs, numOfHosts, 996);
+  //interpodIncomming(pairs, k);
+  forceToPair(pairs, numOfHosts, 1000);
   //pairs[2].dst = 9;
   printfPairs(pairs, numOfHosts);
 
