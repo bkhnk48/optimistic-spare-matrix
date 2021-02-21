@@ -112,11 +112,9 @@ int main(int argc, char **argv)
 
   for (i = 0; i < numOfHosts; i++) //Only test first hosts in pod
   {
-    //if(i != 11 && i != 12){
-      idNodeInTree = hash(i, HOST, 0, A, k);
-      add(A, i, 0, 0, &root, idNodeInTree);
-      numOfFlows++;
-    //}
+    idNodeInTree = hash(i, HOST, 0, A, k);
+    add(A, i, 0, 0, &root, idNodeInTree);
+    numOfFlows++;
   }
 
   Flow *flows = malloc(numOfHosts * sizeof(Flow));
