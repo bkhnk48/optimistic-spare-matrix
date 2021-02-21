@@ -36,8 +36,7 @@ int main(int argc, char **argv)
   enum PairStrategy stragegy = FORCE_TO_PAIR;
   
   unsigned long currentTime = 0;
-  int numOfHosts = k * k * k / 4;
-  int defaultNumOfFlows = numOfHosts;
+  
   unsigned long endTime = defaultSec * ((unsigned long)(1000 * 1000 * 1000));
   unsigned long STEP_TIME = endTime / STEP;
 
@@ -51,7 +50,7 @@ int main(int argc, char **argv)
   }
 
   
-
+  int numOfHosts = k * k * k / 4;
   unsigned long i, j;
   unsigned int N, root = UINT_MAX;
 
@@ -69,7 +68,8 @@ int main(int argc, char **argv)
 
   PairPattern *pairs = NULL;
   pairs = malloc(numOfHosts * sizeof(PairPattern)); 
-  forceToPair(pairs, numOfHosts, 999);
+  interpodIncomming(pairs, k);
+  //forceToPair(pairs, numOfHosts, 996);
   //pairs[2].dst = 9;
   printfPairs(pairs, numOfHosts);
 
@@ -400,14 +400,14 @@ int main(int argc, char **argv)
   double INTERVAL_BANDWIDTH = (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000000;
   unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, INTERVAL_BANDWIDTH);
   INTERVAL_BANDWIDTH /= numOfFlows;
-  for(i = 0; i < numOfHosts; i++){
+  /*for(i = 0; i < numOfHosts; i++){
     if(flows[i].srcIP != -1){
       printf("====================\n");
       printf("Flow from %d(%d) to %d: \n", getIndexOfHost(flows[i].srcIP, k), flows[i].srcIP, flows[i].indexOfDst);
       calculateFlow(flows[i].receivedPackets, PACKET_SIZE, STEP, INTERVAL_BANDWIDTH);
       printf("\n====================\n");
     }
-  }
+  }*/
 
   timing(&wc2, &cpuT);
   printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
