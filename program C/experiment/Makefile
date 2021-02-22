@@ -19,7 +19,7 @@ serial:
 	gcc -pg -c Node.c
 	gcc -pg -c LinkedList.c
 	gcc -pg -c CalendarQueue.c
-	gcc CalendarQueueTest.c -pg -o cqtest.o -lm
+	gcc CalendarQueueTest.c -pg -g -o cqtest.o -lm
 	gcc -pg -c CAQueue.c
 	gcc randomFile.c -pg -o ran.o
 	gcc -ggdb3 -O0 -std=c99 -Wall -Wextra -pedantic -o main.out main.c
