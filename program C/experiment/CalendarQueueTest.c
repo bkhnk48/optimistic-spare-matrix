@@ -70,7 +70,7 @@ int main(int argc, char** argv)
         receivedPkts[i] = malloc(sizeof *receivedPkts[i] * (STEP + 1));
         for (j = 0; j < STEP + 1; j++)
         {
-        receivedPkts[i][j] = 0;
+            receivedPkts[i][j] = 0;
         }
     }
 
@@ -96,7 +96,7 @@ int main(int argc, char** argv)
     int numOfFlows = 0;
     int type;
     int edited = 0, flag = 0;
-    printf("Simulation time is %ld (s)\n", endTime / (1000*1000));
+    printf("Simulation time is %ld (s)\n", endTime / (1000*1000*1000));
     unsigned long mem = mem_avail();
     printf("Free memory Available = %'ld\n", mem / (1024*1024));
 
@@ -104,9 +104,9 @@ int main(int argc, char** argv)
     //char* p = malloc(1 * 1024 * 1024 * 1024);
     
     timing(&wc1, &cpuT);
-    for(i = 0; i < numOfHosts; i++)
+    for(i = 0; i < 1; i++)
     {
-        enqueue(new_node(A, i, 0L, i));
+        enqueue(new_node(A, i, 0, i));
         numOfFlows++;
     }
 
@@ -117,7 +117,7 @@ int main(int argc, char** argv)
         flows[i].receivedPackets = malloc(STEP * sizeof(unsigned long));
         for (j = 0; j < STEP; j++)
         {
-        flows[i].receivedPackets[j] = 0;
+            flows[i].receivedPackets[j] = 0;
         }
     }
     
@@ -162,6 +162,8 @@ int main(int argc, char** argv)
             }
             else if(ev->type == D){
                 #pragma region action of Event type D
+                if(currentTime == 480088)
+                    printf("DEBUG\n");
                 int portID = ev->portID;
                 Packet *ENB = bufferSwitches[i].ENB[portID];
                 int idPrev = allNodes[i + numOfHosts].links[portID].nextIndex;
@@ -197,8 +199,6 @@ int main(int argc, char** argv)
                         //add(E, i, nextEXB, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
                         enqueue(new_node(E, i, nextEXB, currentTime + SWITCH_CYCLE));
                     }
-
-
                 }
                 
                 #pragma endregion
@@ -225,18 +225,18 @@ int main(int argc, char** argv)
 
                 if (ENB[posInENB].srcIP != -1 && ENB[posInENB].dstIP != -1 && ENB[posInENB].id != -1 && ENB[posInENB].generatedTime != -1)
                 {
-                unsigned long portAndNextIP = next(ENB[posInENB].srcIP,
-                                    allNodes[i + numOfHosts].ipv4,
-                                    ENB[posInENB].dstIP,
-                                    k, &(tablesOfSwitches->tables[i]));
-                int nextIP = (int)portAndNextIP;
-                int nextEXB = (int)(portAndNextIP >> 32);
-                //int nextEXB = getEXB_ID(nextIP, allNodes[i + numOfHosts].type, k);
-                //this func has two params:
-                // + nextEXB: the port ID of the next EXB
-                // + registeredEXB[portID]: the array's element to store the nextEXB
-                //additional info: portID - ID of ENB in which outgoing packet
-                signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
+                    unsigned long portAndNextIP = next(ENB[posInENB].srcIP,
+                                        allNodes[i + numOfHosts].ipv4,
+                                        ENB[posInENB].dstIP,
+                                        k, &(tablesOfSwitches->tables[i]));
+                    int nextIP = (int)portAndNextIP;
+                    int nextEXB = (int)(portAndNextIP >> 32);
+                    //int nextEXB = getEXB_ID(nextIP, allNodes[i + numOfHosts].type, k);
+                    //this func has two params:
+                    // + nextEXB: the port ID of the next EXB
+                    // + registeredEXB[portID]: the array's element to store the nextEXB
+                    //additional info: portID - ID of ENB in which outgoing packet
+                    signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
                 }
                 #pragma endregion
 
@@ -269,7 +269,7 @@ int main(int argc, char** argv)
                 }
                 else
                 {
-                //generate event H
+                    //generate event H
                     int idPrePort = allNodes[i + numOfHosts].links[pickUpENB].nextPort;
                     //idNodeInTree = hash(idPrev, allNodes[idPrev + numOfHosts].type, idPrePort, H, k);
                     //add(H, idPrev, idPrePort, currentTime + 1, &root, idNodeInTree);
@@ -326,6 +326,8 @@ int main(int argc, char** argv)
                     unsigned long loadingTime = loadingTime1;
                     if(tempEvent == D){
                         loadingTime = (bufferSwitches[i].type == CORE_SWITCH || bufferSwitches[nextIndex].type == CORE_SWITCH) ? loadingTime2 : loadingTime1;
+                        if(currentTime + loadingTime == 480088)
+                            printf("DEBUG %d\n", __LINE__);
                     }
                     //idNodeInTree = hash(nextIndex, tempNode, nextPort, tempEvent, k);
                     //add(tempEvent, nextIndex, nextPort, currentTime + loadingTime, &root, idNodeInTree);
@@ -340,7 +342,7 @@ int main(int argc, char** argv)
                 int nextNode = allNodes[i].links[0].nextIndex;
                 int nextPort = allNodes[i].links[0].nextPort;
                 if(flows[i].srcIP == -1)
-                flows[i].srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
+                    flows[i].srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
                 
                 actionG(&bufferHosts[i], &receivedPkts[i][j],
                         allNodes[nextNode + numOfHosts].links[nextPort].pkt);
