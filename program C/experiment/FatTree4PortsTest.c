@@ -35,7 +35,7 @@ int main(int argc, char **argv)
   int STEP = 100;
   enum PairStrategy stragegy = FORCE_TO_PAIR;
   
-  unsigned long currentTime = 0;
+  unsigned long currentTime = ULLONG_MAX;
   
   unsigned long endTime = defaultSec * ((unsigned long)(1000 * 1000 * 1000));
   unsigned long STEP_TIME = endTime / STEP;
@@ -110,10 +110,11 @@ int main(int argc, char **argv)
 
   timing(&wc1, &cpuT);
 
-  for (i = 0; i < numOfHosts; i++) //Only test first hosts in pod
+  for (i = 9; i < 11; i++) //Only test first hosts in pod
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
-    add(A, i, 0, 0, &root, idNodeInTree);
+    add(A, i, 0, i, &root, idNodeInTree);
+    if(currentTime > i) currentTime = i;
     numOfFlows++;
   }
 
@@ -130,7 +131,7 @@ int main(int argc, char **argv)
 
   removeFirst(&first, &root);
 
-  unsigned long ongoingTime = (unsigned long)arr[first][0] << 32 + arr[first][1];
+  unsigned long ongoingTime = ((unsigned long)arr[first][0] << 32) + arr[first][1];
   while (currentTime <= endTime && ongoingTime != -1)
   {
     if (ongoingTime == currentTime)
@@ -345,6 +346,7 @@ int main(int argc, char **argv)
           if(tempEvent == D){
             loadingTime = (bufferSwitches[i].type == CORE_SWITCH || bufferSwitches[nextIndex].type == CORE_SWITCH) ? loadingTime2 : loadingTime1;
           }
+          
           idNodeInTree = hash(nextIndex, tempNode, nextPort, tempEvent, k);
           add(tempEvent, nextIndex, nextPort, currentTime + loadingTime, &root, idNodeInTree);
         }
@@ -386,7 +388,6 @@ int main(int argc, char **argv)
     {
       currentTime = ((unsigned long)arr[first][0] << 32) + arr[first][1];
       ongoingTime = currentTime;
-
     }
     else
     {
