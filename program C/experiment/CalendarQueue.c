@@ -277,7 +277,8 @@ Node* dequeue(){
     Node* tmp = removeSoonestEvent();
 
     /*thu hep so luong cua calendar neu can*/
-    if(qsize < bot_threshold) resize(nbuckets/2);
+    if(qsize < bot_threshold && nbuckets >= 2) 
+        resize(nbuckets/2);
     return tmp;
 }
 
