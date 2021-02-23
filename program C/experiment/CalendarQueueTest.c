@@ -39,7 +39,7 @@ int main(int argc, char** argv)
     int STEP = 100;
     enum PairStrategy stragegy = FORCE_TO_PAIR;
     
-    unsigned long currentTime = 0;
+    unsigned long currentTime = ULLONG_MAX;
     
     unsigned long endTime = defaultSec * ((unsigned long)(1000 * 1000 * 1000));
     unsigned long STEP_TIME = endTime / STEP;
@@ -104,8 +104,9 @@ int main(int argc, char** argv)
     //char* p = malloc(1 * 1024 * 1024 * 1024);
     
     timing(&wc1, &cpuT);
-    for(i = 0; i < 1; i++)
+    for(i = 1; i < 2; i++)
     {
+        if(currentTime > i) currentTime = i;
         enqueue(new_node(A, i, 0, i));
         numOfFlows++;
     }
