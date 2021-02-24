@@ -425,7 +425,7 @@ int actionE(int portENB, int portEXB,
     if(bufferSwitch->countNextENB[portEXB] > 0
         && link->pkt->id == -1
         ){
-        result |= 2;
+        result |= 2;//will create event F
     }
     return result;
 }
