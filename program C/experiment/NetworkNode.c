@@ -46,6 +46,7 @@ enum StatesOfPkt{
     P4 = 4, //the packet is located at ENB of switch.
     P4bis = 7, //the packet is choosen to move on the next EXB
     P5 = 5, //the packet is located at EXB of switch.
+    P5bis = 8, //the packet is choosen to transfer on the next link
     P6 = 6  //the packet is received by the destination node.
 };
 
