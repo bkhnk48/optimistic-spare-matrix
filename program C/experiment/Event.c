@@ -424,7 +424,9 @@ int actionE(int portENB, int portEXB,
 
     if(bufferSwitch->countNextENB[portEXB] > 0
         && link->pkt->id == -1
+        && bufferSwitch->EXB[portEXB][firstEXB].state == P5
         ){
+        bufferSwitch->EXB[portEXB][firstEXB].state = P5bis;
         result |= 2;//will create event F
     }
     return result;
@@ -578,7 +580,15 @@ int actionH(BufferSwitch *buffSwitch, int type, int portID, Packet *pktInLink, i
                         buffSwitch->firstLastEXBs[portID][1])
             < BUFFER_SIZE
                 ){
-        return (pktInLink->id == -1);
+        int firstEXB = buffSwitch->firstLastEXBs[portID][0];
+        if(buffSwitch->EXB[portID][firstEXB].state == P5){
+            if(pktInLink->id == -1){
+                buffSwitch->EXB[portID][firstEXB].state = P5bis;
+                return 1;
+            }
+        }
+        else
+            return 0;
     }
     else
         return 0;
