@@ -51,7 +51,7 @@ void insert(Node* entry){
     i = priority / width;
     i = i % nbuckets;
 
-    // tren i vao vi tri hop li tren buckets[i]
+    // chen i vao vi tri hop li tren buckets[i]
     if(buckets[i] == NULL || buckets[i]->endTime >= priority){
         entry->next = buckets[i];
         buckets[i] = entry;
