@@ -21,7 +21,7 @@ int main(int argc, char** argv)
     initqueue();
     double wc1 = 0, wc2 = 0, cpuT = 0;
     //unsigned int first = UINT_MAX;
-    int defaultSec = 1;
+    int defaultSec = 100;
     int defaultBias = 0;
     ProcStatm proc_statm;
     long page_size = sysconf(_SC_PAGESIZE);
@@ -41,9 +41,6 @@ int main(int argc, char** argv)
     
     unsigned long currentTime = ULLONG_MAX;
     
-    unsigned long endTime = defaultSec * ((unsigned long)(1000 * 1000 * 1000));
-    unsigned long STEP_TIME = endTime / STEP;
-
     if (argc >= 2)
     {
         k = atoi(argv[1]);
@@ -52,6 +49,10 @@ int main(int argc, char** argv)
         if (argc > 3)
         defaultBias = atoi(argv[3]);
     }
+
+    unsigned long endTime = defaultSec * ((unsigned long)(1000 * 1000 * 1000));
+    unsigned long STEP_TIME = endTime / STEP;
+
     
     int numOfHosts = k * k * k / 4;
     unsigned long i, j;
@@ -104,13 +105,11 @@ int main(int argc, char** argv)
     //char* p = malloc(1 * 1024 * 1024 * 1024);
     
     timing(&wc1, &cpuT);
-    for(i = 9; i < 12; i++)
+    for(i = 0; i < numOfHosts; i++)
     {
-        if(i != 10){
-            if(currentTime > i) currentTime = i;
-            enqueue(new_node(A, i, 0, i));
-            numOfFlows++;
-        }
+        if(currentTime > i) currentTime = i;
+        enqueue(new_node(A, i, 0, i));
+        numOfFlows++;
     }
 
     Flow *flows = malloc(numOfHosts * sizeof(Flow));
@@ -363,22 +362,22 @@ int main(int argc, char** argv)
     double INTERVAL_BANDWIDTH = (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000000;
     unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, INTERVAL_BANDWIDTH);
     INTERVAL_BANDWIDTH /= numOfFlows;
-    for(i = 0; i < numOfHosts; i++){
+    /*for(i = 0; i < numOfHosts; i++){
         if(flows[i].srcIP != -1){
         printf("====================\n");
         printf("Flow from %d(%d) to %d: \n", getIndexOfHost(flows[i].srcIP, k), flows[i].srcIP, flows[i].indexOfDst);
         calculateFlow(flows[i].receivedPackets, PACKET_SIZE, STEP, INTERVAL_BANDWIDTH);
         printf("\n====================\n");
         }
-    }
+    }*/
 
     timing(&wc2, &cpuT);
     printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
     printf("================================\n");
     badness(wc2 - wc1, page_size, proc_statm);
 
-    assertPackets(total, allNodes, bufferHosts,
-                          bufferSwitches, numOfHosts, 5 * k * k / 4, k);
+    //assertPackets(total, allNodes, bufferHosts,
+    //                      bufferSwitches, numOfHosts, 5 * k * k / 4, k);
 
     return 0;
 }
