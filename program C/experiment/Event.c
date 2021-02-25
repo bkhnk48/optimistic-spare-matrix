@@ -443,7 +443,7 @@ int actionF(BufferSwitch *bufferSwitch,
     int first = bufferSwitch->firstLastEXBs[portID][0];
     int last = bufferSwitch->firstLastEXBs[portID][1];
     int emptySlots = countEmptySlots(first, last);
-    if(emptySlots < BUFFER_SIZE){
+    if(emptySlots < BUFFER_SIZE && link->pkt->id == -1){
         //StoredPacket pkt = bufferSwitch->EXB[portID][first];
         link->pkt->id = bufferSwitch->EXB[portID][first].id;
         link->pkt->srcIP = bufferSwitch->EXB[portID][first].srcIP;
