@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 {
   double wc1 = 0, wc2 = 0, cpuT = 0;
   unsigned int first = UINT_MAX;
-  int defaultSec = 1;
+  int defaultSec = 100;
   int defaultBias = 0;
   ProcStatm proc_statm;
   long page_size = sysconf(_SC_PAGESIZE);
@@ -37,9 +37,6 @@ int main(int argc, char **argv)
   
   unsigned long currentTime = ULLONG_MAX;
   
-  unsigned long endTime = defaultSec * ((unsigned long)(1000 * 1000 * 1000));
-  unsigned long STEP_TIME = endTime / STEP;
-
   if (argc >= 2)
   {
     k = atoi(argv[1]);
@@ -49,6 +46,8 @@ int main(int argc, char **argv)
       defaultBias = atoi(argv[3]);
   }
 
+  unsigned long endTime = defaultSec * ((unsigned long)(1000 * 1000 * 1000));
+  unsigned long STEP_TIME = endTime / STEP;
   
   int numOfHosts = k * k * k / 4;
   unsigned long i, j;
@@ -91,6 +90,9 @@ int main(int argc, char **argv)
   NetworkNode *allNodes = initNetworkNodes(k * k * k / 4, 5 * k * k / 4, k);
 
   setlocale(LC_NUMERIC, "");
+  printf("Simulation time is %ld (s)\n", endTime / (1000*1000*1000));
+  unsigned long mem = mem_avail();
+  printf("Free memory Available = %'ld\n", mem / (1024*1024));
 
   printf("Start Simulating ......\n");
   unsigned long count = 0;
@@ -110,7 +112,7 @@ int main(int argc, char **argv)
 
   timing(&wc1, &cpuT);
 
-  for (i = 9; i < 11; i++) //Only test first hosts in pod
+  for (i = 0; i < numOfHosts; i++) //Only test first hosts in pod
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
     add(A, i, 0, i, &root, idNodeInTree);
@@ -222,10 +224,7 @@ int main(int argc, char **argv)
             idNodeInTree = hash(i, allNodes[i + numOfHosts].type, nextEXB, E, k);
             add(E, i, nextEXB, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
           }
-
-
         }
-        
       }
       #pragma endregion
       else if (type == E)
