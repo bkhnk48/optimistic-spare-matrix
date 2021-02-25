@@ -174,13 +174,7 @@ int main(int argc, char** argv)
                 idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && portID < k / 2 ? 0 : numOfHosts);
 
                 Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
-                if(i == 11 && portID == 1 && pkt->id >= 48){
-                    int first = bufferSwitches[i].firstLastENBs[portID][0];
-                    if(bufferSwitches[i].ENB[portID][first].id == -1){
-                        printf("DEBUG %d curr %ld & pkt->id = %ld\n", __LINE__, currentTime, pkt->id);
-                    }
-                    printf("DEBUG %d curr %ld & pkt->id = %ld\n", __LINE__, currentTime, pkt->id);
-                }
+                
                 int posInENB = receivePacket(portID, &bufferSwitches[i], currentTime, pkt);
 
                 if (posInENB == bufferSwitches[i].firstLastENBs[portID][0])
@@ -250,6 +244,7 @@ int main(int argc, char** argv)
                 if(shallFindNewPkt){
                     findENB_ID(portID, &bufferSwitches[i], currentTime, k);
                 }
+                
                 int generatedEF = actionE(pickUpENB, portID, &bufferSwitches[i], &allNodes[i + numOfHosts].links[portID]);
 
                 generateEventE = generatedEF & 1;
@@ -286,7 +281,6 @@ int main(int argc, char** argv)
                 generateEventC = actionH_HOST(&bufferHosts[i], allNodes[i].links[0].pkt);
                 
                 if (generateEventC){
-                    //add(C, i, 0, currentTime + defaultBias * 33, &root, first - 1);
                     enqueue(new_node(C,i, 0, currentTime + defaultBias * 33));
                 }
             }
@@ -300,6 +294,7 @@ int main(int argc, char** argv)
                 
                 generateEventE = k;//pass k as parameter in the variable generateEventE
                 nextIP = getNeighborIP(allNodes[i + numOfHosts].ipv4, allNodes[i + numOfHosts].type, portID, k);
+                
                 int generateEventD_OR_G = actionF(&bufferSwitches[i],
                                                 portID,
                                                 &allNodes[i + numOfHosts].links[portID],
