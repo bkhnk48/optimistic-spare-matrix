@@ -9,6 +9,7 @@
 #include "TestAPI.c"
 #include "Throughput.c"
 #include "PairStrategies.c"
+#include "StoreData.c"
 #include <limits.h>
 #include <locale.h>
 #include <math.h>
@@ -208,6 +209,7 @@ int main(int argc, char** argv)
             }
             else if (ev->type == E)
             {
+                Events[Count[E]] = currentTime;
                 Count[E]++;
                 #pragma region action of Event type E
                 int portID = ev->portID;
@@ -382,11 +384,12 @@ int main(int argc, char** argv)
 
     timing(&wc2, &cpuT);
     printf("Time: %'f ms with count = %'ld ", (wc2 - wc1)*1000, Count[10]);
-    printf(". Among them A{%ld}, B{%ld}, C{%ld}, D{%ld}, E{%ld}, F{%ld}, G{%ld}, , H_HOST{%ld}, H{%ld}\n",
+    printf(". Among them A{%ld}, B{%ld}, C{%ld}, D{%ld}, E{%ld}, F{%ld}, G{%ld}, H_HOST{%ld}, H{%ld}\n",
           Count[A], Count[B], Count[C], Count[D], Count[E], Count[F], Count[G], Count[H_HOST], Count[H]);
     printf("================================\n");
     badness(wc2 - wc1, page_size, proc_statm);
 
+    writeTime(Events, "CQ.txt", Count[E]);
     //assertPackets(total, allNodes, bufferHosts,
     //                      bufferSwitches, numOfHosts, 5 * k * k / 4, k);
 
