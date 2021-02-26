@@ -21,7 +21,7 @@ int main(int argc, char** argv)
     initqueue();
     double wc1 = 0, wc2 = 0, cpuT = 0;
     //unsigned int first = UINT_MAX;
-    int defaultSec = 100;
+    int defaultSec = 1;
     int defaultBias = 0;
     ProcStatm proc_statm;
     long page_size = sysconf(_SC_PAGESIZE);
@@ -85,7 +85,7 @@ int main(int argc, char** argv)
     setlocale(LC_NUMERIC, "");
 
     printf("Start Simulating ......\n");
-    unsigned long count = 0;
+    //unsigned long count = 0;
     int nextIP = 0;
     int nextIndex;
     int nextPort = 0;
@@ -105,7 +105,7 @@ int main(int argc, char** argv)
     //char* p = malloc(1 * 1024 * 1024 * 1024);
     
     timing(&wc1, &cpuT);
-    for(i = 0; i < numOfHosts; i++)
+    for(i = 0; i < 1; i++)
     {
         if(currentTime > i) currentTime = i;
         enqueue(new_node(A, i, 0, i));
@@ -128,11 +128,12 @@ int main(int argc, char** argv)
     {   
         if(ev->endTime == currentTime)
         {
-            count++;
+            Count[10]++;
             
             i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
             if(ev->type == A)
             {
+                Count[A]++;
                 allNodes[i].generatedPackets++;
                 enqueue(new_node(A, i, 0, currentTime + T));
                 generateEventB = actionA(T, currentTime, &bufferHosts[i]);
@@ -141,6 +142,7 @@ int main(int argc, char** argv)
             }
             else if(ev->type == B)
             {
+                Count[B]++;
                 generateEventC = actionB(&bufferHosts[i], allNodes[i].links[0].pkt);
                 if (generateEventC)
                     enqueue(new_node(C, i, 0, currentTime + defaultBias*33
@@ -148,6 +150,7 @@ int main(int argc, char** argv)
             }
             else if (ev->type == C)
             {
+                Count[C]++;
                 #pragma region action of Event type C
                 nextIndex = allNodes[i].links[0].nextIndex;
                 nextPort = allNodes[i].links[0].nextPort;
@@ -162,7 +165,8 @@ int main(int argc, char** argv)
                 }
                 #pragma endregion
             }
-            else if(ev->type == D){
+            else if (ev->type == D){
+                Count[D]++;
                 #pragma region action of Event type D
                 int portID = ev->portID;
                 
@@ -204,6 +208,7 @@ int main(int argc, char** argv)
             }
             else if (ev->type == E)
             {
+                Count[E]++;
                 #pragma region action of Event type E
                 int portID = ev->portID;
                 int pickUpENB = chooseENB_ID(portID, &bufferSwitches[i], k);
@@ -273,6 +278,7 @@ int main(int argc, char** argv)
             }
             else if (ev->type == H_HOST)
             {
+                Count[H_HOST]++;
                 //generateEventB = 0;
                 int nextNode = allNodes[i].links[0].nextIndex;
                 int nextPort = allNodes[i].links[0].nextPort;
@@ -285,6 +291,7 @@ int main(int argc, char** argv)
             }
             else if (ev->type == F)
             {
+                Count[F]++;
                 #pragma region action of Event type F
                 int portID = ev->portID;
                 nextIndex = allNodes[i + numOfHosts].links[portID].nextIndex;
@@ -326,6 +333,7 @@ int main(int argc, char** argv)
             }
             else if (ev->type == G)
             {
+                Count[G]++;
                 #pragma region action of Event type G
                 j = currentTime / STEP_TIME;
                 int nextNode = allNodes[i].links[0].nextIndex;
@@ -342,6 +350,7 @@ int main(int argc, char** argv)
             }
             else if (ev->type == H)
             {
+                Count[H]++;
                 int portID = ev->portID;
                 generateEventF = actionH(&bufferSwitches[i], allNodes[i + numOfHosts].type, portID, 
                                             allNodes[i + numOfHosts].links[portID].pkt, k);
@@ -372,7 +381,9 @@ int main(int argc, char** argv)
     }*/
 
     timing(&wc2, &cpuT);
-    printf("Time: %'f ms with count = %'ld\n", (wc2 - wc1)*1000, count);
+    printf("Time: %'f ms with count = %'ld ", (wc2 - wc1)*1000, Count[10]);
+    printf(". Among them A{%ld}, B{%ld}, C{%ld}, D{%ld}, E{%ld}, F{%ld}, G{%ld}, , H_HOST{%ld}, H{%ld}\n",
+          Count[A], Count[B], Count[C], Count[D], Count[E], Count[F], Count[G], Count[H_HOST], Count[H]);
     printf("================================\n");
     badness(wc2 - wc1, page_size, proc_statm);
 
