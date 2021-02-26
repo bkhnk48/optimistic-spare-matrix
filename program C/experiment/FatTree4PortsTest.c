@@ -424,6 +424,7 @@ int main(int argc, char **argv)
   badness(wc2 - wc1, page_size, proc_statm);
 
   writeTime(Events, "AS.txt", Count[E]);
+  readTime("AS.txt", "CQ.txt", Count[E]);
   //assertPackets(total, allNodes, bufferHosts,
   //                      bufferSwitches, numOfHosts, 5 * k * k / 4, k);
 
