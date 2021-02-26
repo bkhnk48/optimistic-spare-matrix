@@ -1,6 +1,7 @@
 all: serial
 
 serial: 
+	gcc -pg -c -g StoreData.c
 	gcc -pg -c -g ShiftBits.c
 	gcc -pg -c Event.c
 	gcc -pg -c memory.c -lm
