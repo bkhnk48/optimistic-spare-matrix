@@ -20,10 +20,10 @@ enum TypesOfEvent
     X = 9  //RandomEvent
 };
 
-unsigned long Count[11] = {0, 0, 0, 0, 0, 0,
-                           0, 0, 0, 0, 0};
+unsigned long Count; //[11] = {0, 0, 0, 0, 0, 0,
+                     //      0, 0, 0, 0, 0};
 
-unsigned long Events[49983] = {0};
+
 
 enum Side{LEFT, RIGHT};
 
