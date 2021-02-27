@@ -109,15 +109,6 @@ int main(int argc, char** argv)
 
     printf("Start Simulating ......\n");
     //char* p = malloc(1 * 1024 * 1024 * 1024);
-    
-    timing(&wc1, &cpuT);
-    for(i = 0; i < 1; i++)
-    {
-        if(currentTime > i) currentTime = i;
-        enqueue(new_node(A, i, 0, i));
-        numOfFlows++;
-    }
-
     Flow *flows = malloc(numOfHosts * sizeof(Flow));
     for(i = 0; i < numOfHosts; i++){
         flows[i].indexOfDst = i;
@@ -127,6 +118,15 @@ int main(int argc, char** argv)
         {
             flows[i].receivedPackets[j] = 0;
         }
+    }
+    
+    timing(&wc1, &cpuT);
+    
+    for(i = 0; i < numOfHosts; i++)
+    {
+        if(currentTime > i) currentTime = i;
+        enqueue(new_node(A, i, 0, i));
+        numOfFlows++;
     }
     
     Node * ev = dequeue();
