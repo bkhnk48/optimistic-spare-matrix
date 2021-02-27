@@ -116,17 +116,6 @@ int main(int argc, char **argv)
   int edited = 0, flag = 0;
   
   root = UINT_MAX;
-
-  timing(&wc1, &cpuT);
-
-  for (i = 0; i < 1; i++) //Only test first hosts in pod
-  {
-    idNodeInTree = hash(i, HOST, 0, A, k);
-    add(A, i, 0, i, &root, idNodeInTree);
-    if(currentTime > i) currentTime = i;
-    numOfFlows++;
-  }
-
   Flow *flows = malloc(numOfHosts * sizeof(Flow));
   for(i = 0; i < numOfHosts; i++){
     flows[i].indexOfDst = i;
@@ -138,6 +127,17 @@ int main(int argc, char **argv)
     }
   }
 
+  timing(&wc1, &cpuT);
+
+  for (i = 0; i < numOfHosts; i++) //Only test first hosts in pod
+  {
+    idNodeInTree = hash(i, HOST, 0, A, k);
+    add(A, i, 0, i, &root, idNodeInTree);
+    if(currentTime > i) currentTime = i;
+    numOfFlows++;
+  }
+
+  
   removeFirst(&first, &root);
 
   unsigned long ongoingTime = ((unsigned long)arr[first][0] << 32) + arr[first][1];
