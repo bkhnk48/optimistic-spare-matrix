@@ -1,7 +1,6 @@
 all: serial
 
 serial: 
-	gcc -pg -c -g StoreData.c
 	gcc -pg -c -g ShiftBits.c
 	gcc -pg -c Event.c
 	gcc -pg -c memory.c -lm
@@ -18,6 +17,7 @@ serial:
 	export OMP_NUM_THREADS=4
 	gcc MergeSplayTest.c -g -o mstest.o -lm -fopenmp
 	gcc -pg -c Node.c
+	gcc -pg -c -g StoreData.c
 	gcc -pg -c LinkedList.c
 	gcc -pg -c CalendarQueue.c
 	gcc CalendarQueueTest.c -pg -g -o cqtest.o -lm
