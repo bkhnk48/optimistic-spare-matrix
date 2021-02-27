@@ -15,6 +15,8 @@ typedef struct node {
     struct node * next;
 } Node;
 
+Node *Events;
+
 Node* new_node(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime) {
