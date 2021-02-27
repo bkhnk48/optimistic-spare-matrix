@@ -10,6 +10,7 @@
 #include "Throughput.c"
 #include "PairStrategies.c"
 #include "StoreData.c"
+#include "Node.c"
 #include <limits.h>
 #include <locale.h>
 #include <math.h>
@@ -53,6 +54,7 @@ int main(int argc, char **argv)
   int numOfHosts = k * k * k / 4;
   unsigned long i, j;
   unsigned int N, root = UINT_MAX;
+  
 
   arr = malloc(sizeof *arr * (25 * k * k * k/4));
   data = malloc((25 * k * k * k/4) * sizeof(unsigned long));
@@ -90,6 +92,11 @@ int main(int argc, char **argv)
   assignTypeOfSwitch(bufferSwitches, k);
   NetworkNode *allNodes = initNetworkNodes(k * k * k / 4, 5 * k * k / 4, k);
 
+  /*Events = malloc(sizeof(Node));
+  Events->endTime = -1; Events->idElementInGroup = -1;
+  Events->next = NULL;  Events->portID = -1;
+  Events->type = E;
+  Node* last = Events;*/
   setlocale(LC_NUMERIC, "");
   printf("Simulation time is %ld (s)\n", endTime / (1000*1000*1000));
   unsigned long mem = mem_avail();
@@ -138,7 +145,7 @@ int main(int argc, char **argv)
   {
     if (ongoingTime == currentTime)
     {
-      Count[10]++;
+      Count++;
       #pragma region get value from data array
       type = data[first] & 65535; //type of event
       i = data[first] >> 32;          //idElementInGroup
@@ -152,7 +159,6 @@ int main(int argc, char **argv)
       #pragma region action of Event type A
       if (type == A)
       {
-        Count[A]++;
         allNodes[i].generatedPackets++;
         add(A, i, 0, currentTime + T, &root, first);
         generateEventB = actionA(T, currentTime, &bufferHosts[i]);
@@ -165,16 +171,14 @@ int main(int argc, char **argv)
       #pragma region action of Event type B
       else if (type == B)
       {
-        Count[B]++;
         generateEventC = actionB(&bufferHosts[i], allNodes[i].links[0].pkt);
-        if (generateEventC)
+        if (generateEventC){
           add(C, i, 0, currentTime + defaultBias * 33, &root, first + 1);
+        }
       }
       #pragma endregion
-
       else if (type == C)
       {
-        Count[C]++;
         #pragma region action of Event type C
         nextIndex = allNodes[i].links[0].nextIndex;
         nextPort = allNodes[i].links[0].nextPort;
@@ -192,7 +196,6 @@ int main(int argc, char **argv)
       }
       else if (type == D)
       {
-        Count[D]++;
         #pragma region action of Event type D
         int portID = (data[first] >> 16) & MASK_INT;
         Packet *ENB = bufferSwitches[i].ENB[portID];
@@ -233,10 +236,26 @@ int main(int argc, char **argv)
       #pragma endregion
       else if (type == E)
       {
-        Events[Count[E]] = currentTime;
-        Count[E]++;
         #pragma region action of Event type E
         int portID = (data[first] >> 16) & MASK_INT;
+        #pragma region Insert to Events list
+        /*if(Events->endTime == -1){
+            Events->endTime = currentTime;
+            Events->idElementInGroup = i;
+            Events->portID = portID;
+            Events->type = E;
+        }
+        else{
+          Node* tmpNode = malloc(sizeof(Node));
+          tmpNode->endTime = currentTime; 
+          tmpNode->idElementInGroup = i;
+          tmpNode->portID = portID;
+          tmpNode->next = NULL;
+          last->next = tmpNode;
+          last = tmpNode;
+        }*/
+        #pragma endregion
+        
         int pickUpENB = chooseENB_ID(portID, &bufferSwitches[i], k);
         
         generateEventE = 0;
@@ -306,7 +325,6 @@ int main(int argc, char **argv)
       }
       else if (type == H_HOST)
       {
-        Count[H_HOST]++;
         int nextNode = allNodes[i].links[0].nextIndex;
         int nextPort = allNodes[i].links[0].nextPort;
         
@@ -318,7 +336,6 @@ int main(int argc, char **argv)
       }
       else if (type == F)
       {
-        Count[F]++;
         #pragma region action of Event type F
         int portID = (data[first] >> 16) & MASK_INT;
         nextIndex = allNodes[i + numOfHosts].links[portID].nextIndex;
@@ -337,7 +354,7 @@ int main(int argc, char **argv)
           int pickUpENB = findENB_ID(portID, &bufferSwitches[i], currentTime, k);
           if(pickUpENB >= 0 && pickUpENB < k && pickUpENB != portID){
             idNodeInTree = first - 1;
-              //hash(i, allNodes[i + numOfHosts].type, portID, E, k);
+            //hash(i, allNodes[i + numOfHosts].type, portID, E, k);
             //I believe the return value of hash in this case is (first - 1)
             add(E, i, portID, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
           }
@@ -360,7 +377,6 @@ int main(int argc, char **argv)
       }
       else if (type == G)
       {
-        Count[G]++;
         #pragma region action of Event type G
         j = currentTime / STEP_TIME;
         int nextNode = allNodes[i].links[0].nextIndex;
@@ -379,7 +395,6 @@ int main(int argc, char **argv)
       }
       else if (type == H)
       {
-        Count[H]++;
         int portID = (data[first] >> 16) & MASK_INT;
         generateEventF = actionH(&bufferSwitches[i], allNodes[i + numOfHosts].type, portID, 
                                     allNodes[i + numOfHosts].links[portID].pkt, k);
@@ -417,14 +432,14 @@ int main(int argc, char **argv)
   }*/
 
   timing(&wc2, &cpuT);
-  printf("Time: %'f ms with count = %'ld ", (wc2 - wc1)*1000, Count[10]);
-  printf(". Among them A{%ld}, B{%ld}, C{%ld}, D{%ld}, E{%ld}, F{%ld}, G{%ld}, H_HOST{%ld}, H{%ld}\n",
-          Count[A], Count[B], Count[C], Count[D], Count[E], Count[F], Count[G], Count[H_HOST], Count[H]);
-  printf("================================\n");
+  printf("Time: %'f ms with count = %'ld ", (wc2 - wc1)*1000, Count);
+  //printf(". Among them A{%ld}, B{%ld}, C{%ld}, D{%ld}, E{%ld}, F{%ld}, G{%ld}, H_HOST{%ld}, H{%ld}\n",
+  //        Count[A], Count[B], Count[C], Count[D], Count[E], Count[F], Count[G], Count[H_HOST], Count[H]);
+  //printf("================================\n");
   badness(wc2 - wc1, page_size, proc_statm);
 
-  writeTime(Events, "AS.txt", Count[E]);
-  readTime("AS.txt", "CQ.txt", Count[E]);
+  //writeTime(Events, "AS.txt");
+  //readTime("AS.txt", "CQ.txt", Count[E]);
   //assertPackets(total, allNodes, bufferHosts,
   //                      bufferSwitches, numOfHosts, 5 * k * k / 4, k);
 
