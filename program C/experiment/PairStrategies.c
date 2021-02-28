@@ -256,8 +256,28 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
     free(destinations);
 }
 
-void importPairs(PairPattern *pairs, const int k, const char *fileName){
-
+void importPairs(PairPattern *pairs, const char *fileName){
+    FILE *fptr;
+    fptr = fopen(fileName,"r");
+    int k = 4;
+    fscanf(fptr, "k = %d", &k);
+    
+    printf("k = %d\n", k);
+    int src, dst;
+    int i = 0;
+    int pod1, pod2;
+    int numNodesInPod = k*k/4 + k;
+    while(fscanf(fptr, "%d %d\n", &src, &dst) != EOF){
+        pod1 = src / numNodesInPod;
+        src = (src % numNodesInPod) + (pod1 * k*k/4);
+        pairs[src].src = src;
+        pod2 = dst / numNodesInPod;
+        dst = (dst % numNodesInPod) + (pod2 * k*k/4);
+        pairs[src].dst = dst;
+        i++;
+    }
+    fclose(fptr);
+    //exit(1);
 }
 
 void checkValid(int *sources, int * dests, const int k){
