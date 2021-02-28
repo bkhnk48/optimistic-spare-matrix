@@ -5,26 +5,26 @@
 //int sizeTree = 0;
 //int maxSize = 0;
 
-typedef struct node {
+typedef struct node_splay {
     enum TypesOfEvent type; //type of event
     
     int idElementInGroup;//id of element in group of hosts or switches
     int portID;
     unsigned long endTime;
-    struct node *left;
-    struct node *right;
-    struct node *parent;
-}node;
+    struct node_splay *left;
+    struct node_splay *right;
+    struct node_splay *parent;
+}NodeS;
 
 
 typedef struct splay_tree {
-  struct node *root;
+  struct node_splay *root;
 }splay_tree;
 
-node* new_node(int type, int idElementInGroup,
+NodeS* new_nodeS(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime) {
-  node *n = (node *)malloc(sizeof(node));
+  NodeS *n = (NodeS *)malloc(sizeof(NodeS));
   //int sizeOfNode = sizeof(node);
   //printf("-------------sizeofNode = %d----------\n", sizeOfNode);
   n->type = type;
@@ -38,8 +38,8 @@ node* new_node(int type, int idElementInGroup,
   return n;
 }
 
-node* minimum(splay_tree *t) {
-    node *x = t->root;
+NodeS* minimum(splay_tree *t) {
+    NodeS *x = t->root;
     if(x == NULL)
         return x;
     while(x->left != NULL)
@@ -56,8 +56,8 @@ splay_tree* new_splay_tree() {
   return t;
 }
 
-void left_rotate(splay_tree *t, node *x) {
-  node *y = x->right;
+void left_rotate(splay_tree *t, NodeS *x) {
+  NodeS *y = x->right;
   x->right = y->left;
   if(y->left != NULL) {
     y->left->parent = x;
@@ -76,8 +76,8 @@ void left_rotate(splay_tree *t, node *x) {
   x->parent = y;
 }
 
-void right_rotate(splay_tree *t, node *x) {
-  node *y = x->left;
+void right_rotate(splay_tree *t, NodeS *x) {
+  NodeS *y = x->left;
   x->left = y->right;
   if(y->right != NULL) {
     y->right->parent = x;
@@ -96,7 +96,7 @@ void right_rotate(splay_tree *t, node *x) {
   x->parent = y;
 }
 
-void splay(splay_tree *t, node *n) {
+void splay(splay_tree *t, NodeS *n) {
   while(n->parent != NULL) { //node is not root
     if(n->parent == t->root) { //node is child of root, one rotation
       if(n == n->parent->left) {
@@ -107,8 +107,8 @@ void splay(splay_tree *t, node *n) {
       }
     }
     else {
-      node *p = n->parent;
-      node *g = p->parent; //grandparent
+      NodeS *p = n->parent;
+      NodeS *g = p->parent; //grandparent
 
       if(g == NULL)
       {
@@ -173,12 +173,12 @@ void splay(splay_tree *t, node *n) {
 
 }
 
-void insert(splay_tree *t, node *n) {
+void insert(splay_tree *t, NodeS *n) {
   //sizeTree++;
   //if(maxSize < sizeTree) maxSize = sizeTree;
 
-  node *y = NULL;
-  node *temp = t->root;
+  NodeS *y = NULL;
+  NodeS *temp = t->root;
   while(temp != NULL) {
     y = temp;
     if(n->endTime < temp->endTime)
@@ -198,13 +198,13 @@ void insert(splay_tree *t, node *n) {
   splay(t, n);
 }
 
-node* maximum(splay_tree *t, node *x) {
+NodeS* maximum(splay_tree *t, NodeS *x) {
   while(x->right != NULL)
     x = x->right;
   return x;
 }
 
-node* find(node *t, int key)
+NodeS* find(NodeS *t, int key)
 {
   if(t == NULL) return NULL;
   if(t->endTime < key)
@@ -220,7 +220,7 @@ node* find(node *t, int key)
 }
 
 
-void delete(splay_tree *t, node *n) {
+void delete(splay_tree *t, NodeS *n) {
   splay(t, n);
 
   splay_tree *left_subtree = new_splay_tree();
@@ -236,7 +236,7 @@ void delete(splay_tree *t, node *n) {
   free(n);
 
   if(left_subtree->root != NULL) {
-    node *m = maximum(left_subtree, left_subtree->root);
+    NodeS *m = maximum(left_subtree, left_subtree->root);
     splay(left_subtree, m);
     left_subtree->root->right = right_subtree->root;
     if(left_subtree->root->right != NULL)
@@ -248,19 +248,19 @@ void delete(splay_tree *t, node *n) {
   }
 }
 
-void delete_key(splay_tree *t, int key)
+void delete_key(splay_tree *t, unsigned long key)
 {
-  node *temp = find(t->root, key);
+  NodeS *temp = find(t->root, key);
   if(temp == NULL)
     return;
   delete(t, temp);
 }
 
-node* removeFirst(splay_tree *t)
+NodeS* removeFirst(splay_tree *t)
 {
     //sizeTree--;
-    node *x = minimum(t);
-    node *temp = new_node(A, 0, 0, 0);
+    NodeS *x = minimum(t);
+    NodeS *temp = new_nodeS(A, 0, 0, 0);
     
     temp->type = x->type;
     temp->idElementInGroup = x->idElementInGroup;
@@ -271,7 +271,7 @@ node* removeFirst(splay_tree *t)
     return temp;
 }
 
-void inorder(splay_tree *t, node *n) {
+void inorder(splay_tree *t, NodeS *n) {
   if(n != NULL) {
     inorder(t, n->left);
     //printf("%d\n", n->data);
@@ -279,7 +279,7 @@ void inorder(splay_tree *t, node *n) {
   }
 }
 
-void leaf(node *t, enum Side side)
+void leaf(NodeS *t, enum Side side)
 {
     printf("===========> ");
     if(side == LEFT)
