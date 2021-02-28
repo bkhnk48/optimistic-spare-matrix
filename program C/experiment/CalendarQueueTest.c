@@ -9,7 +9,7 @@
 #include "TestAPI.c"
 #include "Throughput.c"
 #include "PairStrategies.c"
-#include "StoreData.c"
+#include "ProcessData.c"
 #include <limits.h>
 #include <locale.h>
 #include <math.h>
@@ -386,22 +386,23 @@ int main(int argc, char** argv)
 
     double INTERVAL_BANDWIDTH = (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000000;
     unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, INTERVAL_BANDWIDTH);
-    INTERVAL_BANDWIDTH /= numOfFlows;
-    /*for(i = 0; i < numOfHosts; i++){
-        if(flows[i].srcIP != -1){
-        printf("====================\n");
-        printf("Flow from %d(%d) to %d: \n", getIndexOfHost(flows[i].srcIP, k), flows[i].srcIP, flows[i].indexOfDst);
-        calculateFlow(flows[i].receivedPackets, PACKET_SIZE, STEP, INTERVAL_BANDWIDTH);
-        printf("\n====================\n");
-        }
-    }*/
-
+    
     timing(&wc2, &cpuT);
     printf("Time: %'f ms with count = %'ld ", (wc2 - wc1)*1000, Count);
     //printf(". Among them A{%ld}, B{%ld}, C{%ld}, D{%ld}, E{%ld}, F{%ld}, G{%ld}, H_HOST{%ld}, H{%ld}\n",
     //      Count[A], Count[B], Count[C], Count[D], Count[E], Count[F], Count[G], Count[H_HOST], Count[H]);
-    //printf("================================\n");
+    printf("\n================================\n");
     badness(wc2 - wc1, page_size, proc_statm);
+    
+    INTERVAL_BANDWIDTH /= numOfFlows;
+    for(i = 0; i < numOfHosts; i++){
+        if(flows[i].srcIP != -1){
+            printf("====================\n");
+            printf("Flow from %d(%d) to %d: \n", getIndexOfHost(flows[i].srcIP, k), flows[i].srcIP, flows[i].indexOfDst);
+            calculateFlow(flows[i].receivedPackets, PACKET_SIZE, STEP, INTERVAL_BANDWIDTH);
+            printf("\n====================\n");
+        }
+    }
 
     //writeTime(Events, "CQ.txt");
     //assertPackets(total, allNodes, bufferHosts,
