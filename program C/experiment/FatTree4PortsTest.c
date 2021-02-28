@@ -9,7 +9,7 @@
 #include "TestAPI.c"
 #include "Throughput.c"
 #include "PairStrategies.c"
-#include "StoreData.c"
+#include "ProcessData.c"
 #include "Node.c"
 #include <limits.h>
 #include <locale.h>
@@ -439,7 +439,7 @@ int main(int argc, char **argv)
   badness(wc2 - wc1, page_size, proc_statm);
 
   //writeTime(Events, "AS.txt");
-  //readTime("AS.txt", "CQ.txt", Count[E]);
+  //readTime("AS.txt", "CQ.txt");
   //assertPackets(total, allNodes, bufferHosts,
   //                      bufferSwitches, numOfHosts, 5 * k * k / 4, k);
 
