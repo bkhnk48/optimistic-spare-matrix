@@ -17,7 +17,7 @@ serial:
 	export OMP_NUM_THREADS=4
 	gcc MergeSplayTest.c -g -o mstest.o -lm -fopenmp
 	gcc -pg -c Node.c
-	gcc -pg -c -g StoreData.c
+	gcc -pg -c -g ProcessData.c
 	gcc -pg -c LinkedList.c
 	gcc -pg -c CalendarQueue.c
 	gcc CalendarQueueTest.c -pg -g -o cqtest.o -lm
@@ -42,18 +42,19 @@ n:
 	gcc OptimizationSplayTest.c -o optest.o -lm
 	gcc -c VoidSplay.c -lm
 	gcc VoidSplayTest.c -o vstest.o -lm
-	gcc -pg -c MergeSplay.c
-	gcc -pg -c ControlFlow.c
+	gcc -c MergeSplay.c
+	gcc -c ControlFlow.c
 	export OMP_NUM_THREADS=4
 	gcc MergeSplayTest.c -o mstest.o -lm -fopenmp
 	gcc -c Node.c
+	gcc -c ProcessData.c
 	gcc -c LinkedList.c
 	gcc -c CalendarQueue.c
 	gcc CalendarQueueTest.c -o cqtest.o -lm
 	gcc -c CAQueue.c
 	gcc randomFile.c -o ran.o
 	gcc -ggdb3 -O0 -std=c99 -Wall -Wextra -pedantic -o main.out main.c
-	gcc -pg -c TestAPI.c
+	gcc -c TestAPI.c
 	gcc -c Throughput.c
 	gcc -c PairStrategies.c
 	gcc FatTreeTest.c -o ftg.o
