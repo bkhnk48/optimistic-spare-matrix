@@ -71,7 +71,8 @@ int main(int argc, char **argv)
   PairPattern *pairs = NULL;
   pairs = malloc(numOfHosts * sizeof(PairPattern)); 
   //interpodIncomming(pairs, k);
-  forceToPair(pairs, numOfHosts, 1000);
+  //forceToPair(pairs, numOfHosts, 1000);
+  importPairs(pairs, "K8Pair1.txt");
   //pairs[2].dst = 9;
   printfPairs(pairs, numOfHosts);
 
