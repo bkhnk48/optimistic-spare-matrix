@@ -256,6 +256,10 @@ void forceToPair(PairPattern *pairs, const int numOfFlows, const int option){
     free(destinations);
 }
 
+void importPairs(PairPattern *pairs, const int k, const char *fileName){
+
+}
+
 void checkValid(int *sources, int * dests, const int k){
     //int numOfCores = k*k/4;
     int numOfHosts = k*k*k/4;
