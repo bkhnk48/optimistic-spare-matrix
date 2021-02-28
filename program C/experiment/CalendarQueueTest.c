@@ -62,7 +62,8 @@ int main(int argc, char** argv)
     PairPattern *pairs = NULL;
     pairs = malloc(numOfHosts * sizeof(PairPattern)); 
     //interpodIncomming(pairs, k);
-    forceToPair(pairs, numOfHosts, 1000);
+    //forceToPair(pairs, numOfHosts, 1000);
+    importPairs(pairs, "K8Pairs1.in");
     //pairs[2].dst = 9;
     printfPairs(pairs, numOfHosts);
 
@@ -395,14 +396,14 @@ int main(int argc, char** argv)
     badness(wc2 - wc1, page_size, proc_statm);
     
     INTERVAL_BANDWIDTH /= numOfFlows;
-    for(i = 0; i < numOfHosts; i++){
+    /*for(i = 0; i < numOfHosts; i++){
         if(flows[i].srcIP != -1){
             printf("====================\n");
             printf("Flow from %d(%d) to %d: \n", getIndexOfHost(flows[i].srcIP, k), flows[i].srcIP, flows[i].indexOfDst);
             calculateFlow(flows[i].receivedPackets, PACKET_SIZE, STEP, INTERVAL_BANDWIDTH);
             printf("\n====================\n");
         }
-    }
+    }*/
 
     //writeTime(Events, "CQ.txt");
     //assertPackets(total, allNodes, bufferHosts,
