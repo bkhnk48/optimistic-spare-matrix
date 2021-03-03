@@ -12,7 +12,6 @@ const int MASK_INT = 65535;
 //int maxSize = 0;
 
 
-//unsigned long arr[20250][7];
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
@@ -77,7 +76,7 @@ void add(int type, int idElementInGroup,
                 //unsigned long arr[384][7]
                 )
 {
-   /* Quy ước arr[i][3] se luu cac phan tu
+   /* Quy ước arr[i][5] se luu cac phan tu
     *  arr[i][0] luu tru 4 bytes tren cua endTime
     *  arr[i][1] luu tru 4 bytes cuoi cua endTime 
     *  arr[i][2] luu tru id cua father
