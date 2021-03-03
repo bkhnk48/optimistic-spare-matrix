@@ -1,79 +1,41 @@
 all: serial
 
 serial: 
-	gcc -pg -c -g ShiftBits.c
-	gcc -pg -c Event.c
-	gcc -pg -c memory.c -lm
-	gcc -pg -c timing.c
-	gcc -pg -g -c NetworkNode.c
-	gcc -pg -c FatTreeGraph.c
-	gcc -pg -g -c FatTreeTables.c
-	gcc -pg -c OptimizationSplay.c
-	gcc OptimizationSplayTest.c -pg -o optest.o -lm
-	gcc -pg -c VoidSplay.c 
-	gcc VoidSplayTest.c -pg -o vstest.o -lm
-	gcc -pg -g -c MergeSplay.c
-	gcc -pg -g -c ControlFlow.c
-	export OMP_NUM_THREADS=4
-	gcc MergeSplayTest.c -g -o mstest.o -lm -fopenmp
-	gcc -pg -c Node.c
-	gcc -pg -c -g ProcessData.c
-	gcc -pg -c LinkedList.c
-	gcc -pg -c CalendarQueue.c
-	gcc CalendarQueueTest.c -pg -g -o cqtest.o -lm
-	gcc -pg -c CAQueue.c
-	gcc randomFile.c -pg -o ran.o
-	gcc -ggdb3 -O0 -std=c99 -Wall -Wextra -pedantic -o main.out main.c
-	gcc -pg -g -c TestAPI.c
-	gcc -pg -g -c Throughput.c
-	gcc -pg -g -c -fbounds-check -fno-strict-aliasing PairStrategies.c
-	gcc FatTreeTest.c -g -o ftg.o
-	gcc FatTree4PortsTest.c -g -fno-strict-aliasing -o f4t.o -lm
+	make -C lib
+	gcc OptimizationSplayTest.c -pg -o optest.o -lm -I lib
+	gcc VoidSplayTest.c -pg -o vstest.o -lm -I lib
+	gcc MergeSplayTest.c -g -o mstest.o -lm -I lib
+	gcc CalendarQueueTest.c -pg -g -o cqtest.o -lm -I lib
+	gcc FatTreeTest.c -g -o ftg.o -I lib
+	gcc FatTree4PortsTest.c -g -fno-strict-aliasing -o f4t.o -lm -I lib
+	@echo "====================="
+	@echo "      All done!"
+	@echo "====================="
 #gcc EventTest.c -g -o e.o -lm
 n:
-	gcc -c ShiftBits.c
-	gcc -c Event.c
-	gcc -c memory.c -lm
-	gcc -c timing.c
-	gcc -c NetworkNode.c
-	gcc -c FatTreeGraph.c
-	gcc -c FatTreeTables.c
-	gcc -c OptimizationSplay.c
-	gcc OptimizationSplayTest.c -o optest.o -lm
-	gcc -c VoidSplay.c -lm
-	gcc VoidSplayTest.c -o vstest.o -lm
-	gcc -c MergeSplay.c
-	gcc -c ControlFlow.c
+	make n -C lib
+	gcc OptimizationSplayTest.c -o optest.o -lm -I lib
+	gcc VoidSplayTest.c -o vstest.o -lm -I lib
 	export OMP_NUM_THREADS=4
-	gcc MergeSplayTest.c -o mstest.o -lm -fopenmp
-	gcc -c Node.c
-	gcc -c ProcessData.c
-	gcc -c LinkedList.c
-	gcc -c CalendarQueue.c
-	gcc CalendarQueueTest.c -o cqtest.o -lm
-	gcc -c CAQueue.c
-	gcc randomFile.c -o ran.o
-	gcc -ggdb3 -O0 -std=c99 -Wall -Wextra -pedantic -o main.out main.c
-	gcc -c TestAPI.c
-	gcc -c Throughput.c
-	gcc -c PairStrategies.c
-	gcc FatTreeTest.c -o ftg.o
-	gcc FatTree4PortsTest.c -o f4t.o -lm
-#gcc EventTest.c -o e.o -lm
+	gcc MergeSplayTest.c -o mstest.o -lm -fopenmp -I lib
+	gcc CalendarQueueTest.c -o cqtest.o -lm -I lib
+	gcc FatTreeTest.c -o ftg.o -I lib
+	gcc FatTree4PortsTest.c -fno-strict-aliasing -o f4t.o -lm -I lib
+	@echo "===================="
+	@echo "All done - no debug!"
+	@echo "===================="
 clean: 
 	-rm *.o
-	-rm out
-	-rm *.out
 	-rm *.txt
+	make c -C lib
 clear: 
 	-rm *.o
-	-rm out
 	-rm *.out
 	-rm *.txt
+	make c -C lib
 c: 
 	-rm *.o
-	-rm out
-	-rm *.out
 	-rm *.txt
+	make c -C lib
 k:
 	dmesg | egrep -i "killed process"
