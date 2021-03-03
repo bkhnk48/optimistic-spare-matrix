@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include "Node.c"
-#include "LinkedList.c"
 
 void insert(Node* entry);
 Node* removeSoonestEvent();
@@ -27,7 +26,6 @@ unsigned long lastbucket;
 double buckettop;
 unsigned long bot_threshold;
 unsigned long top_threshold;
-
 
 void insert(Node* entry){
     unsigned long priority = entry->endTime;
