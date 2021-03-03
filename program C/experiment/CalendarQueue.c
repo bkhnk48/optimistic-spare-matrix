@@ -28,20 +28,6 @@ double buckettop;
 unsigned long bot_threshold;
 unsigned long top_threshold;
 
-struct calendar_queue{
-    List *bucket;
-    double buckettop;
-    int width;
-    unsigned long nbuckets;
-    unsigned long qsize;
-    unsigned long last_bucket;
-    unsigned long last_prio;
-    unsigned long top_threshold;
-    unsigned long bot_threshold;
-    int resize_enabled;
-};
-
-typedef struct calendar_queue CalendarQueue;
 
 void insert(Node* entry){
     unsigned long priority = entry->endTime;
