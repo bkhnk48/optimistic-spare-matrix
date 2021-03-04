@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "Node.c"
+//#include "Node.c"
 #define RIGHT_MASK 0x7fffffff
 #define LEFT_MASK ((unsigned long)0x7fffffff << 32)
 #define MASK_INT 65535
@@ -19,12 +19,15 @@ double buckettop;
 unsigned long bot_threshold;
 unsigned long top_threshold;
 
+unsigned long save[25];
+unsigned int indexes[25];
+
 void putIntoQueue(unsigned long endTime, unsigned int idNewNode);
 void insert(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
                 unsigned int idNewNode);
-int removeSoonestEvent();
+unsigned int removeSoonestEvent();
 unsigned long newwidth();
 void resize(unsigned long newsize);
 void localInit(unsigned long nbuck, unsigned long bwidth, 
@@ -126,7 +129,7 @@ void insert(int type, int idElementInGroup,
     putIntoQueue(endTime, idNewNode);
 }
 
-int removeSoonestEvent(){
+unsigned int removeSoonestEvent(){
     unsigned long i;
     
     if(qsize == 0) return -1;
@@ -218,6 +221,87 @@ int removeSoonestEvent(){
     qsize--;
 
     return foo;
+}
+
+unsigned long newwidth(){
+    unsigned long nsamples;
+    int i;
+
+    if(qsize < 2) 
+        return 1;
+    if(qsize <= 5)
+        nsamples = qsize;
+    else
+        nsamples = 5 + qsize/10;
+
+    if(nsamples > 25) 
+        nsamples = 25;
+
+    unsigned long oldlastprio = lastprio;
+    unsigned long oldlastbucket = lastbucket;
+    double oldbuckkettop = buckettop;
+
+    // lay ra nsamples gia tri mau
+    // luc lay ra mau ngan chan viec resize, resizeenable = false
+    resizeenable = 0;
+    //unsigned long *save = malloc(nsamples * sizeof(unsigned long));
+    for(i = 0; i < nsamples; i++){
+        save[i] = 0;
+    }
+    //Node* save = (Node*) calloc(nsamples,sizeof(Node));
+    unsigned int tmp;
+    for(i=0; i < nsamples; i++){
+        //Node* tmp = removeSoonestEvent();
+        tmp = removeSoonestEvent();
+        save[i] = ((unsigned long)arr[tmp][0] << 32) + arr[tmp][1];
+        indexes[i] = tmp;
+        //save[i] = *tmp;
+    }
+    resizeenable = 1;
+
+    //  tra lai cac gia tri da lay ra trong hang doi
+    for(i = 0; i < nsamples; i++){
+        putIntoQueue(save[i], indexes[i]);
+        //insert(&save[i]);
+    }
+    lastprio = oldlastprio;
+    lastbucket = oldlastbucket;
+    buckettop = oldbuckkettop;
+
+    // tinh toan gia tri cho new witdh
+    unsigned long totalSeparation = 0;
+    //double totalSeparation = 0;
+    int end = nsamples;
+    int cur = 0;
+    int next = cur + 1;
+    while(next != end){
+        totalSeparation += save[next] - save[cur];
+        //totalSeparation += save[next].endTime - save[cur].endTime;
+        cur++;
+        next++;
+    }
+    double twiceAvg = (double)totalSeparation / (nsamples - 1) * 2;
+
+    totalSeparation = 0;
+    end = nsamples;
+    cur = 0;
+    next = cur + 1;
+    unsigned long diff;
+    while(next != end){
+        diff = save[next] - save[cur];
+        //double diff = save[next].endTime - save[cur].endTime;
+        if(diff <= twiceAvg){
+            totalSeparation += diff;
+        }
+        cur++;
+        next++;
+    }
+
+    // gia tri width moi = 3 lan do phan tach gia tri trung binh
+    totalSeparation *= 3;
+    totalSeparation = totalSeparation < 1.0 ? 1.0 : totalSeparation;
+
+    return totalSeparation;
 }
 
 void resize(unsigned long newsize){
