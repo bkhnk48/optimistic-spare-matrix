@@ -214,7 +214,7 @@ void resize(unsigned long newsize){
             foo = foo->next;
         }
     }
-
+    free(oldbuckets);
     return;
 }
 
