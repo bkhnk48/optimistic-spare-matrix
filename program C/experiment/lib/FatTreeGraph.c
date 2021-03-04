@@ -347,5 +347,23 @@ int hash(int idInGroup,enum TypesOfNode typeOfNode,
   }
   return newIndex;
 }
+
+void buildData(unsigned long *data, int k){
+  int i = 0, j, l;
+  int numOfHosts = k*k*k/4;
+  int numOfPods = k*k;
+  int index = 0;
+  enum TypesOfEvent eventHosts[5] = {A, B, C, G, H_HOST};
+  for(i = 0; i < numOfHosts; i++){
+    for(j = 0; j < 5; j++){
+      index = hash(i, HOST, 0, eventHosts[j], k);
+      data[index] = ((unsigned long)i << 32)
+                           | ((0) & MASK_INT) << 16 
+                           | (eventHosts[j] & MASK_INT);
+    }
+  }
+
+
+}
 #endif
 
