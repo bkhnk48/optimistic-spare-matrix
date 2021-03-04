@@ -6,6 +6,7 @@
 
 #ifndef _TYPES_OF_EVENT_
 #define _TYPES_OF_EVENT_
+#define MASK_INT 65535
 enum TypesOfEvent
 {
     A = 0, //GenerationEvent
