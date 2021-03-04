@@ -2,9 +2,13 @@
 #include <stdlib.h>
 #include "Event.c"
 #include <limits.h>
+
+#ifndef _MERGE_SPLAY_
+#define _MERGE_SPLAY_
+
 #define RIGHT_MASK 0x7fffffff
 #define LEFT_MASK ((unsigned long)0x7fffffff << 32)
-#define MASK_INT 65535
+
 
 unsigned long *data; //[384];
 unsigned int **arr; //[384][5];
@@ -73,9 +77,9 @@ void add(int type, int idElementInGroup,
    */
    if(arr[idNewNode][2] == UINT_MAX && arr[idNewNode][3] == UINT_MAX 
          && arr[idNewNode][4] == UINT_MAX){
-      data[idNewNode] = ((unsigned long)idElementInGroup << 32)
+      /*data[idNewNode] = ((unsigned long)idElementInGroup << 32)
                            | ((portID) & MASK_INT) << 16 
-                           | (type & MASK_INT);
+                           | (type & MASK_INT);*/
 
       arr[idNewNode][0] = (unsigned int)(endTime >> 32);
       arr[idNewNode][1] = (unsigned int)(endTime);
@@ -455,3 +459,5 @@ void validate(int index)
                   arr[index][6]);
    }
 }
+
+#endif
