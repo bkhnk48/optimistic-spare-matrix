@@ -2,12 +2,15 @@
 #include <stdlib.h>
 #include "Event.c"
 #include <limits.h>
+#define RIGHT_MASK 0x7fffffff
+#define LEFT_MASK ((unsigned long)0x7fffffff << 32)
+#define MASK_INT 65535
 
 unsigned long *data; //[384];
 unsigned int **arr; //[384][5];
-const unsigned long RIGHT_MASK = 0x7fffffff;
-const unsigned long LEFT_MASK = ((unsigned long)0x7fffffff << 32);
-const int MASK_INT = 65535;
+//const unsigned long RIGHT_MASK = 0x7fffffff;
+//const unsigned long LEFT_MASK = ((unsigned long)0x7fffffff << 32);
+//const int MASK_INT = 65535;
 
 
 void add(int type, int idElementInGroup,
