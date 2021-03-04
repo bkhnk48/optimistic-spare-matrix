@@ -8,18 +8,13 @@ unsigned int **arr; //[384][5];
 const unsigned long RIGHT_MASK = 0x7fffffff;
 const unsigned long LEFT_MASK = ((unsigned long)0x7fffffff << 32);
 const int MASK_INT = 65535;
-//int sizeOfTree = 0;
-//int maxSize = 0;
 
 
 void add(int type, int idElementInGroup,
                 int portID, 
                 unsigned long endTime,
                 unsigned int *root,
-                unsigned int idNewNode
-                //int k,
-                //unsigned long arr[20250][7]
-                );
+                unsigned int idNewNode);
 /* From now on, an event (is stored in arr) has 5 fields:
    + endTime: the time of event to be finished.
    + index of father.
@@ -33,21 +28,13 @@ void add(int type, int idElementInGroup,
    
 */
 
-void splay(unsigned int e//, //unsigned long arr[20250][7]
-                  //unsigned long arr[384][7]
-                  );
+void splay(unsigned int e);
 
 void removeFirst(unsigned int * first, 
-                  unsigned int * root //unsigned long arr[20250][7]
-                     //unsigned long arr[384][7]
-                  );
+                  unsigned int * root);
 
-void show(//unsigned long arr[20250][7], 
-            //unsigned long arr[384][7],
-            unsigned int root);
-void leaf(//unsigned long arr[20250][7], 
-            //unsigned long arr[384][7],
-               unsigned int root, enum Side side);
+void show(unsigned int root);
+void leaf(unsigned int root, enum Side side);
 
 static inline int compare(unsigned long endTime, 
                         unsigned int upper, 
@@ -72,8 +59,6 @@ void add(int type, int idElementInGroup,
                 unsigned long endTime,
                 unsigned int *root,
                 unsigned int idNewNode
-                //unsigned long arr[20250][7]
-                //unsigned long arr[384][7]
                 )
 {
    /* Quy ước arr[i][5] se luu cac phan tu
@@ -202,9 +187,7 @@ void add(int type, int idElementInGroup,
    }
 }
 
-void splay(unsigned int e //unsigned long arr[20250][7]
-                  //unsigned long arr[384][7]
-               )
+void splay(unsigned int e)
 {
    int left;
    int f;   // Tree * f;
@@ -318,10 +301,7 @@ void splay(unsigned int e //unsigned long arr[20250][7]
    }
 }
 
-void removeFirst(unsigned int * first, unsigned int * root 
-                     //unsigned long arr[20250][7]
-                     //unsigned long arr[384][7]
-                  )
+void removeFirst(unsigned int * first, unsigned int * root)
 {
    //sizeOfTree--;
    unsigned int t = *root;
@@ -405,9 +385,7 @@ void removeFirst(unsigned int * first, unsigned int * root
    
 }
 
-void show(//unsigned long arr[20250][7], 
-            //unsigned long arr[384][7],
-            unsigned int root)
+void show(unsigned int root)
 {
    if(root != UINT_MAX && arr[root][2] != -1)
    {
@@ -423,9 +401,7 @@ void show(//unsigned long arr[20250][7],
    }
 }
 
-void leaf(//unsigned long arr[20250][7], 
-            //unsigned long arr[384][7],
-            unsigned int root, enum Side side)
+void leaf(unsigned int root, enum Side side)
 {
    printf("===========> ");
    if(side == LEFT)
@@ -449,15 +425,8 @@ void leaf(//unsigned long arr[20250][7],
    }
 }
 
-void validate(//unsigned long arr[20250][7], 
-               //unsigned long arr[384][7],
-               int index)
+void validate(int index)
 {
-   //return;
-   //if(arr[33][4] == 45 && arr[45][5] == 33){
-   //   printf("\tarr[33][4] = %d and arr[45][5, 6] = %d, %d\n", arr[33][4], arr[45][5], arr[45][6]);
-   //   printf("The type is %d, endTime is %d\n", arr[33][0], arr[33][3]);
-   //}
    if(arr[index][5] == -1 && arr[index][6] == -1)
    {
       return;
