@@ -289,5 +289,5 @@ void printBuckets(){
     printf("lastprio : %ld\n",lastprio);
     printf("width : %d\n",width);
     printf("bot : %ld\n",bot_threshold);
-    printf("top : %ld",top_threshold);
+    printf("top : %ld\n",top_threshold);
 }
