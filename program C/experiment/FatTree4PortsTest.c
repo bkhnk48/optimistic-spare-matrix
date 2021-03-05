@@ -55,33 +55,19 @@ int main(int argc, char **argv)
   unsigned long i, j;
   unsigned int N, root = UINT_MAX;
   
-
-  arr = malloc(sizeof *arr * (25 * k * k * k/4));
-  data = malloc((25 * k * k * k/4) * sizeof(unsigned long));
-  for (i = 0; i < 25 * k * k * k/4; i++)
-  {
-    arr[i] = malloc(sizeof *arr[i] * BUFFER_SIZE);
-    for (j = 0; j < BUFFER_SIZE; j++)
-    {
-      arr[i][j] = UINT_MAX;
-    }
-    data[i] = 0;
-  }
-
   PairPattern *pairs = NULL;
   pairs = malloc(numOfHosts * sizeof(PairPattern)); 
   //interpodIncomming(pairs, k);
   //forceToPair(pairs, numOfHosts, 1000);
   importPairs(pairs, "K8Pairs1.in");
+  //importPairs(pairs, "K16Pairs1.in");
   //pairs[2].dst = 9;
   printfPairs(pairs, numOfHosts);
 
   receivedPkts = malloc(sizeof *receivedPkts * numOfHosts);
-  for (i = 0; i < numOfHosts; i++)
-  {
+  for (i = 0; i < numOfHosts; i++){
     receivedPkts[i] = malloc(sizeof *receivedPkts[i] * (STEP + 1));
-    for (j = 0; j < STEP + 1; j++)
-    {
+    for (j = 0; j < STEP + 1; j++){
       receivedPkts[i][j] = 0;
     }
   }
@@ -129,6 +115,20 @@ int main(int argc, char **argv)
   }
 
   timing(&wc1, &cpuT);
+
+  arr = malloc(sizeof *arr * (25 * k * k * k/4));
+  data = malloc((25 * k * k * k/4) * sizeof(unsigned long));
+  for (i = 0; i < 25 * k * k * k/4; i++)
+  {
+    arr[i] = malloc(sizeof *arr[i] * BUFFER_SIZE);
+    for (j = 0; j < BUFFER_SIZE; j++)
+    {
+      arr[i][j] = UINT_MAX;
+    }
+    data[i] = 0;
+  }
+
+  buildData(data, k);
 
   for (i = 0; i < numOfHosts; i++) //Only test first hosts in pod
   {
