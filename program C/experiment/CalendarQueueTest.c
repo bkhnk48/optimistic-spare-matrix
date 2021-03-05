@@ -18,7 +18,6 @@
 
 int main(int argc, char** argv) 
 {
-    //double* pBigArray = (double*)malloc(sizeof(double) * 536870912); 
     initqueue();
     double wc1 = 0, wc2 = 0, cpuT = 0;
     //unsigned int first = UINT_MAX;
@@ -62,8 +61,8 @@ int main(int argc, char** argv)
     PairPattern *pairs = NULL;
     pairs = malloc(numOfHosts * sizeof(PairPattern)); 
     //interpodIncomming(pairs, k);
-    //forceToPair(pairs, numOfHosts, 1000);
-    importPairs(pairs, "K8Pairs1.in");
+    forceToPair(pairs, numOfHosts, 1000);
+    //importPairs(pairs, "K16Pairs1.in");
     //pairs[2].dst = 9;
     printfPairs(pairs, numOfHosts);
 
