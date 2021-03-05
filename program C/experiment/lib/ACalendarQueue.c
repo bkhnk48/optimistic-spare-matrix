@@ -74,10 +74,10 @@ void putIntoQueue(unsigned long endTime, unsigned int idNewNode){
     if(atTop){
         arr[idNewNode][3] = bucket_index;
         //entry->next = buckets[i];
-        arr[idNewNode][2] = idNewNode;
+        arr[i][2] = idNewNode;
         //buckets[i] = entry;
     } else {
-        current = arr[bucket_index][2];
+        current = bucket_index; //arr[bucket_index][2];
         //Node* current = buckets[i];
         //while(current->next != NULL ){
         while(arr[current][3] != -1 ){
@@ -400,5 +400,5 @@ void printBuckets(){
     printf("lastprio : %ld\n",lastprio);
     printf("width : %d\n",width);
     printf("bot : %ld\n",bot_threshold);
-    printf("top : %ld",top_threshold);
+    printf("top : %ld\n",top_threshold);
 }
