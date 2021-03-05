@@ -100,7 +100,7 @@ int main(int argc, char **argv)
   int idNodeInTree = 0;
   int numOfFlows = 0;
   int type;
-  int edited = 0, flag = 0;
+  
   
   root = UINT_MAX;
   Flow *flows = malloc(numOfHosts * sizeof(Flow));
