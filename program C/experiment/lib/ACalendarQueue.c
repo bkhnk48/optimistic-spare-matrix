@@ -23,21 +23,14 @@ unsigned long save[25];
 unsigned int indexes[25];
 
 void putIntoQueue(unsigned long endTime, unsigned int idNewNode);
-void insert(int type, int idElementInGroup,
-                int portID, 
-                unsigned long endTime,
-                unsigned int idNewNode);
+void insert(unsigned long endTime, unsigned int idNewNode);
 unsigned int removeSoonestEvent();
 unsigned long newwidth();
 void resize(unsigned long newsize);
-void localInit(unsigned long nbuck, unsigned long bwidth, 
-                                    unsigned long startprio);
+void localInit(unsigned long nbuck, unsigned long bwidth, unsigned long startprio);
 void initqueue();
-void enqueue(int type, int idElementInGroup,
-                int portID, 
-                unsigned long endTime,
-                unsigned int idNewNode);
-int dequeue();
+void enqueue(unsigned long endTime, unsigned int idNewNode);
+unsigned int dequeue();
 void printBuckets();
 
 static inline int compare(unsigned long endTime, 
@@ -115,14 +108,7 @@ void putIntoQueue(unsigned long endTime, unsigned int idNewNode){
     return;
 }
 
-void insert(int type, int idElementInGroup,
-                int portID, 
-                unsigned long endTime,
-                unsigned int idNewNode){
-    data[idNewNode] = ((unsigned long)idElementInGroup << 32)
-                           | ((portID) & MASK_INT) << 16 
-                           | (type & MASK_INT);
-
+void insert(unsigned long endTime, unsigned int idNewNode){
     arr[idNewNode][0] = (unsigned int)(endTime >> 32);
     arr[idNewNode][1] = (unsigned int)(endTime);
     
@@ -370,4 +356,49 @@ void localInit(unsigned long nbuck, unsigned long bwidth, unsigned long startpri
 void initqueue(){
     localInit(2,1,0.0);
     resizeenable = 1;
+}
+
+// enqueue
+void enqueue(unsigned long endTime, unsigned int idNewNode){
+    insert(endTime, idNewNode);
+    // nhan doi so luong calendar neu can
+    if(qsize > top_threshold) 
+        resize(2 * nbuckets);
+}
+
+// dequeue
+unsigned int dequeue(){
+    unsigned int tmp = removeSoonestEvent();
+
+    /*thu hep so luong cua calendar neu can*/
+    if(qsize < bot_threshold && nbuckets >= 2) 
+        resize(nbuckets/2);
+    return tmp;
+}
+
+/*in ra man hinh lich*/
+void printBucket(unsigned int n){
+    while(n != -1){
+        printf("%ld ", ((unsigned long)arr[n][0] << 32) + arr[n][1]);
+        n = arr[n][3];
+    }
+    return;
+}
+
+void printBuckets(){
+    unsigned int i;
+    for(i = 0; i < nbuckets; i++){
+        printf("Day %d : ",i);
+        unsigned int tmp = arr[i][2];
+        printBucket(tmp);
+        printf("\n");
+    }
+    printf("\nCount of event : %ld\n",qsize);
+    printf("so luong bucket : %ld\n",nbuckets);
+    printf("buckettop : %f\n",buckettop);
+    printf("lastbuckket : %ld\n",lastbucket);
+    printf("lastprio : %ld\n",lastprio);
+    printf("width : %d\n",width);
+    printf("bot : %ld\n",bot_threshold);
+    printf("top : %ld",top_threshold);
 }
