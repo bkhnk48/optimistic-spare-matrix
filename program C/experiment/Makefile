@@ -8,6 +8,7 @@ serial:
 	gcc CalendarQueueTest.c -pg -g -o cqtest.o -lm -I lib
 	gcc FatTreeTest.c -g -o ftg.o -I lib
 	gcc FatTree4PortsTest.c -g -fno-strict-aliasing -o f4t.o -lm -I lib
+	gcc ACalendarQueueTest.c -g -o acq.o -lm -I lib
 	@echo "====================="
 	@echo "      All done!"
 	@echo "====================="
@@ -21,6 +22,7 @@ n:
 	gcc CalendarQueueTest.c -o cqtest.o -lm -I lib
 	gcc FatTreeTest.c -o ftg.o -I lib
 	gcc FatTree4PortsTest.c -fno-strict-aliasing -o f4t.o -lm -I lib
+	gcc ACalendarQueueTest.c -o acq.o -lm -I lib
 	@echo "===================="
 	@echo "All done - no debug!"
 	@echo "===================="
