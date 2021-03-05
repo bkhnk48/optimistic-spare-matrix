@@ -349,9 +349,10 @@ int hash(int idInGroup,enum TypesOfNode typeOfNode,
 }
 
 void buildData(unsigned long *data, int k){
-  int i = 0, j, l;
+  int i = 0, j;
   int numOfHosts = k*k*k/4;
   int numOfPods = k*k;
+  int numOfCores = k*k/4;
   int index = 0;
   enum TypesOfEvent eventHosts[5] = {A, B, C, G, H_HOST};
   for(i = 0; i < numOfHosts; i++){
@@ -363,6 +364,31 @@ void buildData(unsigned long *data, int k){
     }
   }
 
+  enum TypesOfNode type;
+  int portID;
+  enum TypesOfEvent eventSw[4] = {D, E, F, H};
+  for(i = 0; i < numOfPods; i++){
+    type = ((i % k) < (k/2)) ? EDGE_SWITCH : AGG_SWITCH;
+    for(portID = 0; portID < k; portID++){
+      for(j = 0; j < 4; j++){
+        index = hash(i, type, portID, eventSw[j], k);
+        data[index] = ((unsigned long)i << 32)
+                            | ((portID) & MASK_INT) << 16 
+                            | (eventSw[j] & MASK_INT);
+      }
+    }
+  }
+
+  for(i = numOfPods; i < numOfPods + numOfCores; i++){
+    for(portID = 0; portID < k; portID++){
+      for(j = 0; j < 4; j++){
+        index = hash(i, CORE_SWITCH, portID, eventSw[j], k);
+        data[index] = ((unsigned long)i << 32)
+                            | ((portID) & MASK_INT) << 16 
+                            | (eventSw[j] & MASK_INT);
+      }
+    }
+  }
 
 }
 #endif
