@@ -132,7 +132,10 @@ int main(int argc, char **argv)
     insert(i, idNodeInTree);
     if(currentTime > i) currentTime = i;
     numOfFlows++;
+    printf("i = %ld => ", i);
+    printBuckets();
   }
   
+  return 0;
   first = dequeue();
 }
