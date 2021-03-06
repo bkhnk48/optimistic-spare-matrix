@@ -8,6 +8,7 @@
 
 unsigned long *data; //[384];
 unsigned int **arr; //[384][5];
+unsigned int MAX_ARR;
 int width;
 unsigned long nbuckets;
 //int firstsub;
@@ -295,14 +296,25 @@ void resize(unsigned long newsize){
     unsigned int foo;
     
     unsigned long oldnbuckets;
-    unsigned int *oldbuckets = malloc(nbuckets * sizeof(unsigned int));
+    unsigned int **oldbuckets = malloc(sizeof * oldbuckets * MAX_ARR);
+    for(i = 0; i < MAX_ARR; i++){
+        oldbuckets[i] = malloc(sizeof * oldbuckets[i] * 4);
+        oldbuckets[i][0] = -1;
+        oldbuckets[i][1] = -1;
+        oldbuckets[i][2] = -1;
+        oldbuckets[i][3] = -1;
+    }
     //Node** oldbuckets;
 
     if(!resizeenable) return;
 
     bwidth = newwidth();
-    for(i = 0; i < width; i++){
-        oldbuckets[i] = arr[i][2];
+    printf("At %d width = %d\n", __LINE__, width);
+    for(i = 0; i < MAX_ARR; i++){
+        oldbuckets[i][0] = arr[i][0];
+        oldbuckets[i][1] = arr[i][1];
+        oldbuckets[i][2] = arr[i][2];
+        oldbuckets[i][3] = arr[i][3];
     }
     //oldbuckets = buckets;
     oldnbuckets = nbuckets;
@@ -312,21 +324,24 @@ void resize(unsigned long newsize){
     unsigned int id; unsigned long endTime;
     // them lai cac phan tu vao calendar moi
     for(i = 0; i < oldnbuckets; i++){
-        foo = oldbuckets[i];
+        foo = oldbuckets[i][2];
         //Node* foo = oldbuckets[i];
         while(foo != -1){ // tranh viec lap vo han
         //while(foo != NULL){
             id = data[foo] >> 32;
-            endTime = ((unsigned long)arr[foo][0] << 32) + arr[foo][1];
+            endTime = ((unsigned long)oldbuckets[foo][0] << 32) + oldbuckets[foo][1];
             //Node* tmp = new_node(foo->type,foo->idElementInGroup,
             //                               foo->portID,foo->endTime);
-            putIntoQueue(endTime, id);
+            //putIntoQueue(endTime, id);
+            insert(endTime, id);
             //insert(tmp);
 
-            foo = arr[foo][3];
+            foo = oldbuckets[foo][3];
             //foo = foo->next;
         }
     }
+
+    free(oldbuckets);
 
     return;
 }
