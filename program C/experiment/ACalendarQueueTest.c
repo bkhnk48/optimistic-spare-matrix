@@ -133,7 +133,7 @@ int main(int argc, char **argv)
     enqueue(i, idNodeInTree);
     if(currentTime > i) currentTime = i;
     numOfFlows++;
-    printBuckets();
+    //printBuckets();
   }
   
   first = dequeue();
@@ -151,6 +151,238 @@ int main(int argc, char **argv)
       arr[first][1] = UINT_MAX;
       //arr[first][2] = const. It can't be changed at here
       arr[first][3] = UINT_MAX;
+
+      #pragma endregion
+
+      #pragma region action of Event type A
+      if (type == A)
+      {
+        allNodes[i].generatedPackets++;
+        enqueue(currentTime + T, first);
+        generateEventB = actionA(T, currentTime, &bufferHosts[i]);
+        if (generateEventB){
+          enqueue(currentTime + defaultBias * 13, first + 1);
+        }
+      }
+      #pragma endregion
+      #pragma region action of Event type B
+      else if (type == B)
+      {
+        generateEventC = actionB(&bufferHosts[i], allNodes[i].links[0].pkt);
+        if (generateEventC){
+          enqueue(currentTime + defaultBias * 33, first + 1);
+        }
+      }
+      #pragma endregion
+      else if (type == C)
+      {
+        #pragma region action of Event type C
+        nextIndex = allNodes[i].links[0].nextIndex;
+        nextPort = allNodes[i].links[0].nextPort;
+        generateEventB = 0;
+        generateEventD = actionC(&bufferHosts[i],
+                                 allNodes[i].links, &generateEventB,
+                                 getIPv4OfHost(pairs[i].dst, k), T);
+        if (generateEventB)
+          enqueue(currentTime + defaultBias * 13, first - 1);
+        if (generateEventD){
+          idNodeInTree = hash(nextIndex, EDGE_SWITCH, nextPort, D, k);
+          enqueue(currentTime + loadingTime1, idNodeInTree);
+        }
+        #pragma endregion
+      }
+      else if (type == D)
+      {
+        #pragma region action of Event type D
+        int portID = (data[first] >> 16) & MASK_INT;
+        Packet *ENB = bufferSwitches[i].ENB[portID];
+        int idPrev = allNodes[i + numOfHosts].links[portID].nextIndex;
+
+        int idPrevPort = allNodes[i + numOfHosts].links[portID].nextPort;
+        idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && portID < k / 2 ? 0 : numOfHosts);
+
+        Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
+        
+        int posInENB = receivePacket(portID, &bufferSwitches[i], currentTime, pkt);
+
+        if (posInENB == bufferSwitches[i].firstLastENBs[portID][0])
+        {
+          //Packet is ahead of all other ones on ENB
+          unsigned long portAndNextIP = next(ENB[posInENB].srcIP,
+                            allNodes[i + numOfHosts].ipv4,
+                            ENB[posInENB].dstIP,
+                            k, &(tablesOfSwitches->tables[i]));
+          int nextIP = (int)portAndNextIP;
+          int nextEXB = (int)(portAndNextIP >> 32);
+          //int nextEXB = getEXB_ID(nextIP,
+          //                        allNodes[i + numOfHosts].type, k);
+          //this func has two params:
+          // + nextEXB: the port ID of the next EXB
+          // + registeredEXB[portID]: the array's element to store the nextEXB
+          //additional info: portID - ID of ENB in which outgoing packet
+          signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[portID]);
+
+          generateEventE = actionD(portID, nextEXB, &bufferSwitches[i], currentTime);
+
+          if (generateEventE){
+            idNodeInTree = hash(i, allNodes[i + numOfHosts].type, nextEXB, E, k);
+            enqueue(currentTime + SWITCH_CYCLE, idNodeInTree);
+          }
+        }
+      }
+      #pragma endregion
+      else if (type == E)
+      {
+        #pragma region action of Event type E
+        int portID = (data[first] >> 16) & MASK_INT;
+        
+        int pickUpENB = chooseENB_ID(portID, &bufferSwitches[i], k);
+        
+        generateEventE = 0;
+        generateEventF = 0;
+        generateEventH = 0;
+        generateEventH_HOST = 0;
+        int H_IS_HOST = ((allNodes[i + numOfHosts].type == EDGE_SWITCH && pickUpENB <= (k / 2 - 1)) ? 1 : 0);
+        
+        int shallFindNewPkt = 0;
+        
+        shallFindNewPkt = move(pickUpENB, portID, &bufferSwitches[i]);
+        
+        #pragma region Shift packet in ENB
+        Packet *ENB = bufferSwitches[i].ENB[pickUpENB];
+        int posInENB = bufferSwitches[i].firstLastENBs[pickUpENB][0];
+
+        if (ENB[posInENB].srcIP != -1 && ENB[posInENB].dstIP != -1 && ENB[posInENB].id != -1 && ENB[posInENB].generatedTime != -1)
+        {
+          unsigned long portAndNextIP = next(ENB[posInENB].srcIP,
+                            allNodes[i + numOfHosts].ipv4,
+                            ENB[posInENB].dstIP,
+                            k, &(tablesOfSwitches->tables[i]));
+          int nextIP = (int)portAndNextIP;
+          int nextEXB = (int)(portAndNextIP >> 32);
+          //int nextEXB = getEXB_ID(nextIP, allNodes[i + numOfHosts].type, k);
+          //this func has two params:
+          // + nextEXB: the port ID of the next EXB
+          // + registeredEXB[portID]: the array's element to store the nextEXB
+          //additional info: portID - ID of ENB in which outgoing packet
+          signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
+        }
+        #pragma endregion
+
+        if(shallFindNewPkt){
+          findENB_ID(portID, &bufferSwitches[i], currentTime, k);
+        }
+        int generatedEF = actionE(pickUpENB, portID, &bufferSwitches[i], &allNodes[i + numOfHosts].links[portID]);
+
+        generateEventE = generatedEF & 1;
+        generateEventF = (generatedEF & 2) >> 1;
+        
+        if (generateEventE){
+          idNodeInTree = hash(i, allNodes[i + numOfHosts].type, portID, E, k);
+          enqueue(currentTime + SWITCH_CYCLE, idNodeInTree);
+        }
+
+        if (generateEventF){
+          idNodeInTree = hash(i, allNodes[i + numOfHosts].type, portID, F, k);
+          enqueue(currentTime + SWITCH_CYCLE, idNodeInTree);
+        }
+
+        int idPrev = allNodes[i + numOfHosts].links[pickUpENB].nextIndex;
+        idNodeInTree = 0;
+        if (H_IS_HOST){
+          idNodeInTree = hash(idPrev, HOST, 0, H_HOST, k);
+          enqueue(currentTime + 1, idNodeInTree);
+        }
+        else
+        {
+          //generate event H
+          int idPrePort = allNodes[i + numOfHosts].links[pickUpENB].nextPort;
+          idNodeInTree = hash(idPrev, allNodes[idPrev + numOfHosts].type, idPrePort, H, k);
+          enqueue(currentTime + 1, idNodeInTree);
+        }
+
+        #pragma endregion
+      }
+      else if (type == H_HOST)
+      {
+        int nextNode = allNodes[i].links[0].nextIndex;
+        int nextPort = allNodes[i].links[0].nextPort;
+        
+        generateEventC = actionH_HOST(&bufferHosts[i], allNodes[i].links[0].pkt);
+        
+        if (generateEventC){
+          enqueue(currentTime + defaultBias * 33, first - 1);
+        }
+      }
+      else if (type == F)
+      {
+        #pragma region action of Event type F
+        int portID = (data[first] >> 16) & MASK_INT;
+        nextIndex = allNodes[i + numOfHosts].links[portID].nextIndex;
+
+        nextPort = allNodes[i + numOfHosts].links[portID].nextPort;
+        
+        generateEventE = k;//pass k as parameter in the variable generateEventE
+        nextIP = getNeighborIP(allNodes[i + numOfHosts].ipv4, allNodes[i + numOfHosts].type, portID, k);
+        int generateEventD_OR_G = actionF(&bufferSwitches[i],
+                                          portID,
+                                          &allNodes[i + numOfHosts].links[portID],
+                                          &generateEventE //,
+                                                          //getIPv4OfHost(pairs[i], k), T
+        );
+        if(generateEventE){
+          int pickUpENB = findENB_ID(portID, &bufferSwitches[i], currentTime, k);
+          if(pickUpENB >= 0 && pickUpENB < k && pickUpENB != portID){
+            idNodeInTree = first - 1;
+            //hash(i, allNodes[i + numOfHosts].type, portID, E, k);
+            //I believe the return value of hash in this case is (first - 1)
+            enqueue(currentTime + SWITCH_CYCLE, idNodeInTree);
+          }
+        }
+        
+        if (generateEventD_OR_G)
+        {
+          enum TypesOfNode tempNode = typeOfNode(nextIP, k);
+          enum TypesOfEvent tempEvent = (tempNode == HOST) ? G : D;
+          
+          unsigned long loadingTime = loadingTime1;
+          if(tempEvent == D){
+            loadingTime = (bufferSwitches[i].type == CORE_SWITCH || bufferSwitches[nextIndex].type == CORE_SWITCH) ? loadingTime2 : loadingTime1;
+          }
+          
+          idNodeInTree = hash(nextIndex, tempNode, nextPort, tempEvent, k);
+          enqueue(currentTime + loadingTime, idNodeInTree);
+        }
+        #pragma endregion
+      }
+      else if (type == G)
+      {
+        #pragma region action of Event type G
+        j = currentTime / STEP_TIME;
+        int nextNode = allNodes[i].links[0].nextIndex;
+        int nextPort = allNodes[i].links[0].nextPort;
+        if(flows[i].srcIP == -1)
+          flows[i].srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
+        
+        actionG(&bufferHosts[i], &receivedPkts[i][j],
+                allNodes[nextNode + numOfHosts].links[nextPort].pkt);
+        flows[i].receivedPackets[j]++;
+
+        idNodeInTree = hash(nextNode, EDGE_SWITCH, nextPort, H, k);
+        enqueue(currentTime + 1, idNodeInTree);
+        
+        #pragma endregion
+      }
+      else if (type == H)
+      {
+        int portID = (data[first] >> 16) & MASK_INT;
+        generateEventF = actionH(&bufferSwitches[i], allNodes[i + numOfHosts].type, portID, 
+                                    allNodes[i + numOfHosts].links[portID].pkt, k);
+        if(generateEventF){
+          enqueue(currentTime, first - 1);
+        }
+      }
+    
     }
     ongoingTime = -1;
     first = dequeue();
