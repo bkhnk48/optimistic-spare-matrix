@@ -111,10 +111,10 @@ int main(int argc, char **argv)
 
   printf("Start Simulating ......\n");
   timing(&wc1, &cpuT);
-  
-  arr = malloc(sizeof *arr * (25 * k * k * k/4));
-  data = malloc((25 * k * k * k/4) * sizeof(unsigned long));
-  for (i = 0; i < 25 * k * k * k/4; i++)
+  MAX_ARR = (25 * k * k * k/4);
+  arr = malloc(sizeof *arr * MAX_ARR);
+  data = malloc(MAX_ARR * sizeof(unsigned long));
+  for (i = 0; i < MAX_ARR; i++)
   {
     arr[i] = malloc(sizeof *arr[i] * 4);
     for (j = 0; j < 4; j++)
