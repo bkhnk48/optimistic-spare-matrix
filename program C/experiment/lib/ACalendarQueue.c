@@ -340,6 +340,9 @@ void localInit(unsigned long nbuck, unsigned long bwidth, unsigned long startpri
 
     // khoi tao cac bucket
     qsize = 0;
+    for(i = 0; i < nbuckets; i++){
+        arr[i][2] = -1;
+    }
 
     // khoi tao cac chi so ban dau cua bucket dau tien
     lastprio = startprio;
