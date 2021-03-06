@@ -149,7 +149,7 @@ int main(int argc, char **argv)
       i = data[first] >> 32;          //idElementInGroup
       arr[first][0] = UINT_MAX;
       arr[first][1] = UINT_MAX;
-      arr[first][2] = UINT_MAX;
+      //arr[first][2] = const. It can't be changed at here
       arr[first][3] = UINT_MAX;
     }
     ongoingTime = -1;
