@@ -17,7 +17,6 @@
 
 int main(int argc, char **argv)
 {
-  initqueue();
   double wc1 = 0, wc2 = 0, cpuT = 0;
   unsigned int first = UINT_MAX;
   int defaultSec = 1;
@@ -81,11 +80,7 @@ int main(int argc, char **argv)
   NetworkNode *allNodes = initNetworkNodes(k * k * k / 4, 5 * k * k / 4, k);
 
   setlocale(LC_NUMERIC, "");
-  printf("Simulation time is %ld (s)\n", endTime / (1000*1000*1000));
-  unsigned long mem = mem_avail();
-  printf("Free memory Available = %'ld\n", mem / (1024*1024));
-
-  printf("Start Simulating ......\n");
+  
   int nextIP = 0;
   int nextIndex;
   int nextPort = 0;
@@ -110,8 +105,13 @@ int main(int argc, char **argv)
     }
   }
 
-  timing(&wc1, &cpuT);
+  printf("Simulation time is %ld (s)\n", endTime / (1000*1000*1000));
+  unsigned long mem = mem_avail();
+  printf("Free memory Available = %'ld\n", mem / (1024*1024));
 
+  printf("Start Simulating ......\n");
+  timing(&wc1, &cpuT);
+  
   arr = malloc(sizeof *arr * (25 * k * k * k/4));
   data = malloc((25 * k * k * k/4) * sizeof(unsigned long));
   for (i = 0; i < 25 * k * k * k/4; i++)
@@ -125,6 +125,7 @@ int main(int argc, char **argv)
   }
 
   buildData(data, k);
+  initqueue();
 
   for (i = 0; i < numOfHosts; i++) //Only test first hosts in pod
   {
