@@ -129,14 +129,10 @@ int main(int argc, char **argv)
 
   for (i = 0; i < numOfHosts; i++) //Only test first hosts in pod
   {
-    if(i == 4){
-        printf("DEBUG %d\n", __LINE__);
-    }
     idNodeInTree = hash(i, HOST, 0, A, k);
     enqueue(i, idNodeInTree);
     if(currentTime > i) currentTime = i;
     numOfFlows++;
-    printf("i = %ld => ", i);
     printBuckets();
   }
   
