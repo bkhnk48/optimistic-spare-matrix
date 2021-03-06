@@ -253,7 +253,8 @@ void initqueue(){
 void enqueue(Node* entry){
     insert(entry);
     // nhan doi so luong calendar neu can
-    if(qsize>top_threshold) resize(2*nbuckets);
+    if(qsize>top_threshold) 
+        resize(2*nbuckets);
 }
 
 // dequeue
