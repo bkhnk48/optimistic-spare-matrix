@@ -140,6 +140,7 @@ unsigned int removeSoonestEvent(){
             //Node* tmp = buckets[i];
             arr[i][2] = arr[tmp][3];
             //buckets[i] = tmp->next;
+            arr[tmp][3] = -1;
 
             lastbucket = i;
             lastprio = ((unsigned long)arr[tmp][0] << 32) + arr[tmp][1];
@@ -309,7 +310,6 @@ void resize(unsigned long newsize){
     if(!resizeenable) return;
 
     bwidth = newwidth();
-    printf("At %d width = %d\n", __LINE__, width);
     for(i = 0; i < MAX_ARR; i++){
         oldbuckets[i][0] = arr[i][0];
         oldbuckets[i][1] = arr[i][1];
@@ -321,21 +321,20 @@ void resize(unsigned long newsize){
 
     localInit(newsize, bwidth, lastprio);
 
-    unsigned int id; unsigned long endTime;
+    unsigned long endTime;
     // them lai cac phan tu vao calendar moi
     for(i = 0; i < oldnbuckets; i++){
         foo = oldbuckets[i][2];
         //Node* foo = oldbuckets[i];
         while(foo != -1){ // tranh viec lap vo han
         //while(foo != NULL){
-            id = data[foo] >> 32;
             endTime = ((unsigned long)oldbuckets[foo][0] << 32) + oldbuckets[foo][1];
+            arr[foo][3] = -1;
             //Node* tmp = new_node(foo->type,foo->idElementInGroup,
             //                               foo->portID,foo->endTime);
-            //putIntoQueue(endTime, id);
-            insert(endTime, id);
+            insert(endTime, foo);
             //insert(tmp);
-
+            
             foo = oldbuckets[foo][3];
             //foo = foo->next;
         }
