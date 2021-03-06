@@ -136,6 +136,52 @@ int main(int argc, char **argv)
     printBuckets();
   }
   
-  return 0;
   first = dequeue();
+  
+  unsigned long ongoingTime = ((unsigned long)arr[first][0] << 32) + arr[first][1];
+  while (currentTime <= endTime && ongoingTime != -1)
+  {
+    if (ongoingTime == currentTime)
+    {
+      Count++;
+      #pragma region get value from data array
+      type = data[first] & 65535; //type of event
+      i = data[first] >> 32;          //idElementInGroup
+      arr[first][0] = UINT_MAX;
+      arr[first][1] = UINT_MAX;
+      arr[first][2] = UINT_MAX;
+      arr[first][3] = UINT_MAX;
+    }
+    ongoingTime = -1;
+    first = dequeue();
+    if (first != UINT_MAX)
+    {
+      currentTime = ((unsigned long)arr[first][0] << 32) + arr[first][1];
+      ongoingTime = currentTime;
+    }
+    else
+    {
+      ongoingTime = -1;
+    }
+  }
+  printf("\n\nFINISH!!!!!!!!!!!! ^_^....\n");
+
+  double INTERVAL_BANDWIDTH = (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000000;
+  unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, INTERVAL_BANDWIDTH);
+  INTERVAL_BANDWIDTH /= numOfFlows;
+  /*for(i = 0; i < numOfHosts; i++){
+    if(flows[i].srcIP != -1){
+      printf("====================\n");
+      printf("Flow from %d(%d) to %d: \n", getIndexOfHost(flows[i].srcIP, k), flows[i].srcIP, flows[i].indexOfDst);
+      calculateFlow(flows[i].receivedPackets, PACKET_SIZE, STEP, INTERVAL_BANDWIDTH);
+      printf("\n====================\n");
+    }
+  }*/
+
+  timing(&wc2, &cpuT);
+  printf("Time: %'f ms with count = %'ld ", (wc2 - wc1)*1000, Count);
+  
+  badness(wc2 - wc1, page_size, proc_statm);
+
+  return 0;
 }
