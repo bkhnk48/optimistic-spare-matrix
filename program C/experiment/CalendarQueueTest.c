@@ -128,12 +128,11 @@ int main(int argc, char** argv)
         if(currentTime > i) currentTime = i;
         enqueue(new_node(A, i, 0, i));
         numOfFlows++;
-        printBuckets();
+        //printBuckets();
     }
     
-    return 0;
     Node * ev = dequeue();
-
+    
     while(currentTime <= endTime && ev->endTime != -1)
     {   
         if(ev->endTime == currentTime)
