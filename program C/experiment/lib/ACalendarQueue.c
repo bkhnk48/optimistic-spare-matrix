@@ -130,10 +130,9 @@ unsigned int removeSoonestEvent(){
         ulBuckettop = (unsigned long)buckettop;
         //if(buckets[i] != NULL && buckets[i]->endTime < buckettop){
         inThisBucket = (bucket_index != -1);
-        if(!inThisBucket){
+        if(inThisBucket){
             comp = compare(ulBuckettop, arr[bucket_index][0], arr[bucket_index][1]);
-            if(comp > 0)
-                inThisBucket = 1;
+            inThisBucket = (comp > 0);
         }
         if(inThisBucket){
             tmp = bucket_index;
