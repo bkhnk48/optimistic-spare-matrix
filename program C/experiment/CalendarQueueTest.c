@@ -125,13 +125,9 @@ int main(int argc, char** argv)
     
     for(i = 0; i < numOfHosts; i++)
     {
-        if(i == 4){
-            printf("DEBUG %d\n", __LINE__);
-        }
         if(currentTime > i) currentTime = i;
         enqueue(new_node(A, i, 0, i));
         numOfFlows++;
-        printf("i = %ld => ", i);
         printBuckets();
     }
     
