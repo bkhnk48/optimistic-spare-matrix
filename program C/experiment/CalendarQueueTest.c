@@ -18,7 +18,6 @@
 
 int main(int argc, char** argv) 
 {
-    initqueue();
     double wc1 = 0, wc2 = 0, cpuT = 0;
     //unsigned int first = UINT_MAX;
     int defaultSec = 1;
@@ -90,7 +89,6 @@ int main(int argc, char** argv)
     Node* last = Events;*/
     setlocale(LC_NUMERIC, "");
 
-    printf("Start Simulating ......\n");
     //unsigned long count = 0;
     int nextIP = 0;
     int nextIndex;
@@ -103,11 +101,7 @@ int main(int argc, char** argv)
     int numOfFlows = 0;
     int type;
     int edited = 0, flag = 0;
-    printf("Simulation time is %ld (s)\n", endTime / (1000*1000*1000));
-    unsigned long mem = mem_avail();
-    printf("Free memory Available = %'ld\n", mem / (1024*1024));
-
-    printf("Start Simulating ......\n");
+    
     //char* p = malloc(1 * 1024 * 1024 * 1024);
     Flow *flows = malloc(numOfHosts * sizeof(Flow));
     for(i = 0; i < numOfHosts; i++){
@@ -119,11 +113,21 @@ int main(int argc, char** argv)
             flows[i].receivedPackets[j] = 0;
         }
     }
+
+    printf("Simulation time is %ld (s)\n", endTime / (1000*1000*1000));
+    unsigned long mem = mem_avail();
+    printf("Free memory Available = %'ld\n", mem / (1024*1024));
     
+    printf("Start Simulating ......\n");
     timing(&wc1, &cpuT);
+    initqueue();
+    
     
     for(i = 0; i < numOfHosts; i++)
     {
+        if(i == 4){
+            printf("DEBUG %d\n", __LINE__);
+        }
         if(currentTime > i) currentTime = i;
         enqueue(new_node(A, i, 0, i));
         numOfFlows++;
