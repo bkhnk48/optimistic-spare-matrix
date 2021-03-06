@@ -229,7 +229,7 @@ void localInit(unsigned long nbuck, unsigned long bwidth, unsigned long startpri
 
     // khoi tao cac bucket
     qsize = 0;
-    for(i=0; i< nbuckets; i++){
+    for(i = 0; i < nbuckets; i++){
         buckets[i] = NULL;
     }
 
