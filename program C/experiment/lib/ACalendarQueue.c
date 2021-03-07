@@ -150,8 +150,6 @@ unsigned int removeSoonestEvent(){
             return tmp;
         } else {
             i++; 
-            if(i == 400)
-                printf("At %d nbucket %ld", __LINE__, nbuckets);
             if(i == nbuckets){ 
                 i = 0;
             }
@@ -208,7 +206,7 @@ unsigned int removeSoonestEvent(){
     arr[minbucket][2] = arr[foo][3];
     //buckets[minbucket] = foo->next;
 
-    int n = lastprio / width;
+    double n = lastprio / width;
     buckettop = (n+1) * width + 0.5*width;
     qsize--;
 
@@ -390,7 +388,6 @@ void enqueue(unsigned long endTime, unsigned int idNewNode){
 // dequeue
 unsigned int dequeue(){
     unsigned int tmp = removeSoonestEvent();
-
     /*thu hep so luong cua calendar neu can*/
     if(qsize < bot_threshold && nbuckets >= 2) 
         resize(nbuckets/2);
