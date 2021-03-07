@@ -123,7 +123,7 @@ int main(int argc, char** argv)
     initqueue();
     
     
-    for(i = 0; i < 1; i++)
+    for(i = 0; i < numOfHosts; i++)
     {
         if(currentTime > i) currentTime = i;
         enqueue(new_node(A, i, 0, i));
@@ -135,8 +135,6 @@ int main(int argc, char** argv)
     
     while(currentTime <= endTime && ev->endTime != -1)
     {   
-        if(ev->endTime == 200031 && Count == 19)
-            printf("Ongoing %ld count %ld\n", ev->endTime, Count);
         if(ev->endTime == currentTime)
         {
             Count++;
@@ -185,9 +183,7 @@ int main(int argc, char** argv)
                 idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && portID < k / 2 ? 0 : numOfHosts);
 
                 Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
-                if(pkt->id >= 21500){
-                    //printf("DEBUG %d currT %ld\n", __LINE__, currentTime);
-                }
+                
                 int posInENB = receivePacket(portID, &bufferSwitches[i], currentTime, pkt);
 
                 if (posInENB == bufferSwitches[i].firstLastENBs[portID][0])
@@ -218,27 +214,10 @@ int main(int argc, char** argv)
             }
             else if (ev->type == E)
             {
-                if(i == 0 && currentTime > 2150200000){
-                    //printf("DEBUG %d latest E %ld\n", __LINE__, currentTime);
-                }
                 #pragma region action of Event type E
                 int portID = ev->portID;
                 #pragma region Insert to Events list
-                /*if(Events->endTime == -1){
-                    Events->endTime = currentTime;
-                    Events->idElementInGroup = i;
-                    Events->portID = portID;
-                    Events->type = E;
-                }
-                else{
-                    Node* tmpNode = malloc(sizeof(Node));
-                    tmpNode->endTime = currentTime; 
-                    tmpNode->idElementInGroup = i;
-                    tmpNode->portID = portID;
-                    tmpNode->next = NULL;
-                    last->next = tmpNode;
-                    last = tmpNode;
-                }*/
+                
                 #pragma endregion
         
                 int pickUpENB = chooseENB_ID(portID, &bufferSwitches[i], k);
@@ -279,14 +258,6 @@ int main(int argc, char** argv)
                     findENB_ID(portID, &bufferSwitches[i], currentTime, k);
                 }
 
-                int firstENB = bufferSwitches[i].firstLastENBs[pickUpENB][0];
-                if(bufferSwitches[i].ENB[pickUpENB][firstENB].id == 21498
-                    && i == 0
-                    //&& bufferSwitches[i].ENB[pickUpENB][firstENB].id <= 22599
-                ){
-                    printf("\t DEBUG %d, event E happens at %ld with id = %ld\n", __LINE__, currentTime, bufferSwitches[i].ENB[pickUpENB][firstENB].id);
-                }
-                
                 int generatedEF = actionE(pickUpENB, portID, &bufferSwitches[i], &allNodes[i + numOfHosts].links[portID]);
 
                 generateEventE = generatedEF & 1;
@@ -328,9 +299,6 @@ int main(int argc, char** argv)
             }
             else if (ev->type == F)
             {
-                if(i == 0 && currentTime > 2150200000){
-                    //printf("DEBUG %d\n", __LINE__);
-                }
                 #pragma region action of Event type F
                 int portID = ev->portID;
                 nextIndex = allNodes[i + numOfHosts].links[portID].nextIndex;
@@ -378,11 +346,6 @@ int main(int argc, char** argv)
                 int nextPort = allNodes[i].links[0].nextPort;
                 if(flows[i].srcIP == -1)
                     flows[i].srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
-                if(currentTime == 2150980204 || j == 71){
-                    printf("At G, DEBUG %d j = %ld, pkt %ld currT %ld\n", __LINE__, j, 
-                        allNodes[nextNode + numOfHosts].links[nextPort].pkt->id, 
-                        currentTime);
-                }
                 actionG(&bufferHosts[i], &receivedPkts[i][j],
                         allNodes[nextNode + numOfHosts].links[nextPort].pkt);
                 flows[i].receivedPackets[j]++;
