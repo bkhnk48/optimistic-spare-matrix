@@ -150,6 +150,8 @@ unsigned int removeSoonestEvent(){
             return tmp;
         } else {
             i++; 
+            if(i == 400)
+                printf("At %d nbucket %ld", __LINE__, nbuckets);
             if(i == nbuckets){ 
                 i = 0;
             }
@@ -166,16 +168,19 @@ unsigned int removeSoonestEvent(){
     unsigned long minpri;
 
     // start : vi tri dau tien buckets[i] != NULL
-    unsigned long start;
+    unsigned long start; int realBucket = 0;
     for(start = 0; start < nbuckets; start++)
         //if(buckets[start] != NULL){
         if(arr[start][2] != -1){
+            realBucket = arr[start][2];
             lastbucket = start;
-            lastprio = ((unsigned long)arr[start][0] << 32) + arr[start][1];
+            //lastbucket = start;
+            lastprio = ((unsigned long)arr[realBucket][0] << 32) + arr[realBucket][1];
             //lastprio = buckets[start]->endTime;
             minpri = lastprio;
             //minpri = buckets[start]->endTime;
             minbucket = start;
+            //minbucket = start;
             break;
         }
 
