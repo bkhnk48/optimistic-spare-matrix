@@ -127,7 +127,7 @@ int main(int argc, char **argv)
   buildData(data, k);
   initqueue();
 
-  for (i = 0; i < numOfHosts; i++) //Only test first hosts in pod
+  for (i = 0; i < 1; i++) //Only test first hosts in pod
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
     enqueue(i, idNodeInTree);
@@ -141,6 +141,8 @@ int main(int argc, char **argv)
   unsigned long ongoingTime = ((unsigned long)arr[first][0] << 32) + arr[first][1];
   while (currentTime <= endTime && ongoingTime != -1)
   {
+    //if(ongoingTime == 200031 && Count == 19)
+    //printf("Ongoing %ld count %ld\n", ongoingTime, Count);
     if (ongoingTime == currentTime)
     {
       Count++;
@@ -401,19 +403,23 @@ int main(int argc, char **argv)
   double INTERVAL_BANDWIDTH = (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000000;
   unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, INTERVAL_BANDWIDTH);
   INTERVAL_BANDWIDTH /= numOfFlows;
-  /*for(i = 0; i < numOfHosts; i++){
+  for(i = 0; i < numOfHosts; i++){
     if(flows[i].srcIP != -1){
       printf("====================\n");
       printf("Flow from %d(%d) to %d: \n", getIndexOfHost(flows[i].srcIP, k), flows[i].srcIP, flows[i].indexOfDst);
       calculateFlow(flows[i].receivedPackets, PACKET_SIZE, STEP, INTERVAL_BANDWIDTH);
       printf("\n====================\n");
     }
-  }*/
+  }
 
   timing(&wc2, &cpuT);
   printf("Time: %'f ms with count = %'ld ", (wc2 - wc1)*1000, Count);
   
   badness(wc2 - wc1, page_size, proc_statm);
+
+  assertPackets(total, allNodes, bufferHosts,
+                        bufferSwitches, numOfHosts, 5 * k * k / 4, k);
+
 
   return 0;
 }
