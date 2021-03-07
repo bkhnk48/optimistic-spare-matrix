@@ -406,7 +406,7 @@ int actionE(int portENB, int portEXB,
     int nextLastEXB = (lastEXB + 1) % BUFFER_SIZE;
 
     int firstENB = bufferSwitch->firstLastENBs[portENB][0];
-
+    
     unsigned long id = bufferSwitch->EXB[portEXB][nextLastEXB].id;
     if(id != -1){
         int count = getCount(id);
