@@ -195,6 +195,9 @@ int main(int argc, char **argv)
       }
       else if (type == D)
       {
+        if(i == 3 && currentTime > 2150500130){
+          printf("At i = 3, DEBUG %d latest D %ld\n", __LINE__, currentTime);
+        }
         #pragma region action of Event type D
         int portID = (data[first] >> 16) & MASK_INT;
         Packet *ENB = bufferSwitches[i].ENB[portID];
@@ -204,6 +207,9 @@ int main(int argc, char **argv)
         idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && portID < k / 2 ? 0 : numOfHosts);
 
         Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
+        if(pkt->id >= 21500){
+          printf("DEBUG %d currT %ld\n", __LINE__, currentTime);
+        }
         
         int posInENB = receivePacket(portID, &bufferSwitches[i], currentTime, pkt);
 
@@ -235,6 +241,12 @@ int main(int argc, char **argv)
       #pragma endregion
       else if (type == E)
       {
+        if(i == 0 && currentTime > 2150200000){
+          printf("DEBUG %d latest E %ld\n", __LINE__, currentTime);
+        }
+        else if(i == 3 && currentTime > 2150600130){
+          printf("DEBUG %d latest E %ld\n", __LINE__, currentTime);
+        }
         #pragma region action of Event type E
         int portID = (data[first] >> 16) & MASK_INT;
         
@@ -273,6 +285,14 @@ int main(int argc, char **argv)
 
         if(shallFindNewPkt){
           findENB_ID(portID, &bufferSwitches[i], currentTime, k);
+        }
+
+        int firstENB = bufferSwitches[i].firstLastENBs[pickUpENB][0];
+        if(bufferSwitches[i].ENB[pickUpENB][firstENB].id == 21498
+          && i == 0
+          //&& bufferSwitches[i].ENB[pickUpENB][firstENB].id <= 22599
+          ){
+            printf("\t DEBUG %d, event E happens at %ld with id = %ld\n", __LINE__, currentTime, bufferSwitches[i].ENB[pickUpENB][firstENB].id);
         }
         int generatedEF = actionE(pickUpENB, portID, &bufferSwitches[i], &allNodes[i + numOfHosts].links[portID]);
 
@@ -318,6 +338,15 @@ int main(int argc, char **argv)
       }
       else if (type == F)
       {
+        if(i == 0 && currentTime > 2150200000){
+          printf("DEBUG %d latest F %ld\n", __LINE__, currentTime);
+          if(currentTime == 2150500130){
+            printf("\tDEBUG %d\n", __LINE__);
+          }
+        }
+        else if(i == 3 && currentTime == 2150600150){
+          printf("\tDEBUG %d\n", __LINE__);
+        }
         #pragma region action of Event type F
         int portID = (data[first] >> 16) & MASK_INT;
         nextIndex = allNodes[i + numOfHosts].links[portID].nextIndex;
@@ -326,6 +355,7 @@ int main(int argc, char **argv)
         
         generateEventE = k;//pass k as parameter in the variable generateEventE
         nextIP = getNeighborIP(allNodes[i + numOfHosts].ipv4, allNodes[i + numOfHosts].type, portID, k);
+        //if(i == 0 && )
         int generateEventD_OR_G = actionF(&bufferSwitches[i],
                                           portID,
                                           &allNodes[i + numOfHosts].links[portID],
@@ -365,7 +395,11 @@ int main(int argc, char **argv)
         int nextPort = allNodes[i].links[0].nextPort;
         if(flows[i].srcIP == -1)
           flows[i].srcIP = allNodes[nextNode + numOfHosts].links[nextPort].pkt->srcIP;
-        
+        if(currentTime == 2150980204 || j == 71){
+            printf("At G, DEBUG %d j = %ld, pkt %ld currT %ld\n", __LINE__, j, 
+                allNodes[nextNode + numOfHosts].links[nextPort].pkt->id, 
+                currentTime);
+        }
         actionG(&bufferHosts[i], &receivedPkts[i][j],
                 allNodes[nextNode + numOfHosts].links[nextPort].pkt);
         flows[i].receivedPackets[j]++;
