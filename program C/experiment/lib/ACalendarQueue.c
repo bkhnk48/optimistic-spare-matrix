@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <limits.h>
 //#include "Node.c"
 #define RIGHT_MASK 0x7fffffff
 #define LEFT_MASK ((unsigned long)0x7fffffff << 32)
@@ -110,10 +111,14 @@ void putIntoQueue(unsigned long endTime, unsigned int idNewNode){
 }
 
 void insert(unsigned long endTime, unsigned int idNewNode){
-    arr[idNewNode][0] = (unsigned int)(endTime >> 32);
-    arr[idNewNode][1] = (unsigned int)(endTime);
-    
-    putIntoQueue(endTime, idNewNode);
+    //prevent two different events happen on the same node
+    //same EXB (or ENB) and same port but different times.
+    if(arr[idNewNode][0] == UINT_MAX && arr[idNewNode][1] == UINT_MAX){
+        arr[idNewNode][0] = (unsigned int)(endTime >> 32);
+        arr[idNewNode][1] = (unsigned int)(endTime);
+        
+        putIntoQueue(endTime, idNewNode);
+    }
 }
 
 unsigned int removeSoonestEvent(){
@@ -335,7 +340,10 @@ void resize(unsigned long newsize){
             arr[foo][3] = -1;
             //Node* tmp = new_node(foo->type,foo->idElementInGroup,
             //                               foo->portID,foo->endTime);
-            insert(endTime, foo);
+            //We MUST call putIntoQueue instead of insert
+            //because from now on, insert has if clause to prevent
+            //change arr[i] which arr[i][0..1] != UINT_MAX
+            putIntoQueue(endTime, foo);
             //insert(tmp);
             
             foo = oldbuckets[foo][3];
