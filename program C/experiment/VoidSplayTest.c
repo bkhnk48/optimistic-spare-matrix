@@ -62,6 +62,7 @@ int main(int argc, char** argv)
     //interpodIncomming(pairs, k);
     //forceToPair(pairs, numOfHosts, 1000);
     importPairs(pairs, "K8Pairs1.in");
+    //importPairs(pairs, "K16Pairs1.in");
     //pairs[2].dst = 9;
     printfPairs(pairs, numOfHosts);
 
@@ -378,15 +379,15 @@ int main(int argc, char** argv)
         }
     }
 
-    double INTERVAL_BANDWIDTH = (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000000;
-    unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, INTERVAL_BANDWIDTH);
-    
     timing(&wc2, &cpuT);
     printf("Time: %'f ms with count = %'ld ", (wc2 - wc1)*1000, Count);
     //printf(". Among them A{%ld}, B{%ld}, C{%ld}, D{%ld}, E{%ld}, F{%ld}, G{%ld}, H_HOST{%ld}, H{%ld}\n",
     //      Count[A], Count[B], Count[C], Count[D], Count[E], Count[F], Count[G], Count[H_HOST], Count[H]);
     printf("\n================================\n");
     badness(wc2 - wc1, page_size, proc_statm);
+    
+    double INTERVAL_BANDWIDTH = (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000000;
+    unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, INTERVAL_BANDWIDTH);
     
     INTERVAL_BANDWIDTH /= numOfFlows;
     /*for(i = 0; i < numOfHosts; i++){
