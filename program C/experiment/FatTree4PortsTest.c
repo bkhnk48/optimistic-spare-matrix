@@ -79,11 +79,6 @@ int main(int argc, char **argv)
   assignTypeOfSwitch(bufferSwitches, k);
   NetworkNode *allNodes = initNetworkNodes(k * k * k / 4, 5 * k * k / 4, k);
 
-  /*Events = malloc(sizeof(Node));
-  Events->endTime = -1; Events->idElementInGroup = -1;
-  Events->next = NULL;  Events->portID = -1;
-  Events->type = E;
-  Node* last = Events;*/
   setlocale(LC_NUMERIC, "");
   printf("Simulation time is %ld (s)\n", endTime / (1000*1000*1000));
   unsigned long mem = mem_avail();
