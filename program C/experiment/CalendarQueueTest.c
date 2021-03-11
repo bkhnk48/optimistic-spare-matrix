@@ -60,7 +60,8 @@ int main(int argc, char** argv)
     PairPattern *pairs = NULL;
     pairs = malloc(numOfHosts * sizeof(PairPattern)); 
     //interpodIncomming(pairs, k);
-    forceToPair(pairs, numOfHosts, 1000);
+    //forceToPair(pairs, numOfHosts, 1000);
+    importPairs(pairs, "K8Pairs1.in");
     //importPairs(pairs, "K16Pairs1.in");
     //pairs[2].dst = 9;
     printfPairs(pairs, numOfHosts);
@@ -82,11 +83,6 @@ int main(int argc, char** argv)
     assignTypeOfSwitch(bufferSwitches, k);
     NetworkNode *allNodes = initNetworkNodes(k * k * k / 4, 5 * k * k / 4, k);
 
-    /*Events = malloc(sizeof(Node));
-    Events->endTime = -1; Events->idElementInGroup = -1;
-    Events->next = NULL;  Events->portID = -1;
-    Events->type = E;
-    Node* last = Events;*/
     setlocale(LC_NUMERIC, "");
 
     //unsigned long count = 0;
@@ -114,6 +110,7 @@ int main(int argc, char** argv)
         }
     }
 
+
     printf("Simulation time is %ld (s)\n", endTime / (1000*1000*1000));
     unsigned long mem = mem_avail();
     printf("Free memory Available = %'ld\n", mem / (1024*1024));
@@ -123,7 +120,7 @@ int main(int argc, char** argv)
     initqueue();
     
     
-    for(i = 0; i < numOfHosts; i++)
+    for(i = 57; i < 60; i++)
     {
         if(currentTime > i) currentTime = i;
         enqueue(new_node(A, i, 0, i));
@@ -138,7 +135,6 @@ int main(int argc, char** argv)
         if(ev->endTime == currentTime)
         {
             Count++;
-            
             i = ev->idElementInGroup;//Lay id cua host trong danh sach cac hosts
             if(ev->type == A)
             {
@@ -372,8 +368,6 @@ int main(int argc, char** argv)
 
     printf("\n\nFINISH!!!!!!!!!!!! ^_^....\n");
 
-    double INTERVAL_BANDWIDTH = (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000000;
-    unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, INTERVAL_BANDWIDTH);
     
     timing(&wc2, &cpuT);
     printf("Time: %'f ms with count = %'ld ", (wc2 - wc1)*1000, Count);
@@ -382,16 +376,18 @@ int main(int argc, char** argv)
     printf("\n================================\n");
     badness(wc2 - wc1, page_size, proc_statm);
     
+    double INTERVAL_BANDWIDTH = (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000000;
+    unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, INTERVAL_BANDWIDTH);
+    
     INTERVAL_BANDWIDTH /= numOfFlows;
-    /*for(i = 0; i < numOfHosts; i++){
+    for(i = 0; i < numOfHosts; i++){
         if(flows[i].srcIP != -1){
             printf("====================\n");
             printf("Flow from %d(%d) to %d: \n", getIndexOfHost(flows[i].srcIP, k), flows[i].srcIP, flows[i].indexOfDst);
             calculateFlow(flows[i].receivedPackets, PACKET_SIZE, STEP, INTERVAL_BANDWIDTH);
             printf("\n====================\n");
         }
-    }*/
-
+    }
     //writeTime(Events, "CQ.txt");
     //assertPackets(total, allNodes, bufferHosts,
     //                      bufferSwitches, numOfHosts, 5 * k * k / 4, k);
