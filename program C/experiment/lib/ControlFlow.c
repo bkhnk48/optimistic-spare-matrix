@@ -78,7 +78,8 @@ int findENB_ID(int EXB_ID, BufferSwitch *bufferSwitch, unsigned long currentTime
                 )
         {
             firstENB = bufferSwitch->firstLastENBs[m][0];
-            if(bufferSwitch->ENB[m][firstENB].id != -1 &&
+            if(bufferSwitch->ENB[m][firstENB].id != -1 //This express prevents from resending a choosen pkt
+                &&
                 soonestPkt > 
                     bufferSwitch->ENB[m][firstENB].generatedTime){
                 soonestPkt = 
@@ -99,7 +100,7 @@ int findENB_ID(int EXB_ID, BufferSwitch *bufferSwitch, unsigned long currentTime
             && 
                 bufferSwitch->registeredEXBs[m]
                 == EXB_ID
-            && m != EXB_ID
+            && m != EXB_ID //&& m != pickUp
                 )
             {
                 firstENB = bufferSwitch->firstLastENBs[m][0];
