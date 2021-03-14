@@ -158,13 +158,9 @@ int actionC(BufferHost *bufferHost, Link *link,
     return 1;
 }
 
-int receivePacket(/*enum StatesOfENB *stateENB, 
-                    Packet *ENB, 
-                    unsigned long *requestedTime,*/
-                    int portID,
+int receivePacket(int portID,
                     BufferSwitch *bufferSwitch,
                     unsigned long currentTime,
-                    //enum TypesOfNode typeOfNode,
                     Packet *pkt){
     /* This func returns 1 means the event E will be generated
      * otherwise, no new event E will occur.
@@ -181,11 +177,7 @@ int receivePacket(/*enum StatesOfENB *stateENB,
             i = (last + 1) % BUFFER_SIZE;
         }
     }
-    /*for(i = 0; i < BUFFER_SIZE; i++){
-        if(ENB[i].id == -1)
-            break;//found empty slot in ENB
-    }*/
-    //if(i < BUFFER_SIZE - 1){
+    
     if(i != -1){
         bufferSwitch->ENB[portID][i].id = pkt->id;
         pkt->id = -1;
