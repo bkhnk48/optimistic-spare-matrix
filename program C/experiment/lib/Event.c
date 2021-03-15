@@ -595,6 +595,10 @@ int actionH(BufferSwitch *buffSwitch, int type, int portID, Packet *pktInLink, i
 void changeForRemove(int *firstLastBuffer){
     int first = firstLastBuffer[0];
     int last = firstLastBuffer[1];
+    if(last == -1 && first == 0){
+        printf("WARNING!!! Why you did remove a pkt from an empty buffer\n");
+        return;
+    }
     if(first == last){
         *firstLastBuffer = 0;
         firstLastBuffer[1] = -1;
