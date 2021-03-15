@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "NetworkNode.c"
 #include "ShiftBits.c"
+#include "Event.c"
 
 #ifndef _CONTROL_FLOW_
 #define _CONTROL_FLOW_
@@ -65,6 +66,7 @@ int findENB_ID(int EXB_ID, BufferSwitch *bufferSwitch, unsigned long currentTime
     
     int m;
     int firstENB ;
+    int lastENB;
     unsigned long soonestPkt = ULONG_MAX;
     int pickUp = -1;
     unsigned short count = 0;
@@ -78,14 +80,17 @@ int findENB_ID(int EXB_ID, BufferSwitch *bufferSwitch, unsigned long currentTime
                 )
         {
             firstENB = bufferSwitch->firstLastENBs[m][0];
-            if(bufferSwitch->ENB[m][firstENB].id != -1 //This express prevents from resending a choosen pkt
-                &&
-                soonestPkt > 
-                    bufferSwitch->ENB[m][firstENB].generatedTime){
-                soonestPkt = 
-                    bufferSwitch->ENB[m][firstENB].generatedTime;
-                pickUp = m;
-            } 
+            lastENB = bufferSwitch->firstLastENBs[m][1];
+            if(countEmptySlots(firstENB, lastENB) < BUFFER_SIZE){
+                if(bufferSwitch->ENB[m][firstENB].id != -1 //This express prevents from resending a choosen pkt
+                    &&
+                    soonestPkt > 
+                        bufferSwitch->ENB[m][firstENB].generatedTime){
+                    soonestPkt = 
+                        bufferSwitch->ENB[m][firstENB].generatedTime;
+                    pickUp = m;
+                } 
+            }
             //countRequestedTime++;
         }
     }
@@ -93,7 +98,7 @@ int findENB_ID(int EXB_ID, BufferSwitch *bufferSwitch, unsigned long currentTime
     int max = pickUp;
     if(pickUp < k && pickUp >= 0 && pickUp != EXB_ID){
         if(bufferSwitch->requestedTimeToEXB[EXB_ID] != currentTime)
-                    bufferSwitch->requestedTimeToEXB[EXB_ID] = currentTime;
+            bufferSwitch->requestedTimeToEXB[EXB_ID] = currentTime;
         for(m = 0; m <= k - 1; m++){
             if(bufferSwitch->requestedTimeOfENB[m] 
                 <= currentTime
@@ -104,12 +109,15 @@ int findENB_ID(int EXB_ID, BufferSwitch *bufferSwitch, unsigned long currentTime
                 )
             {
                 firstENB = bufferSwitch->firstLastENBs[m][0];
-                if(soonestPkt == bufferSwitch->ENB[m][firstENB].generatedTime
-                    && bufferSwitch->ENB[m][firstENB].id != -1
-                    ){
-                    count++;
-                    min = (min < m) ? m : min;
-                    max = (max < m) ? m : max;
+                lastENB = bufferSwitch->firstLastENBs[m][1];
+                if(countEmptySlots(firstENB, lastENB) < BUFFER_SIZE){
+                    if(soonestPkt == bufferSwitch->ENB[m][firstENB].generatedTime
+                        && bufferSwitch->ENB[m][firstENB].id != -1
+                        ){
+                        count++;
+                        min = (min > m) ? m : min;
+                        max = (max < m) ? m : max;
+                    }
                 }
             }
         }
