@@ -129,7 +129,7 @@ int main(int argc, char **argv)
   buildData(data, k);
   initqueue();
 
-  for(i = 57; i < 60; i++)
+  for(i = 0; i < numOfHosts; i++)
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
     enqueue(i, idNodeInTree);
@@ -203,6 +203,9 @@ int main(int argc, char **argv)
         idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && portID < k / 2 ? 0 : numOfHosts);
 
         Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
+        if(i == 26 && portID == 3){
+          //printf("ERROR hereh  pkt: %ld from src%d\n", pkt->id, pkt->srcIP);
+        }
         
         int posInENB = receivePacket(portID, &bufferSwitches[i], currentTime, pkt);
 
@@ -238,7 +241,9 @@ int main(int argc, char **argv)
         int portID = (data[first] >> 16) & MASK_INT;
         
         int pickUpENB = chooseENB_ID(portID, &bufferSwitches[i], k);
-        
+        if(pickUpENB == 3 && i == 26){
+          //printf("\t%d\n", __LINE__);
+        }
         generateEventE = 0;
         generateEventF = 0;
         generateEventH = 0;
@@ -410,20 +415,20 @@ int main(int argc, char **argv)
   double INTERVAL_BANDWIDTH = (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000000;
   unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, INTERVAL_BANDWIDTH);
   INTERVAL_BANDWIDTH /= numOfFlows;
-  for(i = 0; i < numOfHosts; i++){
+  /*for(i = 0; i < numOfHosts; i++){
     if(flows[i].srcIP != -1){
       printf("====================\n");
       printf("Flow from %d(%d) to %d: \n", getIndexOfHost(flows[i].srcIP, k), flows[i].srcIP, flows[i].indexOfDst);
       calculateFlow(flows[i].receivedPackets, PACKET_SIZE, STEP, INTERVAL_BANDWIDTH);
       printf("\n====================\n");
     }
-  }
+  }*/
 
 
   //readTime("CQ_Out", "ACQ_Out", 100000);
   //fclose(file);
-  assertPackets(total, allNodes, bufferHosts,
-                        bufferSwitches, numOfHosts, 5 * k * k / 4, k);
+  //assertPackets(total, allNodes, bufferHosts,
+  //                      bufferSwitches, numOfHosts, 5 * k * k / 4, k);
 
 
   return 0;
