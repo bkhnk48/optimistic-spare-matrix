@@ -23,6 +23,11 @@ enum StatesOfEXB{
     X11 = 3  //EXB is full and able to transfer packet.
 };
 
+enum ReadyToReceive{
+    R0 = 0, //EXB already has an E event which gonna happen
+    R1 = 1  //EXB is willing to receive new packet from any ENB
+};
+
 enum StatesOfENB{
     N0 = 0, //ENB is not full.
     N1 = 1  //ENB is full.
@@ -111,6 +116,7 @@ typedef struct _bufferSwitch{
     int *countNextENB;//Luu tru so luong cac goi tin trong cac ENB tiep theo
     enum StatesOfENB *stsENBs;//Luu tru trang thai gui goi tin di cua k cai ENB
     enum StatesOfEXB *stsEXBs;//Luu tru trang thai gui goi tin di cua k cai EXB
+    enum ReadyToReceive *r2rEXBs; //Luu tru trang thai nhan goi tin den cua k cai EXB
     unsigned long *requestedTimeOfENB;//Luu tru thoi diem goi tin den duoc phan dau cua k cai ENB
     unsigned long *requestedTimeToEXB;//Luu tru thoi diem goi tin yeu cau chuyen sang EXB
     int *registeredEXBs;//Luu tru thoi diem goi tin chuan bi chuyen sang k cai EXB
@@ -180,6 +186,11 @@ BufferSwitch *initBufferSwitches(int numOfSwitches, int k){
         bufferSwitches[i].stsEXBs = malloc(k*sizeof(int));
         for(j = 0; j < k; j++){
             bufferSwitches[i].stsEXBs[j] = X01;
+        }
+
+        bufferSwitches[i].r2rEXBs = malloc(k*sizeof(int));
+        for(j = 0; j < k; j++){
+            bufferSwitches[i].r2rEXBs[j] = R1;//EXB is willing to receive new pkt
         }
 
         bufferSwitches[i].requestedTimeOfENB = malloc(k*sizeof(unsigned long));
