@@ -109,8 +109,8 @@ typedef struct _bufferSwitch{
     Packet **ENB;//Luu tru cac goi tin trong k cai ENB
     StoredPacket **EXB;//Luu tru cac goi tin trong k cai EXB
     int *countNextENB;//Luu tru so luong cac goi tin trong cac ENB tiep theo
-    enum StatesOfENB *stsENBs;//Luu tru trang thai cua k cai ENB
-    enum StatesOfEXB *stsEXBs;//Luu tru trang thai cua k cai EXB
+    enum StatesOfENB *stsENBs;//Luu tru trang thai gui goi tin di cua k cai ENB
+    enum StatesOfEXB *stsEXBs;//Luu tru trang thai gui goi tin di cua k cai EXB
     unsigned long *requestedTimeOfENB;//Luu tru thoi diem goi tin den duoc phan dau cua k cai ENB
     unsigned long *requestedTimeToEXB;//Luu tru thoi diem goi tin yeu cau chuyen sang EXB
     int *registeredEXBs;//Luu tru thoi diem goi tin chuan bi chuyen sang k cai EXB
