@@ -120,7 +120,12 @@ int main(int argc, char** argv)
     initqueue();
     
     
-    for(i = 57; i < 60; i++)
+    //for(i = 57; i < 60; i++)
+    //for(i = 0; i < numOfHosts; i++)
+    //for(i = 0; i < numOfHosts/5; i++)
+    //for(i = 0; i < 2; i++)
+    //for(i = 110; i < 118; i++)
+    for(i = 20; i < 110; i++)
     {
         if(currentTime > i) currentTime = i;
         enqueue(new_node(A, i, 0, i));
@@ -225,7 +230,6 @@ int main(int argc, char** argv)
                 int H_IS_HOST = ((allNodes[i + numOfHosts].type == EDGE_SWITCH && pickUpENB <= (k / 2 - 1)) ? 1 : 0);
                 
                 int shallFindNewPkt = 0;
-                
                 shallFindNewPkt = move(pickUpENB, portID, &bufferSwitches[i]);
                 
                 #pragma region Shift packet in ENB
@@ -297,6 +301,7 @@ int main(int argc, char** argv)
             {
                 #pragma region action of Event type F
                 int portID = ev->portID;
+                
                 nextIndex = allNodes[i + numOfHosts].links[portID].nextIndex;
 
                 nextPort = allNodes[i + numOfHosts].links[portID].nextPort;
@@ -307,17 +312,21 @@ int main(int argc, char** argv)
                 int generateEventD_OR_G = actionF(&bufferSwitches[i],
                                                 portID,
                                                 &allNodes[i + numOfHosts].links[portID],
-                                                &generateEventE //,
+                                                &generateEventE
                                                                 //getIPv4OfHost(pairs[i], k), T
                 );
                 if(generateEventE){
                     int pickUpENB = findENB_ID(portID, &bufferSwitches[i], currentTime, k);
-                    if(pickUpENB >= 0 && pickUpENB < k && pickUpENB != portID){
+                    if(pickUpENB >= 0 && pickUpENB < k && pickUpENB != portID)
+                    {
                         //idNodeInTree = first - 1;
                         //hash(i, allNodes[i + numOfHosts].type, portID, E, k);
                         //I believe the return value of hash in this case is (first - 1)
                         //add(E, i, portID, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
                         enqueue(new_node(E, i, portID, currentTime + SWITCH_CYCLE));
+                    }
+                    else{
+                        bufferSwitches[i].r2rEXBs[portID] = R1;
                     }
                 }
                 
@@ -380,14 +389,14 @@ int main(int argc, char** argv)
     unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, INTERVAL_BANDWIDTH);
     
     INTERVAL_BANDWIDTH /= numOfFlows;
-    for(i = 0; i < numOfHosts; i++){
+    /*for(i = 110; i < numOfHosts; i++){
         if(flows[i].srcIP != -1){
             printf("====================\n");
             printf("Flow from %d(%d) to %d: \n", getIndexOfHost(flows[i].srcIP, k), flows[i].srcIP, flows[i].indexOfDst);
             calculateFlow(flows[i].receivedPackets, PACKET_SIZE, STEP, INTERVAL_BANDWIDTH);
             printf("\n====================\n");
         }
-    }
+    }*/
     //writeTime(Events, "CQ.txt");
     //assertPackets(total, allNodes, bufferHosts,
     //                      bufferSwitches, numOfHosts, 5 * k * k / 4, k);
