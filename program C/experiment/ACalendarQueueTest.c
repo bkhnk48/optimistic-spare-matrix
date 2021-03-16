@@ -58,8 +58,8 @@ int main(int argc, char **argv)
   PairPattern *pairs = NULL;
   pairs = malloc(numOfHosts * sizeof(PairPattern)); 
   //interpodIncomming(pairs, k);
-  //forceToPair(pairs, numOfHosts, 1000);
-  importPairs(pairs, "K8Pairs1.in");
+  forceToPair(pairs, numOfHosts, 1000);
+  //importPairs(pairs, "K8Pairs1.in");
   //importPairs(pairs, "K16Pairs1.in");
   //pairs[2].dst = 9;
   printfPairs(pairs, numOfHosts);
@@ -130,6 +130,7 @@ int main(int argc, char **argv)
   initqueue();
 
   for(i = 0; i < numOfHosts; i++)
+  //for(i = 20; i < 100; i++)
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
     enqueue(i, idNodeInTree);
@@ -345,6 +346,9 @@ int main(int argc, char **argv)
             //hash(i, allNodes[i + numOfHosts].type, portID, E, k);
             //I believe the return value of hash in this case is (first - 1)
             enqueue(currentTime + SWITCH_CYCLE, idNodeInTree);
+          }
+          else{
+              bufferSwitches[i].r2rEXBs[portID] = R1;
           }
         }
         
