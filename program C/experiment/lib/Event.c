@@ -242,7 +242,7 @@ int actionD(int portENB, //int *generateEventE,
             //if(EXB[i].id == -1)
             if(bufferSwitch->EXB[portEXB][i].id == -1){
                 //slot thu (i) cua EXB thuc su trong
-                generateEventE = 1;//tao event E
+                generateEventE = (bufferSwitch->r2rEXBs[portEXB] == R1);//tao event E
             }
             else {//neu o thu (i) do dang danh cho 1 packet nao do
                 
@@ -252,7 +252,7 @@ int actionD(int portENB, //int *generateEventE,
                     ) || bufferSwitch->requestedTimeToEXB[portEXB] == currentTime 
                     ){
                     generateEventE = (bufferSwitch->requestedTimeToEXB[portEXB] != currentTime);
-                        //(BUFFER_SIZE - 1 >= i + getCount(EXB[i].id) + 1);
+                    generateEventE &= (bufferSwitch->r2rEXBs[portEXB] == R1);
                     couldSendPacket = 1;
                 }
                 else{
@@ -281,6 +281,8 @@ int actionD(int portENB, //int *generateEventE,
         else
             bufferSwitch->stsEXBs[portEXB] = (bufferSwitch->stsEXBs[portEXB] == X01) ? X11 : X10;
     }
+    if(generateEventE)
+        bufferSwitch->r2rEXBs[portEXB] = R0;
     return generateEventE;
 }
 
@@ -387,6 +389,7 @@ void update(int portENB, int portEXB,
 
 int actionE(int portENB, int portEXB, 
                 BufferSwitch *bufferSwitch, Link *link){
+    bufferSwitch->r2rEXBs[portEXB] = R1;
     int result = 0;
     /*
     *The variable result will contain several bit to represent:
@@ -404,7 +407,9 @@ int actionE(int portENB, int portEXB,
         int count = getCount(id);
         int emptySlots = countEmptySlots(firstEXB, lastEXB);
         if(count >= 1 && emptySlots > 0){
-            result |= 1;//will create event E
+            result |= (bufferSwitch->r2rEXBs[portEXB] == R1);//will create event E
+            if(result == 1)
+                bufferSwitch->r2rEXBs[portEXB] = R0;
             //bufferSwitch->registeredEXBs[nextLastEXB] = 0;
             bufferSwitch->requestedTimeToEXB[portEXB] = 0;
         }
@@ -495,6 +500,7 @@ int actionF(BufferSwitch *bufferSwitch,
                 //exit(1);
             }
             *generateEventE = 1;
+            bufferSwitch->r2rEXBs[portID] = R0;
         }
     }
     return generateEventD;
