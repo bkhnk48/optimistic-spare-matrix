@@ -331,6 +331,9 @@ int main(int argc, char** argv)
                         //add(E, i, portID, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
                         insert(t, new_nodeS(E, i, portID, currentTime + SWITCH_CYCLE));
                     }
+                    else{
+                        bufferSwitches[i].r2rEXBs[portID] = R1;
+                    }
                 }
                 
                 if (generateEventD_OR_G)
