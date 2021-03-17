@@ -260,6 +260,13 @@ int main(int argc, char** argv)
                     // + registeredEXB[portID]: the array's element to store the nextEXB
                     //additional info: portID - ID of ENB in which outgoing packet
                     signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
+                    if(nextEXB != portID){
+                        int subEventE = actionD(pickUpENB, nextEXB, &bufferSwitches[i], currentTime);
+
+                        if (subEventE){
+                            insert(t, new_nodeS(E, i, nextEXB, currentTime + SWITCH_CYCLE));
+                        }
+                    }
                 }
                 #pragma endregion
 
