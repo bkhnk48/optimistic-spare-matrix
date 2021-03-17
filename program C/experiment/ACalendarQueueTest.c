@@ -58,8 +58,8 @@ int main(int argc, char **argv)
   PairPattern *pairs = NULL;
   pairs = malloc(numOfHosts * sizeof(PairPattern)); 
   //interpodIncomming(pairs, k);
-  forceToPair(pairs, numOfHosts, 1000);
-  //importPairs(pairs, "K8Pairs1.in");
+  //forceToPair(pairs, numOfHosts, 1000);
+  importPairs(pairs, "K8Pairs1.in");
   //importPairs(pairs, "K16Pairs1.in");
   //pairs[2].dst = 9;
   printfPairs(pairs, numOfHosts);
@@ -204,9 +204,6 @@ int main(int argc, char **argv)
         idPrev += (allNodes[i + numOfHosts].type == EDGE_SWITCH && portID < k / 2 ? 0 : numOfHosts);
 
         Packet *pkt = allNodes[idPrev].links[idPrevPort].pkt;
-        if(i == 26 && portID == 3){
-          //printf("ERROR hereh  pkt: %ld from src%d\n", pkt->id, pkt->srcIP);
-        }
         
         int posInENB = receivePacket(portID, &bufferSwitches[i], currentTime, pkt);
 
@@ -242,9 +239,7 @@ int main(int argc, char **argv)
         int portID = (data[first] >> 16) & MASK_INT;
         
         int pickUpENB = chooseENB_ID(portID, &bufferSwitches[i], k);
-        if(pickUpENB == 3 && i == 26){
-          //printf("\t%d\n", __LINE__);
-        }
+        
         generateEventE = 0;
         generateEventF = 0;
         generateEventH = 0;
@@ -273,6 +268,14 @@ int main(int argc, char **argv)
           // + registeredEXB[portID]: the array's element to store the nextEXB
           //additional info: portID - ID of ENB in which outgoing packet
           signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
+          if(nextEXB != portID){
+            int subEventE = actionD(pickUpENB, nextEXB, &bufferSwitches[i], currentTime);
+
+            if (subEventE){
+              idNodeInTree = hash(i, allNodes[i + numOfHosts].type, nextEXB, E, k);
+              enqueue(currentTime + SWITCH_CYCLE, idNodeInTree);
+            }
+          }
         }
         #pragma endregion
 
