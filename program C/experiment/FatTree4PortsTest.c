@@ -58,8 +58,8 @@ int main(int argc, char **argv)
   PairPattern *pairs = NULL;
   pairs = malloc(numOfHosts * sizeof(PairPattern)); 
   //interpodIncomming(pairs, k);
-  forceToPair(pairs, numOfHosts, 1000);
-  //importPairs(pairs, "K8Pairs1.in");
+  //forceToPair(pairs, numOfHosts, 1000);
+  importPairs(pairs, "K8Pairs1.in");
   //importPairs(pairs, "K16Pairs1.in");
   //pairs[2].dst = 9;
   printfPairs(pairs, numOfHosts);
@@ -286,6 +286,14 @@ int main(int argc, char **argv)
           // + registeredEXB[portID]: the array's element to store the nextEXB
           //additional info: portID - ID of ENB in which outgoing packet
           signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
+          if(nextEXB != portID){
+            int subEventE = actionD(pickUpENB, nextEXB, &bufferSwitches[i], currentTime);
+
+            if (subEventE){
+              idNodeInTree = hash(i, allNodes[i + numOfHosts].type, nextEXB, E, k);
+              add(E, i, nextEXB, currentTime + SWITCH_CYCLE, &root, idNodeInTree);
+            }
+          }
         }
         #pragma endregion
 
@@ -433,7 +441,8 @@ int main(int argc, char **argv)
   double INTERVAL_BANDWIDTH = (double)numOfFlows*BANDWIDTH_HOST*STEP_TIME/1000000000;
   unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, INTERVAL_BANDWIDTH);
   INTERVAL_BANDWIDTH /= numOfFlows;
-  /*for(i = 110; i < numOfHosts; i++){
+  /*for(i = 0; i < numOfHosts; i++)
+  {
     if(flows[i].srcIP != -1){
       printf("====================\n");
       printf("Flow from %d(%d) to %d: \n", getIndexOfHost(flows[i].srcIP, k), flows[i].srcIP, flows[i].indexOfDst);
@@ -441,11 +450,11 @@ int main(int argc, char **argv)
       printf("\n====================\n");
     }
   }*/
-
+  
   //writeTime(Events, "AS.txt");
   //readTime("AS.txt", "CQ.txt");
-  assertPackets(total, allNodes, bufferHosts,
-              bufferSwitches, numOfHosts, 5 * k * k / 4, k);
+  //assertPackets(total, allNodes, bufferHosts,
+  //            bufferSwitches, numOfHosts, 5 * k * k / 4, k);
 
   
   return 0;
