@@ -120,17 +120,11 @@ int main(int argc, char** argv)
     initqueue();
     
     
-    //for(i = 57; i < 60; i++)
-    //for(i = 0; i < numOfHosts; i++)
-    //for(i = 0; i < numOfHosts/5; i++)
-    //for(i = 0; i < 2; i++)
-    //for(i = 110; i < 118; i++)
-    for(i = 20; i < 110; i++)
+    for(i = 0; i < numOfHosts; i++)
     {
         if(currentTime > i) currentTime = i;
         enqueue(new_node(A, i, 0, i));
         numOfFlows++;
-        //printBuckets();
     }
     
     Node * ev = dequeue();
@@ -251,6 +245,14 @@ int main(int argc, char** argv)
                     // + registeredEXB[portID]: the array's element to store the nextEXB
                     //additional info: portID - ID of ENB in which outgoing packet
                     signEXB_ID(nextEXB, &bufferSwitches[i].registeredEXBs[pickUpENB]);
+                    if(nextEXB != portID){
+                        int subEventE = actionD(pickUpENB, nextEXB, &bufferSwitches[i], currentTime);
+
+                        if (subEventE){
+                            enqueue(new_node(E, i, nextEXB, currentTime + SWITCH_CYCLE));
+                        }
+                    }
+                
                 }
                 #pragma endregion
 
@@ -389,7 +391,8 @@ int main(int argc, char** argv)
     unsigned long total = calculateThroughput(receivedPkts, PACKET_SIZE, STEP, numOfHosts, INTERVAL_BANDWIDTH);
     
     INTERVAL_BANDWIDTH /= numOfFlows;
-    /*for(i = 110; i < numOfHosts; i++){
+    /*for(i = 0; i < numOfHosts; i++)
+    {
         if(flows[i].srcIP != -1){
             printf("====================\n");
             printf("Flow from %d(%d) to %d: \n", getIndexOfHost(flows[i].srcIP, k), flows[i].srcIP, flows[i].indexOfDst);
