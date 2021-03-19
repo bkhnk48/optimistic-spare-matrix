@@ -127,19 +127,19 @@ int main(int argc, char **argv)
   }
 
   buildData(data, k);
-  initqueue();
+  initqueueA();
 
   for(i = 0; i < numOfHosts; i++)
   //for(i = 20; i < 100; i++)
   {
     idNodeInTree = hash(i, HOST, 0, A, k);
-    enqueue(i, idNodeInTree);
+    enqueueA(i, idNodeInTree);
     if(currentTime > i) currentTime = i;
     numOfFlows++;
     //printBuckets();
   }
   
-  first = dequeue();
+  first = dequeueA();
   unsigned long ongoingTime = ((unsigned long)arr[first][0] << 32) + arr[first][1];
   while (currentTime <= endTime && ongoingTime != -1)
   {
@@ -160,10 +160,10 @@ int main(int argc, char **argv)
       if (type == A)
       {
         allNodes[i].generatedPackets++;
-        enqueue(currentTime + T, first);
+        enqueueA(currentTime + T, first);
         generateEventB = actionA(T, currentTime, &bufferHosts[i]);
         if (generateEventB){
-          enqueue(currentTime + defaultBias * 13, first + 1);
+          enqueueA(currentTime + defaultBias * 13, first + 1);
         }
       }
       #pragma endregion
@@ -172,7 +172,7 @@ int main(int argc, char **argv)
       {
         generateEventC = actionB(&bufferHosts[i], allNodes[i].links[0].pkt);
         if (generateEventC){
-          enqueue(currentTime + defaultBias * 33, first + 1);
+          enqueueA(currentTime + defaultBias * 33, first + 1);
         }
       }
       #pragma endregion
@@ -186,10 +186,10 @@ int main(int argc, char **argv)
                                  allNodes[i].links, &generateEventB,
                                  getIPv4OfHost(pairs[i].dst, k), T);
         if (generateEventB)
-          enqueue(currentTime + defaultBias * 13, first - 1);
+          enqueueA(currentTime + defaultBias * 13, first - 1);
         if (generateEventD){
           idNodeInTree = hash(nextIndex, EDGE_SWITCH, nextPort, D, k);
-          enqueue(currentTime + loadingTime1, idNodeInTree);
+          enqueueA(currentTime + loadingTime1, idNodeInTree);
         }
         #pragma endregion
       }
@@ -228,7 +228,7 @@ int main(int argc, char **argv)
 
           if (generateEventE){
             idNodeInTree = hash(i, allNodes[i + numOfHosts].type, nextEXB, E, k);
-            enqueue(currentTime + SWITCH_CYCLE, idNodeInTree);
+            enqueueA(currentTime + SWITCH_CYCLE, idNodeInTree);
           }
         }
       }
@@ -273,7 +273,7 @@ int main(int argc, char **argv)
 
             if (subEventE){
               idNodeInTree = hash(i, allNodes[i + numOfHosts].type, nextEXB, E, k);
-              enqueue(currentTime + SWITCH_CYCLE, idNodeInTree);
+              enqueueA(currentTime + SWITCH_CYCLE, idNodeInTree);
             }
           }
         }
@@ -290,26 +290,26 @@ int main(int argc, char **argv)
         
         if (generateEventE){
           idNodeInTree = hash(i, allNodes[i + numOfHosts].type, portID, E, k);
-          enqueue(currentTime + SWITCH_CYCLE, idNodeInTree);
+          enqueueA(currentTime + SWITCH_CYCLE, idNodeInTree);
         }
 
         if (generateEventF){
           idNodeInTree = hash(i, allNodes[i + numOfHosts].type, portID, F, k);
-          enqueue(currentTime + SWITCH_CYCLE, idNodeInTree);
+          enqueueA(currentTime + SWITCH_CYCLE, idNodeInTree);
         }
 
         int idPrev = allNodes[i + numOfHosts].links[pickUpENB].nextIndex;
         idNodeInTree = 0;
         if (H_IS_HOST){
           idNodeInTree = hash(idPrev, HOST, 0, H_HOST, k);
-          enqueue(currentTime + 1, idNodeInTree);
+          enqueueA(currentTime + 1, idNodeInTree);
         }
         else
         {
           //generate event H
           int idPrePort = allNodes[i + numOfHosts].links[pickUpENB].nextPort;
           idNodeInTree = hash(idPrev, allNodes[idPrev + numOfHosts].type, idPrePort, H, k);
-          enqueue(currentTime + 1, idNodeInTree);
+          enqueueA(currentTime + 1, idNodeInTree);
         }
 
         #pragma endregion
@@ -322,7 +322,7 @@ int main(int argc, char **argv)
         generateEventC = actionH_HOST(&bufferHosts[i], allNodes[i].links[0].pkt);
         
         if (generateEventC){
-          enqueue(currentTime + defaultBias * 33, first - 1);
+          enqueueA(currentTime + defaultBias * 33, first - 1);
         }
       }
       else if (type == F)
@@ -348,7 +348,7 @@ int main(int argc, char **argv)
             idNodeInTree = first - 1;
             //hash(i, allNodes[i + numOfHosts].type, portID, E, k);
             //I believe the return value of hash in this case is (first - 1)
-            enqueue(currentTime + SWITCH_CYCLE, idNodeInTree);
+            enqueueA(currentTime + SWITCH_CYCLE, idNodeInTree);
           }
           else{
               bufferSwitches[i].r2rEXBs[portID] = R1;
@@ -366,7 +366,7 @@ int main(int argc, char **argv)
           }
           
           idNodeInTree = hash(nextIndex, tempNode, nextPort, tempEvent, k);
-          enqueue(currentTime + loadingTime, idNodeInTree);
+          enqueueA(currentTime + loadingTime, idNodeInTree);
           
         }
         #pragma endregion
@@ -385,7 +385,7 @@ int main(int argc, char **argv)
         flows[i].receivedPackets[j]++;
 
         idNodeInTree = hash(nextNode, EDGE_SWITCH, nextPort, H, k);
-        enqueue(currentTime + 1, idNodeInTree);
+        enqueueA(currentTime + 1, idNodeInTree);
         
         #pragma endregion
       }
@@ -395,13 +395,13 @@ int main(int argc, char **argv)
         generateEventF = actionH(&bufferSwitches[i], allNodes[i + numOfHosts].type, portID, 
                                     allNodes[i + numOfHosts].links[portID].pkt, k);
         if(generateEventF){
-          enqueue(currentTime, first - 1);
+          enqueueA(currentTime, first - 1);
         }
       }
     
     }
     ongoingTime = -1;
-    first = dequeue();
+    first = dequeueA();
     if (first != UINT_MAX)
     {
       currentTime = ((unsigned long)arr[first][0] << 32) + arr[first][1];
