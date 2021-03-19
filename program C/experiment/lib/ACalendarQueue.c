@@ -305,25 +305,20 @@ void resize(unsigned long newsize){
     unsigned int foo;
     
     unsigned long oldnbuckets;
-    unsigned int **oldbuckets = malloc(sizeof * oldbuckets * MAX_ARR);
-    for(i = 0; i < MAX_ARR; i++){
-        oldbuckets[i] = malloc(sizeof * oldbuckets[i] * 4);
-        oldbuckets[i][0] = -1;
-        oldbuckets[i][1] = -1;
-        oldbuckets[i][2] = -1;
-        oldbuckets[i][3] = -1;
-    }
     //Node** oldbuckets;
+    unsigned int **oldbuckets = malloc(sizeof * oldbuckets * MAX_ARR);
 
     if(!resizeenable) return;
 
     bwidth = newwidth();
     for(i = 0; i < MAX_ARR; i++){
+        oldbuckets[i] = malloc(sizeof * oldbuckets[i] * 4);
         oldbuckets[i][0] = arr[i][0];
         oldbuckets[i][1] = arr[i][1];
         oldbuckets[i][2] = arr[i][2];
         oldbuckets[i][3] = arr[i][3];
     }
+
     //oldbuckets = buckets;
     oldnbuckets = nbuckets;
 
