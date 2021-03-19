@@ -25,15 +25,15 @@ unsigned long save[25];
 unsigned int indexes[25];
 
 void putIntoQueue(unsigned long endTime, unsigned int idNewNode);
-void insert(unsigned long endTime, unsigned int idNewNode);
-unsigned int removeSoonestEvent();
-unsigned long newwidth();
-void resize(unsigned long newsize);
-void localInit(unsigned long nbuck, unsigned long bwidth, unsigned long startprio);
-void initqueue();
-void enqueue(unsigned long endTime, unsigned int idNewNode);
-unsigned int dequeue();
-void printBuckets();
+void insertA(unsigned long endTime, unsigned int idNewNode);
+unsigned int removeSoonestEventA();
+unsigned long newwidthA();
+void resizeA(unsigned long newsize);
+void localInitA(unsigned long nbuck, unsigned long bwidth, unsigned long startprio);
+void initqueueA();
+void enqueueA(unsigned long endTime, unsigned int idNewNode);
+unsigned int dequeueA();
+void printBucketsA();
 
 static inline int compare(unsigned long endTime, 
                         unsigned int upper, 
@@ -110,7 +110,7 @@ void putIntoQueue(unsigned long endTime, unsigned int idNewNode){
     return;
 }
 
-void insert(unsigned long endTime, unsigned int idNewNode){
+void insertA(unsigned long endTime, unsigned int idNewNode){
     //prevent two different events happen on the same node
     //same EXB (or ENB) and same port but different times.
     if(arr[idNewNode][0] == UINT_MAX && arr[idNewNode][1] == UINT_MAX){
@@ -121,7 +121,7 @@ void insert(unsigned long endTime, unsigned int idNewNode){
     }
 }
 
-unsigned int removeSoonestEvent(){
+unsigned int removeSoonestEventA(){
     unsigned long i;
     
     if(qsize == 0) return -1;
@@ -218,7 +218,7 @@ unsigned int removeSoonestEvent(){
     return foo;
 }
 
-unsigned long newwidth(){
+unsigned long newwidthA(){
     unsigned long nsamples;
     int i;
 
@@ -247,7 +247,7 @@ unsigned long newwidth(){
     unsigned int tmp;
     for(i=0; i < nsamples; i++){
         //Node* tmp = removeSoonestEvent();
-        tmp = removeSoonestEvent();
+        tmp = removeSoonestEventA();
         save[i] = ((unsigned long)arr[tmp][0] << 32) + arr[tmp][1];
         indexes[i] = tmp;
         //save[i] = *tmp;
@@ -299,7 +299,7 @@ unsigned long newwidth(){
     return totalSeparation;
 }
 
-void resize(unsigned long newsize){
+void resizeA(unsigned long newsize){
     unsigned long i;
     unsigned long bwidth;
     unsigned int foo;
@@ -310,7 +310,7 @@ void resize(unsigned long newsize){
 
     if(!resizeenable) return;
 
-    bwidth = newwidth();
+    bwidth = newwidthA();
     for(i = 0; i < MAX_ARR; i++){
         oldbuckets[i] = malloc(sizeof * oldbuckets[i] * 4);
         oldbuckets[i][0] = arr[i][0];
@@ -322,7 +322,7 @@ void resize(unsigned long newsize){
     //oldbuckets = buckets;
     oldnbuckets = nbuckets;
 
-    localInit(newsize, bwidth, lastprio);
+    localInitA(newsize, bwidth, lastprio);
 
     unsigned long endTime;
     // them lai cac phan tu vao calendar moi
@@ -351,7 +351,7 @@ void resize(unsigned long newsize){
     return;
 }
 
-void localInit(unsigned long nbuck, unsigned long bwidth, unsigned long startprio){
+void localInitA(unsigned long nbuck, unsigned long bwidth, unsigned long startprio){
     unsigned long i;
     double n;
 
@@ -375,30 +375,30 @@ void localInit(unsigned long nbuck, unsigned long bwidth, unsigned long startpri
     top_threshold = 2 * nbuckets;
 }
 
-void initqueue(){
-    localInit(2,1,0.0);
+void initqueueA(){
+    localInitA(2,1,0.0);
     resizeenable = 1;
 }
 
 // enqueue
-void enqueue(unsigned long endTime, unsigned int idNewNode){
-    insert(endTime, idNewNode);
+void enqueueA(unsigned long endTime, unsigned int idNewNode){
+    insertA(endTime, idNewNode);
     // nhan doi so luong calendar neu can
     if(qsize > top_threshold) 
-        resize(2 * nbuckets);
+        resizeA(2 * nbuckets);
 }
 
 // dequeue
-unsigned int dequeue(){
-    unsigned int tmp = removeSoonestEvent();
+unsigned int dequeueA(){
+    unsigned int tmp = removeSoonestEventA();
     /*thu hep so luong cua calendar neu can*/
     if(qsize < bot_threshold && nbuckets >= 2) 
-        resize(nbuckets/2);
+        resizeA(nbuckets/2);
     return tmp;
 }
 
 /*in ra man hinh lich*/
-void printBucket(unsigned int n){
+void printBucketA(unsigned int n){
     while(n != -1){
         printf("%ld ", ((unsigned long)arr[n][0] << 32) + arr[n][1]);
         n = arr[n][3];
@@ -406,12 +406,12 @@ void printBucket(unsigned int n){
     return;
 }
 
-void printBuckets(){
+void printBucketsA(){
     unsigned int i;
     for(i = 0; i < nbuckets; i++){
         printf("Day %d : ",i);
         unsigned int tmp = arr[i][2];
-        printBucket(tmp);
+        printBucketA(tmp);
         printf("\n");
     }
     printf("\nCount of event : %ld\n",qsize);
