@@ -20,7 +20,9 @@ serial:
 	gcc -pg -g -c TestAPI.c
 	gcc -pg -g -c Throughput.c
 	gcc -pg -g -c -fbounds-check -fno-strict-aliasing PairStrategies.c
+	gcc -pg -g -c HCQStruct.c
 	gcc -pg -g -c ACalendarQueue.c
+	gcc -pg -g -c HCalendarQueue.c
 	@echo "==================="
 	@echo "Done for *.o in lib"
 	@echo "==================="
@@ -45,6 +47,8 @@ n:
 	gcc -c Throughput.c
 	gcc -c -fbounds-check -fno-strict-aliasing PairStrategies.c
 	gcc -c ACalendarQueue.c
+	gcc -c HCQStruct.c
+	gcc -c HCalendarQueue.c
 	@echo "==================="
 	@echo "Done for *.o in lib"
 	@echo "==================="
