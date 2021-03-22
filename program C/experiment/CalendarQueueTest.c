@@ -371,6 +371,7 @@ int main(int argc, char** argv)
             }
             
             ev->endTime = -1;
+            free(ev);
             ev = dequeue();
 
             currentTime = ev->endTime;
