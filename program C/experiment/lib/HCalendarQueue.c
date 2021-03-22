@@ -6,7 +6,7 @@
 #include "ACalendarQueue.c"
 #include "HCQStruct.c"
 
-HCQStruct *allCQs;
+CQStruct *allCQs;
 void putIntoQueueH(unsigned long endTime, unsigned int idNewNode);
 void insertH(unsigned long endTime, unsigned int idNewNode);
 unsigned int removeSoonestEventH();
@@ -22,7 +22,7 @@ void printBucketsH();
 void initqueueH(int numOfHosts, int numOfSwitches){
     localInitA(2,1,0.0);
     resizeenable = 1;
-    allCQs = malloc((numOfHosts + numOfSwitches)*sizeof(HCQStruct));
+    allCQs = malloc((numOfHosts + numOfSwitches)*sizeof(CQStruct));
     int i = 0; 
     for(i = 0; i < numOfHosts + numOfSwitches; i++){
         initqueue(&allCQs[i]);
